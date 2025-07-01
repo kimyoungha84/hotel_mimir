@@ -1,0 +1,72 @@
+/* 상단 툴바 */
+.toolbar {
+    background: #000;
+    color: #fff;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.85rem;
+    padding: 0.5rem 1rem;
+}
+
+.toolbar-left {
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.toolbar-right a {
+    color: #fff;
+    margin-left: 1rem;
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+.toolbar-right a:hover {
+    color: #f2c94c;
+}
+
+/* 고정 네비게이션 바 */
+.navbar-wrapper {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    background-color: transparent;
+    transition: background-color 0.3s ease;
+    z-index: 999;
+}
+
+/* 스크롤 시 배경 변경 */
+.navbar-wrapper.scrolled {
+    background-color: #000;
+}
+
+/* 네비게이션 메뉴 */
+.navbar-menu {
+    list-style: none;
+    display: flex;
+    justify-content: center;
+    margin: 0;
+    padding: 1rem 0;
+}
+
+.navbar-menu li {
+    margin: 0 1.5rem;
+}
+
+.navbar-link {
+    color: #fff;
+    font-weight: 500;
+    text-decoration: none;
+    font-size: 1rem;
+    transition: color 0.2s ease;
+}
+
+.navbar-link:hover {
+    color: #f2c94c;
+}
+
+/* 본문과 겹치지 않도록 여백 확보 */
+body {
+    padding-top: 110px;
+}
