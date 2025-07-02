@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://thymeleaf.org">
+<head>
+  <meta charset="UTF-8" />
+  <title>관리자 실시간 문의</title>
+  <link rel="stylesheet" href="/css/admin_chat.css" />
+  
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+<div class="admin-container">
+  <aside class="sidebar">
+    <h2>MIMIR</h2>
+    <ul class="menu">
+      <li>대시보드</li>
+      <li>회원관리</li>
+      <li>차량관리</li>
+      <li>디자인관리</li>
+        <li class="section">문의센터</li>
+        <li>1:1 문의</li>
+        <li class="active" onclick="location.href='/admin/faq'">FAQ</li>
+        <li class="active" onclick="location.href='/admin/chat'">실시간 채팅</li>
+    </ul>
+  </aside>
+
+  <main class="chat-main">
+    <h3>실시간</h3>
+    <div class="chat-layout">
+      <!-- 유저 목록 -->
+      <div class="user-list" id="userList">
+        <!-- 동적으로 유저 추가 -->
+        <!-- 예시:
+        <div class="user-item" data-user="john_doe">
+          <div class="user-info">
+            <strong>john_doe</strong><br><span>안녕하세요</span>
+          </div>
+          <div class="badge">1</div>
+        </div>
+        -->
+      </div>
+
+      <!-- 채팅창 -->
+      <div class="chat-panel">
+        <div class="chat-header">
+          <span id="chatWith">선택된 유저 없음</span>
+        </div>
+        <div class="chat-body" id="chatBody"></div>
+        <div class="chat-input">
+          <textarea id="messageInput" placeholder="메시지를 입력하세요..."></textarea>
+          <button id="sendBtn">전송</button>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+
+<script src="/js/admin_chat.js"></script>
+</body>
+</html>

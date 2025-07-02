@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>문의관리</title>
+  <link rel="stylesheet" href="/css/inquiry.css">
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+<div class="container">
+  <div class="content">
+    <div class="section">
+      <h2>FAQ</h2>
+      <div class="faq-box">
+  <div th:each="faq : ${faqList}">
+    <div class="faq-item" th:text="${faq.faq_title}"></div>
+    <div class="faq-answer" th:text="${faq.faq_content}" style="display:none;"></div>
+  </div>
+</div>
+      <div class="pagination">◀ 1 ▶</div>
+    </div>
+  </div>
+</div>
+<!-- 채팅 토글 버튼 -->
+<div class="chat-toggle-btn" id="chatToggleBtn">💬</div>
+<!-- 채팅창 -->
+<div class="chat-container" id="chatBox">
+  <div class="chat-header">1:1 채팅
+  <button class="chat-back" data-type="back">✖</button>
+  </div>
+  
+  <div class="chat-body" id="chatBody">
+  <p style="text-align:center; color: #aaa;">문의 유형을 선택해주세요</p>
+  <div class="chat-options">
+    <button class="chat-option" data-type="room">객실 문의</button>
+    <button class="chat-option" data-type="dining">다이닝 문의</button>
+    <button class="chat-option" data-type="etc">그냥 문의</button>
+  </div>
+</div>
+  
+ <!--  <div class="chat-footer">
+    <button id="startChatBtn">새 문의하기</button>
+  </div> -->
+  
+  <div class="chat-input-area" id="inputArea" style="display:none;">
+  <textarea id="messageInput" placeholder="메시지를 입력하세요..."></textarea>
+  <button id="sendBtn">전송</button>
+</div>
+  
+</div>
+<script src="/js/inquiry.js"></script>
+</body>
+</html>

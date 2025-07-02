@@ -1,0 +1,167 @@
+@charset "UTF-8";
+
+body {
+	margin: 0;
+	font-family: 'Noto Sans KR', sans-serif;
+	background-color: #f4f4f4;
+}
+
+.wrapper {
+	display: flex;
+	height: 100vh;
+}
+
+/* 사이드바 */
+.sidebar {
+  width: 220px;
+  background-color: #2c3e50;
+  color: white;
+  padding: 20px;
+}
+
+.sidebar h2 {
+  margin-top: 0;
+  font-size: 24px;
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.sidebar .menu {
+  list-style: none;
+  padding: 0;
+}
+
+.sidebar .menu li {
+  padding: 12px 10px;
+  margin-bottom: 10px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.sidebar .menu li:hover,
+.sidebar .menu li.active {
+  background-color: #34495e;
+}
+
+.logo {
+	margin-bottom: 20px;
+	text-align: center;
+}
+
+.menu {
+	list-style: none;
+	padding: 0;
+}
+
+.menu li {
+	padding: 10px;
+	cursor: pointer;
+}
+
+.menu .section {
+	margin-top: 20px;
+	font-size: 14px;
+	color: #ccc;
+}
+
+.menu li.active, .menu li:hover {
+	background-color: #3a4a66;
+}
+
+/* Main Content */
+.main-content {
+	flex: 1;
+	padding: 30px;
+	background: white;
+	overflow-y: auto;
+}
+
+.top-bar {
+	display: flex;
+	justify-content: flex-end;
+	align-items: center;
+	margin-bottom: 20px;
+}
+
+.top-bar button {
+	margin-left: 10px;
+	padding: 5px 10px;
+}
+
+.faq-section h1 {
+	border-bottom: 2px solid black;
+	padding-bottom: 10px;
+	margin-bottom: 30px;
+}
+
+.search-bar {
+	display: flex;
+	justify-content: flex-end;
+	gap: 10px;
+	margin-bottom: 15px;
+}
+
+.search-bar input {
+	padding: 5px;
+	width: 200px;
+}
+
+.faq-table {
+	width: 100%;
+	border-collapse: collapse;
+	margin-bottom: 15px;
+}
+
+.faq-table thead {
+	background-color: #f1eae1;
+}
+
+.faq-table th, .faq-table td {
+	border: 1px solid #ccc;
+	padding: 10px;
+	text-align: center;
+}
+
+.bottom-controls {
+	text-align: right;
+	margin-bottom: 15px;
+}
+
+.bottom-controls .btn {
+	margin-left: 5px;
+	padding: 8px 15px;
+	border: none;
+	cursor: pointer;
+}
+
+.modify {
+	background-color: #ccc;
+}
+
+.delete {
+	background-color: #e57373;
+	color: white;
+}
+
+.apply {
+	background-color: #3f51b5;
+	color: white;
+}
+
+.pagination {
+	text-align: center;
+}
+
+.pagination .page {
+	padding: 5px 10px;
+	margin: 0 2px;
+	background-color: #ddd;
+	border: none;
+	cursor: pointer;
+}
+
+.pagination .page.active {
+	background-color: #999;
+	color: white;
+}

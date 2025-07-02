@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html xmlns:th="http://thymeleaf.org" lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FAQ 관리</title>
+  <link rel="stylesheet" href="/css/admin_faq.css" />
+</head>
+<body>
+  <div class="wrapper">
+    <!-- 사이드바 -->
+     <aside class="sidebar">
+    <h2>MIMIR</h2>
+    <ul class="menu">
+      <li>대시보드</li>
+      <li>회원관리</li>
+      <li>차량관리</li>
+      <li>디자인관리</li>
+        <li class="section">문의센터</li>
+        <li class="active" onclick="location.href='/admin/inquiry'">1:1 문의</li>
+        <li class="active" onclick="location.href='/admin/faq'">FAQ</li>
+        <li class="active" onclick="location.href='/admin/chat'">실시간 채팅</li>
+    </ul>
+  </aside>
+
+    <!-- 메인 컨텐츠 -->
+    <main class="main-content">
+      <div class="top-bar">
+        <span>홍길동 님</span>
+        <button id="logoutBtn">Log Out</button>
+      </div>
+
+      <section class="faq-section">
+        <h1>1대1 문의</h1>
+
+        <!-- 검색 필터 -->
+        <div class="search-bar">
+        <select>
+        <option>객실</option>
+        <option>다이닝</option>
+        <option>문의</option>
+        </select>
+          <input type="text" id="titleSearch" placeholder="제목" />
+          <button id="searchBtn">검색</button>
+        </div>
+
+        <!-- FAQ 테이블 -->
+        <table class="faq-table">
+          <thead>
+            <tr>
+              <th><input type="checkbox" id="selectAll" /></th>
+              <th>번호</th>
+              <th>작성자</th>
+              <th>제목</th>
+              <th>등록일</th>
+            </tr>
+          </thead>
+          <tbody id="faqList">
+            <!-- FAQ 항목 동적 삽입 -->
+          </tbody>
+        </table>
+
+        <!-- 하단 버튼 -->
+        <div class="bottom-controls">
+          <button class="btn delete">삭제</button>
+        </div>
+
+        <!-- 페이징 -->
+        <div class="pagination">
+          <button class="page">&laquo;</button>
+          <button class="page active">1</button>
+          <button class="page">2</button>
+          <button class="page">3</button>
+          <button class="page">&raquo;</button>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script src="admin_faq.js"></script>
+</body>
+</html>
