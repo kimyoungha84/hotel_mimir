@@ -1,52 +1,32 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
-    <title>HOTEL MIMIR</title>
-
-    <!-- Bootstrap CDN -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css">
-
-    <!-- Custom Header CSS -->
-    <link rel="stylesheet" th:href="@{/css/header.css}" />
+<meta charset="UTF-8">
+<title>Header</title>
 </head>
 <body>
 
-<div th:fragment="header">
-    <!-- 상단 툴바 -->
-    <div class="toolbar">
-        <div class="toolbar-left">HOTEL MIMIR</div>
-        <div class="toolbar-right">
-            <a href="#">로그인</a>
-            <a href="#">회원가입</a>
-        </div>
-    </div>
+	<div th:fragment="header">
+		<!-- 상단 툴바 -->
+		<div class="toolbar">
+			<div class="toolbar-left">HOTEL MIMIR</div>
+			<div class="toolbar-right">
+				<a href="#">로그인</a> <a th:href="@{/member/registerFrm}">회원가입</a>
+			</div>
+		</div>
 
-    <!-- 네비게이션 -->
-    <nav class="navbar-wrapper">
-        <ul class="navbar-menu">
-            <li><a href="#" class="navbar-link">호텔소개</a></li>
-            <li><a href="#" class="navbar-link">객실</a></li>
-            <li><a href="#" class="navbar-link">다이닝</a></li>
-            <li><a href="#" class="navbar-link">고객센터</a></li>
-        </ul>
-    </nav>
-</div>
+		<!-- 네비게이션 -->
+		<nav class="navbar-wrapper">
+			<ul class="navbar-menu">
+				<li><a href="#" class="navbar-link">호텔소개</a></li>
+				<li><a href="#" class="navbar-link">객실</a></li>
+				<li><a href="#" class="navbar-link">다이닝</a></li>
+				<li><a href="#" class="navbar-link">고객센터</a></li>
+			</ul>
+		</nav>
+	</div>
 
-<!-- 스크롤 시 네비게이션 배경 변경 -->
-<script>
-    document.addEventListener("DOMContentLoaded", function () {
-        const navbar = document.querySelector(".navbar-wrapper");
 
-        window.addEventListener("scroll", function () {
-            if (window.scrollY > 50) {
-                navbar.classList.add("scrolled");
-            } else {
-                navbar.classList.remove("scrolled");
-            }
-        });
-    });
-</script>
 
 </body>
 </html>

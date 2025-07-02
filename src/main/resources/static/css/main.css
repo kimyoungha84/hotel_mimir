@@ -1,53 +1,61 @@
 @charset "UTF-8";
 
+/* 기본 세팅 */
 body {
-	margin: 0;
-	padding: 0;
+  margin: 0;
+  padding: 0;
 }
 
+/* Swiper 슬라이드 */
 .swiper {
-	width: 100%;
-	height: 90vh;
+  width: 100%;
+  height: 90vh;
+  position: relative;
+  z-index: 1; /* 헤더보다 낮게 */
 }
 
 .swiper-slide {
-	position: relative;
+  position: relative;
 }
 
 .swiper-slide img {
-	width: 100%;
-	height: 100%;
-	object-fit: cover;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
+/* 슬라이드 안의 텍스트 오버레이 */
 .slide-text {
-	position: absolute;
-	top: 50%;
-	left: 50%;
-	transform: translate(-50%, -50%);
-	background-color: rgba(0, 0, 0, 0.4);
-	padding: 30px 50px;
-	border-radius: 12px;
-	color: white;
-	text-align: center;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: rgba(0, 0, 0, 0.4); /* 반투명 블랙 배경 */
+  padding: 30px 50px;
+  border-radius: 12px;
+  color: white;
+  text-align: center;
+  z-index: 10;
 }
 
 .slide-text h2 {
-	font-size: 2.5rem;
-	font-weight: bold;
-	margin-bottom: 10px;
-	font-family: 'Georgia', serif;
+  font-size: 2.5rem;
+  font-weight: bold;
+  margin-bottom: 10px;
+  font-family: 'Georgia', serif;
 }
 
 .slide-text p {
-	font-size: 1.2rem;
-	font-family: 'Noto Sans KR', sans-serif;
+  font-size: 1.2rem;
+  font-family: 'Noto Sans KR', sans-serif;
 }
 
-.swiper-button-next, .swiper-button-prev {
-	color: white;
+/* Swiper 버튼 및 페이지네이션 */
+.swiper-button-next,
+.swiper-button-prev {
+  color: white;
 }
 
 .swiper-pagination-bullet-active {
-	background-color: white;
+  background-color: white;
 }

@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>회원가입</title>
+    <link rel="stylesheet" 
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" />
+    <style>
+        .form-container {
+            max-width: 500px;
+            margin: 50px auto;
+            padding: 30px;
+            background: #fff;
+            border-radius: 10px;
+        }
+        .form-title {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="form-container shadow">
+        <h3 class="form-title">회원가입</h3>
+
+        <form th:action="@{/member/register}" th:object="${memberDTO}" method="post">
+
+            <!-- 이름 -->
+            <div class="mb-3">
+                <label for="user_name" class="form-label">이름</label>
+                <input type="text" th:field="*{user_name}" class="form-control" placeholder="이름 입력" />
+                <div class="text-danger" th:errors="*{user_name}"></div>
+            </div>
+
+            <!-- 이메일(아이디) -->
+            <div class="mb-3">
+                <label for="email_id" class="form-label">이메일 아이디</label>
+                <div class="input-group">
+                    <input type="email" th:field="*{email_id}" class="form-control" placeholder="example@lotte.net" />
+                    <button class="btn btn-outline-secondary" type="button" onclick="checkEmail()">중복확인</button>
+                </div>
+                <div class="text-danger" th:errors="*{email_id}"></div>
+            </div>
+
+            <!-- 이메일 인증번호 입력 -->
+            <div class="mb-3">
+                <label class="form-label">이메일 인증번호</label>
+                <div class="input-group">
+                    <input type="text" name="email_auth" class="form-control" placeholder="인증번호 입력" />
+                    <button class="btn btn-outline-secondary" type="button" onclick="verifyEmail()">확인</button>
+                </div>
+                <div id="emailVerifyMessage" class="text-success"></div>
+            </div>
+
+            <!-- 비밀번호 -->
+            <div class="mb-3">
+                <label for="password" class="form-label">비밀번호</label>
+                <input type="password" th:field="*{password}" class="form-control" placeholder="비밀번호 입력" />
+                <div class="text-danger" th:errors="*{password}"></div>
+            </div>
+
+            <!-- 비밀번호 확인 -->
+            <div class="mb-3">
+                <label class="form-label">비밀번호 확인</label>
+                <input type="password" id="confirmPassword" class="form-control" placeholder="비밀번호 재입력" />
+                <div id="pwCheckMessage" class="text-danger"></div>
+            </div>
+
+            <!-- 전화번호 -->
+            <div class="mb-3">
+                <label for="tel" class="form-label">전화번호</label>
+                <input type="text" th:field="*{tel}" class="form-control" placeholder="예: 01012345678" />
+                <div class="text-danger" th:errors="*{tel}"></div>
+            </div>
+
+            <!-- 생년월일 -->
+            <div class="mb-3">
+                <label for="birth_date" class="form-label">생년월일</label>
+                <input type="date" th:field="*{birth_date}" class="form-control" />
+                <div class="text-danger" th:errors="*{birth_date}"></div>
+            </div>
+
+            <button type="submit" class="btn btn-dark w-100">회원가입 완료</button>
+        </form>
+    </div>
+</div>
+
+
+</body>
+</html>
