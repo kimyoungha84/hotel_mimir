@@ -1,4 +1,4 @@
-package kr.co.sist.main;
+package kr.co.sist.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;

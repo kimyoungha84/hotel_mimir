@@ -78,6 +78,12 @@
   			<version>1.16.1</version>
 		</dependency>
 		
+		<!-- 유효성 검증 -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-validation</artifactId>
+		</dependency>
+		
 	</dependencies>
 
 	<build>

@@ -6,70 +6,14 @@
 
     <!-- Bootstrap CDN -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css">
-
-    <!-- Custom CSS -->
-    <link rel="stylesheet" th:href="@{/css/header.css}" />
-    
     <!-- Swiper CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css" />
 
-    <style>
-        body {
-            margin: 0;
-            padding: 0;
-        }
-
-        .swiper {
-            width: 100%;
-            height: 90vh;
-        }
-
-        .swiper-slide {
-            position: relative;
-        }
-
-        .swiper-slide img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-        .slide-text {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background-color: rgba(0, 0, 0, 0.4);
-            padding: 30px 50px;
-            border-radius: 12px;
-            color: white;
-            text-align: center;
-        }
-
-        .slide-text h2 {
-            font-size: 2.5rem;
-            font-weight: bold;
-            margin-bottom: 10px;
-            font-family: 'Georgia', serif;
-        }
-
-        .slide-text p {
-            font-size: 1.2rem;
-            font-family: 'Noto Sans KR', sans-serif;
-        }
-
-        .swiper-button-next,
-        .swiper-button-prev {
-            color: white;
-        }
-
-        .swiper-pagination-bullet-active {
-            background-color: white;
-        }
-    </style>
+    <!-- Custom CSS -->
+    <link rel="stylesheet" th:href="@{/css/header.css}" />
+    <link rel="stylesheet" th:href="@{/css/main.css}" />
 </head>
 <body>
-
     <!-- 헤더 삽입 -->
     <div th:replace="~{fragments/header :: header}"></div>
 
@@ -86,7 +30,7 @@
             <div class="swiper-slide">
                 <img th:src="@{/images/mimir2.jpg}" alt="호텔2">
                 <div class="slide-text">
-                    <h2>시그니엘 서울</h2>
+                    <h2></h2>
                     <p>럭셔리한 서울의 하늘 뷰</p>
                 </div>
             </div>
@@ -96,7 +40,7 @@
         <div class="swiper-button-prev"></div>
     </div>
 
-    <!-- Swiper JS -->
+<!-- Swiper JS -->
     <script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>
     <script>
         const swiper = new Swiper(".mySwiper", {
