@@ -4,10 +4,15 @@
   <meta charset="UTF-8">
   <title>문의관리</title>
   <link rel="stylesheet" href="/css/inquiry.css">
+  <link rel="stylesheet" href="/css/header.css">
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
+<img src="/images/bg_membership_faq.jpg" alt="FAQ 배경 이미지" style="width: 100%; height: auto;">
+<div th:replace="~{fragments/header.html :: header}"></div>
+
 <div class="container">
+
   <div class="content">
     <div class="section">
       <h2>FAQ</h2>
@@ -25,11 +30,17 @@
 <div class="chat-toggle-btn" id="chatToggleBtn">💬</div>
 <!-- 채팅창 -->
 <div class="chat-container" id="chatBox">
-  <div class="chat-header">1:1 채팅
-  <button class="chat-back" data-type="back">✖</button>
+  <div class="chat-header">
+  1:1 채팅
+  <div class="chat-controls">
+    <button class="chat-maximize" id="maximizeBtn">⛶</button>
+    <button class="chat-back" id="backBtn">↩</button>
   </div>
+</div>
   
   <div class="chat-body" id="chatBody">
+  <p style="text-align:center; color: #0000FF;">상담 시간 10:00 ~ 17:00 </p>
+  <p style="text-align:center; font-size : 13px; color: #FF0000;">※욕설 금지 = 관리자도 누군가의 자녀이자 부모님이다.※ </p>
   <p style="text-align:center; color: #aaa;">문의 유형을 선택해주세요</p>
   <div class="chat-options">
     <button class="chat-option" data-type="room">객실 문의</button>

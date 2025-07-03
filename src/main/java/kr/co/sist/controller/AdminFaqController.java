@@ -18,7 +18,7 @@ import kr.co.sist.FAQ.FAQServiceImpl;
 import kr.co.sist.dto.FAQDTO;
 
 @Controller
-public class AdminController {
+public class AdminFaqController {
 
 	@Autowired
 	private FAQServiceImpl service;
@@ -59,7 +59,7 @@ public class AdminController {
 	public String inquiryPage(Model model) {
 		List<FAQDTO> faqList = service.selectAllFAQ(); // DB에서 FAQ 불러오기
 		model.addAttribute("faqList", faqList);
-		return "inquiry"; // => templates/inquiry.html
+		return "inquiry/inquiry"; // => templates/inquiry.html
 	}
 
 	// faq 등록
@@ -74,12 +74,13 @@ public class AdminController {
 
 		service.insertFaq(faq); // DB 저장
 
-		return "redirect:/inquiry/admin/faq"; // 등록 후 리스트 페이지로 이동
+		return "redirect:/admin/faq"; // 등록 후 리스트 페이지로 이동
 	}
 	
 	@PostMapping("/admin/faq/delete")
 	@ResponseBody
 	public String deleteFaq(@RequestBody List<Integer> faqNums) {
+		System.out.println("삭제 요청 받음: " + faqNums);  // 로그 찍기
 		service.deleteFaqs(faqNums);
 	    return "success";
 	}

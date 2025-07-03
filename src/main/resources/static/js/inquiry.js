@@ -22,8 +22,7 @@ $("#startChatBtn").click(function() {
   $("#chatBody").html('');
 });
 
-// WebSocket 연결
-/*const userId = "hong";*/
+// WebSocket 객찰
 const urlParams = new URLSearchParams(location.search);
 const userId = urlParams.get("userId");  // 예: user1
 const ws = new WebSocket("ws://192.168.10.78:8080/chat?userId=" + userId);
@@ -33,7 +32,7 @@ ws.onmessage = function (event) {
   $(".placeholder-text").hide();
 
   const [sender, msg] = event.data.split(":", 2);
-  const isMine = sender === userId; // 내 메시지인지 여부
+  const isMine = sender === userId; // 내 메시지인지 유무
   const alignClass = isMine ? "right" : "left";
 
   const msgElem = $("<div>")
@@ -43,8 +42,7 @@ ws.onmessage = function (event) {
   $("#chatBody").append(msgElem).scrollTop($("#chatBody")[0].scrollHeight);
 };
 
-
-// 문의 시작
+// 문의 시작 버튼 클릭
 $("#startChatBtn").click(function () {
   $("#inputArea").hide();
   $(this).hide();
@@ -53,9 +51,9 @@ $("#startChatBtn").click(function () {
   $("#chatBody").html(`
     <p style="text-align:center; color:#555;">문의 유형을 선택해주세요</p>
     <div class="chat-options">
-      <button class="chat-option" data-type="room">객실 문의</button>
+      <button class="chat-option" data-type="room">거실 문의</button>
       <button class="chat-option" data-type="dining">다이닝 문의</button>
-      <button class="chat-option" data-type="etc">그냥 문의</button>
+      <button class="chat-option" data-type="etc">기타 문의</button>
     </div>
   `);
 });
@@ -66,7 +64,7 @@ $(document).on("click", ".chat-option", function () {
   inquiryType = $(this).data("type");
 
   const typeName = {
-    room: "객실 문의",
+    room: "거실 문의",
     dining: "다이닝 문의",
     etc: "일반 문의"
   }[inquiryType];
@@ -75,7 +73,8 @@ $(document).on("click", ".chat-option", function () {
   $("#inputArea").css("display", "flex");
 });
 
-
+// 보낸 타임스템프 저장
+let messageTimestamps = [];
 
 // 전송 버튼 클릭
 $("#sendBtn").click(function () {
@@ -93,20 +92,88 @@ $("#messageInput").keydown(function (e) {
 // 공통 전송 함수
 function sendMessage() {
   const msg = $("#messageInput").val().trim();
+
+  // 1. 300자 차례 검사
+  if (msg.length > 300) {
+    showError("⚠️ 300자 초과로 전송할 수 없습니다.");
+    return;
+  }
+
+  // 2. 30초 안에 10개 이상 전송이면 도배 처리
+  const now = Date.now();
+  messageTimestamps = messageTimestamps.filter(ts => now - ts <= 30000);
+  if (messageTimestamps.length >= 7) {
+    disableSendBtn();
+    showError("⚠️ 도배 방지를 위해 30초간 전송이 제한됩니다.");
+    return;
+  }
+
   if (msg !== "") {
     const msgElem = $("<div>")
       .addClass("chat-message right")
       .text(userId + ": " + msg);
-      
+
     $("#chatBody").append(msgElem).scrollTop($("#chatBody")[0].scrollHeight);
     ws.send(msg);
     $("#messageInput").val("");
+    messageTimestamps.push(now);
   }
 }
+
+// 오류 메시지 표시
+function showError(msg) {
+  if ($("#errorBox").length === 0) {
+    $("#inputArea").prepend(`<div id="errorBox" style="color:red; margin-bottom:4px;"></div>`);
+  }
+  $("#errorBox").text(msg);
+
+  // 5초 후 제거
+  setTimeout(() => $("#errorBox").fadeOut(300, function () { $(this).remove(); }), 30000);
+}
+
+// 보낸 비활성화 버튼 통제
+function disableSendBtn() {
+  $("#sendBtn").prop("disabled", true).css({
+    "background-color": "#ccc",
+    "cursor": "not-allowed"
+  });
+
+  // 30초 후 복구
+  setTimeout(() => {
+    $("#sendBtn").prop("disabled", false).css({
+      "background-color": "",
+      "cursor": ""
+    });
+    $("#errorBox").remove();
+    messageTimestamps = []; // 처음복귀
+  }, 30000);
+}
+
+// 문의 등록 페이지 이동
 $(document).ready(function() {
   $(".inquiry_register").click(function() {
     window.location.href = "/inquiry_register";
   });
 });
 
+// 최대화 & 뒤로가기 버튼 이벤트
+let isMaximized = false;
 
+$("#maximizeBtn").click(function () {
+  $("#chatBox").toggleClass("maximized");
+  isMaximized = !isMaximized;
+});
+
+$("#backBtn").click(function () {
+  $("#inputArea").hide();
+  $("#chatBody").html(`
+	<p style="text-align:center; color: #0000FF;">상담 시간 10:00 ~ 17:00 </p>
+	<p style="text-align:center; font-size : 13px; color: #FF0000;">※욕설 금지 = 관리자도 누군가의 자녀이자 부모님이다.※ </p>
+    <p style="text-align:center; color: #aaa;">문의 유형을 선택해주세요</p>
+    <div class="chat-options">
+      <button class="chat-option" data-type="room">거실 문의</button>
+      <button class="chat-option" data-type="dining">다이닝 문의</button>
+      <button class="chat-option" data-type="etc">기타 문의</button>
+    </div>
+  `);
+});
