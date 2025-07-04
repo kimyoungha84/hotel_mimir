@@ -1,4 +1,4 @@
-/* 툴바 (상단 고정) */
+/* 툴바 */
 .toolbar {
   position: fixed;
   top: 0;
@@ -12,7 +12,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  transition: background-color 0.3s ease;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 .toolbar-right a {
@@ -26,13 +26,29 @@
   color: #f2c94c !important;
 }
 
-/* 스크롤 시 배경색 변경 */
+/* 스크롤 시 툴바 스타일 */
 .toolbar.scrolled {
   background-color: rgba(0, 0, 0, 0.85);
-  box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+  color: white;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+}
+.toolbar.scrolled a {
+  color: white !important;
 }
 
-/* 네비게이션 바*/
+/* 서브페이지일 경우 초기 상태는 흰 배경 + 검정 글씨 */
+.sub-page .toolbar {
+  background-color: white;
+  color: black;
+}
+.sub-page .toolbar a {
+  color: black !important;
+}
+.sub-page .toolbar a:hover {
+  color: #f2c94c !important;
+}
+
+/* 네비게이션 바 */
 .navbar-wrapper {
   position: fixed;
   top: 40px;
@@ -70,7 +86,51 @@
   color: #f2c94c;
 }
 
+/* 서브페이지 네비 링크 초기 색상 (검정 글씨) */
+.sub-page .navbar-link {
+  color: black;
+}
+.sub-page .navbar-link:hover {
+  color: #f2c94c;
+}
+
+.sub-page .navbar-wrapper {
+  background-color: white;
+}
+
+/* 스크롤 후엔 흰색으로 변경 (메인/서브 동일) */
+.navbar-wrapper.scrolled .navbar-link {
+  color: white;
+}
+.navbar-wrapper.scrolled .navbar-link:hover {
+  color: #f2c94c;
+}
+
 /* 본문과 겹치지 않도록 여백 확보 */
 body {
-  padding-top: 130px; 
+  padding-top: 130px;
+}
+
+/* 서브페이지: 스크롤 시 툴바 스타일 */
+.sub-page .toolbar.scrolled {
+  background-color: rgba(0, 0, 0, 0.85);
+  color: white;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+}
+.sub-page .toolbar.scrolled a {
+  color: white !important;
+}
+.sub-page .toolbar.scrolled a:hover {
+  color: #f2c94c !important;
+}
+
+/* 서브페이지: 스크롤 시 네비게이션 스타일 */
+.sub-page .navbar-wrapper.scrolled {
+  background-color: rgba(0, 0, 0, 0.85);
+}
+.sub-page .navbar-wrapper.scrolled .navbar-link {
+  color: white !important;
+}
+.sub-page .navbar-wrapper.scrolled .navbar-link:hover {
+  color: #f2c94c !important;
 }

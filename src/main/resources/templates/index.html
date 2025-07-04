@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" th:class="'main-page'">
 <head>
     <meta charset="UTF-8">
     <title>HOTEL MIMIR</title>
@@ -16,26 +16,6 @@
 <body>
     <!-- 헤더 삽입 -->
     <div th:replace="~{fragments/header :: header}"></div>
-    
-    <!-- 스크롤이벤트 -->
-     <script>
-      document.addEventListener("DOMContentLoaded", function () {
-        const toolbar = document.querySelector(".toolbar");
-        const navbar = document.querySelector(".navbar-wrapper");
-
-        console.log(toolbar, navbar); 
-
-        window.addEventListener("scroll", function () {
-          if (window.scrollY > 50) {
-            toolbar?.classList.add("scrolled");
-            navbar?.classList.add("scrolled");
-          } else {
-            toolbar?.classList.remove("scrolled");
-            navbar?.classList.remove("scrolled");
-          }
-        });
-      });
-    </script>
 
     <!-- 본문 Swiper 배너 -->
     <div class="swiper mySwiper">
