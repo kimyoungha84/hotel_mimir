@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8" />
+  <title>예약 현황</title>
+  <style>
+    body {
+      font-family: "Pretendard", sans-serif;
+      margin: 40px;
+      background-color: #fdfdfd;
+    }
+
+    h2 {
+      font-size: 30px;
+      border-bottom: 3px solid #333;
+      padding-bottom: 20px;
+      margin-bottom: 30px;
+    }
+
+    .filters {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px 15px;
+      align-items: center;
+      margin-bottom: 25px;
+    }
+
+    .filters label {
+      font-weight: bold;
+      margin-right: 5px;
+    }
+
+    .filters input[type="date"],
+    .filters select,
+    .filters input[type="text"] {
+      padding: 8px 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      font-size: 14px;
+    }
+
+    .filters .date-range {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0;
+    }
+
+    th, td {
+      text-align: center;
+      padding: 14px 10px;
+      font-size: 15px;
+    }
+
+    thead th {
+      background-color: #f0ece7;
+      font-weight: bold;
+      border-top: 1px solid #ccc;
+      border-bottom: 1px solid #ccc;
+    }
+
+    tbody tr {
+      background-color: #fff;
+      cursor: pointer;
+      transition: background-color 0.2s;
+    }
+
+    tbody tr:hover {
+      background-color: #f9f9f9;
+    }
+
+    tbody tr + tr td {
+      border-top: 1px solid #eee;
+    }
+
+    tbody td {
+      border-left: 1px solid #eee;
+    }
+
+    tbody td:first-child {
+      border-left: none;
+    }
+
+    tbody tr:last-child td {
+      border-bottom: 1px solid #eee;
+    }
+
+    tbody tr:first-child td:first-child {
+      border-top-left-radius: 10px;
+    }
+
+    tbody tr:first-child td:last-child {
+      border-top-right-radius: 10px;
+    }
+
+    tbody tr:last-child td:first-child {
+      border-bottom-left-radius: 10px;
+    }
+
+    tbody tr:last-child td:last-child {
+      border-bottom-right-radius: 10px;
+    }
+
+    .pagination {
+      margin-top: 20px;
+      text-align: center;
+    }
+
+    .pagination button {
+      border: none;
+      background: none;
+      font-size: 16px;
+      margin: 0 4px;
+      cursor: pointer;
+      color: #999;
+    }
+
+    .pagination .active {
+      color: #000;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+
+  <h2>예약 현황</h2>
+
+  <div class="filters">
+    <div class="date-range">
+      <label>시작일</label>
+      <input type="date" name="startDate" />
+      <span>-</span>
+      <label>종료일</label>
+      <input type="date" name="endDate" />
+    </div>
+
+    <div style="padding-left: 600px;">
+      <label>룸 종류</label>
+      <select name="roomType">
+        <option value="">전체</option>
+        <option value="스탠다드룸">스탠다드룸</option>
+        <option value="프리미어룸">프리미어룸</option>
+        <option value="스위트룸">스위트룸</option>
+        <option value="프레지덴셜 스위트 룸">프레지덴셜 스위트 룸</option>
+      </select>
+    </div>
+
+    <div>
+      <label>회원</label>
+      <select name="memberType">
+        <option value="">전체</option>
+        <option value="회원">회원</option>
+        <option value="비회원">비회원</option>
+      </select>
+    </div>
+
+    <div>
+      <label>예약 상태</label>
+      <select name="reservationStatus">
+        <option value="">전체</option>
+        <option value="예약 대기">예약 대기</option>
+        <option value="예약 완료">예약 완료</option>
+        <option value="예약 취소">예약 취소</option>
+        <option value="체크인 완료">체크인 완료</option>
+        <option value="체크아웃 완료">체크아웃 완료</option>
+      </select>
+    </div>
+
+    <div style="margin-left: auto;">
+      <input type="text" name="searchUser" placeholder="예약자 검색" />
+    </div>
+  </div>
+
+  <table>
+    <thead>
+      <tr>
+        <th>예약 번호</th>
+        <th>룸 종류(호실)</th>
+        <th>예약자(회원/비회원)</th>
+        <th>예약 상태</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr th:each="room : ${roomList}"
+          th:onclick="|location.href='@{/room_manage_detail(roomId=${room.roomId})}'|">
+        <td th:text="${room.reserveNo}">20250123</td>
+        <td th:text="${room.roomType}">스탠다드룸(601)</td>
+        <td th:text="${room.reserver}">김재인(회원)</td>
+        <td th:text="${room.status}">예약 대기</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="pagination">
+    <button>&laquo;</button>
+    <button>&lsaquo;</button>
+    <button class="active">1</button>
+    <button>&rsaquo;</button>
+    <button>&raquo;</button>
+  </div>
+
+</body>
+</html>

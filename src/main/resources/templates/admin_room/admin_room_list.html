@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8" />
+  <title>객실 관리</title>
+  <style>
+    /* (생략) — 기존 스타일 그대로 유지 */
+    body {
+      font-family: "Pretendard", sans-serif;
+      margin: 40px;
+      background-color: #fdfdfd;
+    }
+
+    h2 {
+      font-size: 30px;
+      border-bottom: 3px solid #333;
+      padding-bottom: 20px;
+      margin-bottom: 20px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0;
+    }
+
+    th, td {
+      text-align: center;
+      padding: 14px 10px;
+      font-size: 15px;
+    }
+
+    thead th {
+      background-color: #f0ece7;
+      font-weight: bold;
+      border-top: 1px solid #ccc;
+      border-bottom: 1px solid #ccc;
+    }
+
+    tbody tr {
+      background-color: #fff;
+      cursor: pointer;
+      transition: background-color 0.2s;
+    }
+
+    tbody tr:hover {
+      background-color: #f9f9f9;
+    }
+
+    tbody tr + tr td {
+      border-top: 1px solid #eee;
+    }
+
+    tbody td {
+      border-left: 1px solid #eee;
+    }
+
+    tbody td:first-child {
+      border-left: none;
+    }
+
+    tbody tr:last-child td {
+      border-bottom: 1px solid #eee;
+    }
+
+    tbody tr td {
+      border-radius: 0;
+    }
+
+    tbody tr:first-child td:first-child {
+      border-top-left-radius: 10px;
+    }
+
+    tbody tr:first-child td:last-child {
+      border-top-right-radius: 10px;
+    }
+
+    tbody tr:last-child td:first-child {
+      border-bottom-left-radius: 10px;
+    }
+
+    tbody tr:last-child td:last-child {
+      border-bottom-right-radius: 10px;
+    }
+
+    .pagination {
+      margin-top: 20px;
+      text-align: center;
+    }
+
+    .pagination button {
+      border: none;
+      background: none;
+      font-size: 16px;
+      margin: 0 4px;
+      cursor: pointer;
+      color: #999;
+    }
+
+    .pagination .active {
+      color: #000;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+
+  <h2>객실 관리</h2>
+
+  <table>
+    <thead>
+      <tr>
+        <th>룸 종류</th>
+        <th>침대 타입</th>
+        <th>전망</th>
+        <th>비고</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr th:each="room : ${roomList}"
+          th:onclick="|location.href='@{/room_manage_detail(roomId=${room.roomId})}'|">
+        <td th:text="${room.roomType}">룸 종류</td>
+        <td th:text="${room.bedType}">침대 타입</td>
+        <td th:text="${room.viewType}">전망</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="pagination">
+    <button>&laquo;</button>
+    <button>&lsaquo;</button>
+    <button class="active">1</button>
+    <button>&rsaquo;</button>
+    <button>&raquo;</button>
+  </div>
+
+</body>
+</html>
