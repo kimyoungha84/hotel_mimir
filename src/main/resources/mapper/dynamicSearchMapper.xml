@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.co.sist.mapper.DynamicSearchMapper">
+<select id="searchDynamic" resultType="SearchDataDomain">
+  SELECT * FROM dining
+  WHERE 1=1
+  <foreach collection="filters" item="filter">
+  <choose>
+  <when test="filter.operator.name() == 'EQ'">
+    AND ${filter.column} = #{filter.value}
+  </when>
+  <when test="filter.operator.name() == 'LIKE'">
+  AND ${filter.column} LIKE '%' || #{filter.value} || '%'
+  </when>
+  <when test="filter.operator.name() == 'IN'">
+    <foreach collection="filter.value" item="v" open="AND ${filter.column} IN (" separator="," close=")">
+      #{v}
+    </foreach>
+  </when>
+  <when test="filter.operator.name() == 'BETWEEN'">
+    AND ${filter.column} BETWEEN #{filter.value[0]} AND #{filter.value[1]}
+  </when>
+  </choose>
+
+  </foreach>
+</select>
+
+
+<sql id="filter">
+<if test="filters != null and filters.size() > 0">
+  <foreach collection="filters" item="filter">
+    <choose>
+      <when test="filter.operator.name() == 'EQ'">
+        AND ${filter.column} = #{filter.value}
+      </when>
+      <when test="filter.operator.name() == 'LIKE'">
+        AND ${filter.column} LIKE '%' || #{filter.value} || '%'
+      </when>
+      <when test="filter.operator.name() == 'IN'">
+        <foreach collection="filter.value" item="v" open="AND ${filter.column} IN (" separator="," close=")">
+          #{v}
+        </foreach>
+      </when>
+          <!-- 날짜: BETWEEN (start + end) -->
+        <when test="filter.operator.name() == 'TRUNC_BETWEEN'">
+          AND TRUNC(${filter.column}) BETWEEN #{filter.value[0]} AND #{filter.value[1]}
+        </when>
+
+        <!-- 날짜: startDate만 있을 경우 -->
+        <when test="filter.operator.name() == 'TRUNC_GREATER_EQUAL'">
+          AND TRUNC(${filter.column}) &gt;= #{filter.value}
+        </when>
+
+        <!-- 날짜: endDate만 있을 경우 -->
+        <when test="filter.operator.name() == 'TRUNC_LESS_EQUAL'">
+          AND TRUNC(${filter.column}) &lt;= #{filter.value}
+        </when>
+    </choose>
+  </foreach>
+  </if>
+</sql>
+
+<sql id="diningSelectColumns">
+  dining_name, dining_price, dining_reg_date
+</sql>
+
+
+<sql id="faqSelectColumns">
+  faq_num, faq_title, faq_content, faq_date
+</sql>
+
+
+<select id="searchDining" resultType="SearchDataDomain">
+  SELECT
+    <include refid="diningSelectColumns"/>
+  FROM dining
+  WHERE 1=1
+  <include refid="filter"/>
+  LIMIT #{pageSize} OFFSET #{offset}
+</select>
+
+
+
+		<select id="countFaq" resultType="int">
+        SELECT COUNT(*)
+        FROM faq
+        WHERE 1=1
+        <include refid="filter"/>
+        </select>
+
+
+<select id="searchFaq" resultType="SearchDataDomain">
+ SELECT faq_num, faq_title, faq_content, faq_date
+FROM (
+    SELECT faq_num, faq_title, faq_content, faq_date,
+           ROW_NUMBER() OVER (ORDER BY faq_date DESC) rnum
+    FROM faq
+    WHERE 1=1
+    <include refid="filter"/> <!-- 동적 필터 추가 -->
+) 
+WHERE rnum BETWEEN #{offset} AND #{end}
+</select>
+
+
+<!-- <select id="searchFaq" resultType="SearchDataDomain">
+  SELECT
+    <include refid="faqSelectColumns"/>
+  FROM faq
+  WHERE 1=1
+  <include refid="filter"/>
+  LIMIT #{pageSize} OFFSET #{offset}
+</select> -->
+
+  
+  
+  <!-- 간단한 Select 쿼리 -->
+ <!--  <select id="searchDynamic" resultType="kr.co.sist.dto.DiningDto">
+    SELECT
+        dining_name AS name,
+        dining_price AS price,
+        dining_reg_date AS regDate
+    FROM dining
+  </select>
+ -->
+ <!-- <select id="searchDynamic" resultType="kr.co.sist.dto.DiningDomain">
+    SELECT * FROM dining WHERE dining_name LIKE '%한%'
+ </select> -->
+ 
+</mapper>
