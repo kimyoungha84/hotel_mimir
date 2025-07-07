@@ -52,4 +52,20 @@ document.addEventListener("DOMContentLoaded", function () {
       window.location.href = "/admin/faq/register";
     });
   }
+  // ✅ 수정 버튼 클릭 시
+  const modifyBtn = document.getElementById("modifyBtn");
+  if (modifyBtn) {
+    modifyBtn.addEventListener("click", function () {
+      const checked = document.querySelectorAll("input[name='chk']:checked");
+      if (checked.length !== 1) {
+        alert("수정할 항목을 하나만 선택하세요.");
+        return;
+      }
+
+      const faqId = checked[0].value;
+      window.location.href = `/admin/faq/modify?num=${faqId}`;
+    });
+  }
+  
+  
 });

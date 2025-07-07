@@ -39,7 +39,7 @@ public class FaqController {
 	      
 	       modelUtils.setFilteringInfo(model, FilterConfig.FAQ);
 	       
-	       modelUtils.setPageInfoAttributes(model, "admin_faq", "faq_list_fm", "faqList");
+	       modelUtils.setPageInfoAttributes(model, "inquiry/admin_faq", "faq_list_fm", "faqList");
 	       
 	       modelUtils.setPaginationAttributes(model, pageSize, FilterConfig.FAQ);
 	      

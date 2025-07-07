@@ -28,14 +28,8 @@
       <section class="faq-section">
         <h1>FAQ</h1>
 
-        <!-- 검색 필터 -->
-        <div class="search-bar">
-          <input type="text" id="titleSearch" placeholder="제목" />
-          <button id="searchBtn">검색</button>
-        </div>
         <!-- 검색 필터 Fragment -->
-<div th:replace="fragments/filter :: filter(${filter})">
-</div>
+		<div class="search-bar" th:replace="fragments/filter :: filter(${filter})"></div>
 
         <!-- FAQ 테이블 -->
         <table class="faq-table">
@@ -60,7 +54,7 @@
 
         <!-- 하단 버튼 -->
         <div class="bottom-controls">
-          <button class="btn modify">수정</button>
+          <button class="btn modify" onclick="location.href='/admin/faq/modify'">수정</button>
           <button id="deleteBtn" class="btn delete">삭제</button>
           <button class="btn apply" onclick="location.href='/admin/faq/register'">FAQ 등록</button>
         </div>
@@ -68,13 +62,7 @@
         <!-- 페이징 -->
         <div id="paginationArea" th:insert="fragments/pagination :: pagination">
 </div>
-        <div class="pagination">
-          <button class="page">&laquo;</button>
-          <button class="page active">1</button>
-          <button class="page">2</button>
-          <button class="page">3</button>
-          <button class="page">&raquo;</button>
-        </div>
+        
       </section>
     </main>
 </div>
