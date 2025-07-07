@@ -2,12 +2,13 @@ package kr.co.sist.util.mapper;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import kr.co.sist.util.FilterCondition;
 import kr.co.sist.util.domain.SearchDataDomain;
 
-
+@Mapper
 public interface DynamicSearchMapper {
     List<SearchDataDomain> searchDynamic(@Param("table") String table,
                                             @Param("columns") List<String> columns,

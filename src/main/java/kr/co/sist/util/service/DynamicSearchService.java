@@ -11,22 +11,19 @@ import kr.co.sist.util.mapper.DynamicSearchMapper;
 
 
 @Service
-public class DynamicSearchService implements DynamicSearchMapper{
+public class DynamicSearchService{
     @Autowired private DynamicSearchMapper mapper;
 
-	@Override
 	public List<SearchDataDomain> searchDynamic(String table, List<String> columns, List<FilterCondition> filters) {
 		return null;
 	}
 
 
-	@Override
 	public List<SearchDataDomain> searchDining(List<FilterCondition> filters, int offset, int end, int pageSize) {
 		return mapper.searchDining(filters, offset, end, pageSize);
 	}
 
 
-	@Override
 	public List<SearchDataDomain> searchFaq(List<FilterCondition> filters, int offset, int end, int pageSize) {
 		for(FilterCondition filter : filters) {
 			System.out.println(filter);
@@ -36,13 +33,11 @@ public class DynamicSearchService implements DynamicSearchMapper{
 	}
 
 
-	@Override
 	public int countFaq(List<FilterCondition> filters) {
 		return mapper.countFaq(filters);
 	}
 
 
-	@Override
 	public int countDining(List<FilterCondition> filters) {
 		return mapper.countDining(filters);
 	}

@@ -4,7 +4,7 @@
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="kr.co.sist.mapper.DynamicSearchMapper">
-<select id="searchDynamic" resultType="SearchDataDomain">
+<select id="searchDynamic" resultType="kr.co.sist.util.domain.SearchDataDomain">
   SELECT * FROM dining
   WHERE 1=1
   <foreach collection="filters" item="filter">
@@ -73,7 +73,7 @@
 </sql>
 
 
-<select id="searchDining" resultType="SearchDataDomain">
+<select id="searchDining" resultType="kr.co.sist.util.domain.SearchDataDomain">
   SELECT
     <include refid="diningSelectColumns"/>
   FROM dining
@@ -92,7 +92,7 @@
         </select>
 
 
-<select id="searchFaq" resultType="SearchDataDomain">
+<select id="searchFaq" resultType="kr.co.sist.util.domain.SearchDataDomain">
  SELECT faq_num, faq_title, faq_content, faq_date
 FROM (
     SELECT faq_num, faq_title, faq_content, faq_date,
