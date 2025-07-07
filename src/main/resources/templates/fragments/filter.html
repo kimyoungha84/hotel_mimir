@@ -1,0 +1,89 @@
+<div th:fragment="filter(filter)">
+  <form id="searchForm" style="display: flex; align-items: center; justify-content: space-between;">
+    
+    <!-- 왼쪽: Date Picker -->
+    <div th:if="${filter.showDatePicker}" style="flex: 1; display: flex; justify-content: flex-start; gap: 10px;">
+      <input type="hidden" name="dateName" th:value="${filter.filteringDateName}" />
+      <input type="date" name="startDate" th:value="${param.startDate}" />
+      <input type="date" name="endDate" th:value="${param.endDate}" />
+    </div>
+
+    <!-- 오른쪽: 콤보박스, 텍스트 입력, 검색 버튼 -->
+    <div style="display: flex; align-items: center; gap: 10px;">
+      
+      <!-- 셀렉터가 1개일 경우, 라벨만 표시 -->
+      <div th:if="${filter.showSelector}">
+      	<input type="hidden" name="searchType" th:value="${filter.selectOptions[0].value}" />
+        <span th:if="${#lists.size(filter.selectOptions) == 1}" th:text="${filter.selectOptions[0].label}"></span>
+        <!-- 셀렉터가 2개 이상일 경우에만 select box 표시 -->
+        <select th:if="${#lists.size(filter.selectOptions) > 1}" name="searchType" style="width: 150px;">
+          <option th:each="opt : ${filter.selectOptions}" 
+                  th:value="${opt.value}" th:text="${opt.label}">검색</option>
+        </select>
+      </div>
+
+      <!-- 텍스트 입력 -->
+      <div th:if="${filter.showSearchText}" style="flex: 1;">
+        <input type="text" name="searchKeyword" th:value="${param.searchKeyword}" placeholder="검색어 입력" style="width: 200px;" />
+      </div>
+
+      <!-- 검색 버튼 -->
+      <button type="button" id="searchBtn" style="padding: 5px 10px; font-size: 14px;">검색</button>
+    </div>
+
+    <!-- 숨겨진 필드들 -->
+    <input type="hidden" name="filterType" th:value="${filter.filterType}" />
+    <input type="hidden" name="filter_fragmentTemplate" th:value="${filter_fragmentTemplate}" />
+    <input type="hidden" name="filter_fragmentName" th:value="${filter_fragmentName}" />
+    <input type="hidden" name="filter_resultKey" th:value="${filter_resultKey}" />
+    <input type="hidden" name="currentPage" th:value="${currentPage}" />
+    <input type="hidden" name="pageSize" th:value="${pageSize}" />
+    
+  </form>
+
+<script th:inline="javascript">
+(function () {
+  const $btn = document.getElementById("searchBtn");
+  const $form = document.getElementById("searchForm");
+
+  $form.addEventListener("keydown", function(event) {
+    if (event.key === "Enter") {
+      event.preventDefault();
+    }
+  });
+
+  $btn?.addEventListener("click", function () {
+	  
+	const params = new URLSearchParams(new FormData($form));
+	window.lastSearchParams = new URLSearchParams(params);
+
+    // 검색 결과 요청
+    fetch('/search?' + params.toString())
+      .then(res => res.text())
+      .then(html => {
+        // 결과 영역 갱신
+        document.getElementById("resultArea").innerHTML = html;
+
+        // 🔹 1. count 요청
+      		fetch('/count?' + params.toString())
+			  .then(res => res.json())
+			  .then(json => {
+			    const totalItems = json.totalItems;
+			    console.log("총 개수:", totalItems);
+			    params.set("totalItems", totalItems);
+
+
+            // 🔹 3. 페이지네이션 요청
+            fetch('/reBuildPagination?' + params.toString())
+              .then(res => res.text())
+              .then(paginationHtml => {
+                document.getElementById("paginationArea").innerHTML = paginationHtml;
+              });
+          });
+      });
+  });
+})();
+</script>
+
+
+</div>

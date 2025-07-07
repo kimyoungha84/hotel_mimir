@@ -1,0 +1,92 @@
+<div th:fragment="pagination">
+    <style>
+        .pagination {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            list-style: none;
+            padding: 0;
+        }
+
+        .pagination li {
+            display: inline-block;
+            width: 40px;
+            height: 40px;
+            text-align: center;
+            line-height: 40px;
+            border: 1px solid #ddd;
+            border-radius: 5px; /* 네모 형태 */
+        }
+        
+
+        .pagination li a {
+            text-decoration: none;
+            color: #333;
+            font-size: 16px;
+            display: block;
+            height: 100%;
+            width: 100%;
+            line-height: 40px;
+        }
+
+        .pagination li.active {
+            background-color: #000; /* 현재 페이지 하이라이트는 검은색 */
+            color: #fff; /* 폰트 색을 하얀색으로 변경 */
+            font-weight: bold;
+        }
+        
+        .pagination li.disabled {
+		  pointer-events: none;
+		  /* opacity: 0.5; */
+		}
+        
+
+        .pagination li.disabled a {
+            color: #ddd;
+            cursor: not-allowed;
+        }
+
+        .pagination li a:hover {
+            background-color: #f0f0f0;
+            cursor: pointer;
+        }
+
+        .pagination li a:hover:not(.active) {
+            background-color: #ddd; /* hover 시 회색 배경 */
+        }
+    </style>
+
+    <div class="pagination">
+        <ul>
+            <!-- << 버튼 (첫 페이지로 이동) -->
+            <li th:classappend="${currentPage == 1} ? 'disabled' : ''">
+                <a href="#" th:onclick="|loadPage(1)|" th:text="'<<'"></a>
+            </li>
+
+            <!-- < 버튼 (이전 페이지로 이동) -->
+            <li th:classappend="${currentPage == 1} ? 'disabled' : ''">
+                <a href="#" th:onclick="|loadPage(${currentPage - 1})|" th:text="'<'"></a>
+            </li>
+
+            <!-- 페이지 번호 -->
+            <li th:each="pageNum : ${#numbers.sequence(1, (totalItems / pageSize) + 1)}"
+                th:classappend="${pageNum == currentPage} ? 'active' : ''">
+                <a href="#" th:onclick="|loadPage(${pageNum})|" th:text="${pageNum}"></a>
+            </li>
+
+            <!-- > 버튼 (다음 페이지로 이동) -->
+            <li th:classappend="${currentPage == (totalItems / pageSize) + 1} ? 'disabled' : ''">
+                <a href="#" th:onclick="|loadPage(${currentPage + 1})|" th:text="'>'"></a>
+            </li>
+
+            <!-- >> 버튼 (마지막 페이지로 이동) -->
+            <li th:classappend="${currentPage == (totalItems / pageSize) + 1} ? 'disabled' : ''">
+                <a href="#" th:onclick="|loadPage(${(totalItems / pageSize) + 1})|" th:text="'>>'"></a>
+            </li>
+        </ul>
+    </div>
+</div>
+
+
+
+
