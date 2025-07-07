@@ -19,24 +19,33 @@ $(function(){
         l.addEventListener('click', colorLink)
     });
 
-    /* COLLAPSE MENU */
-    const linkCollapse = document.getElementsByClassName('collapse__link');
-    var i;
-    for(i=0;i<linkCollapse.length;i++) {
-        linkCollapse[i].addEventListener('click', function(){
-            //debugger; //여기서 linkCollapse 내에 뭐가 있는지 알아야 한단 말이지....
-            //alert("linkCollapse 길이-----"+linkCollapse.length);
+    var collapseLinks = $(".nav__link.collapse");
 
-            //감싼거 보여줘, 안보이게 해줘
-            const collapseMenu = this.nextElementSibling;
-            collapseMenu.classList.toggle('showCollapse');//showCollapse라는 속성을 추가/삭제 (on/off하는 것처럼 추가/삭제)
+    collapseLinks.each(function () {
+        $(this).on("click", function (e) {
+			
+            var clicked = $(this);
+            var clickedMenu = clicked.children(".collapse__menu");
+            var clickedArrow = clicked.children(".collapse__link");
 
-            //화살표일거임.
-            const rotate = collapseMenu.previousElementSibling;
-            rotate.classList.toggle('rotate');
+            // 이미 열려있는 상태면 닫기만 하고 return
+            if (clickedMenu.hasClass("showCollapse")) {
+                clickedMenu.removeClass("showCollapse");
+                clickedArrow.removeClass("rotate");
+                return;
+            }
+
+            // 모든 메뉴 닫기
+            $(".collapse__menu").removeClass("showCollapse");
+            $(".collapse__link").removeClass("rotate");
+
+            // 현재 클릭한 메뉴 열기
+            clickedMenu.addClass("showCollapse");
+            clickedArrow.addClass("rotate");
+
+            e.stopPropagation();
         });
-    }//end for
-
+    });
 });//ready
 
 
