@@ -8,5 +8,6 @@ public interface FAQService {
     void insertFaq(FAQDTO faq);
     
     void deleteFaqs(List<Integer> faqNums);
+    
 }
 

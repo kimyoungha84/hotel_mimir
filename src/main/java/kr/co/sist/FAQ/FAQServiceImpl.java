@@ -25,4 +25,6 @@ public class FAQServiceImpl implements FAQService {
     public void deleteFaqs(List<Integer> faqNums) {
         faqMapper.deleteFaqs(faqNums);
     }
+    
+
 }

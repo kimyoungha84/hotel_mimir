@@ -41,8 +41,8 @@
               <th>등록일</th>
             </tr>
           </thead>
-         <tbody th:fragment="faq_list_fm" id="resultArea" th:each="faq, stat : ${faqList}">
-  <tr>
+         <tbody th:fragment="faq_list_fm" id="resultArea" >
+  <tr th:each="faq, stat : ${faqList}" th:if="${stat.count <= 5}")>
     <td><input type="checkbox" name="chk" th:value="${faq.faq_num}"/></td>
     <td th:text="${stat.count}"></td>
     <td th:text="${faq.faq_title}"></td>
@@ -54,7 +54,7 @@
 
         <!-- 하단 버튼 -->
         <div class="bottom-controls">
-          <button class="btn modify" onclick="location.href='/admin/faq/modify'">수정</button>
+          <button class="btn modify" id="btn modify">수정</button>
           <button id="deleteBtn" class="btn delete">삭제</button>
           <button class="btn apply" onclick="location.href='/admin/faq/register'">FAQ 등록</button>
         </div>
@@ -66,6 +66,7 @@
       </section>
     </main>
 </div>
+<script src="/admin_common_assets/js/pagination.js"></script>
   <script src="/js/admin_faq.js"></script>
 </body>
 </html>

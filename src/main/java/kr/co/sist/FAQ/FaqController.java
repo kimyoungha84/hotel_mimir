@@ -91,6 +91,7 @@ public class FaqController {
 		return "redirect:/admin/faq"; // 등록 후 리스트 페이지로 이동
 	}
 	
+
 	@PostMapping("/admin/faq/delete")
 	@ResponseBody
 	public String deleteFaq(@RequestBody List<Integer> faqNums) {
