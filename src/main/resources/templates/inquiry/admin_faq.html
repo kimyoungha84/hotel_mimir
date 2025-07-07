@@ -33,6 +33,9 @@
           <input type="text" id="titleSearch" placeholder="제목" />
           <button id="searchBtn">검색</button>
         </div>
+        <!-- 검색 필터 Fragment -->
+<div th:replace="fragments/filter :: filter(${filter})">
+</div>
 
         <!-- FAQ 테이블 -->
         <table class="faq-table">
@@ -44,7 +47,7 @@
               <th>등록일</th>
             </tr>
           </thead>
-         <tbody id="faqList" th:each="faq, stat : ${faqList}">
+         <tbody th:fragment="faq_list_fm" id="resultArea" th:each="faq, stat : ${faqList}">
   <tr>
     <td><input type="checkbox" name="chk" th:value="${faq.faq_num}"/></td>
     <td th:text="${stat.count}"></td>
@@ -63,6 +66,8 @@
         </div>
 
         <!-- 페이징 -->
+        <div id="paginationArea" th:insert="fragments/pagination :: pagination">
+</div>
         <div class="pagination">
           <button class="page">&laquo;</button>
           <button class="page active">1</button>

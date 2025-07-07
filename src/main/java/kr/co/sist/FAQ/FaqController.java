@@ -14,11 +14,17 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import kr.co.sist.util.FilterConfig;
+import kr.co.sist.util.ModelUtils;
+
 @Controller
 public class FaqController {
 
 	@Autowired
 	private FAQServiceImpl service;
+	
+	@Autowired
+	private ModelUtils modelUtils;
 
 	@GetMapping("/admin/chat")
 	public String adminChatPage() {
@@ -28,7 +34,18 @@ public class FaqController {
 	@GetMapping("/admin/faq")
 	public String adminFAQPage(Model model) {
 		List<FAQDTO> list = service.selectAllFAQ();
-		model.addAttribute("faqList", list);
+		
+		  int pageSize = 5; // 페이지당 항목 수
+	      
+	       modelUtils.setFilteringInfo(model, FilterConfig.FAQ);
+	       
+	       modelUtils.setPageInfoAttributes(model, "admin_faq", "faq_list_fm", "faqList");
+	       
+	       modelUtils.setPaginationAttributes(model, pageSize, FilterConfig.FAQ);
+	      
+	       
+		
+//		model.addAttribute("faqList", list);
 		/*
 		 * List<FaqDTO> faqList = null; try { faqList = service.selectAllFAQ(); } catch
 		 * (Exception e) { e.printStackTrace(); } // 서비스 호출
