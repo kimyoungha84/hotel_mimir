@@ -135,12 +135,13 @@ a {
 
 /* Add padding body*/
 .body-pd {
-    transition : all 0.7s ease; /*부드럽게 오른쪽으로 이동*/
+   /* transition : all 0.7s ease; 부드럽게 오른쪽으로 이동 */
+   padding: 0 0 0 9rem;
 
 }
 
 .body-pd.shrink{
-	padding: 0 0 0 9rem;
+	/* padding: 0 0 0 9rem; */
 }
 
 /* Active links menu */
