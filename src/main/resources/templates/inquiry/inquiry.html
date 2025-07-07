@@ -1,14 +1,14 @@
 <!DOCTYPE html>
-<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" th:class="'sub-page'">
 <head>
   <meta charset="UTF-8">
   <title>문의관리</title>
   <link rel="stylesheet" href="/css/inquiry.css">
-  <link rel="stylesheet" href="/css/header.css">
+  <link rel="stylesheet" th:href="@{/css/header.css}" />
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
+
 <body>
-<img src="/images/bg_membership_faq.jpg" alt="FAQ 배경 이미지" style="width: 100%; height: auto;">
 <div th:replace="~{fragments/header.html :: header}"></div>
 
 <div class="container">
@@ -59,6 +59,8 @@
 </div>
   
 </div>
+
+<script src="https://cdn.jsdelivr.net/npm/bad-word-filtering@1.0.4/dist/bad-word-filtering.min.js"></script>
 <script src="/js/inquiry.js"></script>
 </body>
 </html>

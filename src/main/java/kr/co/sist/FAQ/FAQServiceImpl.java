@@ -5,9 +5,6 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import kr.co.sist.dto.FAQDTO;
-import kr.co.sist.mapper.FAQMapper;
-
 @Service
 public class FAQServiceImpl implements FAQService {
 

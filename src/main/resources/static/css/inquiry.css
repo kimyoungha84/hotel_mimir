@@ -249,3 +249,35 @@ th, td {
 .chat-option:hover {
 	background: #f0f0f0;
 }
+/*------------블록 css----------*/
+.message-block {
+  display: flex;
+  flex-direction: column;
+  max-width: 80%;
+  margin-bottom: 8px;
+  clear: both;
+}
+
+.message-block.left {
+  align-items: flex-start;
+  float: left;
+  margin-left: 10px;
+}
+
+.message-block.right {
+  align-items: flex-end;
+  float: right;
+  margin-right: 10px;
+}
+
+.sender-name {
+  font-size: 13px;
+  color: #555;
+  margin-bottom: 3px;
+}
+
+.message-time {
+  font-size: 11px;
+  color: #777;
+  margin-top: 2px;
+}

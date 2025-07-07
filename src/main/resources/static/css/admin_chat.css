@@ -156,3 +156,60 @@ body {
 .chat-input button:hover {
   background-color: #216ab9;
 }
+/* 채팅 메시지 */
+.chat-message {
+	display: inline-block;
+	clear: both;
+	margin: 5px 0;
+	padding: 10px 15px;
+	border-radius: 15px;
+	font-size: 14px;
+	max-width: 80%;
+	word-break: break-word;
+}
+
+.chat-message.left {
+	float: left;
+	background-color: #f1f1f1;
+	margin-left: 10px;
+}
+
+.chat-message.right {
+	float: right;
+	background-color: #FFEB33;
+	margin-right: 10px;
+}
+
+/* 메시지 블록 구조 */
+.message-block {
+	display: flex;
+	flex-direction: column;
+	max-width: 80%;
+	margin-bottom: 8px;
+	clear: both;
+}
+
+.message-block.left {
+	align-items: flex-start;
+	float: left;
+	margin-left: 10px;
+}
+
+.message-block.right {
+	align-items: flex-end;
+	float: right;
+	margin-right: 10px;
+}
+
+.sender-name {
+	font-size: 13px;
+	color: #555;
+	margin-bottom: 3px;
+}
+
+.message-time {
+	font-size: 11px;
+	color: #777;
+	margin-top: 2px;
+}
+

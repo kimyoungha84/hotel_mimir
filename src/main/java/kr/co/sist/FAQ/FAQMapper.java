@@ -1,10 +1,8 @@
-package kr.co.sist.mapper;
+package kr.co.sist.FAQ;
 
 import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
-
-import kr.co.sist.dto.FAQDTO;
 
 @Mapper
 public interface FAQMapper {

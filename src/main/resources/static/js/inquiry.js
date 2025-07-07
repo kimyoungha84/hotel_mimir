@@ -32,15 +32,34 @@ ws.onmessage = function (event) {
   $(".placeholder-text").hide();
 
   const [sender, msg] = event.data.split(":", 2);
-  const isMine = sender === userId; // 내 메시지인지 유무
+  const isMine = sender === userId;
   const alignClass = isMine ? "right" : "left";
 
-  const msgElem = $("<div>")
-    .addClass("chat-message " + alignClass)
-    .text(sender + ": " + msg);
+  const messageBlock = $("<div>").addClass("message-block " + alignClass);
 
-  $("#chatBody").append(msgElem).scrollTop($("#chatBody")[0].scrollHeight);
+  // 관리자 메시지일 경우 이름과 시간 표시
+  if (!isMine) {
+    //const nameElem = $("<div>").addClass("sender-name").text(sender);
+    const timeElem = $("<div>").addClass("message-time").text(getCurrentTime());
+    const msgElem = $("<div>").addClass("chat-message left").text(msg);
+    messageBlock.append( msgElem, timeElem);
+  } else {
+    // 사용자 메시지는 이름 없이 메시지만
+    const msgElem = $("<div>").addClass("chat-message right").text(msg);
+    messageBlock.append(msgElem);
+  }
+
+  $("#chatBody").append(messageBlock).scrollTop($("#chatBody")[0].scrollHeight);
 };
+
+// 시간 포맷 함수
+function getCurrentTime() {
+  const now = new Date();
+  const h = now.getHours().toString().padStart(2, '0');
+  const m = now.getMinutes().toString().padStart(2, '0');
+  return `${h}:${m}`;
+}
+
 
 // 문의 시작 버튼 클릭
 $("#startChatBtn").click(function () {
@@ -51,7 +70,7 @@ $("#startChatBtn").click(function () {
   $("#chatBody").html(`
     <p style="text-align:center; color:#555;">문의 유형을 선택해주세요</p>
     <div class="chat-options">
-      <button class="chat-option" data-type="room">거실 문의</button>
+      <button class="chat-option" data-type="room">객실 문의</button>
       <button class="chat-option" data-type="dining">다이닝 문의</button>
       <button class="chat-option" data-type="etc">기타 문의</button>
     </div>
@@ -109,9 +128,11 @@ function sendMessage() {
   }
 
   if (msg !== "") {
-    const msgElem = $("<div>")
-      .addClass("chat-message right")
-      .text(userId + ": " + msg);
+	const msgElem = $("<div>").addClass("message-block right");
+	
+	const message = $("<div>").addClass("chat-message right").text(msg);
+	const timeElem = $("<div>").addClass("message-time").text(getCurrentTime());
+	msgElem.append(message,timeElem);
 
     $("#chatBody").append(msgElem).scrollTop($("#chatBody")[0].scrollHeight);
     ws.send(msg);
@@ -167,11 +188,11 @@ $("#maximizeBtn").click(function () {
 $("#backBtn").click(function () {
   $("#inputArea").hide();
   $("#chatBody").html(`
-	<p style="text-align:center; color: #0000FF;">상담 시간 10:00 ~ 17:00 </p>
-	<p style="text-align:center; font-size : 13px; color: #FF0000;">※욕설 금지 = 관리자도 누군가의 자녀이자 부모님이다.※ </p>
+   <p style="text-align:center; color: #0000FF;">상담 시간 10:00 ~ 17:00 </p>
+   <p style="text-align:center; font-size : 13px; color: #FF0000;">※욕설 금지 = 관리자도 누군가의 자녀이자 부모님이다.※ </p>
     <p style="text-align:center; color: #aaa;">문의 유형을 선택해주세요</p>
     <div class="chat-options">
-      <button class="chat-option" data-type="room">거실 문의</button>
+      <button class="chat-option" data-type="room">객실 문의</button>
       <button class="chat-option" data-type="dining">다이닝 문의</button>
       <button class="chat-option" data-type="etc">기타 문의</button>
     </div>

@@ -1,4 +1,4 @@
-package kr.co.sist.controller;
+package kr.co.sist.FAQ;
 
 import java.sql.Date;
 import java.time.LocalDate;
@@ -14,11 +14,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import kr.co.sist.FAQ.FAQServiceImpl;
-import kr.co.sist.dto.FAQDTO;
-
 @Controller
-public class AdminFaqController {
+public class FaqController {
 
 	@Autowired
 	private FAQServiceImpl service;

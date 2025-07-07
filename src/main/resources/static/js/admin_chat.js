@@ -79,9 +79,15 @@ function sendMessage() {
 
 // 채팅 출력
 function appendChat(user, msg, isMine) {
-	const msgElem = $("<div>")
-		.text(`${user}: ${msg}`)
-		.css("text-align", isMine ? "right" : "left");
+	const time = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
 
-	$("#chatBody").append(msgElem);
+		const block = $("<div>").addClass("message-block").addClass(isMine ? "right" : "left");
+		//const sender = $("<div>").addClass("sender-name").text(user);
+		const message = $("<div>").addClass("chat-message").addClass(isMine ? "right" : "left").text(msg);
+		const timestamp = $("<div>").addClass("message-time").text(time);
+
+		block/*.append(sender)*/.append(message).append(timestamp);
+
+		$("#chatBody").append(block);
+		$("#chatBody").scrollTop($("#chatBody")[0].scrollHeight);
 }
