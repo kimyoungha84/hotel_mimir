@@ -1,34 +1,29 @@
 <!DOCTYPE html>
-<html xmlns:th="http://thymeleaf.org" lang="ko">
+<html xmlns="http://www.thymeleaf.org" lang="ko">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>FAQ 관리</title>
-  <link rel="stylesheet" href="/css/admin_faq.css" />
+<!-- favicon 설정 -->
+<link rel="icon shortcut"  href="/admin_common_assets/common_img/mimir_favicon.ico"/>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="/css/admin_faq.css" />
+
+
+<!-- jquery CDN -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+
+<th:block th:replace="~{/administrator/fragments/admin_header :: admin_header}"></th:block>
+
 </head>
 <body>
-  <div class="wrapper">
-    <!-- 사이드바 -->
-     <aside class="sidebar">
-    <h2>MIMIR</h2>
-    <ul class="menu">
-      <li>대시보드</li>
-      <li>회원관리</li>
-      <li>차량관리</li>
-      <li>디자인관리</li>
-        <li class="section">문의센터</li>
-        <li class="active" onclick="location.href='/admin/inquiry'">1:1 문의</li>
-        <li class="active" onclick="location.href='/admin/faq'">FAQ</li>
-        <li class="active" onclick="location.href='/admin/chat'">실시간 채팅</li>
-    </ul>
-  </aside>
+<th:block th:replace="~{/administrator/fragments/admin_sidebar :: admin_sidebar}"></th:block>
 
+<div id="body-pd" class="body-pd">
+<h2 class="h2Title">title 작성</h2>
+<hr/>
     <!-- 메인 컨텐츠 -->
     <main class="main-content">
-      <div class="top-bar">
-        <span>홍길동 님</span>
-        <button id="logoutBtn">Log Out</button>
-      </div>
+    
 
       <section class="faq-section">
         <h1>FAQ</h1>
@@ -77,8 +72,7 @@
         </div>
       </section>
     </main>
-  </div>
-
+</div>
   <script src="/js/admin_faq.js"></script>
 </body>
 </html>
