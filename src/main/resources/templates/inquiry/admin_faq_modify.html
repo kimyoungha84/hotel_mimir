@@ -6,9 +6,14 @@
 
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="/css/admin_faq.css" />
 
 <!-- jquery CDN -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+
+<!-- Summernote CSS & JS -->
+<link href="https://cdn.jsdelivr.net/npm/summernote@0.8.20/dist/summernote-lite.min.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/summernote@0.8.20/dist/summernote-lite.min.js"></script>
 
 <th:block th:replace="~{/administrator/fragments/admin_header :: admin_header}"></th:block>
 
@@ -17,75 +22,36 @@
 <th:block th:replace="~{/administrator/fragments/admin_sidebar :: admin_sidebar}"></th:block>
 
 <div id="body-pd" class="body-pd">
-<h2 class="h2Title">title 작성</h2>
+<h2 class="h2Title">FAQ 수정</h2>
 <hr/>
-  <style>
-    body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      padding: 40px;
-    }
-    h2 {
-      font-size: 24px;
-      border-bottom: 2px solid #000;
-      padding-bottom: 10px;
-    }
-    label {
-      display: block;
-      margin-top: 30px;
-      font-weight: bold;
-    }
-    input[type="text"] {
-      width: 100%;
-      padding: 8px;
-      font-size: 14px;
-      margin-top: 5px;
-      border: 1px solid #ccc;
-    }
-    textarea {
-      width: 100%;
-      height: 200px;
-      padding: 10px;
-      margin-top: 10px;
-      font-size: 14px;
-      border: 1px solid #ccc;
-    }
-    .btn-box {
-      margin-top: 30px;
-      text-align: center;
-    }
-    .btn {
-      width: 80px;
-      padding: 10px;
-      margin: 0 10px;
-      font-size: 14px;
-      border: none;
-      cursor: pointer;
-    }
-    .btn.modify {
-      background-color: #6667AB;
-      color: #fff;
-    }
-    .btn.cancel {
-      background-color: #555;
-      color: #fff;
-    }
-  </style>
+ <main class="main-content">
 <form method="post" action="/admin/faq/modify">
-    <input type="hidden" name="faq_num" value="${faq.faq_num}" /> <!-- 수정할 번호 -->
+    <input type="hidden" name="faq_num" th:value="${faq.faq_num}" /> <!-- 수정할 번호 -->
 
     <label for="faq_title">제목</label>
-    <input type="text" id="faq_title" name="faq_title" value="${faq.faq_title}" required />
+    <input type="text" id="faq_title" name="faq_title" th:value="${faq.faq_title}" required />
 
     <label for="faq_content">내용</label>
-    <textarea id="faq_content" name="faq_content">${faq.faq_content}</textarea>
+    <textarea id="faq_content" name="faq_content" th:text="${faq.faq_content}">
+    
+    </textarea>
 
     <div class="btn-box">
-      <button type="submit" class="btn modify">등록</button>
+      <button type="submit" class="btn modify">수정</button>
       <button type="button" class="btn cancel" onclick="history.back()">취소</button>
     </div>
   </form>
-
+<script>
+  $(document).ready(function() {
+    $('#faq_content').summernote({
+      height: 300,
+      lang: 'ko-KR',
+      placeholder: '내용을 입력하세요.'
+    });
+  });
+</script>
+</main>
 </div>
-
+<script src="/js/admin_faq.js"></script>
 </body>
 </html>

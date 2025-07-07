@@ -53,7 +53,7 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   }
   // ✅ 수정 버튼 클릭 시
-  const modifyBtn = document.getElementById("modifyBtn");
+/*  const modifyBtn = document.getElementById("modifyBtn");
   if (modifyBtn) {
     modifyBtn.addEventListener("click", function () {
       const checked = document.querySelectorAll("input[name='chk']:checked");
@@ -65,7 +65,19 @@ document.addEventListener("DOMContentLoaded", function () {
       const faqId = checked[0].value;
       window.location.href = `/admin/faq/modify?num=${faqId}`;
     });
-  }
+  }*/
+  $(document).ready(function () {
+    $("#btnModify").click(function () {
+      const selected = $("input[name=chk]:checked");
+      if (selected.length !== 1) {
+        alert("수정할 항목 하나만 선택하세요.");
+        return;
+      }
+      const faqNum = selected.val();
+      location.href = "/admin/faq/modify?faq_num=" + faqNum;
+    });
+  });
+
   
   
 });

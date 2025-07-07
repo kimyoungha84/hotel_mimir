@@ -22,7 +22,7 @@ public class FaqController {
 
 	@Autowired
 	private FAQServiceImpl service;
-	
+
 	@Autowired
 	private ModelUtils modelUtils;
 
@@ -34,17 +34,15 @@ public class FaqController {
 	@GetMapping("/admin/faq")
 	public String adminFAQPage(Model model) {
 		List<FAQDTO> list = service.selectAllFAQ();
-		
-		  int pageSize = 5; // 페이지당 항목 수
-	      
-	       modelUtils.setFilteringInfo(model, FilterConfig.FAQ);
-	       
-	       modelUtils.setPageInfoAttributes(model, "inquiry/admin_faq", "faq_list_fm", "faqList");
-	       
-	       modelUtils.setPaginationAttributes(model, pageSize, FilterConfig.FAQ);
-	      
-	       
-		
+
+		int pageSize = 5; // 페이지당 항목 수
+
+		modelUtils.setFilteringInfo(model, FilterConfig.FAQ);
+
+		modelUtils.setPageInfoAttributes(model, "inquiry/admin_faq", "faq_list_fm", "faqList");
+
+		modelUtils.setPaginationAttributes(model, pageSize, FilterConfig.FAQ);
+
 		model.addAttribute("faqList", list);
 		/*
 		 * List<FaqDTO> faqList = null; try { faqList = service.selectAllFAQ(); } catch
@@ -57,16 +55,6 @@ public class FaqController {
 	@GetMapping("/admin/faq/register")
 	public String faqRegisterForm() {
 		return "inquiry/admin_faq_register"; // templates/admin_chat.html
-	}
-
-//    @PostMapping("/admin/faq/register")
-//    public String registerFaq(@RequestParam String title, @RequestParam String content) {
-//        // DB 저장 로직 추가
-//        return "redirect:/admin/faq"; // 등록 후 리스트 페이지로 이동
-//    }
-	@GetMapping("/admin/inquiry")
-	public String inquriyForm() {
-		return "inquiry/admin_inquiry"; // templates/admin_chat.html
 	}
 
 	@GetMapping("/inquiry")
@@ -90,14 +78,39 @@ public class FaqController {
 
 		return "redirect:/admin/faq"; // 등록 후 리스트 페이지로 이동
 	}
-	
 
 	@PostMapping("/admin/faq/delete")
 	@ResponseBody
 	public String deleteFaq(@RequestBody List<Integer> faqNums) {
-		System.out.println("삭제 요청 받음: " + faqNums);  // 로그 찍기
+		System.out.println("삭제 요청 받음: " + faqNums); // 로그 찍기
 		service.deleteFaqs(faqNums);
-	    return "success";
+		return "success";
 	}
+	@GetMapping("/admin/faq/modify")
+	public String showModifyForm(@RequestParam("faq_num") int faqNum, Model model) {
+	    FAQDTO faq = service.selectOneFaq(faqNum); // DB에서 FAQ 가져오기
+//	    System.out.println(faq);
+	    
+	    model.addAttribute("faq", faq); // HTML에 전달
+	    
+	    return "inquiry/admin_faq_modify"; // 수정 폼 페이지로 이동
+	}
+	
+	@PostMapping("/admin/faq/modify")
+	public String modifyFaq(@RequestParam("faq_num") int faqNum,
+	                        @RequestParam("faq_title") String title,
+	                        @RequestParam("faq_content") String content) {
+
+	    FAQDTO faq = new FAQDTO();
+	    faq.setFaq_num(faqNum);
+	    faq.setFaq_title(title);
+	    faq.setFaq_content(content); // 필요 시 Jsoup.parse(content).text() 해도 됨
+
+	    service.updateFaq(faq); // DB 업데이트 호출
+
+	    return "redirect:/admin/faq"; // 수정 후 목록으로 리다이렉트
+	}
+
+
 
 }

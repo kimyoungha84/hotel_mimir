@@ -25,6 +25,16 @@ public class FAQServiceImpl implements FAQService {
     public void deleteFaqs(List<Integer> faqNums) {
         faqMapper.deleteFaqs(faqNums);
     }
-    
 
+	@Override
+	public FAQDTO selectOneFaq(int faq_num) {
+		
+		return faqMapper.selectOneFaq(faq_num);
+	}
+	
+	@Override
+	public void updateFaq(FAQDTO faq) {
+		faqMapper.updateFaq(faq);
+	}
+    
 }

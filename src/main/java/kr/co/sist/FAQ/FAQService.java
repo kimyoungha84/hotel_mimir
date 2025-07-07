@@ -9,5 +9,8 @@ public interface FAQService {
     
     void deleteFaqs(List<Integer> faqNums);
     
+    FAQDTO selectOneFaq(int faq_num);
+    
+    void updateFaq(FAQDTO faq);
 }
 

@@ -12,5 +12,8 @@ public interface FAQMapper {
     
     void deleteFaqs(List<Integer> faqNums);
     
-
+    FAQDTO selectOneFaq(int faq_num);
+    
+    void updateFaq(FAQDTO faq);
+   
 }

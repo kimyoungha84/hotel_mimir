@@ -28,4 +28,10 @@
 
 </select>
 
+<update id="updateFaq" parameterType="kr.co.sist.FAQ.FAQDTO">
+  UPDATE faq
+  SET faq_title = #{faq_title},
+      faq_content = #{faq_content}
+  WHERE faq_num = #{faq_num}
+</update>
 </mapper>
