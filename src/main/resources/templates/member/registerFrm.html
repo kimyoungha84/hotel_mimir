@@ -32,28 +32,28 @@
                 <input type="text" th:field="*{user_name}" class="form-control" placeholder="이름 입력" />
                 <div class="text-danger" th:errors="*{user_name}"></div>
             </div>
+			
+			<!-- 이메일(아이디) -->
+			<div class="mb-3">
+				<label for="email_id" class="form-label">이메일 아이디</label>
+				<div class="input-group">
+					<input type="email" th:field="*{email_id}" id="email_id"
+							class="form-control" placeholder="example@test.com" readonly />
+					<button class="btn btn-outline-secondary" type="button"
+							onclick="openEmailPopup()">중복확인</button>
+				</div>
+					<div class="text-danger" th:errors="*{email_id}"></div>
+			</div>
 
-            <!-- 이메일(아이디) -->
-            <div class="mb-3">
-                <label for="email_id" class="form-label">이메일 아이디</label>
-                <div class="input-group">
-                    <input type="email" th:field="*{email_id}" class="form-control" placeholder="example@lotte.net" />
-                    <button class="btn btn-outline-secondary" type="button" onclick="checkEmail()">중복확인</button>
-                </div>
-                <div class="text-danger" th:errors="*{email_id}"></div>
-            </div>
+				<script type="text/javascript">
+					function openEmailPopup() {
+						window.open('/member/email-popup', 'emailPopup',
+								'width=500,height=450,left=200,top=150');
+					}
+				</script>
 
-            <!-- 이메일 인증번호 입력 -->
-            <div class="mb-3">
-                <label class="form-label">이메일 인증번호</label>
-                <div class="input-group">
-                    <input type="text" name="email_auth" class="form-control" placeholder="인증번호 입력" />
-                    <button class="btn btn-outline-secondary" type="button" onclick="verifyEmail()">확인</button>
-                </div>
-                <div id="emailVerifyMessage" class="text-success"></div>
-            </div>
 
-            <!-- 비밀번호 -->
+				<!-- 비밀번호 -->
             <div class="mb-3">
                 <label for="password" class="form-label">비밀번호</label>
                 <input type="password" th:field="*{password}" class="form-control" placeholder="비밀번호 입력" />
@@ -62,7 +62,6 @@
 
             <!-- 비밀번호 확인 -->
             <div class="mb-3">
-                <label class="form-label">비밀번호 확인</label>
                 <input type="password" id="confirmPassword" class="form-control" placeholder="비밀번호 재입력" />
                 <div id="pwCheckMessage" class="text-danger"></div>
             </div>
@@ -81,7 +80,7 @@
                 <div class="text-danger" th:errors="*{birth_date}"></div>
             </div>
 
-            <button type="submit" class="btn btn-dark w-100">회원가입 완료</button>
+            <button type="submit" class="btn btn-dark w-100">회원가입</button>
         </form>
     </div>
 </div>

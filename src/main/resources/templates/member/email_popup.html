@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>이메일 인증</title>
+    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}" />
+</head>
+<body class="p-4">
+    <h4>이메일 인증</h4>
+
+    <div class="mb-3">
+        <input type="email" id="popup_email" class="form-control" placeholder="이메일 입력" />
+    </div>
+    <button type="button" class="btn btn-outline-primary mb-3" onclick="sendAuthCode()">인증번호 발송</button>
+
+    <div class="mb-3">
+        <input type="text" id="auth_code" class="form-control" placeholder="인증번호 입력" />
+    </div>
+    <button type="button" class="btn btn-success" onclick="confirmAuthCode()">확인</button>
+
+    <div id="popupMessage" class="mt-2 text-success"></div>
+
+    <script th:inline="javascript">
+        function sendAuthCode() {
+            const email = document.getElementById("popup_email").value;
+
+            fetch('/member/send-auth-code', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ email })
+            })
+            .then(res => res.text())
+            .then(msg => {
+                document.getElementById("popupMessage").innerText = msg;
+            });
+        }
+
+        function confirmAuthCode() {
+            const email = document.getElementById("popup_email").value;
+            const code = document.getElementById("auth_code").value;
+
+            fetch('/member/verify-auth-code', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ email, code })
+            })
+            .then(res => res.text())
+            .then(result => {
+                if (result === 'success') {
+                    // 부모창에 이메일 입력값 전달
+                    window.opener.document.getElementById("email_id").value = email;
+                    window.close();
+                } else {
+                    document.getElementById("popupMessage").innerText = "인증번호가 일치하지 않습니다.";
+                }
+            });
+        }
+    </script>
+</body>
+</html>
