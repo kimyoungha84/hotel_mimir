@@ -15,26 +15,26 @@
             <div>
                 <div class="nav__brand">
                     <ion-icon name="menu-outline" class="nav__toggle" id="nav-toggle"></ion-icon>
-                    <a href="#" class="nav__logo">MIMIR</a>
+                    <a th:href="@{/admin}" class="nav__logo">MIMIR</a>
                 </div>
                 <div class="nav__list">
-                    <div class="nav__link" onclick="movePage('/admin/dashboard')">
+                    <div class="nav__link">
                         <ion-icon name="pie-chart-outline" class="nav__icon"></ion-icon>
-                        <span class="nav_name">대쉬보드</span>
+                        <span class="nav_name" onclick="movePage('/admin/dashboard')">대쉬보드</span>
                     </div>
-                    <div class="nav__link" onclick="movePage('/admin/employee')">
+                    <div class="nav__link">
                         <ion-icon name="person-outline" class="nav__icon"></ion-icon>
-                        <span class="nav_name">직원 관리</span>
+                        <span class="nav_name"  onclick="movePage('/admin/employee')">직원 관리</span>
                     </div>
 
-                    <div class="nav__link" onclick="movePage('/admin/member')">
+                    <div class="nav__link">
                         <ion-icon name="people-outline" class="nav__icon"></ion-icon>
-                        <span class="nav_name">회원 관리</span>
+                        <span class="nav_name"  onclick="movePage('/admin/member')">회원 관리</span>
                     </div>
 
-                    <div class="nav__link collapse" onclick="movePage('/admin/room')">
+                    <div class="nav__link collapse" >
                         <ion-icon name="bed-outline" class="nav__icon"></ion-icon>
-                        <span class="nav_name">객실 관리</span>
+                        <span class="nav_name" onclick="movePage('/admin/room')">객실 관리</span>
 
                         <ion-icon name="chevron-down-outline" class="collapse__link"></ion-icon>
 
@@ -46,9 +46,9 @@
 
                     </div>
 
-                    <div class="nav__link collapse" onclick="movePage('/admin/dinning')">
+                    <div class="nav__link collapse">
                         <ion-icon name="restaurant-outline" class="nav__icon"></ion-icon>
-                        <span class="nav_name">다이닝 관리</span>
+                        <span class="nav_name" onclick="movePage('/admin/dinning')">다이닝 관리</span>
 
                         <ion-icon name="chevron-down-outline" class="collapse__link"></ion-icon>
 
@@ -58,16 +58,15 @@
                         </ul>
                     </div>
 
-                    <div class="nav__link collapse" onclick="movePage('/admin/inquiry')">
+                    <div class="nav__link collapse" >
                         <ion-icon name="help-outline" class="nav__icon"></ion-icon>
-                        <span class="nav_name">문의 관리</span>
+                        <span class="nav_name" onclick="movePage('/admin/inquiry')">문의 관리</span>
 
                         <ion-icon name="chevron-down-outline" class="collapse__link"></ion-icon>
 
                         <ul class="collapse__menu">
-                            <a href="/admin/personalManage" class="collapse__sublink">1:1문의</a>
-                            <a href="/admin/faq" class="collapse__sublink">FAQ</a>
-                            <a href="/admin/chat" class="collapse__sublink">실시간 문의</a>
+                            <a th:href="@{/admin/faq}" class="collapse__sublink">FAQ</a>
+                            <a th:href="@{/admin/chat}" class="collapse__sublink">실시간 문의</a>
                         </ul>
                     </div>
                 </div>
