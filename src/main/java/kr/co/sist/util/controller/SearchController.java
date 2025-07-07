@@ -55,6 +55,12 @@ public class SearchController {
         }
 
         model.addAttribute(resultKey, result);
+        System.out.println("resultKey : " + resultKey);
+        System.out.println("fragmentTemplate : " + fragmentTemplate);
+        System.out.println("fragmentName : " + fragmentName);
+        for(SearchDataDomain sdd : result) {
+        	System.out.println(sdd);
+        }
         model.addAttribute("pageSize", pageSize);
 
         return fragmentTemplate + " :: " + fragmentName;
