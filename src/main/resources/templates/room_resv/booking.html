@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="ko" xmlns:th="http://thymeleaf.org">
 
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" >
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>호텔 예약</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -243,7 +243,7 @@
       <div class="col-md-8">
         <div class="border-title" id="reservation-title" onclick="toggleSection('reservation-info', 'toggle-icon')">
           예약자 정보
-          <img style="float: right;" id="toggle-icon" src="/jsp_prj/common/images/minus.svg" alt="toggle icon" width="20" height="20">
+          <img style="float: right;" id="toggle-icon" th:src="@{/images/room/RM/minus.svg}" alt="toggle icon" width="20" height="20">
         </div>
         <div id="reservation-info" class="collapse-transition">
           <div class="mb-3">
