@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<!-- favicon 설정 -->
+<link rel ="shortcut icon" href="http://192.168.10.72/html_prj/common/images/favicon.ico">
+<!--  site 기본 CSS -->
+<link rel="stylesheet" type="text/css"
+	href="http://192.168.10.72/html_prj/common/css/main_v250409.css">
+<!-- bootstrap CDN -->
+<link rel="stylesheet" type="text/css"
+	href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css">
+	
+<style type="text/css">
+ .reservation-complete {
+  max-width: 600px;
+  margin: 0 auto;
+  font-family: 'Pretendard', sans-serif;
+  color: #111;
+}
+
+/* 스텝 표시 */
+.step-indicator {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 30px;
+  gap: 10px;
+}
+
+.step-indicator span {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  border: 1px solid #999;
+  text-align: center;
+  line-height: 30px;
+  font-weight: bold;
+  font-size: 15px;
+}
+
+.step-indicator .active {
+  background-color: #7a5028;
+  color: white;
+  border: none;
+}
+
+.step-indicator .step-label {
+  background: none;
+  border: none;
+  color: #888;
+  font-weight: normal;
+  font-size: 16px;
+  margin-left: 10px;
+}
+
+/* 예약 헤더 (잎사귀 + 텍스트) */
+.reservation-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 40px; /* 이미지와 텍스트 간격 */
+  margin: 30px 0;
+  position: relative;
+  padding-bottom: 20px;
+  border-bottom: 2px solid #111;
+   margin-bottom: 0px; /* 선과 너무 가까워지지 않게 */
+  padding-bottom: 30px;
+}
+
+.reservation-header img {
+  width: 230px;  /* 크기 더 크게 */
+  height: auto;
+}
+
+.reservation-title {
+  font-size: 22px;
+  font-weight: bold;
+  white-space: nowrap;
+}
+
+/* 예약 정보 */
+.reservation-info {
+  margin-top: 30px;
+  font-size: 16px;
+  margin-bottom: 30px; /* 이게 없으면 hr이 너무 가까이 붙음 */
+}
+
+.info-row {
+  display: flex;
+  margin-bottom: 12px;
+}
+
+.info-row span {
+  display: inline-block;
+}
+
+.info-row .info-colon {
+  width: 20px;
+  text-align: center;
+  margin: 0 8px;
+}
+
+.info-value {
+  flex: 1;
+}
+
+.italic {
+  font-style: italic;
+  color: #444;
+}
+
+
+/* 확인 버튼 */
+.button-wrapper {
+ border-top: 2px solid #111;
+ padding-top : 40px;
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.confirm-btn {
+  background-color: #111;
+  color: white;
+  padding: 12px 40px;
+  border: none;
+  font-size: 18px;
+  font-weight: bold;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.confirm-btn:hover {
+  background-color: #222;
+}
+ 
+</style>
+<!-- jquert CDN -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+<script type = "text/javascript">
+$(function(){
+	
+});
+</script>
+
+</head>
+<body>
+<div class="reservation-complete">
+
+
+<div class="reservation-header">
+  <!-- 왼쪽 잎사귀 -->
+  <img src="http://192.168.10.72/jsp_prj/common/images/leftleaf.png" alt="왼쪽 잎사귀">
+
+  <!-- 텍스트 중앙 정렬 -->
+  <div class="reservation-title">예약 정보</div>
+
+  <!-- 오른쪽 잎사귀 -->
+  <img src="http://192.168.10.72/jsp_prj/common/images/rightleaf.png" alt="오른쪽 잎사귀">
+</div>
+
+  <!-- 예약 정보 테이블 -->
+  <div class="reservation-info">
+    <div class="info-row">
+      <span>예약번호</span>
+      <span class="info-colon">:</span>
+      <span class="info-value italic">20250617</span>
+    </div>
+    <div class="info-row">
+      <span>예약자</span>
+      <span class="info-colon">:</span>
+      <span class="info-value">김재인</span>
+    </div>
+    <div class="info-row">
+      <span>휴대전화</span>
+      <span class="info-colon">:</span>
+      <span class="info-value italic">010-1234-5678</span>
+    </div>
+    <div class="info-row">
+      <span>객실</span>
+      <span class="info-colon">:</span>
+      <span class="info-value">로얄 스위트룸</span>
+    </div>
+    <div class="info-row">
+      <span>인원</span>
+      <span class="info-colon">:</span>
+      <span class="info-value">3명</span>
+    </div>
+    <div class="info-row">
+      <span>체크인 /아웃</span>
+      <span class="info-colon">:</span>
+      <span class="info-value italic">2025.06.17 15:00 &nbsp; - &nbsp; 2025.06.20 11:00</span>
+    </div>
+  </div>
+
+  <!-- 구분선 -->
+
+  <!-- 확인 버튼 -->
+  <div class="button-wrapper">
+    <button class="confirm-btn">확 인</button>
+  </div>
+</div>
+
+</body>
+</html>

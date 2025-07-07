@@ -1,0 +1,122 @@
+
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>호텔 프로모션 메인</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.css" />
+  <link rel="stylesheet" href="https://unpkg.com/aos@2.3.1/dist/aos.css" />
+  <link rel="stylesheet" href="http://192.168.10.72/jsp_prj/common/css/mainpage.css">
+</head>
+<body>
+  
+
+
+  <!-- Swiper -->
+  <div class="swiper">
+    <div class="swiper-wrapper">
+      <div class="swiper-slide">
+        <img src="http://192.168.10.72/jsp_prj/common/room/Presidential/3292-1-2000-roo-LTSG.webp" alt="룸1">
+      </div>
+      <div class="swiper-slide">
+        <img src="http://192.168.10.72/jsp_prj/common/room/Presidential/3292-2-2000-roo-LTSG.webp" alt="룸2">
+      </div>
+      <div class="swiper-slide">
+        <img src="http://192.168.10.72/jsp_prj/common/room/Presidential/3292-3-2000-roo-LTSG.webp" alt="룸3">
+      </div>
+    </div>
+  </div>
+  <div style="height: 100vh;"></div>
+
+  <!-- 프로모션 텍스트 + 이미지 -->
+  <div class="promo-wrapper">
+  <div class="main-title" data-aos="fade-down">객실 프로모션</div><br>
+  <p data-aos="fade-down" style="text-align: center;">미미르 호텔에서만 제공하는 특별한 객실 서비스와 프로모션 상품들을 확인하세요</p>
+  <section class="promo-section1">
+    <div class="promo-img" data-aos="fade-left">
+      <img src="http://192.168.10.72/jsp_prj/common/room/main/main1.webp" alt="객실">
+    </div>
+    <div class="promo-text" data-aos="fade-up">
+      <h2>Enriching Moments<br> at Global Destinations</h2>
+      <p>
+        미미르 호텔의 역사가 고객의 품위와 고객에 대한 존중을 보장합니다. <br>
+		미미르 호텔은 섬세하고 품격 있는 시설과 서비스로 비교할 수 없는 명성과 대표성을<br>
+		 가지고 있습니다. 전 세계 어디에서나 보증된 서비스와 시설을 제공하고 있으며<br>
+		 고객에게 변함없는 만족감을 선사하고 있습니다. 품격 높은 삶을 즐기는 <br>
+		당신의 여유와 자긍심에 걸맞는 세심한 서비스로 배려와 감동을 약속합니다.<br>
+      </p>
+    </div>
+  </section>
+    <hr>
+  <!-- 프로모션 텍스트 + 이미지 -->
+  <section class="promo-section2">
+    <div class="promo-img" data-aos="fade-left">
+    <h2 style="position: relative; left: 80px; bottom: 30px">The Essential Key to <br>Authentic Connection</h2>
+      <img src="http://192.168.10.72/jsp_prj/common/room/main/main2.webp" alt="객실">
+    </div>
+    <div class="promo-text" data-aos="fade-up">
+      <p style="position: relative; top: 155px;">
+        미미르 호텔은 지역의 본질과 연결되어 있습니다. <br>
+		우리는 고객과 지역의 진정한 경험을 이어주는 호텔이며<br>
+		 고객과 미미르 호텔은 서로 간의 신뢰가 바탕이되는 <br>
+		따뜻한 유대감을 가지고 있습니다.<br>
+      </p>
+    </div>
+  </section>
+    <hr>
+  <!-- 프로모션 텍스트 + 이미지 -->
+  <section class="promo-section3">
+    <div style="position: relative; bottom: 100px" class="promo-text" data-aos="fade-up">
+      <h2>Classic Upper Upscale</h2>
+      <p>
+        미미르 호텔은 세계 주요 도시에 자리 잡은 플래그쉽 브랜드입니다.<br>
+		 신뢰감을 주는 시설과 정성이 담긴 서비스는 <br>
+		이곳에 머무르는 고객에게 편안한 휴식을 약속합니다.<br>
+      </p>
+    </div>
+    <div class="promo-img" data-aos="fade-left">
+      <img src="http://192.168.10.72/jsp_prj/common/room/main/main3.webp" alt="객실">
+    </div>
+  </section>
+    <hr>
+  
+  
+  <!-- 프로모션 텍스트 + 이미지 -->
+  <section class="promo-section4">
+    <div class="promo-img" data-aos="fade-left">
+      <img src="http://192.168.10.72/jsp_prj/common/room/main/main4.webp" alt="객실">
+    </div>
+    <div style="position: relative; left: 300px" class="promo-text" data-aos="fade-up">
+      <h2>Brand Features</h2>
+      <p>
+        ·해온 베딩<br>
+        ·훌륭한 음식을 제공하는 품격 있는 레스토랑<br>
+        ·진성성 있는 고객 인지 서비스<br>
+      </p>
+</div>
+  </section>
+    <hr>
+  <div style="text-align:center">
+    <a class="button-cta" href="#" style=" text-decoration: none;">객실 예약하기</a>
+  </div>
+  
+    </div>
+
+
+
+  <script src="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.js"></script>
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+  <script>
+    const swiper = new Swiper('.swiper', {
+      loop: true,
+      autoplay: { delay: 4000 },
+      effect: 'fade',
+      speed: 1000,
+    });
+
+    AOS.init({ duration: 1000 });
+  </script>
+</body>
+</html>
+    
