@@ -21,10 +21,8 @@ import kr.co.sist.util.service.DynamicSearchService;
 @Controller
 public class SearchController {
 
-	
-//	@Autowired 
-//	private ModelUtils modelUtils;
-	 
+    @Autowired
+    private ModelUtils modelUtils;
     @Autowired 
     private DynamicSearchService service;
     @Autowired 
@@ -69,7 +67,7 @@ public class SearchController {
         int currentPage = Integer.parseInt(params.getOrDefault("currentPage","1"));
         
         //마지막 파라미터 int로 오버로딩된 메소드 호출
-        ModelUtils.setPaginationAttributes(model, pageSize, currentPage, totalItems);
+        modelUtils.setPaginationAttributes(model, pageSize, currentPage, totalItems);
 
         return "fragments/pagination :: pagination";
     }

@@ -1,50 +1,125 @@
 package kr.co.sist.util;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import org.springframework.ui.Model;
+
 import kr.co.sist.util.service.DynamicSearchService;
 
-public class ModelUtils {
 
-    // 필터 정보 설정
-    public static void setFilteringInfo(Model model, FilterConfig config) {
+@Component  // Spring 빈으로 등록
+public class ModelUtils {
+	
+	
+    private final DynamicSearchService dss;
+    private final PaginationCounter pc;
+
+    @Autowired
+    public ModelUtils(DynamicSearchService dss, PaginationCounter pc) {
+        this.dss = dss;
+        this.pc = pc;
+    }
+
+    // 필터링 정보 설정
+    /**
+     * @param model
+     * @param config 모델 속성이름 : filter
+     */
+    public void setFilteringInfo(Model model, FilterConfig config) {
         model.addAttribute("filter", config);
     }
 
-    // 페이지 정보 설정 (프래그먼트)
-    public static void setPageInfoAttributes(Model model, String fragmentTemplate, String fragmentName, String resultKey) {
+    // 페이지네이션 정보 설정
+    /**
+     * @param model
+     * @param fragmentTemplate 모델 속성이름 : filter_fragmentTemplate
+     * @param fragmentName 모델 속성이름 : filter_fragmentName
+     * @param resultKey 모델 속성이름 : filter_resultKey
+     */
+    public void setPageInfoAttributes(Model model, String fragmentTemplate, String fragmentName, String resultKey) {
         model.addAttribute("filter_fragmentTemplate", fragmentTemplate);
         model.addAttribute("filter_fragmentName", fragmentName);
         model.addAttribute("filter_resultKey", resultKey);
+        
     }
 
-    // 페이지네이션 정보 설정 - 데이터 개수 자동 조회
-    public static void setPaginationAttributes(Model model, int pageSize, int currentPage, FilterConfig config, DynamicSearchService dss) {
+    // 페이지네이션 및 총 항목 수 설정
+    /**
+     * @param model
+     * @param pageSize 모델 속성이름 : pageSize
+     * @param currentPage 모델 속성이름 : currentPage
+     * config로 데이터 개수를 구해서 모델 attribute에 add -> 모델 속성이름 : totalItems
+     */
+    public void setPaginationAttributes(Model model, int pageSize, int currentPage, FilterConfig config) {
         model.addAttribute("pageSize", pageSize);
         model.addAttribute("currentPage", currentPage);
-        int totalItems = getDataCountByConfig(config, dss);
-        model.addAttribute("totalItems", totalItems);
-    }
 
-    // 페이지네이션 정보 설정 - currentPage 없이 (1로 기본값 지정)
-    public static void setPaginationAttributes(Model model, int pageSize, FilterConfig config, DynamicSearchService dss) {
-        setPaginationAttributes(model, pageSize, 1, config, dss);
-    }
+        // 총 항목 수 계산 (config에 따라 다르게 계산)
+        int dataCount = 0;
 
-    // 페이지네이션 정보 설정 - 외부에서 데이터 개수 직접 전달
-    public static void setPaginationAttributes(Model model, int pageSize, int currentPage, int dataCount) {
+        System.out.println(pageSize);
+        System.out.println(currentPage);
+        if (config != null) {
+            switch (config) {
+                case DINING:
+                    dataCount = dss.countDining(null);  // dining 데이터 개수
+                    break;
+                case FAQ:
+                    dataCount = dss.countFaq(null);    // faq 데이터 개수
+                    System.out.println("switch-faq");
+                    break;
+                default : 
+                	dataCount = 0;
+                // 다른 필터 유형에 대한 처리 추가 가능
+            }
+        }
+
+        // 모델에 totalItems 추가
+        model.addAttribute("totalItems", dataCount);
+    }
+    
+    /**
+     * @param model
+     * @param pageSize 모델 속성이름 : pageSize
+     * @param config 모델 속성이름 : filter
+     */
+    public void setPaginationAttributes(Model model, int pageSize, FilterConfig config) {
+    	model.addAttribute("pageSize", pageSize);
+    	int initialCurrentPage = 1;
+    	model.addAttribute("currentPage", initialCurrentPage);
+    	
+    	// 총 항목 수 계산 (config에 따라 다르게 계산)
+    	int dataCount = 0;
+    	
+    	System.out.println(pageSize);
+    	System.out.println(initialCurrentPage);
+    	if (config != null) {
+    		switch (config) {
+    		case DINING:
+    			dataCount = dss.countDining(null);  // dining 데이터 개수
+    			break;
+    		case FAQ:
+    			dataCount = dss.countFaq(null);    // faq 데이터 개수
+    			System.out.println("switch-faq");
+    			break;
+    		default : 
+    			dataCount = 0;
+    			// 다른 필터 유형에 대한 처리 추가 가능
+    		}
+    	}
+    	
+    	// 모델에 totalItems 추가
+    	model.addAttribute("totalItems", dataCount);
+    }
+    
+    
+    public void setPaginationAttributes(Model model, int pageSize, int currentPage, int dataCount) {
         model.addAttribute("pageSize", pageSize);
         model.addAttribute("currentPage", currentPage);
         model.addAttribute("totalItems", dataCount);
     }
-
-    // config 기반 데이터 개수 조회
-    private static int getDataCountByConfig(FilterConfig config, DynamicSearchService dss) {
-        if (config == null || dss == null) return 0;
-
-        return switch (config) {
-            case DINING -> dss.countDining(null);
-            case FAQ -> dss.countFaq(null);
-            default -> 0;
-        };
-    }
+    
+    
+    
+    
 }
