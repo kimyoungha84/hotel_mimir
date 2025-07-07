@@ -60,7 +60,7 @@ a {
     padding: 0 1.5rem 2rem;
     transition: .5s;
     z-index: var(--z-fixed);
-    transition: 0.7s ease; /*부드럽게 접히기*/
+    
 }
 
 /* NAV */
@@ -135,12 +135,13 @@ a {
 
 /* Add padding body*/
 .body-pd {
-    transition : all 0.7s ease; /*부드럽게 오른쪽으로 이동*/
+   /* transition : all 0.7s ease; 부드럽게 오른쪽으로 이동 */
+   padding: 0 0 0 9rem;
 
 }
 
 .body-pd.shrink{
-	padding: 0 0 0 9rem;
+	/* padding: 0 0 0 9rem; */
 }
 
 /* Active links menu */
@@ -167,7 +168,7 @@ a {
 .collapse__sublink {
     color: var(--sub-color); /*여기서 sub-color가 검은색!*/
     font-size: var(--small-font-size);
-    
+    background-color: var(--first-color);
     white-space: nowrap;        /* 줄바꿈 방지 */
     word-break: keep-all;      /* 한글 단어 단위로 줄바꿈 (중간 줄바꿈 방지) */
     display: block;             /* width 적용 보장 */

@@ -1,6 +1,6 @@
 $(function(){
 
-    showMenu('nav-toggle', 'navbar', 'body-pd');
+    //showMenu('nav-toggle', 'navbar', 'body-pd');
 
     /* LINK ACTIVE */
     const linkColor = document.querySelectorAll('.nav__link');
@@ -22,7 +22,6 @@ $(function(){
     /* COLLAPSE MENU */
     const linkCollapse = document.getElementsByClassName('collapse__link');
     var i;
-
     for(i=0;i<linkCollapse.length;i++) {
         linkCollapse[i].addEventListener('click', function(){
             //debugger; //여기서 linkCollapse 내에 뭐가 있는지 알아야 한단 말이지....
@@ -50,18 +49,16 @@ function showMenu(toggleId, navbarId, bodyId) {
     const toggle = document.getElementById(toggleId),
     navbar = document.getElementById(navbarId),
     bodypadding = document.getElementById(bodyId);
-    // alert("toggle======="+toggle);
-    // alert("navbar======="+navbar);
+    
+    /*버튼을 클릭했을 때 toggle*/
     if( toggle && navbar ) {
         toggle.addEventListener('click', function(){
-            //메뉴바가 열릴 때, true
-            //메뉴바가 닫힐 때, false
-            // debugger;
-            //alert(bodypadding);
-            navbar.classList.toggle('expander');
-            bodypadding.classList.toggle('shrink');
+            const isNowExpanded = navbar.classList.toggle("expander");
+            bodypadding.classList.toggle("shrink");
 
-        })
+
+
+        });
     }//end if
 }//function showMenu
 

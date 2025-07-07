@@ -9,12 +9,11 @@
     </div>
 </div>
 </div>
-    <div class="l-navbar" id="navbar">
+    <div class="l-navbar expander" id="navbar">
     
         <nav class="nav">
             <div>
                 <div class="nav__brand">
-                    <ion-icon name="menu-outline" class="nav__toggle" id="nav-toggle"></ion-icon>
                     <a th:href="@{/admin}" class="nav__logo">MIMIR</a>
                 </div>
                 <div class="nav__list">
@@ -58,7 +57,7 @@
                         </ul>
                     </div>
 
-                    <div class="nav__link collapse" th:attr="onclick='movePage('+'\''+@{/admin/faq}+'\''+')'">
+                    <div class="nav__link collapse">
                         <ion-icon name="help-outline" class="nav__icon"></ion-icon>
                         <span class="nav_name">문의 관리</span>
 
