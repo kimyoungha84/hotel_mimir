@@ -11,4 +11,5 @@ public class RoomController {
 		return "room/room_list";
 	}//roomList
 	
+	
 }//class
