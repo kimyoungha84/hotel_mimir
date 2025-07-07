@@ -21,4 +21,11 @@
   </foreach>
 </delete>
 
+<select id="selectOneFaq" parameterType="int" resultType="kr.co.sist.FAQ.FAQDTO">
+	select faq_num, faq_title, faq_content
+	from faq
+	where faq_num = #{faq_num}
+
+</select>
+
 </mapper>

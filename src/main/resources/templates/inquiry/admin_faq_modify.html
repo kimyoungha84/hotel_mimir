@@ -19,7 +19,57 @@
 <div id="body-pd" class="body-pd">
 <h2 class="h2Title">title 작성</h2>
 <hr/>
-
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      padding: 40px;
+    }
+    h2 {
+      font-size: 24px;
+      border-bottom: 2px solid #000;
+      padding-bottom: 10px;
+    }
+    label {
+      display: block;
+      margin-top: 30px;
+      font-weight: bold;
+    }
+    input[type="text"] {
+      width: 100%;
+      padding: 8px;
+      font-size: 14px;
+      margin-top: 5px;
+      border: 1px solid #ccc;
+    }
+    textarea {
+      width: 100%;
+      height: 200px;
+      padding: 10px;
+      margin-top: 10px;
+      font-size: 14px;
+      border: 1px solid #ccc;
+    }
+    .btn-box {
+      margin-top: 30px;
+      text-align: center;
+    }
+    .btn {
+      width: 80px;
+      padding: 10px;
+      margin: 0 10px;
+      font-size: 14px;
+      border: none;
+      cursor: pointer;
+    }
+    .btn.modify {
+      background-color: #6667AB;
+      color: #fff;
+    }
+    .btn.cancel {
+      background-color: #555;
+      color: #fff;
+    }
+  </style>
 <form method="post" action="/admin/faq/modify">
     <input type="hidden" name="faq_num" value="${faq.faq_num}" /> <!-- 수정할 번호 -->
 
