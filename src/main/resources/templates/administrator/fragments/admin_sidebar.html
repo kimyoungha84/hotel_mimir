@@ -18,7 +18,7 @@
                     <a th:href="@{/admin}" class="nav__logo">MIMIR</a>
                 </div>
                 <div class="nav__list">
-                    <div class="nav__link">
+                    <div class="nav__link" onclick="movePage('/admin/dashboard')">
                         <ion-icon name="pie-chart-outline" class="nav__icon"></ion-icon>
                         <span class="nav_name" onclick="movePage('/admin/dashboard')">대쉬보드</span>
                     </div>
@@ -32,21 +32,21 @@
                         <span class="nav_name"  onclick="movePage('/admin/member')">회원 관리</span>
                     </div>
 
-                    <div class="nav__link collapse" >
+                    <div class="nav__link collapse" onclick="movePage('/admin/roomList')">
                         <ion-icon name="bed-outline" class="nav__icon"></ion-icon>
-                        <span class="nav_name" onclick="movePage('/admin/room')">객실 관리</span>
+                        <span class="nav_name" onclick="movePage('/admin/roomList')">객실 관리</span>
 
                         <ion-icon name="chevron-down-outline" class="collapse__link"></ion-icon>
 
                         <ul class="collapse__menu">
-                            <li><a href="/admin/roomInfo" class="collapse__sublink">객실정보</a></li>
-                            <li><a href="/admin/roomReserve" class="collapse__sublink">예약 현황</a></li>
-                            <li><a href="/admin/roomSales" class="collapse__sublink">매출 현황</a></li>
+                            <li><a th:href="@{admin/roomList}" class="collapse__sublink">객실정보</a></li>
+                            <li><a href="#" class="collapse__sublink">예약 현황</a></li>
+                            <li><a href="#" class="collapse__sublink">매출 현황</a></li>
                         </ul>
 
                     </div>
 
-                    <div class="nav__link collapse">
+                    <div class="nav__link collapse" onclick="movePage('/admin/dinning')">
                         <ion-icon name="restaurant-outline" class="nav__icon"></ion-icon>
                         <span class="nav_name" onclick="movePage('/admin/dinning')">다이닝 관리</span>
 
@@ -58,7 +58,7 @@
                         </ul>
                     </div>
 
-                    <div class="nav__link collapse" >
+                    <div class="nav__link collapse" onclick="movePage('/admin/inquiry')">
                         <ion-icon name="help-outline" class="nav__icon"></ion-icon>
                         <span class="nav_name" onclick="movePage('/admin/inquiry')">문의 관리</span>
 
