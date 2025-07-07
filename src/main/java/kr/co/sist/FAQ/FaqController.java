@@ -45,7 +45,7 @@ public class FaqController {
 	      
 	       
 		
-//		model.addAttribute("faqList", list);
+		model.addAttribute("faqList", list);
 		/*
 		 * List<FaqDTO> faqList = null; try { faqList = service.selectAllFAQ(); } catch
 		 * (Exception e) { e.printStackTrace(); } // 서비스 호출
