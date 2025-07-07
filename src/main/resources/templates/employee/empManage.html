@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html xmlns="http://www.thymeleaf.org">
+<head>
+<!-- favicon 설정 -->
+<link rel="icon shortcut"  href="/admin_common_assets/common_img/mimir_favicon.ico"/>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<!-- jquery CDN -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+
+<th:block th:replace="~{/administrator/fragments/admin_header :: admin_header}"></th:block>
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<!-- CSS -->
+<link rel="stylesheet" href="/employee_assets/css/employee_style.css"/>
+
+</head>
+<body>
+<th:block th:replace="~{/administrator/fragments/admin_sidebar :: admin_sidebar}"></th:block>
+
+<div id="body-pd" class="body-pd">
+    <h2 class="h2Title">직원 목록</h2>
+    <hr/>
+
+
+    <div>
+    <input type="button" class= "regEmpBtn" value="+ 직원 등록"/>
+    </div>
+    <div class="table-wrapper">
+        <table>
+        <thead>
+            <tr>
+                <th>번호</th>
+                <th>아이디</th>
+                <th>이름</th>
+                <th>부서</th>
+                <th>직책</th>
+                <th>권한</th>
+                <th>상태</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>1</td>
+                <td>mimir_000001</td>
+                <td>어드민</td>
+                <td>객실 관리</td>
+                <td>최고 관리자(대표)</td>
+                <td>All</td>
+                <td>재직</td>
+            </tr>
+            <tr>
+                <td>2</td>
+                <td>mimir_000002</td>
+                <td>어드민</td>
+                <td>객실 관리</td>
+                <td>최고 관리자(대표)</td>
+                <td>All</td>
+                <td>재직</td>
+            </tr>
+        </tbody>
+        </table>
+    </div>
+</div>
+</body>
+</html>
