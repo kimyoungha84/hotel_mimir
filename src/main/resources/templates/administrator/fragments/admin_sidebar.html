@@ -18,21 +18,21 @@
                     <a th:href="@{/admin}" class="nav__logo">MIMIR</a>
                 </div>
                 <div class="nav__list">
-                    <div class="nav__link" onclick="movePage('/admin/dashboard')">
+                    <div class="nav__link" th:attr="onclick='movePage('+'\''+@{/admin/dashboard}+'\''+')'">
                         <ion-icon name="pie-chart-outline" class="nav__icon"></ion-icon>
                         <span class="nav_name">대쉬보드</span>
                     </div>
-                    <div class="nav__link" onclick="movePage('/admin/employee')">
+                    <div class="nav__link" th:attr="onclick='movePage('+'\''+@{/admin/employee}+'\''+')'">
                         <ion-icon name="person-outline" class="nav__icon"></ion-icon>
                         <span class="nav_name">직원 관리</span>
                     </div>
 
-                    <div class="nav__link" onclick="movePage('/admin/member')">
+                    <div class="nav__link" th:attr="onclick='movePage('+'\''+@{/admin/member}+'\''+')'">
                         <ion-icon name="people-outline" class="nav__icon"></ion-icon>
                         <span class="nav_name">회원 관리</span>
                     </div>
 
-                    <div class="nav__link collapse" onclick="movePage('/admin/roomList')">
+                    <div class="nav__link collapse" th:attr="onclick='movePage('+'\''+@{/admin/roomList}+'\''+')'">
                         <ion-icon name="bed-outline" class="nav__icon"></ion-icon>
                         <span class="nav_name">객실 관리</span>
 
@@ -58,7 +58,7 @@
                         </ul>
                     </div>
 
-                    <div class="nav__link collapse" onclick="movePage('/admin/inquiry')">
+                    <div class="nav__link collapse" th:attr="onclick='movePage('+'\''+@{/admin/faq}+'\''+')'">
                         <ion-icon name="help-outline" class="nav__icon"></ion-icon>
                         <span class="nav_name">문의 관리</span>
 
