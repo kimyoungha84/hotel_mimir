@@ -5,26 +5,26 @@
 
 <mapper namespace="kr.co.sist.nonmember.NonMemberMapper">
 
-	<select id="selectAllNonMember" resultType="kr.co.sist.nonmember.NonMemberDomain">
+	<select id="selectAllNonMember" resultType="nonMemberDomain">
 		SELECT faq_num, faq_title, faq_content, faq_date
 		FROM faq
 		ORDER BY faq_date DESC
 	</select>
 	
-	<select id="selectOneNonMember" parameterType="int" resultType="kr.co.sist.nonmember.NonMemberDomain">
+	<select id="selectOneNonMember" parameterType="int" resultType="nonMemberDomain">
 	select faq_num, faq_title, faq_content
 	from faq
 	where faq_num = #{faq_num}
 
 	</select>
 	
-	<insert id="insertNonMember" parameterType="kr.co.sist.nonmember.NonMemberDTO">
+	<insert id="insertNonMember" parameterType="nonMemberDTO">
 		INSERT INTO faq (faq_num, faq_title, faq_content, faq_date)
 		VALUES (faq_seq.NEXTVAL, #{faq_title}, #{faq_content}, #{faq_date})
 	</insert>
 	
 
-	<update id="updateNonMember" parameterType="kr.co.sist.nonmember.NonMemberDTO">
+	<update id="updateNonMember" parameterType="nonMemberDTO">
 	  UPDATE faq
 	  SET faq_title = #{faq_title},
 	      faq_content = #{faq_content}

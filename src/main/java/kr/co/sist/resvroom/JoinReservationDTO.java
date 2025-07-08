@@ -9,7 +9,7 @@ import lombok.Setter;
 import lombok.ToString;
 
 
-@Alias("resvRoomDTO")
+@Alias("joinReservationDTO")
 @Getter
 @Setter
 @ToString

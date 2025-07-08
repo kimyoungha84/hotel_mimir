@@ -5,28 +5,27 @@
 
 <mapper namespace="kr.co.sist.payment.PatmentMapper">
 
-	<select id="selectAllPayment" resultType="kr.co.sist.payment.PaymentDomain">
+	<select id="selectAllPayment" resultType="paymentDomain">
 		SELECT faq_num, faq_title, faq_content, faq_date
 		FROM faq
 		ORDER BY faq_date DESC
 	</select>
 	
-	<select id="selectOnePayment" parameterType="int" resultType="kr.co.sist.payment.PaymentDomain">
+	<select id="selectOnePayment" parameterType="int" resultType="paymentDomain">
 	select faq_num, faq_title, faq_content
 	from faq
 	where faq_num = #{faq_num}
 
 	</select>
 		
-	<insert id="insertPayment" parameterType="kr.co.sist.payment.PaymentDTO">
+	<insert id="insertPayment" parameterType="paymentDTO">
 		INSERT INTO payment (PAYMENT_ID, RESERVATION_ID, PAYMENT_PRICE,
 		 PAYMENT_TYPE, PAYMENT_STATUS, PAYMENT_TIME)
-		 
 		VALUES (SEQ_NONMEMBER.NEXTVAL, #{reservationId}, #{paymentPrice}, 
 		#{paymentType}, #{paymentStatus}, #{paymentTime});
 	</insert>
 	
-	<update id="updatePayment" parameterType="kr.co.sist.payment.PaymentDTO">
+	<update id="updatePayment" parameterType="paymentDTO">
 	  UPDATE faq
 	  SET faq_title = #{faq_title},
 	      faq_content = #{faq_content}
