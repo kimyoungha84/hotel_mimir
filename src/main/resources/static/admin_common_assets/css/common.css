@@ -1,8 +1,14 @@
 @charset "UTF-8";
 .h2Title{
-    font-size:1.5rem; 
+    /* font-size:1.5rem; 
     font-weight: 700; 
-    margin-bottom: 0.5rem;
+    margin-bottom: 0.5rem; */
+
+    font-size: 30px;
+    border-bottom: 3px solid #333;
+    padding-bottom: 20px;
+    margin-bottom: 20px;
+
 }
 
 
