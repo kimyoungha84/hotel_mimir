@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.co.sist.nonmember.NonMemberMapper">
+
+	<select id="selectAllNonMember" resultType="kr.co.sist.nonmember.NonMemberDomain">
+		SELECT faq_num, faq_title, faq_content, faq_date
+		FROM faq
+		ORDER BY faq_date DESC
+	</select>
+	
+	<select id="selectOneNonMember" parameterType="int" resultType="kr.co.sist.nonmember.NonMemberDomain">
+	select faq_num, faq_title, faq_content
+	from faq
+	where faq_num = #{faq_num}
+
+	</select>
+	
+	<insert id="insertNonMember" parameterType="kr.co.sist.nonmember.NonMemberDTO">
+		INSERT INTO faq (faq_num, faq_title, faq_content, faq_date)
+		VALUES (faq_seq.NEXTVAL, #{faq_title}, #{faq_content}, #{faq_date})
+	</insert>
+	
+
+	<update id="updateNonMember" parameterType="kr.co.sist.nonmember.NonMemberDTO">
+	  UPDATE faq
+	  SET faq_title = #{faq_title},
+	      faq_content = #{faq_content}
+	  WHERE faq_num = #{faq_num}
+	</update>
+	
+</mapper>

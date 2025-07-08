@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.co.sist.resvroom.ReservationMapper">
+
+	<select id="selectAllReservation" resultType="kr.co.sist.resvroom.ReservationDomin">
+		SELECT faq_num, faq_title, faq_content, faq_date
+		FROM faq
+		ORDER BY faq_date DESC
+	</select>
+	
+	<select id="selectOneReservation" parameterType="int" resultType="kr.co.sist.resvroom.ReservationDomin">
+	select faq_num, faq_title, faq_content
+	from faq
+	where faq_num = #{faq_num}
+
+	</select>
+	
+	<insert id="insertReservation" parameterType="kr.co.sist.resvroom.ReservationDTO">
+		INSERT INTO faq (faq_num, faq_title, faq_content, faq_date)
+		VALUES (faq_seq.NEXTVAL, #{faq_title}, #{faq_content}, #{faq_date})
+	</insert>
+
+	<update id="updateReservation" parameterType="kr.co.sist.resvroom.ReservationDTO">
+	  UPDATE faq
+	  SET faq_title = #{faq_title},
+	      faq_content = #{faq_content}
+	  WHERE faq_num = #{faq_num}
+	</update>
+	
+</mapper>

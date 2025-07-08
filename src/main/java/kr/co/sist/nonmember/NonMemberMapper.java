@@ -4,18 +4,14 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
 
-import kr.co.sist.FAQ.FAQDTO;
-
 @Mapper
 public interface NonMemberMapper {
-    List<FAQDTO> selectAllFAQ();
+    List<NonMemberDTO> selectAllNonMember();
     
-    void insertFaq(FAQDTO faq);
+    NonMemberDTO selectOneNonMember(int nonMemNum);
     
-    void deleteFaqs(List<Integer> faqNums);
+    void insertNonMember(NonMemberDTO nonDTO);
     
-    FAQDTO selectOneFaq(int faq_num);
-    
-    void updateFaq(FAQDTO faq);
+    void updateNonMember(NonMemberDTO nonDTO);
    
 }

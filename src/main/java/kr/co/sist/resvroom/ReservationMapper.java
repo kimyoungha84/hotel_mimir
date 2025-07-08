@@ -4,16 +4,14 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
 
-import kr.co.sist.FAQ.FAQDTO;
-
 @Mapper
 public interface ReservationMapper {
-    List<ReservationDTO> selectAllReservation();
+    List<JoinReservationDTO> selectAllReservation();
     
-    void insertReservation(ReservationDomain rDomain);
+    JoinReservationDTO selectOneReservation(int ReservationNum);
     
-    ReservationDomain selectOneReservation(int ReservationNum);
+    void insertReservation(ReservationDTO rDTO);
     
-    void updateFaq(ReservationDomain rDomain);
+    void updateReservation(ReservationDTO rDTO);
    
 }

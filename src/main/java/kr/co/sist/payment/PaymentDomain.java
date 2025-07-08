@@ -9,7 +9,7 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString	
-public class Payment {
+public class PaymentDomain {
 
 	private int paymentId;
 	private String reservationId;
