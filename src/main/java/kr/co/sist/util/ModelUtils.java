@@ -26,7 +26,9 @@ public class ModelUtils {
      * @param config 모델 속성이름 : filter
      */
     public void setFilteringInfo(Model model, FilterConfig config) {
+    	 System.out.println("FilterConfig passed to model: " + config);
         model.addAttribute("filter", config);
+        model.addAttribute("filterType", config.getFilterType());
     }
 
     // 페이지네이션 정보 설정
@@ -37,8 +39,8 @@ public class ModelUtils {
      * @param resultKey 모델 속성이름 : filter_resultKey
      */
     public void setPageInfoAttributes(Model model, String fragmentTemplate, String fragmentName, String resultKey) {
-        model.addAttribute("filter_fragmentTemplate", fragmentTemplate);
-        model.addAttribute("filter_fragmentName", fragmentName);
+    	model.addAttribute("filter_fragmentTemplate", fragmentTemplate);
+    	model.addAttribute("filter_fragmentName", fragmentName);
         model.addAttribute("filter_resultKey", resultKey);
         
     }

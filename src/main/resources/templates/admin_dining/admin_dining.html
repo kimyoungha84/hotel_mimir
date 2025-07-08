@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html xmlns="http://www.thymeleaf.org" lang="ko">
+<head>
+<!-- favicon 설정 -->
+<link rel="icon shortcut"  href="/admin_common_assets/common_img/mimir_favicon.ico"/>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="/admin_dining/css/admin_dining.css" />
+
+
+<!-- jquery CDN -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+
+<th:block th:replace="~{/administrator/fragments/admin_header :: admin_header}"></th:block>
+
+</head>
+<body>
+<th:block th:replace="~{/administrator/fragments/admin_sidebar :: admin_sidebar}"></th:block>
+
+<div id="body-pd" class="body-pd">
+<!-- <h2 class="h2Title">title 작성</h2> -->
+<hr/>
+    <!-- 메인 컨텐츠 -->
+    <main class="main-content">
+    
+
+      <section class="faq-section">
+        <h1>다이닝</h1>
+
+        <!-- 검색 필터 Fragment -->
+		<div class="search-bar" th:replace="fragments/filter :: filter(${filter})"></div>
+
+        <!-- FAQ 테이블 -->
+        <table class="faq-table">
+          <thead>
+            <tr>
+              <th><input type="checkbox" id="selectAll" /></th>
+              <th>이름</th>
+              <th>가격</th>
+              <th>등록일</th>
+              <th>담당자</th>
+            </tr>
+          </thead>
+         <tbody th:fragment="dining_list_fm" id="resultArea" >
+		  <tr th:each="dining, stat : ${diningList}" th:if="${stat.count <= 5}")>
+		    <td><input type="checkbox" name="chk" th:value="${dining.dining_id}"/></td>
+		    <td th:text="${dining.dining_name}"></td>
+		    <td th:text="${dining.type}"></td>
+		    <td th:text="${#dates.format(dining.dining_reg_date, 'yyyy-MM-dd')}"></td>
+		    <td th:text="${dining.manager_name}"></td>
+		  </tr>
+		</tbody>
+
+        </table>
+
+        <!-- 하단 버튼 -->
+        <div class="bottom-controls">
+          <button class="btn modify" id="btnModify">수정</button>
+          <button id="deleteBtn" class="btn delete">삭제</button>
+          <button class="btn apply" onclick="location.href='/admin/faq/register'">FAQ 등록</button>
+        </div>
+
+        <!-- 페이징 -->
+        <div id="paginationArea" th:insert="fragments/pagination :: pagination">
+</div>
+        
+      </section>
+    </main>
+</div>
+<script src="/admin_common_assets/js/pagination.js"></script>
+  <script src="/admin_dining/js/admin_dining.js"></script>
+</body>
+</html>

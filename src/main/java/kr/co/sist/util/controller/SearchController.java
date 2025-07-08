@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import jakarta.servlet.http.HttpServletRequest;
 import kr.co.sist.util.FilterCondition;
 import kr.co.sist.util.FilterConditionBuilder;
 import kr.co.sist.util.FilterConfig;
@@ -29,7 +30,7 @@ public class SearchController {
     private FilterConditionBuilder builder;
 
     @GetMapping("/search")
-    public String search(@RequestParam Map<String, String> params, Model model) {
+    public String search(@RequestParam Map<String, String> params, HttpServletRequest request, Model model) {
         FilterConfig config = FilterConfig.fromKey(params.get("filterType"));
         int offset = Integer.parseInt(params.getOrDefault("offset", "1"));
         int pageSize = Integer.parseInt(params.getOrDefault("pageSize", "10"));
@@ -51,6 +52,7 @@ public class SearchController {
         String fragmentName = params.get("filter_fragmentName");
 
         if (resultKey == null || fragmentTemplate == null || fragmentName == null) {
+            System.out.println("fragementTemplate : " + fragmentTemplate + fragmentName + resultKey);
             throw new IllegalArgumentException("뷰 렌더링 정보가 누락되었습니다.");
         }
 
@@ -71,6 +73,7 @@ public class SearchController {
         int pageSize = Integer.parseInt(params.getOrDefault("pageSize", "10"));
         int totalItems = Integer.parseInt(params.getOrDefault("totalItems", "0"));
         int currentPage = Integer.parseInt(params.getOrDefault("currentPage","1"));
+        System.out.println("pageSize : " + pageSize + ", totalItems : " + totalItems + ", currentPage : " + currentPage);
         
         //마지막 파라미터 int로 오버로딩된 메소드 호출
         modelUtils.setPaginationAttributes(model, pageSize, currentPage, totalItems);
