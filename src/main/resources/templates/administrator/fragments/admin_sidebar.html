@@ -31,14 +31,14 @@
                         <span class="nav_name">회원 관리</span>
                     </div>
 
-                    <div class="nav__link collapse" th:attr="onclick='movePage('+'\''+@{/admin/roomList}+'\''+')'">
+                    <div class="nav__link collapse" th:attr="onclick='movePage('+'\''+@{/admin/roomlist}+'\''+')'">
                         <ion-icon name="bed-outline" class="nav__icon"></ion-icon>
                         <span class="nav_name">객실 관리</span>
 
                         <ion-icon name="chevron-down-outline" class="collapse__link"></ion-icon>
 
                         <ul class="collapse__menu">
-                            <li><a th:href="@{admin/roomList}" class="collapse__sublink">객실정보</a></li>
+                            <li><a th:href="@{admin/roomlist}" class="collapse__sublink">객실정보</a></li>
                             <li><a href="#" class="collapse__sublink">예약 현황</a></li>
                             <li><a href="#" class="collapse__sublink">매출 현황</a></li>
                         </ul>
