@@ -11,7 +11,6 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString	
-@Alias("paymentDTO")
 public class PaymentDTO {
 
 	private int paymentId;

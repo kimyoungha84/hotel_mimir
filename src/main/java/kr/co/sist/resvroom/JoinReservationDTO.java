@@ -9,7 +9,6 @@ import lombok.Setter;
 import lombok.ToString;
 
 
-@Alias("joinReservationDTO")
 @Getter
 @Setter
 @ToString
