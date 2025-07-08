@@ -11,7 +11,6 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
-@Alias("reservationDomain")
 public class ReservationDomain {
 
 	private int resvId;

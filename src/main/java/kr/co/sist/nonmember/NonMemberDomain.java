@@ -11,7 +11,6 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
-@Alias("nonMemberDomain")
 public class NonMemberDomain {
 
 	private int nonMemId;

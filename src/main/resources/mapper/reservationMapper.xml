@@ -5,13 +5,13 @@
 
 <mapper namespace="kr.co.sist.resvroom.ReservationMapper">
 
-	<select id="selectAllReservation" >
+	<select id="selectAllReservation" resultType="kr.co.sist.resvroom.ReservationDomain">
 		SELECT faq_num, faq_title, faq_content, faq_date
 		FROM faq
 		ORDER BY faq_date DESC
 	</select>
 	
-	<select id="selectOneReservation" parameterType="int" >
+	<select id="selectOneReservation" parameterType="int" resultType="kr.co.sist.resvroom.ReservationDomain">
 	select faq_num, faq_title, faq_content
 	from faq
 	where faq_num = #{faq_num}

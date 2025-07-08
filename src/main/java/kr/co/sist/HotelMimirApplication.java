@@ -7,9 +7,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 @MapperScan("kr.co.sist.FAQ")
 @MapperScan("kr.co.sist.util.mapper") 
-@MapperScan("kr.co.sist.nonmember") 
-@MapperScan("kr.co.sist.payment") 
-@MapperScan("kr.co.sist.resvroom") 
 public class HotelMimirApplication {
 
 	public static void main(String[] args) {
