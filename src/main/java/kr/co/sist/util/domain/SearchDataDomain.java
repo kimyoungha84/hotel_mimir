@@ -15,8 +15,10 @@ import lombok.ToString;
 public class SearchDataDomain {
 	
 	//다이닝
+	private int dining_id;
 	private String dining_name;
-	private int dining_price;
+	private String type;
+	private String manager_name;
 	private Date dining_reg_date;
 	
 	//FAQ

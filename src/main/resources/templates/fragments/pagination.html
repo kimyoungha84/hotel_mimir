@@ -85,6 +85,19 @@
             </li>
         </ul>
     </div>
+    <div id="pagination-config">
+    <input type="hidden" name="pageSize" th:value="${pageSize}" />
+	</div>
+	
+	<script th:inline="javascript">
+	  window.filterType = /*[[${filterType}]]*/ 'defaultFilterType';
+	  window.filterFragmentTemplate = /*[[${filter_fragmentTemplate}]]*/ 'defaultTemplate';
+	  window.filterFragmentName = /*[[${filter_fragmentName}]]*/ 'defaultFragment';
+	  window.filterResultKey = /*[[${filter_resultKey}]]*/ 'defaultResultKey';
+	</script>
+	
+
+	
 </div>
 
 

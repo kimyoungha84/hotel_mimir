@@ -14,8 +14,7 @@ public enum FilterConfig {
         "diningRegDate",     // 👉 form name
         "dining_reg_date",   // 👉 실제 컬럼명
         List.of(
-            new Option("name", "이름", "dining_name"),
-            new Option("price", "가격", "dining_price")
+            new Option("name", "이름", "dining_name")
         )
     ),
 
@@ -61,6 +60,10 @@ public enum FilterConfig {
             .filter(cfg -> cfg.getFilterType().equalsIgnoreCase(key))
             .findFirst()
             .orElseThrow(() -> new IllegalArgumentException("Invalid filter config key: " + key));
+    }
+    
+    public String getFilterType() {
+        return this.filterType;
     }
 }
 
