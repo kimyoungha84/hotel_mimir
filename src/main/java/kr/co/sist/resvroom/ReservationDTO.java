@@ -33,5 +33,6 @@ public class ReservationDTO {
 	private Date resvRegDate;  
 	private String requestMsg;  
 	private int paymentPrice;  
+	private int breakfast;
 	
 }//class

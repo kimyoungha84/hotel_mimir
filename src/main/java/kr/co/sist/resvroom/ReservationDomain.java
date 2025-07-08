@@ -22,5 +22,5 @@ public class ReservationDomain {
 	private String status;  
 	private Date resvRegDate;  
 	private String requestMsg;  
-	
+	private int breakfast;
 }//class
