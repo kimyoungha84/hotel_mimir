@@ -1,7 +1,5 @@
 $(function(){
 
-    //showMenu('nav-toggle', 'navbar', 'body-pd');
-
     /* LINK ACTIVE */
     const linkColor = document.querySelectorAll('.nav__link');
 
@@ -23,7 +21,11 @@ $(function(){
 
     collapseLinks.each(function () {
         $(this).on("click", function (e) {
-			
+
+            $(".collapse__menu a").on("click", function(e){
+                    e.stopPropagation();//이벤트 버블링 방지
+            });
+
             var clicked = $(this);
             var clickedMenu = clicked.children(".collapse__menu");
             var clickedArrow = clicked.children(".collapse__link");
@@ -44,32 +46,14 @@ $(function(){
             clickedArrow.addClass("rotate");
 
             e.stopPropagation();
-        });
-    });
+        });//click
+    });//each
+
 });//ready
 
 
 /* ********************************************************************* */
 
-/* EXPANDER MENU */
-/*showMenu*/
-function showMenu(toggleId, navbarId, bodyId) {
-
-    const toggle = document.getElementById(toggleId),
-    navbar = document.getElementById(navbarId),
-    bodypadding = document.getElementById(bodyId);
-    
-    /*버튼을 클릭했을 때 toggle*/
-    if( toggle && navbar ) {
-        toggle.addEventListener('click', function(){
-            const isNowExpanded = navbar.classList.toggle("expander");
-            bodypadding.classList.toggle("shrink");
-
-
-
-        });
-    }//end if
-}//function showMenu
 
 
 
