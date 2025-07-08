@@ -8,7 +8,12 @@ public class ReservationController {
 
 	@GetMapping("resvRoom")
 	public String roomList() {
-		return "room_resv/booking.html";
+		return "room_resv/resvRoom";
+	}//roomList
+	
+	@GetMapping("searchResv")
+	public String searchResv() {
+		return "room_resv/searchResv";
 	}//roomList
 	
 	

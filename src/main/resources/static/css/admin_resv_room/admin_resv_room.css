@@ -1,0 +1,128 @@
+@charset "UTF-8";
+    body {
+      font-family: "Pretendard", sans-serif;
+      margin: 40px;
+      background-color: #fdfdfd;
+    }
+
+    h2 {
+      font-size: 30px;
+      border-bottom: 3px solid #333;
+      padding-bottom: 20px;
+      margin-bottom: 30px;
+    }
+
+    .filters {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px 15px;
+      align-items: center;
+      margin-bottom: 25px;
+    }
+
+    .filters label {
+      font-weight: bold;
+      margin-right: 5px;
+    }
+
+    .filters input[type="date"],
+    .filters select,
+    .filters input[type="text"] {
+      padding: 8px 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      font-size: 14px;
+    }
+
+    .filters .date-range {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0;
+    }
+
+    th, td {
+      text-align: center;
+      padding: 14px 10px;
+      font-size: 15px;
+    }
+
+    thead th {
+      background-color: #f0ece7;
+      font-weight: bold;
+      border-top: 1px solid #ccc;
+      border-bottom: 1px solid #ccc;
+    }
+
+    tbody tr {
+      background-color: #fff;
+      cursor: pointer;
+      transition: background-color 0.2s;
+    }
+
+    tbody tr:hover {
+      background-color: #f9f9f9;
+    }
+
+    tbody tr + tr td {
+      border-top: 1px solid #eee;
+    }
+
+    tbody td {
+      border-left: 1px solid #eee;
+    }
+
+    tbody td:first-child {
+      border-left: none;
+    }
+
+    tbody tr:last-child td {
+      border-bottom: 1px solid #eee;
+    }
+
+    tbody tr:first-child td:first-child {
+      border-top-left-radius: 10px;
+    }
+
+    tbody tr:first-child td:last-child {
+      border-top-right-radius: 10px;
+    }
+
+    tbody tr:last-child td:first-child {
+      border-bottom-left-radius: 10px;
+    }
+
+    tbody tr:last-child td:last-child {
+      border-bottom-right-radius: 10px;
+    }
+
+    .pagination {
+      margin-top: 20px;
+      text-align: center;
+    }
+
+    .pagination button {
+      border: none;
+      background: none;
+      font-size: 16px;
+      margin: 0 4px;
+      cursor: pointer;
+      color: #999;
+    }
+
+    .pagination .active {
+      color: #000;
+      font-weight: bold;
+    }
+    
+    
+    .table-section {
+  	margin-top: 40px;
+  	margin-bottom: 40px;
+  	margin-right: 40px;
+	}

@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8" />
+  <title>객실 예약 현황 상세</title>
+    <link rel="stylesheet" th:href="@{/css/admin_resv_room/admin_resv_room_detail.css}" />
+  <link rel="icon shortcut"  href="/admin_common_assets/common_img/mimir_favicon.ico"/>
+  <style>
+  </style>
+<th:block th:replace="~{/administrator/fragments/admin_header :: admin_header}"></th:block>
+</head>
+<body>
+<th:block th:replace="~{/administrator/fragments/admin_sidebar :: admin_sidebar}"></th:block>
+<div id="body-pd" class="body-pd">
+<div class="table-section">
+
+<div class="table-section">
+  <h2 class="h2Title">
+    객실 예약 현황 상세
+    <a class="edit-btn"  title="수정"><!-- th:href="@{/reservation/edit(reserveNo=${reservation.reserveNo})}" -->
+      ✏️
+    </a>
+  </h2>
+
+  <div class="detail-box">
+    <table class="detail-table">
+      <tr>
+        <td>예약번호</td>
+        <td ><!-- th:text="${reservation.reserveNo}"> -->20250617</td>
+      </tr>
+      <tr>
+        <td>고객명</td>
+        <td ><!-- th:text="${reservation.customerName}"> -->김영하</td>
+      </tr>
+      <tr>
+        <td>연락처</td>
+        <td><!-- th:text="${reservation.contact}"> -->010-1234-5678</td>
+      </tr>
+      <tr>
+        <td>룸 종류(호실)</td>
+        <td><!--  th:text="${reservation.roomInfo}"> -->프리미어룸(708)</td>
+      </tr>
+      <tr>
+        <td>체크인</td>
+        <td><!--  th:text="${reservation.checkIn}"> -->2025.08.27(수)</td>
+      </tr>
+      <tr>
+        <td>체크아웃</td>
+        <td><!--  th:text="${reservation.checkOut}"> -->2025.08.29(금)</td>
+      </tr>
+      <tr>
+        <td>인원 수</td>
+        <td><!--  th:text="${reservation.peopleCount}"> -->3명</td>
+      </tr>
+      <tr>
+        <td>예약상태</td>
+        <td><!-- th:text="${reservation.status}"> -->예약완료</td>
+      </tr>
+      <tr>
+        <td>회원/비회원</td>
+        <td><!-- th:text="${reservation.memberType}"> -->비회원</td>
+      </tr>
+      <tr>
+        <td>요청사항</td>
+        <td><!--  th:text="${reservation.memo}"> -->없음</td>
+      </tr>
+    </table>
+  </div>
+  </div>
+  </div>
+  </div>
+
+</body>
+</html>

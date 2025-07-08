@@ -1,0 +1,113 @@
+@charset "UTF-8";
+    body {
+      font-family: "Pretendard", sans-serif;
+      margin: 40px;
+      background-color: #fdfdfd;
+    }
+    
+     h2 {
+      font-size: 30px;
+      border-bottom: 3px solid #333;
+      padding-bottom: 20px;
+      margin-bottom: 20px;
+    }
+
+    .filters {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+
+    .date-range {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .date-range input[type="date"] {
+      padding: 6px 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      font-size: 14px;
+    }
+
+    .room-filter {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    select {
+      padding: 6px 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+
+    .notice {
+      color: red;
+      font-size: 12px;
+      margin-top: 4px;
+      text-align: right;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 10px;
+    }
+
+    th, td {
+      padding: 12px 10px;
+      font-size: 14px;
+      text-align: center;
+      border-bottom: 1px solid #eee;
+    }
+
+    thead th {
+      background-color: #f3ece7;
+      font-weight: bold;
+      border-top: 1px solid #ccc;
+      border-bottom: 2px solid #ccc;
+    }
+
+    tbody tr {
+      background-color: #fff;
+      transition: background-color 0.2s;
+    }
+
+    tbody tr:hover {
+      background-color: #f9f9f9;
+    }
+
+    .summary-row {
+      font-weight: bold;
+      background-color: #f9f9f9;
+      border-top: 2px solid #ccc;
+    }
+
+    .pagination {
+      margin-top: 20px;
+      text-align: center;
+    }
+
+    .pagination button {
+      border: none;
+      background: none;
+      font-size: 16px;
+      margin: 0 4px;
+      cursor: pointer;
+      color: #999;
+    }
+
+    .pagination .active {
+      color: #000;
+      font-weight: bold;
+    }
+    
+    
+    .table-section {
+  	margin-top: 40px;
+  	margin-bottom: 40px;
+  	margin-right: 40px;
+	}
