@@ -9,7 +9,7 @@ public class PageConnectController {
 	/*dashboard*/
 	@GetMapping("/admin/dashboard")
 	public String examplePage() {
-		return "administrator/example";
+		return "administrator/index";
 	}//examplePage
 	
 	/*************************************/

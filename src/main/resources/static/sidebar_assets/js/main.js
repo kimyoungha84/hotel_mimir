@@ -4,6 +4,12 @@ $(function(){
     const linkColor = document.querySelectorAll('.nav__link');
 
 
+    //모든 기존 active 제거
+    $('.collapse__sublink').removeClass('active');
+    $('.nav__link.collapse').removeClass('active');
+    $('.collapse__menu').removeClass('showCollapse');
+    $('.collapse__link').removeClass('rotate');
+
     /*colorLink*/
     function colorLink() {
         linkColor.forEach(function(l){
@@ -49,16 +55,25 @@ $(function(){
         });//click
     });//each
 
+    /*서브 메뉴 클릭 시 localStorage에 현재 메뉴 저장*/
+    $('.collapse__sublink').on('click', function () {
+        const href = $(this).attr('href');
+        localStorage.setItem('activeSidebarPath', href);
+
+          // 기존 active 제거
+        $('.collapse__sublink').removeClass('active');
+        $('.nav__link.collapse').removeClass('active');
+    });
+
 
     const currentPath = window.location.pathname;
-
-
+    const storedPath = localStorage.getItem('activeSidebarPath');
 
     $('.collapse__sublink').each(function () {
         const $sublink = $(this);
         const href = $sublink.attr('href');
 
-        if (currentPath.includes(href)) {
+        if (currentPath.includes(href)  || (storedPath && storedPath.includes(href))) {
         const $collapseMenu = $sublink.closest('.collapse__menu');
         const $parentCollapse = $collapseMenu.closest('.nav__link');
         const $arrow = $parentCollapse.find('.collapse__link');
@@ -73,6 +88,8 @@ $(function(){
 
         // "유지 고정" 표시
         $parentCollapse.attr('data-fixed-open', 'true');
+
+        localStorage.removeItem('activeSidebarPath'); // 깔끔하게 삭제
         }
     });//each
 
