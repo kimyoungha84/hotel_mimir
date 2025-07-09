@@ -100,7 +100,7 @@ public class SearchController {
         
         int total = 0;
         if (config != null) {
-        	total = service.countByFilterConfig(config, null);
+        	total = service.countByFilterConfig(config, filters);
     	}
 
         return Map.of("totalItems", total); // ✅ JSON 형태로 리턴

@@ -50,33 +50,33 @@ public class ModelUtils {
      * @param currentPage 모델 속성이름 : currentPage
      * config로 데이터 개수를 구해서 모델 attribute에 add -> 모델 속성이름 : totalItems
      */
-    public void setPaginationAttributes(Model model, int pageSize, int currentPage, FilterConfig config) {
-        model.addAttribute("pageSize", pageSize);
-        model.addAttribute("currentPage", currentPage);
-
-        // 총 항목 수 계산 (config에 따라 다르게 계산)
-        int dataCount = 0;
-
-        System.out.println(pageSize);
-        System.out.println(currentPage);
-        if (config != null) {
-            switch (config) {
-                case DINING:
-                    dataCount = dss.countDining(null);  // dining 데이터 개수
-                    break;
-                case FAQ:
-                    dataCount = dss.countFaq(null);    // faq 데이터 개수
-                    System.out.println("switch-faq");
-                    break;
-                default : 
-                	dataCount = 0;
-                // 다른 필터 유형에 대한 처리 추가 가능
-            }
-        }
-
-        // 모델에 totalItems 추가
-        model.addAttribute("totalItems", dataCount);
-    }
+//    public void setPaginationAttributes(Model model, int pageSize, int currentPage, FilterConfig config) {
+//        model.addAttribute("pageSize", pageSize);
+//        model.addAttribute("currentPage", currentPage);
+//
+//        // 총 항목 수 계산 (config에 따라 다르게 계산)
+//        int dataCount = 0;
+//
+//        System.out.println(pageSize);
+//        System.out.println(currentPage);
+//        if (config != null) {
+//            switch (config) {
+//                case DINING:
+//                    dataCount = dss.countDining(null);  // dining 데이터 개수
+//                    break;
+//                case FAQ:
+//                    dataCount = dss.countFaq(null);    // faq 데이터 개수
+//                    System.out.println("switch-faq");
+//                    break;
+//                default : 
+//                	dataCount = 0;
+//                // 다른 필터 유형에 대한 처리 추가 가능
+//            }
+//        }
+//
+//        // 모델에 totalItems 추가
+//        model.addAttribute("totalItems", dataCount);
+//    }
     
     /**
      * @param model
@@ -89,7 +89,7 @@ public class ModelUtils {
     	model.addAttribute("currentPage", initialCurrentPage);
     	
     	// 총 항목 수 계산 (config에 따라 다르게 계산)
-    	int dataCount = 0;
+    	int totalItems = 0;
     	
     	System.out.println(pageSize);
     	System.out.println(initialCurrentPage);
@@ -113,15 +113,23 @@ public class ModelUtils {
     		dss.countByFilterConfig(config, null);
     	}
     	
+    	 int totalPages = (int) Math.ceil((double) totalItems / pageSize);
+         if (totalPages == 0) totalPages = 1; // 최소 1페이지는 보장
+         model.addAttribute("totalPages", totalPages);
+    	
     	// 모델에 totalItems 추가
-    	model.addAttribute("totalItems", dataCount);
+    	model.addAttribute("totalItems", totalItems);
     }
     
     
-    public void setPaginationAttributes(Model model, int pageSize, int currentPage, int dataCount) {
+    public void setPaginationAttributes(Model model, int pageSize, int currentPage, int totalItems) {
         model.addAttribute("pageSize", pageSize);
         model.addAttribute("currentPage", currentPage);
-        model.addAttribute("totalItems", dataCount);
+        model.addAttribute("totalItems", totalItems);
+        
+        int totalPages = (int) Math.ceil((double) totalItems / pageSize);
+        if (totalPages == 0) totalPages = 1; // 최소 1페이지는 보장
+        model.addAttribute("totalPages", totalPages);
     }
     
     

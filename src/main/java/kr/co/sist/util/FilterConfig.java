@@ -53,11 +53,6 @@ public enum FilterConfig {
 	                new Option("id", "아이디", "staff_id")
 	            ),
 	            List.of(  // 라벨 + 셀렉터 필터링 항목
-	                new LabelSelectorOption("상태", "selectorStatus", "staff_status",
-	                    List.of(new LabelSelectorItem("전체", null), 
-	                    		new LabelSelectorItem("활성", "ACTIVE"), 
-	                    		new LabelSelectorItem("비활성", "DEACTIVE"))
-	                ),
 	                new LabelSelectorOption("부서", "selectorDept", "dept_iden",
 	                		List.of(new LabelSelectorItem("전체", null), 
 	                				new LabelSelectorItem("객실", "room"), 
@@ -81,6 +76,11 @@ public enum FilterConfig {
 			                		new LabelSelectorItem("일반", "common"),
 			                        new LabelSelectorItem("직원", "employee"),
 			                        new LabelSelectorItem("어드민", "admin"))
+	                ),
+	                new LabelSelectorOption("상태", "selectorStatus", "staff_status",
+	                		List.of(new LabelSelectorItem("전체", null), 
+	                				new LabelSelectorItem("활성", "ACTIVE"), 
+	                				new LabelSelectorItem("비활성", "DEACTIVE"))
 	                )
 	            )
 	     );

@@ -58,32 +58,32 @@
 
     <div class="pagination">
         <ul>
-            <!-- << 버튼 (첫 페이지로 이동) -->
-            <li th:classappend="${currentPage == 1} ? 'disabled' : ''">
-                <a href="#" th:onclick="|loadPage(1)|" th:text="'<<'"></a>
-            </li>
-
-            <!-- < 버튼 (이전 페이지로 이동) -->
-            <li th:classappend="${currentPage == 1} ? 'disabled' : ''">
-                <a href="#" th:onclick="|loadPage(${currentPage - 1})|" th:text="'<'"></a>
-            </li>
-
-            <!-- 페이지 번호 -->
-            <li th:each="pageNum : ${#numbers.sequence(1, (totalItems / pageSize) + 1)}"
-                th:classappend="${pageNum == currentPage} ? 'active' : ''">
-                <a href="#" th:onclick="|loadPage(${pageNum})|" th:text="${pageNum}"></a>
-            </li>
-
-            <!-- > 버튼 (다음 페이지로 이동) -->
-            <li th:classappend="${currentPage == (totalItems / pageSize) + 1} ? 'disabled' : ''">
-                <a href="#" th:onclick="|loadPage(${currentPage + 1})|" th:text="'>'"></a>
-            </li>
-
-            <!-- >> 버튼 (마지막 페이지로 이동) -->
-            <li th:classappend="${currentPage == (totalItems / pageSize) + 1} ? 'disabled' : ''">
-                <a href="#" th:onclick="|loadPage(${(totalItems / pageSize) + 1})|" th:text="'>>'"></a>
-            </li>
-        </ul>
+		    <!-- << 버튼 -->
+		    <li th:classappend="${currentPage == 1} ? 'disabled' : ''">
+		        <a href="#" th:onclick="|loadPage(1)|" th:text="'<<'"></a>
+		    </li>
+		
+		    <!-- < 버튼 -->
+		    <li th:classappend="${currentPage == 1} ? 'disabled' : ''">
+		        <a href="#" th:onclick="|loadPage(${currentPage - 1})|" th:text="'<'"></a>
+		    </li>
+		
+		    <!-- 페이지 번호 -->
+		    <li th:each="pageNum : ${#numbers.sequence(1, totalPages)}"
+		        th:classappend="${pageNum == currentPage} ? 'active' : ''">
+		        <a href="#" th:onclick="|loadPage(${pageNum})|" th:text="${pageNum}"></a>
+		    </li>
+		
+		    <!-- > 버튼 -->
+		    <li th:classappend="${currentPage == totalPages} ? 'disabled' : ''">
+		        <a href="#" th:onclick="|loadPage(${currentPage + 1})|" th:text="'>'"></a>
+		    </li>
+		
+		    <!-- >> 버튼 -->
+		    <li th:classappend="${currentPage == totalPages} ? 'disabled' : ''">
+		        <a href="#" th:onclick="|loadPage(${totalPages})|" th:text="'>>'"></a>
+		    </li>
+		</ul>
     </div>
     <div id="pagination-config">
     <input type="hidden" name="pageSize" th:value="${pageSize}" />

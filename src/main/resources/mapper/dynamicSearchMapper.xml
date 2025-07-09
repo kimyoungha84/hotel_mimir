@@ -80,9 +80,10 @@
     LEFT JOIN staff_permission p ON s.staff_id = p.staff_id
     WHERE 1=1
     <include refid="filter"/>
-    GROUP BY s.staff_id
+    GROUP BY s.staff_id, s.staff_name, s.dept_iden, s.position_identified_code, s.staff_status, s.date_of_employment
   )
 </select>
+
 
 
 <!-- 다이닝 -->
