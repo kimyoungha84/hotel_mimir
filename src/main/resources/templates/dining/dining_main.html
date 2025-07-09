@@ -1,0 +1,720 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<!-- favicon 설정 -->
+<link rel="shortcut icon" href="http://192.168.10.79/images/favicon.ico"/>
+<title>Insert title here</title>
+<!--  bootstrap CDN -->
+<!-- <link rel="stylesheet" type="text/css"
+href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css"> -->
+ 
+<style>
+
+
+.north-tab{
+height : 32px;
+margin-left: 250px;
+}
+
+.category-title{
+    font-size: 50px;
+    line-height: 6.8rem;
+    font-weight: 500;
+    color: #111;
+    text-align: center;
+}
+.category-description{
+	text-align: center;
+
+}
+.dining-category{
+ 	display: flex;              
+	justify-content: center; 
+	align-items: center;   
+	margin-top: 100px;
+
+}
+
+.di-cat-btn{
+	padding: 0rem 1.2rem;
+    border-radius: 10rem;
+    height: 50px;
+    align-items: center;
+    border: 1px solid #DDDDDD;
+    background-color: #111;
+    background: none;
+    cursor: pointer;
+    margin-right: 10px;
+    
+    font-size: 15px;
+    font-weight: bold;
+}
+
+.di-cat-btn.sel{
+    background-color: #020202;
+    color: #FFFFFF;
+
+}
+
+
+.di-content-wrap{
+    max-width: 70vw;
+	margin: 0 auto;
+	margin-top : 100px;
+}
+
+
+.filtering-area{
+	height: 60px;
+    display: flex;
+    margin-bottom: 30px;
+    flex-direction: row; /* ✅ 이렇게 수정 */
+    align-items: center;  /* 세로 가운데 정렬도 추가하면 좋음 */
+}
+
+.fi-btn-area{
+
+display: flex;
+}
+
+.filtering-btn{
+	width: 90px;
+	height: 45px;
+	background: none;
+	border : 1px solid #cccccc;
+	cursor: pointer;
+	margin-right : 0.4rem;
+	border-radius: 4px;
+}
+
+.filtering-btn.keyword::after{
+	content: "";
+    display: inline-block;
+    position: relative;
+    width: 1.1rem;
+    height: 1.1rem;
+    background-image: url('/dining/images/keyword_button_filter.svg');
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    background-position: center;
+    margin-left: 5px;
+
+
+
+}
+
+.ico {
+    display: inline-block;
+    vertical-align: middle;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 100% 100%;
+}
+
+.ico-input-search {
+    width: 1.5rem;
+    height: 1.5rem;
+    /* background-image: url(data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' fill='none'%3E%3Cpath stroke='%23181818' stroke-width='1.2' d='M16.118 16.118 20.5 20.5m-9.609-2.217a7.391 7.391 0 1 1 0-14.783 7.391 7.391 0 0 1 0 14.783Z'/%3E%3C/svg%3E); */
+	background-image: url('/dining/images/searchbtn.svg');
+}
+
+
+.ico-btn-refresh-small {
+    background-image: url(https://www.lottehotel.com/assets/images/common/ico_btn_refresh_small.png);
+    width: 1.1rem;
+    height: 1.1rem;
+    margin-right: 3px;
+}
+
+.input-field{
+    margin-left: auto;
+    border: 1px solid #cccccc;
+    display: flex;
+    transition: border-color 0.3s ease;
+
+}
+
+.input-field input:focus {
+  outline: none;       /* 기본 파란색 아웃라인 제거 */
+  box-shadow: none;    /* 혹시 있는 그림자 효과 제거 */
+  border: none;        /* input 기본 테두리도 제거 (필요하면) */
+  background-color: transparent; /* 기존 스타일 유지 */
+}
+
+
+.input-field:focus-within {
+  border-color: #333;
+}
+
+
+input{
+	border: 0;
+    background-color: transparent;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    border-radius: 0;
+    width: 200px;
+    height: 40px;
+    font-size: 15px;
+    line-height: 2.8rem;
+    font-weight: 500;
+    color: #111;
+    padding-left: 10px;
+
+}
+.di-list-container{
+
+border-top: 2px solid #333;
+border-bottom: 1px solid #DDDDDD;
+margin-bottom: 3.0rem;
+
+}
+
+.di-list-sec{
+	
+  margin-top: 50px;	
+  display: grid;                       /* 부모를 grid로 설정 */
+  grid-template-columns: repeat(3, 1fr); /* 3개의 열 설정 */
+  gap: 30px;                           /* 카드 간 간격 */
+
+}
+
+.card {
+  overflow: hidden;    
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  display: flex;
+  /* background-color: lightblue; */
+  text-align: center;
+  min-height: 475px;
+  flex-direction: column;
+  margin-bottom: 1.0rem;
+  padding: 0.5rem;
+  position: relative; 
+  
+  
+}
+
+.card-top{
+	overflow: hidden;
+}
+
+
+
+.card img {
+  transition: transform 0.3s ease;
+  width: 100%;         /* 이미지가 부모 카드의 너비에 맞게 크기 조정 */
+  height: 100%;        /* 이미지가 부모 카드의 높이에 맞게 크기 조정 */
+  object-fit: cover;   /* 부모 요소를 덮도록 이미지 크기 조정 (비율 유지) */
+  transform-origin: center center;
+}
+
+.card:hover img {
+  transform: scale(1.1); /* 5% 확대 */
+}
+
+.card-info{
+	margin-right: auto;
+	margin-top: 1.0rem;
+
+}
+
+
+.di-type-wrap {
+    display: block; 
+    color: #675b57; 
+    border: 1px solid #675b57;
+    /* background-color: #fff; */
+	width: 5.0rem;
+}
+
+.di-type-txt {
+    font-size: 0.85rem;
+    line-height: 2.2rem;
+    font-weight: 500;
+    margin-left: 0.7rem;
+    margin-right: 0.7rem;
+    display: block;
+}
+
+.di-name-wrap {
+	display: block;
+	margin-top: 0.8rem;
+}
+
+.di-name-txt-area {
+	font-size: 1.7rem;
+    line-height: 2.0rem;
+    font-weight: 500;
+    color: #111;
+    display: flex;
+}
+
+.di-card-info-wrap {
+	margin-top: 0.6rem;
+	display: flex;
+  	flex-direction: column;
+}
+
+.di-info-row {
+	margin-right: auto;
+	margin-top: 0.5rem;
+}
+
+button{
+	background : none;
+	cursor : pointer;
+	display: flex;
+  	align-items: center;   /* 세로 중앙 정렬 */
+  	justify-content: center; /* 가로 중앙 정렬 */
+}
+
+.btn-input-search{
+
+	border: none;
+
+}
+
+.ico-breadcrumb-home {
+    width: 1.5rem;
+    height: 1.5rem;
+    background-image: url('/dining/images/home_img.svg');
+}
+
+</style>
+
+<!-- jquery CDN -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+
+<script type="text/javascript">
+$(function(){
+
+});
+</script>
+</head>
+<body>
+
+<div id="container">
+<main id="content">
+
+<div class="north-tab">
+<i class="ico ico-breadcrumb-home" aria-hidden="true"></i>
+<span>  >  다이닝</span>
+</div>
+
+<div class="category-title">
+다이닝
+</div>
+
+<div class="category-description">
+<span>탁트인 도심의 전경을 바라보며 세계 최고 수준의 셰프들이 직접 선보이는 다양한 요리를 즐기실 수 있습니다.</span>
+</div>
+
+<div class="dining-category">
+<button class="di-cat-btn sel"><span>전체</span></button>
+<button class="di-cat-btn"><span>레스토랑</span></button>
+<button class="di-cat-btn"><span>라운지 & 바</span></button>
+<button class="di-cat-btn"><span>베이커리 & 카페</span></button>
+<button class="di-cat-btn"><span>룸서비스</span></button>
+</div>
+<div class="di-content-wrap">
+
+
+
+<div class="filtering-area">
+<div class="fi-btn-area">
+<button class="filtering-btn keyword">키워드</button>
+<button class="filtering-btn">
+<i aria-hidden="true" class="ico ico-btn-refresh-small"></i>
+초기화</button>
+</div>
+<div class="input-field">
+<input type="text" placeholder="검색어를 입력하세요" aria-label="검색어">
+<button class="btn-input-search" type="button" data-init="true"><i aria-hidden="true" class="ico ico-input-search"></i></button>
+
+</div>
+</div>
+
+<div class="di-list-container">
+<div class="di-list-sec">
+
+
+<!-- cardStart -->
+ <div class="card">
+ <div class="card-top">
+ <div class="card-img motion-scale"><img alt="시그니엘 서울 - 다이닝 - 시그니엘 서울, 레스토랑, 비채나 - 다이닝" aria-label="시그니엘 서울, 레스토랑, 비채나" src="https://img.lottehotel.com/cms/asset/2025/01/31/424/180708-39-2000-din-seoul-signiel.webp" loading="lazy"></div>
+ 
+ 
+ 
+ </div>
+ <div class="card-info">
+ <div class="card-di-type">
+ <span class="di-type-wrap">
+ <span class="di-type-txt">레스토랑</span>
+ </span>
+ 
+ 
+ </div>
+ 
+ <div class="di-name-wrap">
+ <div class="di-name-txt-area">비채나</div>
+ 
+ 
+ </div>
+ 
+ <div class="di-card-info-wrap">
+ <div class="di-info-row">타입 | 한식</div>
+ <div class="di-info-row">타입 | 81층</div>
+ <div class="di-info-row">문의 | 02-3213-1261</div>
+ 
+ 
+ 
+ 
+ </div>
+ 
+ </div>
+ </div>
+ <!-- cardEnd -->
+<!-- cardStart -->
+ <div class="card">
+ <div class="card-top">
+ <div class="card-img motion-scale"><img alt="시그니엘 서울 - 다이닝 - 시그니엘 서울, 레스토랑, 비채나 - 다이닝" aria-label="시그니엘 서울, 레스토랑, 비채나" src="https://img.lottehotel.com/cms/asset/2025/01/31/424/180708-39-2000-din-seoul-signiel.webp" loading="lazy"></div>
+ 
+ 
+ 
+ </div>
+ <div class="card-info">
+ <div class="card-di-type">
+ <span class="di-type-wrap">
+ <span class="di-type-txt">레스토랑</span>
+ </span>
+ 
+ 
+ </div>
+ 
+ <div class="di-name-wrap">
+ <div class="di-name-txt-area">비채나</div>
+ 
+ 
+ </div>
+ 
+ <div class="di-card-info-wrap">
+ <div class="di-info-row">타입 | 한식</div>
+ <div class="di-info-row">타입 | 81층</div>
+ <div class="di-info-row">문의 | 02-3213-1261</div>
+ 
+ 
+ 
+ 
+ </div>
+ 
+ </div>
+ </div>
+ <!-- cardEnd -->
+<!-- cardStart -->
+ <div class="card">
+ <div class="card-top">
+ <div class="card-img motion-scale"><img alt="시그니엘 서울 - 다이닝 - 시그니엘 서울, 레스토랑, 비채나 - 다이닝" aria-label="시그니엘 서울, 레스토랑, 비채나" src="https://img.lottehotel.com/cms/asset/2025/01/31/424/180708-39-2000-din-seoul-signiel.webp" loading="lazy"></div>
+ 
+ 
+ 
+ </div>
+ <div class="card-info">
+ <div class="card-di-type">
+ <span class="di-type-wrap">
+ <span class="di-type-txt">레스토랑</span>
+ </span>
+ 
+ 
+ </div>
+ 
+ <div class="di-name-wrap">
+ <div class="di-name-txt-area">비채나</div>
+ 
+ 
+ </div>
+ 
+ <div class="di-card-info-wrap">
+ <div class="di-info-row">타입 | 한식</div>
+ <div class="di-info-row">타입 | 81층</div>
+ <div class="di-info-row">문의 | 02-3213-1261</div>
+ 
+ 
+ 
+ 
+ </div>
+ 
+ </div>
+ </div>
+ <!-- cardEnd -->
+<!-- cardStart -->
+ <div class="card">
+ <div class="card-top">
+ <div class="card-img motion-scale"><img alt="시그니엘 서울 - 다이닝 - 시그니엘 서울, 레스토랑, 비채나 - 다이닝" aria-label="시그니엘 서울, 레스토랑, 비채나" src="https://img.lottehotel.com/cms/asset/2025/01/31/424/180708-39-2000-din-seoul-signiel.webp" loading="lazy"></div>
+ 
+ 
+ 
+ </div>
+ <div class="card-info">
+ <div class="card-di-type">
+ <span class="di-type-wrap">
+ <span class="di-type-txt">레스토랑</span>
+ </span>
+ 
+ 
+ </div>
+ 
+ <div class="di-name-wrap">
+ <div class="di-name-txt-area">비채나</div>
+ 
+ 
+ </div>
+ 
+ <div class="di-card-info-wrap">
+ <div class="di-info-row">타입 | 한식</div>
+ <div class="di-info-row">타입 | 81층</div>
+ <div class="di-info-row">문의 | 02-3213-1261</div>
+ 
+ 
+ 
+ 
+ </div>
+ 
+ </div>
+ </div>
+ <!-- cardEnd -->
+<!-- cardStart -->
+ <div class="card">
+ <div class="card-top">
+ <div class="card-img motion-scale"><img alt="시그니엘 서울 - 다이닝 - 시그니엘 서울, 레스토랑, 비채나 - 다이닝" aria-label="시그니엘 서울, 레스토랑, 비채나" src="https://img.lottehotel.com/cms/asset/2025/01/31/424/180708-39-2000-din-seoul-signiel.webp" loading="lazy"></div>
+ 
+ 
+ 
+ </div>
+ <div class="card-info">
+ <div class="card-di-type">
+ <span class="di-type-wrap">
+ <span class="di-type-txt">레스토랑</span>
+ </span>
+ 
+ 
+ </div>
+ 
+ <div class="di-name-wrap">
+ <div class="di-name-txt-area">비채나</div>
+ 
+ 
+ </div>
+ 
+ <div class="di-card-info-wrap">
+ <div class="di-info-row">타입 | 한식</div>
+ <div class="di-info-row">타입 | 81층</div>
+ <div class="di-info-row">문의 | 02-3213-1261</div>
+ 
+ 
+ 
+ 
+ </div>
+ 
+ </div>
+ </div>
+ <!-- cardEnd -->
+<!-- cardStart -->
+ <div class="card">
+ <div class="card-top">
+ <div class="card-img motion-scale"><img alt="시그니엘 서울 - 다이닝 - 시그니엘 서울, 레스토랑, 비채나 - 다이닝" aria-label="시그니엘 서울, 레스토랑, 비채나" src="https://img.lottehotel.com/cms/asset/2025/01/31/424/180708-39-2000-din-seoul-signiel.webp" loading="lazy"></div>
+ 
+ 
+ 
+ </div>
+ <div class="card-info">
+ <div class="card-di-type">
+ <span class="di-type-wrap">
+ <span class="di-type-txt">레스토랑</span>
+ </span>
+ 
+ 
+ </div>
+ 
+ <div class="di-name-wrap">
+ <div class="di-name-txt-area">비채나</div>
+ 
+ 
+ </div>
+ 
+ <div class="di-card-info-wrap">
+ <div class="di-info-row">타입 | 한식</div>
+ <div class="di-info-row">타입 | 81층</div>
+ <div class="di-info-row">문의 | 02-3213-1261</div>
+ 
+ 
+ 
+ 
+ </div>
+ 
+ </div>
+ </div>
+ <!-- cardEnd -->
+<!-- cardStart -->
+ <div class="card">
+ <div class="card-top">
+ <div class="card-img motion-scale"><img alt="시그니엘 서울 - 다이닝 - 시그니엘 서울, 레스토랑, 비채나 - 다이닝" aria-label="시그니엘 서울, 레스토랑, 비채나" src="https://img.lottehotel.com/cms/asset/2025/01/31/424/180708-39-2000-din-seoul-signiel.webp" loading="lazy"></div>
+ 
+ 
+ 
+ </div>
+ <div class="card-info">
+ <div class="card-di-type">
+ <span class="di-type-wrap">
+ <span class="di-type-txt">레스토랑</span>
+ </span>
+ 
+ 
+ </div>
+ 
+ <div class="di-name-wrap">
+ <div class="di-name-txt-area">비채나</div>
+ 
+ 
+ </div>
+ 
+ <div class="di-card-info-wrap">
+ <div class="di-info-row">타입 | 한식</div>
+ <div class="di-info-row">타입 | 81층</div>
+ <div class="di-info-row">문의 | 02-3213-1261</div>
+ 
+ 
+ 
+ 
+ </div>
+ 
+ </div>
+ </div>
+ <!-- cardEnd -->
+<!-- cardStart -->
+ <div class="card">
+ <div class="card-top">
+ <div class="card-img motion-scale"><img alt="시그니엘 서울 - 다이닝 - 시그니엘 서울, 레스토랑, 비채나 - 다이닝" aria-label="시그니엘 서울, 레스토랑, 비채나" src="https://img.lottehotel.com/cms/asset/2025/01/31/424/180708-39-2000-din-seoul-signiel.webp" loading="lazy"></div>
+ 
+ 
+ 
+ </div>
+ <div class="card-info">
+ <div class="card-di-type">
+ <span class="di-type-wrap">
+ <span class="di-type-txt">레스토랑</span>
+ </span>
+ 
+ 
+ </div>
+ 
+ <div class="di-name-wrap">
+ <div class="di-name-txt-area">비채나</div>
+ 
+ 
+ </div>
+ 
+ <div class="di-card-info-wrap">
+ <div class="di-info-row">타입 | 한식</div>
+ <div class="di-info-row">타입 | 81층</div>
+ <div class="di-info-row">문의 | 02-3213-1261</div>
+ 
+ 
+ 
+ 
+ </div>
+ 
+ </div>
+ </div>
+ <!-- cardEnd -->
+<!-- cardStart -->
+ <div class="card">
+ <div class="card-top">
+ <div class="card-img motion-scale"><img alt="시그니엘 서울 - 다이닝 - 시그니엘 서울, 레스토랑, 비채나 - 다이닝" aria-label="시그니엘 서울, 레스토랑, 비채나" src="https://img.lottehotel.com/cms/asset/2025/01/31/424/180708-39-2000-din-seoul-signiel.webp" loading="lazy"></div>
+ 
+ 
+ 
+ </div>
+ <div class="card-info">
+ <div class="card-di-type">
+ <span class="di-type-wrap">
+ <span class="di-type-txt">레스토랑</span>
+ </span>
+ 
+ 
+ </div>
+ 
+ <div class="di-name-wrap">
+ <div class="di-name-txt-area">비채나</div>
+ 
+ 
+ </div>
+ 
+ <div class="di-card-info-wrap">
+ <div class="di-info-row">타입 | 한식</div>
+ <div class="di-info-row">타입 | 81층</div>
+ <div class="di-info-row">문의 | 02-3213-1261</div>
+ 
+ 
+ 
+ 
+ </div>
+ 
+ </div>
+ </div>
+ <!-- cardEnd -->
+<!-- cardStart -->
+ <div class="card">
+ <div class="card-top">
+ <div class="card-img motion-scale"><img alt="시그니엘 서울 - 다이닝 - 시그니엘 서울, 레스토랑, 비채나 - 다이닝" aria-label="시그니엘 서울, 레스토랑, 비채나" src="https://img.lottehotel.com/cms/asset/2025/01/31/424/180708-39-2000-din-seoul-signiel.webp" loading="lazy"></div>
+ 
+ 
+ 
+ </div>
+ <div class="card-info">
+ <div class="card-di-type">
+ <span class="di-type-wrap">
+ <span class="di-type-txt">레스토랑</span>
+ </span>
+ 
+ 
+ </div>
+ 
+ <div class="di-name-wrap">
+ <div class="di-name-txt-area">비채나</div>
+ 
+ 
+ </div>
+ 
+ <div class="di-card-info-wrap">
+ <div class="di-info-row">타입 | 한식</div>
+ <div class="di-info-row">타입 | 81층</div>
+ <div class="di-info-row">문의 | 02-3213-1261</div>
+ 
+ 
+ 
+ 
+ </div>
+ 
+ </div>
+ </div>
+ <!-- cardEnd -->
+ 
+
+</div>
+
+
+
+</div>
+
+
+
+
+</div>
+
+
+</main>
+</div>
+</body>
+</html>

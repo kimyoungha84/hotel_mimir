@@ -5,6 +5,7 @@
 
 <mapper namespace="kr.co.sist.util.mapper.DynamicSearchMapper">
 
+<!-- 필터링 쿼리 -->
 <sql id="filter">
 <if test="filters != null and filters.size() > 0">
   <foreach collection="filters" item="filter">
@@ -38,6 +39,7 @@
   </foreach>
   </if>
 </sql>
+<!-- 필터링 쿼리 -->
 
 
 <!-- 단순 셀렉트 -->
@@ -50,7 +52,7 @@
 </sql>
 <!-- 단순 셀렉트 -->
 
-
+<!--///////////////////////////////// STAFF /////////////////////////////////-->
 <select id="searchStaff" resultType="kr.co.sist.util.domain.SearchDataDomain">
   SELECT staff_id, staff_name, dept_iden, position_identified_code, permission_ids, staff_status
   FROM (
@@ -84,17 +86,11 @@
   )
 </select>
 
+<!--///////////////////////////////// STAFF-END /////////////////////////////////-->
 
 
-<!-- 다이닝 -->
 
-<select id="countDining" resultType="int">
-     SELECT COUNT(*)
-     FROM dining
-     WHERE 1=1
-  <include refid="filter"/>
-</select>
-
+<!--///////////////////////////////// DINING /////////////////////////////////-->
 
 <select id="searchDining" resultType="kr.co.sist.util.domain.SearchDataDomain">
  SELECT<include refid="diningSelectColumns"/>
@@ -108,16 +104,23 @@ FROM (
 WHERE rnum BETWEEN #{offset} AND #{end}
 </select>
 
-
-
-<select id="countFaq" resultType="int">
+<select id="countDining" resultType="int">
      SELECT COUNT(*)
-     FROM faq
+     FROM dining
      WHERE 1=1
   <include refid="filter"/>
 </select>
 
+<!--///////////////////////////////// DINING-END /////////////////////////////////-->
 
+
+
+
+
+
+
+
+<!--///////////////////////////////// FAQ /////////////////////////////////-->
 
 <select id="searchFaq" resultType="kr.co.sist.util.domain.SearchDataDomain">
  SELECT <include refid="faqSelectColumns"/>
@@ -131,5 +134,13 @@ FROM (
 WHERE rnum BETWEEN #{offset} AND #{end}
 </select>
 
+<select id="countFaq" resultType="int">
+     SELECT COUNT(*)
+     FROM faq
+     WHERE 1=1
+  <include refid="filter"/>
+</select>
+
+<!--///////////////////////////////// FAQ-END /////////////////////////////////-->
 
 </mapper>
