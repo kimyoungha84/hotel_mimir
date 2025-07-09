@@ -4,29 +4,31 @@
 <mapper namespace="kr.co.sist.member.dao.MemberMapper">
 	
 	<!-- 회원가입 -->
-  <insert id="insertMember" parameterType="kr.co.sist.member.dto.MemberDTO">
-    INSERT INTO MIMIR_USER (
-      USER_NUM,
-      LOGIN_TYPE,
-      EMAIL_ID,
-      PASSWORD,
-      USER_NAME,
-      TEL,
-      BIRTH_DATE,
-      REG_TIME,
-      USE_YN
-    ) VALUES (
-      SEQ_MIMIR_USER.NEXTVAL,
-      #{login_type},
-      #{email_id},
-      #{password},
-      #{user_name},
-      #{tel},
-      #{birth_date},
-      #{reg_time},
-      #{use_yn}
-    )
-  </insert>
+	<insert id="insertMember" parameterType="kr.co.sist.member.dto.MemberDTO">
+		INSERT INTO MIMIR_USER(
+			USER_NUM,
+			LOGIN_TYPE,
+			EMAIL_ID,
+			PASSWORD,
+			USER_NAME,
+			GENDER,
+			TEL,
+			BIRTH_DATE,
+			REG_TIME,
+			USE_YN
+		) VALUES (
+			SEQ_MIMIR_USER.NEXTVAL,
+			#{login_type},
+			#{email_id},
+			#{password},
+			#{user_name},
+			#{gender},
+			#{tel},
+			#{birth_date},
+			#{reg_time},
+			#{use_yn}
+		)
+	</insert>
 
   <!-- 이메일 중복 체크 -->
   <select id="countByEmail" parameterType="string" resultType="int">

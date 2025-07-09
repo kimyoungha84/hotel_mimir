@@ -6,7 +6,8 @@ import kr.co.sist.member.dto.MemberDTO;
 
 @Mapper
 public interface MemberMapper {
-		void insertMember(MemberDTO mDTO);
+		
+		int insertMember(MemberDTO mDTO);
 		
 		int countByEmail(String email_id);
 }

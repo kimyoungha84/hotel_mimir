@@ -44,6 +44,10 @@
 				</div>
 					<div class="text-danger" th:errors="*{email_id}"></div>
 			</div>
+			
+				<!-- 이메일 인증 관련 히든 필드 -->
+				<input type="hidden" name="token" id="auth_token" />
+				<input type="hidden" th:field="*{email_auth}" />
 
 				<script type="text/javascript">
 					function openEmailPopup() {
@@ -66,12 +70,27 @@
                 <div id="pwCheckMessage" class="text-danger"></div>
             </div>
 
-            <!-- 전화번호 -->
+			<!-- 성별 -->
+			<div class="mb-3">
+				<label class="form-label d-block">성별</label>
+				<div class="form-check form-check-inline">
+					<input class="form-check-input" type="radio" th:field="*{gender}" id="genderMale" value="M" /> 
+					<label class="form-check-label" for="genderMale">남성</label>
+				</div>
+				<div class="form-check form-check-inline">
+					<input class="form-check-input" type="radio" th:field="*{gender}" id="genderFemale" value="F" />
+					<label class="form-check-label" for="genderFemale">여성</label>
+				</div>
+				<div class="text-danger" th:errors="*{gender}"></div>
+			</div>
+
+				<!-- 전화번호 -->
             <div class="mb-3">
                 <label for="tel" class="form-label">전화번호</label>
                 <input type="text" th:field="*{tel}" class="form-control" placeholder="예: 01012345678" />
                 <div class="text-danger" th:errors="*{tel}"></div>
             </div>
+            
 
             <!-- 생년월일 -->
             <div class="mb-3">

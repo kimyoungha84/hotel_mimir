@@ -48,10 +48,15 @@
         })
         .then(res => res.text())
         .then(result => {
-            if (result === "success") {
-                window.opener.document.getElementById("email_id").value = email;
-                window.close();
-            } else {
+        	if (result === "success") {
+        	    alert("인증에 성공하였습니다.");
+
+        	    window.opener.document.getElementById("email_id").value = email;           // 이메일
+        	    window.opener.document.getElementById("auth_token").value = jwtToken;      // 토큰
+        	    window.opener.document.getElementsByName("email_auth")[0].value = code;    // 인증번호
+
+        	    window.close();
+        	} else {
                 alert("인증번호가 일치하지 않거나 유효하지 않습니다.");
             }
         });

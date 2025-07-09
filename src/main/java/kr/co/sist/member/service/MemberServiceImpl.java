@@ -1,5 +1,6 @@
 package kr.co.sist.member.service;
 
+import java.sql.Timestamp;
 import java.util.Map;
 import java.util.Random;
 
@@ -8,6 +9,8 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
+import kr.co.sist.member.dao.MemberMapper;
+import kr.co.sist.member.dto.MemberDTO;
 import kr.co.sist.util.JwtUtil;
 
 @Service
@@ -18,6 +21,21 @@ public class MemberServiceImpl implements MemberService {
 
     @Autowired
     private JwtUtil jwtUtil;
+    
+    @Autowired
+    private MemberMapper memberMapper;
+    
+    @Override
+    public boolean registerMember(MemberDTO mDTO) {
+    	
+    	mDTO.setLogin_type("email");
+    	mDTO.setReg_time(new Timestamp(System.currentTimeMillis()));
+    	mDTO.setUse_yn("N");
+    	
+    	int result = memberMapper.insertMember(mDTO);
+    	
+    	return result == 1;
+    }
 
     @Override
     public Map<String, String> sendAuthCodeWithJwt(String email) {
