@@ -43,4 +43,10 @@ public class DiningController {
 		
 		return "admin_dining/staff_test";
 	}
+	
+	@GetMapping("/user/dining_main")
+	public String diningMain(Model model) {
+		
+		return "dining/dining_main";
+	}
 }
