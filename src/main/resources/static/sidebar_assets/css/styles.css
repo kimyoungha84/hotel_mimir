@@ -169,17 +169,18 @@ a {
     word-break: keep-all;      /* 한글 단어 단위로 줄바꿈 (중간 줄바꿈 방지) */
     display: block;             /* width 적용 보장 */
     max-width: 100%;            /* 부모 너비에 맞게 */
+    width:100%;
     padding: 0.5rem 0;      /* 위아래 간격 추가 */
+    border-radius: 0.25rem;
+    transition: background-color 0.3s ease, color 0.3s ease;
     
 }
 
-
-
-a.collapse__sublink:hover {
-    /* color: var(--white-color); */
-    color: var(--sub-color); /*여기서 sub-color가 검은색!*/
-    background-color: #ff0000 !important; /* 좀 더 어두운 hover 색 */
+.collapse__menu li {
+    width: 100%;
 }
+
+
 
 /* Show collapse */
 .showCollapse {
@@ -224,4 +225,34 @@ a.collapse__sublink:hover {
 
 .logout-btn:hover {
     background-color: rgba(255, 255, 255, 0.1); /* hover 효과 */
+}
+
+a.collapse__sublink {
+    color: var(--sub-color);
+    font-size: var(--small-font-size);
+    background-color: var(--first-color);
+    white-space: nowrap;
+    word-break: keep-all;
+    display: block;
+    max-width: 100%;
+    width:100%;
+    padding: 0.5rem 1rem;
+    border-radius: 0.25rem;
+    transition: background-color 0.3s ease, color 0.3s ease, transform 0.3s ease;
+}
+
+
+/* active만 적용될 때 */
+a.collapse__sublink.active {
+    color: var(--sub-color) !important;
+    font-weight: bold;
+}
+
+/* hover 효과는 항상 최우선 적용되도록 */
+a.collapse__sublink:hover,
+a.collapse__sublink.active:hover {
+    background-color: #c1c1c1 !important;
+    color: #333 !important;
+    font-weight: bold;
+    transform: translateX(4px);
 }

@@ -1,71 +1,56 @@
-$(function(){
+$(function () {
 
-    /* LINK ACTIVE */
     const linkColor = document.querySelectorAll('.nav__link');
 
-
-    //모든 기존 active 제거
+    // 기존 active 제거
     $('.collapse__sublink').removeClass('active');
     $('.nav__link.collapse').removeClass('active');
     $('.collapse__menu').removeClass('showCollapse');
     $('.collapse__link').removeClass('rotate');
 
-    /*colorLink*/
-    function colorLink() {
-        linkColor.forEach(function(l){
-            l.classList.remove('active')
+    // 기본 nav 링크 클릭 시 active 처리
+    linkColor.forEach(function (l) {
+        l.addEventListener('click', function () {
+            linkColor.forEach(el => el.classList.remove('active'));
+            this.classList.add('active');
         });
-        this.classList.add('active');
-    }//colorLink
-
-
-    linkColor.forEach(function(l){ 
-        l.addEventListener('click', colorLink)
     });
 
-    var collapseLinks = $(".nav__link.collapse");
+    // collapse 클릭 이벤트 (하위 메뉴 열고 닫기)
+    $(".nav__link.collapse").on("click", function (e) {
+        const $clicked = $(this);
+        const $menu = $clicked.children(".collapse__menu");
+        const $arrow = $clicked.children(".collapse__link");
 
-    collapseLinks.each(function () {
-        $(this).on("click", function (e) {
-
-            $(".collapse__menu a").on("click", function(e){
-                    e.stopPropagation();//이벤트 버블링 방지
-            });
-
-            var clicked = $(this);
-            var clickedMenu = clicked.children(".collapse__menu");
-            var clickedArrow = clicked.children(".collapse__link");
-
-            // 이미 열려있는 상태면 닫기만 하고 return
-            if (clickedMenu.hasClass("showCollapse")) {
-                clickedMenu.removeClass("showCollapse");
-                clickedArrow.removeClass("rotate");
-                return;
-            }
-
-            // 모든 메뉴 닫기
-            $(".collapse__menu").removeClass("showCollapse");
-            $(".collapse__link").removeClass("rotate");
-
-            // 현재 클릭한 메뉴 열기
-            clickedMenu.addClass("showCollapse");
-            clickedArrow.addClass("rotate");
-
+        // data-fixed-open이면 막음
+        if ($clicked.attr('data-fixed-open') === 'true') {
             e.stopPropagation();
-        });//click
-    });//each
+            return;
+        }
 
-    /*서브 메뉴 클릭 시 localStorage에 현재 메뉴 저장*/
-    $('.collapse__sublink').on('click', function () {
+        const isOpen = $menu.hasClass("showCollapse");
+
+        // 모두 닫기
+        $(".collapse__menu").removeClass("showCollapse");
+        $(".collapse__link").removeClass("rotate");
+        $(".nav__link.collapse").removeClass("active");
+
+        if (!isOpen) {
+            $menu.addClass("showCollapse");
+            $arrow.addClass("rotate");
+            $clicked.addClass("active");
+        }
+
+        e.stopPropagation();
+    });
+
+    // collapse 서브링크 클릭 시 localStorage 저장
+    $('.collapse__sublink').on('click', function (e) {
         const href = $(this).attr('href');
         localStorage.setItem('activeSidebarPath', href);
-
-          // 기존 active 제거
-        $('.collapse__sublink').removeClass('active');
-        $('.nav__link.collapse').removeClass('active');
     });
 
-
+    // 페이지 로드시 메뉴 상태 복원
     const currentPath = window.location.pathname;
     const storedPath = localStorage.getItem('activeSidebarPath');
 
@@ -73,58 +58,27 @@ $(function(){
         const $sublink = $(this);
         const href = $sublink.attr('href');
 
-        if (currentPath.includes(href)  || (storedPath && storedPath.includes(href))) {
-        const $collapseMenu = $sublink.closest('.collapse__menu');
-        const $parentCollapse = $collapseMenu.closest('.nav__link');
-        const $arrow = $parentCollapse.find('.collapse__link');
+        if (currentPath.includes(href) || (storedPath && storedPath.includes(href))) {
+            const $collapseMenu = $sublink.closest('.collapse__menu');
+            const $parentCollapse = $collapseMenu.closest('.nav__link');
+            const $arrow = $parentCollapse.find('.collapse__link');
 
-        // 펼친 상태 유지
-        $collapseMenu.addClass('showCollapse');
-        $arrow.addClass('rotate');
-        
-        // 클릭된 메뉴 강조
-        $sublink.addClass('active');
-        $parentCollapse.addClass('active');
+            $collapseMenu.addClass('showCollapse');
+            $arrow.addClass('rotate');
+            $sublink.addClass('active');
+            $parentCollapse.addClass('active');
+            $parentCollapse.attr('data-fixed-open', 'true');
 
-        // "유지 고정" 표시
-        $parentCollapse.attr('data-fixed-open', 'true');
-
-        localStorage.removeItem('activeSidebarPath'); // 깔끔하게 삭제
-        }
-    });//each
-
-    // 일반 nav__link (예: 대쉬보드, 직원관리 등)
-    $('.nav__link:not(.collapse)').each(function () {
-        const href = $(this).attr('onclick')?.match(/'([^']+)'/)?.[1];
-
-        if (href && currentPath.includes(href)) {
-        $(this).addClass('active');
+            localStorage.removeItem('activeSidebarPath');
         }
     });
 
-  // 토글 클릭 이벤트
-    $(".nav__link.collapse").each(function () {
-        $(this).on("click", function (e) {
-        // 자동으로 열린 메뉴는 닫히지 않게
-        if ($(this).attr('data-fixed-open') === 'true') {
-            e.stopPropagation();
-            return;
+    // 기본 nav__link도 현재 주소 기준 active 처리
+    $('.nav__link:not(.collapse)').each(function () {
+        const href = $(this).attr('onclick')?.match(/'([^']+)'/)?.[1];
+        if (href && currentPath.includes(href)) {
+            $(this).addClass('active');
         }
+    });
 
-        // 나머지 메뉴 닫기
-        $(".collapse__menu").removeClass("showCollapse");
-        $(".collapse__link").removeClass("rotate");
-        $(".nav__link.collapse").removeClass("active");
-
-        // 현재 클릭한 메뉴 열기
-        $(this).children(".collapse__menu").addClass("showCollapse");
-        $(this).children(".collapse__link").addClass("rotate");
-        $(this).addClass("active");
-
-        e.stopPropagation();
-        });//on
-    });//each
-});//ready
-
-
-/* ********************************************************************* */
+});
