@@ -28,6 +28,7 @@ public class FaqController {
 
 	@GetMapping("/admin/chat")
 	public String adminChatPage() {
+		
 		return "inquiry/admin_chat"; // templates/admin_chat.html
 	}
 
@@ -44,32 +45,34 @@ public class FaqController {
 		modelUtils.setPaginationAttributes(model, pageSize, FilterConfig.FAQ);
 
 		model.addAttribute("faqList", list);
-		/*
-		 * List<FaqDTO> faqList = null; try { faqList = service.selectAllFAQ(); } catch
-		 * (Exception e) { e.printStackTrace(); } // 서비스 호출
-		 * model.addAttribute("faqList", faqList); System.out.println(faqList);
-		 */
 		return "inquiry/admin_faq"; // templates/admin_chat.html
-	}
+	}//adminFAQPage
 
 	@GetMapping("/admin/faq/register")
 	public String faqRegisterForm() {
+		
 		return "inquiry/admin_faq_register"; // templates/admin_chat.html
-	}
+	}//faqRegisterForm
 
 	@GetMapping("/inquiry")
 	public String inquiryPage(Model model) {
+		
 		List<FAQDTO> faqList = service.selectAllFAQ(); // DB에서 FAQ 불러오기
+		
 		model.addAttribute("faqList", faqList);
+		
 		return "inquiry/inquiry"; // => templates/inquiry.html
-	}
+		
+	}//inquiryPage
 
 	// faq 등록
 	@PostMapping("/admin/faq/register")
 	public String registerFaq(@RequestParam String title, @RequestParam String content) {
+		
 		FAQDTO faq = new FAQDTO();
 		faq.setFaq_title(title);
 		// HTML 태그 제거
+		
 		String plainText = Jsoup.parse(content).text(); // <p>내용</p> → 내용
 		faq.setFaq_content(plainText);
 		faq.setFaq_date(Date.valueOf(LocalDate.now())); // 오늘 날짜 자동 설정
@@ -77,40 +80,40 @@ public class FaqController {
 		service.insertFaq(faq); // DB 저장
 
 		return "redirect:/admin/faq"; // 등록 후 리스트 페이지로 이동
-	}
+	}//registerFaq
 
 	@PostMapping("/admin/faq/delete")
 	@ResponseBody
 	public String deleteFaq(@RequestBody List<Integer> faqNums) {
+		
 		System.out.println("삭제 요청 받음: " + faqNums); // 로그 찍기
 		service.deleteFaqs(faqNums);
+		
 		return "success";
-	}
+	}//deleteFaq
+
 	@GetMapping("/admin/faq/modify")
 	public String showModifyForm(@RequestParam("faq_num") int faqNum, Model model) {
-	    FAQDTO faq = service.selectOneFaq(faqNum); // DB에서 FAQ 가져오기
-//	    System.out.println(faq);
-	    
-	    model.addAttribute("faq", faq); // HTML에 전달
-	    
-	    return "inquiry/admin_faq_modify"; // 수정 폼 페이지로 이동
-	}
-	
+		
+		FAQDTO faq = service.selectOneFaq(faqNum); // DB에서 FAQ 가져오기
+
+		model.addAttribute("faq", faq); // HTML에 전달
+
+		return "inquiry/admin_faq_modify"; // 수정 폼 페이지로 이동
+	}//showModifyForm
+
 	@PostMapping("/admin/faq/modify")
-	public String modifyFaq(@RequestParam("faq_num") int faqNum,
-	                        @RequestParam("faq_title") String title,
-	                        @RequestParam("faq_content") String content) {
+	public String modifyFaq(@RequestParam("faq_num") int faqNum, @RequestParam("faq_title") String title,
+			@RequestParam("faq_content") String content) {
 
-	    FAQDTO faq = new FAQDTO();
-	    faq.setFaq_num(faqNum);
-	    faq.setFaq_title(title);
-	    faq.setFaq_content(content); // 필요 시 Jsoup.parse(content).text() 해도 됨
+		FAQDTO faq = new FAQDTO();
+		faq.setFaq_num(faqNum);
+		faq.setFaq_title(title);
+		faq.setFaq_content(content); // 필요 시 Jsoup.parse(content).text() 해도 됨
 
-	    service.updateFaq(faq); // DB 업데이트 호출
+		service.updateFaq(faq); // DB 업데이트 호출
 
-	    return "redirect:/admin/faq"; // 수정 후 목록으로 리다이렉트
-	}
+		return "redirect:/admin/faq"; // 수정 후 목록으로 리다이렉트
+	}//modifyFaq
 
-
-
-}
+}//class

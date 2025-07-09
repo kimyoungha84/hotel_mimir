@@ -23,9 +23,14 @@ $("#startChatBtn").click(function() {
 });
 
 // WebSocket 객찰
+let inquiryType = null;
 const urlParams = new URLSearchParams(location.search);
-const userId = urlParams.get("userId");  // 예: user1
-const ws = new WebSocket("ws://192.168.10.78:8080/chat?userId=" + userId);
+//const userId = urlParams.get("userId");  // 예: user1
+//const ws = new WebSocket("ws://192.168.10.78:8080/chat?userId=" + userId);
+const userId = "10001"; // 세션 기반으로 추후 변경 가능
+const chatType = inquiryType || "0"; // 버튼 누른 값
+const ws = new WebSocket("ws://localhost:8080/chat?userId=" + userId + "&chatType=" + chatType);
+
 
 // 메시지 수신 처리
 ws.onmessage = function (event) {
@@ -71,26 +76,56 @@ $("#startChatBtn").click(function () {
   $("#chatBody").html(`
     <p style="text-align:center; color:#555;">문의 유형을 선택해주세요</p>
     <div class="chat-options">
-      <button class="chat-option" data-type="room">객실 문의</button>
-      <button class="chat-option" data-type="dining">다이닝 문의</button>
-      <button class="chat-option" data-type="etc">기타 문의</button>
+      <button class="chat-option" data-type="0">객실 문의</button>
+      <button class="chat-option" data-type="1">다이닝 문의</button>
+      <button class="chat-option" data-type="2">기타 문의</button>
     </div>
   `);
 });
 
-let inquiryType = null;
 
 $(document).on("click", ".chat-option", function () {
   inquiryType = $(this).data("type");
 
   const typeName = {
-    room: "거실 문의",
-    dining: "다이닝 문의",
-    etc: "일반 문의"
+    0: "객실 문의",
+    1: "다이닝 문의",
+    2: "일반 문의"
   }[inquiryType];
 
-  $("#chatBody").html(`<p style="text-align:center; color:#555;">[${typeName}] 문의를 시작합니다.</p>`);
-  $("#inputArea").css("display", "flex");
+  // ✅ 채팅방 생성 (enter)
+  $.post("/chat/enter", { chatType: inquiryType }, function (roomId) {
+    console.log("채팅방 ID:", roomId);
+
+    // ✅ 채팅 시작 안내 문구
+    $("#chatBody").html(`<p style="text-align:center; color:#555;">[${typeName}] 문의를 시작합니다.</p>`);
+    $("#inputArea").css("display", "flex");
+
+	function formatDateTime(timestamp) {
+	  const date = new Date(timestamp);
+	  const h = date.getHours().toString().padStart(2, '0');
+	  const m = date.getMinutes().toString().padStart(2, '0');
+	  return `${h}:${m}`;
+	}
+
+    // ✅ 이전 메시지 불러오기
+    $.post("/chat/load", function (messages) {
+      messages.forEach(msg => {
+        const isMine = !msg.staffId; // staffId 있으면 관리자
+        const align = isMine ? "right" : "left";
+
+        const msgBlock = $("<div>").addClass("message-block " + align);
+        const content = $("<div>").addClass("chat-message " + align).text(msg.content);
+        const time = $("<div>").addClass("message-time").text(formatDateTime(msg.sendTime));
+
+        msgBlock.append(content, time);
+        $("#chatBody").append(msgBlock);
+      });
+
+      // 맨 아래로 스크롤
+      $("#chatBody").scrollTop($("#chatBody")[0].scrollHeight);
+    });
+  });
 });
 
 // 보낸 타임스템프 저장
@@ -196,9 +231,9 @@ $("#backBtn").click(function () {
    <p style="text-align:center; font-size : 13px; color: #FF0000;">※욕설 금지 = 관리자도 누군가의 자녀이자 부모님이다.※ </p>
     <p style="text-align:center; color: #aaa;">문의 유형을 선택해주세요</p>
     <div class="chat-options">
-      <button class="chat-option" data-type="room">객실 문의</button>
-      <button class="chat-option" data-type="dining">다이닝 문의</button>
-      <button class="chat-option" data-type="etc">기타 문의</button>
+      <button class="chat-option" data-type="0">객실 문의</button>
+      <button class="chat-option" data-type="1">다이닝 문의</button>
+      <button class="chat-option" data-type="2">일반 문의</button>
     </div>
   `);
 });

@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.co.sist.chat.ChatMapper">
+
+  <!-- 1. 채팅방 존재 여부 조회 -->
+  <select id="findRoomIdByUserAndType" resultType="int">
+    SELECT ROOM_ID FROM CHAT_ROOM
+    WHERE USER_NUM = #{userNum}
+      AND CHAT_TYPE = #{chatType}
+  </select>
+
+  <!-- 2. 채팅방 생성 -->
+  <insert id="insertChatRoom" useGeneratedKeys="true" keyProperty="roomId">
+    INSERT INTO CHAT_ROOM (ROOM_ID, USER_NUM, STAFF_ID, DEPT_IDEN, CHAT_TYPE, FIELD)
+    VALUES (CHAT_ROOM_SEQ.NEXTVAL, #{userNum}, #{staffId}, #{deptIden}, #{chatType}, #{field})
+  </insert>
+
+  <!-- 3. 채팅방 정보 -->
+  <select id="getRoomInfo" resultType="kr.co.sist.chat.ChatRoomDTO">
+    SELECT * FROM CHAT_ROOM WHERE ROOM_ID = #{roomId}
+  </select>
+
+  <!-- 4. 채팅 메시지 조회 -->
+  <select id="findMessagesByRoomId" resultType="kr.co.sist.chat.ChatMessageDTO">
+    SELECT 
+      MESSAGE_ID AS messageId,
+      ROOM_ID AS roomId,
+      STAFF_ID AS staffId,
+      DEPT_IDEN AS deptIden,
+      CONTENT AS content,
+      SEND_TIME AS sendTime,
+      IS_READ AS isRead
+    FROM CHAT_MESSAGE
+    WHERE ROOM_ID = #{roomId}
+    ORDER BY SEND_TIME ASC
+  </select>
+
+  <!-- 5. 채팅 메시지 저장 -->
+  <insert id="insertMessage">
+    INSERT INTO CHAT_MESSAGE (
+      MESSAGE_ID, ROOM_ID, STAFF_ID, DEPT_IDEN, CONTENT, SEND_TIME, IS_READ
+    ) VALUES (
+      CHAT_MESSAGE_SEQ.NEXTVAL, #{roomId}, #{staffId}, #{deptIden}, #{content}, SYSTIMESTAMP, #{isRead}
+    )
+  </insert>
+
+  <!-- 6. 부서 + 권한 만족하는 관리자 1명 조회 (STAFF_ID만 반환) -->
+  <select id="findStaffIdByChatType" resultType="string">
+    SELECT s.STAFF_ID
+    FROM STAFF s
+    WHERE s.DEPT_IDEN = 
+      <choose>
+        <when test="chatType == '0'"> 'room' </when>
+        <when test="chatType == '1'"> 'dinning' </when>
+        <otherwise> 'inquiry' </otherwise>
+      </choose>
+      AND s.STAFF_STATUS = 'ACTIVE'
+      AND EXISTS (
+        SELECT 1 FROM staff_permission sp1
+        WHERE sp1.STAFF_ID = s.STAFF_ID
+        AND sp1.PERMISSION_ID_CODE = 
+          <choose>
+            <when test="chatType == '0'"> 'room' </when>
+            <when test="chatType == '1'"> 'dinning' </when>
+            <otherwise> 'inquiry' </otherwise>
+          </choose>
+      )
+      AND EXISTS (
+        SELECT 1 FROM staff_permission sp2
+        WHERE sp2.STAFF_ID = s.STAFF_ID
+        AND sp2.PERMISSION_ID_CODE = 'inquiry'
+      )
+    ORDER BY DBMS_RANDOM.VALUE
+    FETCH FIRST 1 ROWS ONLY
+  </select>
+
+</mapper>
