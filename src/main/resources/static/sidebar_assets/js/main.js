@@ -49,11 +49,65 @@ $(function(){
         });//click
     });//each
 
+
+    const currentPath = window.location.pathname;
+
+
+
+    $('.collapse__sublink').each(function () {
+        const $sublink = $(this);
+        const href = $sublink.attr('href');
+
+        if (currentPath.includes(href)) {
+        const $collapseMenu = $sublink.closest('.collapse__menu');
+        const $parentCollapse = $collapseMenu.closest('.nav__link');
+        const $arrow = $parentCollapse.find('.collapse__link');
+
+        // 펼친 상태 유지
+        $collapseMenu.addClass('showCollapse');
+        $arrow.addClass('rotate');
+        
+        // 클릭된 메뉴 강조
+        $sublink.addClass('active');
+        $parentCollapse.addClass('active');
+
+        // "유지 고정" 표시
+        $parentCollapse.attr('data-fixed-open', 'true');
+        }
+    });//each
+
+    // 일반 nav__link (예: 대쉬보드, 직원관리 등)
+    $('.nav__link:not(.collapse)').each(function () {
+        const href = $(this).attr('onclick')?.match(/'([^']+)'/)?.[1];
+
+        if (href && currentPath.includes(href)) {
+        $(this).addClass('active');
+        }
+    });
+
+  // 토글 클릭 이벤트
+    $(".nav__link.collapse").each(function () {
+        $(this).on("click", function (e) {
+        // 자동으로 열린 메뉴는 닫히지 않게
+        if ($(this).attr('data-fixed-open') === 'true') {
+            e.stopPropagation();
+            return;
+        }
+
+        // 나머지 메뉴 닫기
+        $(".collapse__menu").removeClass("showCollapse");
+        $(".collapse__link").removeClass("rotate");
+        $(".nav__link.collapse").removeClass("active");
+
+        // 현재 클릭한 메뉴 열기
+        $(this).children(".collapse__menu").addClass("showCollapse");
+        $(this).children(".collapse__link").addClass("rotate");
+        $(this).addClass("active");
+
+        e.stopPropagation();
+        });//on
+    });//each
 });//ready
 
 
 /* ********************************************************************* */
-
-
-
-

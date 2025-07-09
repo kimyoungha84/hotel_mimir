@@ -140,10 +140,6 @@ a {
 
 }
 
-.body-pd.shrink{
-	/* padding: 0 0 0 9rem; */
-}
-
 /* Active links menu */
 .active {
     background-color: var(--first-color);
@@ -176,6 +172,8 @@ a {
     padding: 0.5rem 0;      /* 위아래 간격 추가 */
     
 }
+
+
 
 .collapse__sublink:hover {
     /* color: var(--white-color); */

@@ -19,7 +19,7 @@ hr{
   border: none;              /* 기본 테두리 제거 */
   height: 3px;               /* 두께 */
   background-color: #333;    /* 색상 */
-  width: calc(100% - 5rem);               /* 너비 */
+  width: calc(100% - 1.87rem);               /* 너비 */
   margin: 0 0 20px 0;        /* h2와의 간격 */
 }
 
