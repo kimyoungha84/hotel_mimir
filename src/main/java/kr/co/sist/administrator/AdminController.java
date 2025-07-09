@@ -12,7 +12,7 @@ public class AdminController {
 	
 	@GetMapping("/admin")
 	public String admin() {
-		return "administrator/login";
+		return "administrator/index";
 	}//admin
 	
 	@GetMapping("/admin/login")
