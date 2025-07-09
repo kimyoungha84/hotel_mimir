@@ -42,31 +42,25 @@ public class MemberController {
 		return "member/email_popup";
 	}
 	
-	 @PostMapping("/send-auth-code")
-	    @ResponseBody
-	    public String sendAuthCode(@RequestBody Map<String, String> body, HttpSession session) {
-	        String email = body.get("email");
-	        memberService.sendAuthCode(email, session);
-	        return "인증번호가 발송되었습니다.";
-	    }
+	// 이메일 인증번호 발송
+    @PostMapping("/send-auth-code")
+    public Map<String, String> sendAuthCode(@RequestBody Map<String, String> body) {
+        String email = body.get("email");
+        return memberService.sendAuthCodeWithJwt(email);
+    }
 
-	    // 인증번호 검증
-	    @PostMapping("/verify-auth-code")
-	    @ResponseBody
-	    public String verifyAuthCode(@RequestBody Map<String, String> body, HttpSession session) {
-	        String email = body.get("email");
-	        String code = body.get("code");
-	        boolean verified = memberService.verifyAuthCode(email, code, session);
-	        return verified ? "success" : "fail";
-	    }
+    // 이메일 인증번호 검증
+    @PostMapping("/verify-auth-code")
+    public String verifyAuthCode(@RequestBody Map<String, String> body) {
+        String email = body.get("email");
+        String code = body.get("code");
+        String token = body.get("token");
 
-	    // 회원가입 처리
-	    @PostMapping("/register")
-	    public String register(@ModelAttribute MemberDTO dto, Model model) {
-	        memberService.registerMember(dto);
-	        model.addAttribute("name", dto.getUser_name());
-	        return "member/register_result"; // 회원가입 완료 페이지 (필요 시 생성)
-	    }
+        boolean result = memberService.verifyAuthCodeWithJwt(token, email, code);
+        return result ? "success" : "fail";
+    }
+
+	
 	
 	
 	

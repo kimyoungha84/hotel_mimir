@@ -20,45 +20,42 @@
 
     <div id="popupMessage" class="mt-2 text-success"></div>
 
-    <script th:inline="javascript">
-        function sendAuthCode() {
-            const email = document.getElementById("popup_email").value;
+<script th:inline="javascript">
+    let jwtToken = "";
 
-            fetch('/member/send-auth-code', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ email })
-            })
-            .then(res => res.text())
-            .then(msg => {
-                document.getElementById("popupMessage").innerText = msg;
-            });
-        }
+    function sendAuthCode() {
+        const email = document.getElementById("popup_email").value;
+        fetch("/member/send-auth-code", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ email })
+        })
+        .then(res => res.json())
+        .then(data => {
+            jwtToken = data.token;
+            alert("인증번호가 발송되었습니다.");
+        });
+    }
 
-        function confirmAuthCode() {
-            const email = document.getElementById("popup_email").value;
-            const code = document.getElementById("auth_code").value;
+    function confirmAuthCode() {
+        const email = document.getElementById("popup_email").value;
+        const code = document.getElementById("auth_code").value;
 
-            fetch('/member/verify-auth-code', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ email, code })
-            })
-            .then(res => res.text())
-            .then(result => {
-                if (result === 'success') {
-                    // 부모창에 이메일 입력값 전달
-                    window.opener.document.getElementById("email_id").value = email;
-                    window.close();
-                } else {
-                    document.getElementById("popupMessage").innerText = "인증번호가 일치하지 않습니다.";
-                }
-            });
-        }
-    </script>
+        fetch("/member/verify-auth-code", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ email, code, token: jwtToken })
+        })
+        .then(res => res.text())
+        .then(result => {
+            if (result === "success") {
+                window.opener.document.getElementById("email_id").value = email;
+                window.close();
+            } else {
+                alert("인증번호가 일치하지 않거나 유효하지 않습니다.");
+            }
+        });
+    }
+</script>
 </body>
 </html>

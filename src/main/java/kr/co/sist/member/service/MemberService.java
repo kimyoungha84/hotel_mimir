@@ -1,10 +1,11 @@
 package kr.co.sist.member.service;
 
+import java.util.Map;
+
 import jakarta.servlet.http.HttpSession;
 import kr.co.sist.member.dto.MemberDTO;
 
 public interface MemberService {
-	void sendAuthCode(String email, HttpSession session);
-    boolean verifyAuthCode(String email, String code, HttpSession session);
-    void registerMember(MemberDTO mDTO);
+    Map<String, String> sendAuthCodeWithJwt(String email);
+    boolean verifyAuthCodeWithJwt(String token, String email, String code);
 }
