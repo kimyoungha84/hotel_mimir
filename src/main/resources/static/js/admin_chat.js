@@ -57,6 +57,7 @@ $("#sendBtn").click(function() {
 // 엔터 입력 시
 $("#messageInput").keydown(function(e) {
 	if (e.key === "Enter") {
+		if (e.shiftKey) return; // 줄바꿈 허용
 		e.preventDefault();
 		sendMessage();
 	}
@@ -64,7 +65,7 @@ $("#messageInput").keydown(function(e) {
 
 // 메시지 전송 로직
 function sendMessage() {
-	const msg = $("#messageInput").val().trim();
+	const msg = $("#messageInput").val();
 	if (msg && currentUser) {
 		ws.send(currentUser + ":" + msg);
 

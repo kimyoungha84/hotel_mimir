@@ -34,6 +34,7 @@ ws.onmessage = function (event) {
   const [sender, msg] = event.data.split(":", 2);
   const isMine = sender === userId;
   const alignClass = isMine ? "right" : "left";
+  const formattedMsg = msg.replace(/\n/g, "<br>"); // 🔥 줄바꿈 처리
 
   const messageBlock = $("<div>").addClass("message-block " + alignClass);
 
@@ -41,11 +42,11 @@ ws.onmessage = function (event) {
   if (!isMine) {
     //const nameElem = $("<div>").addClass("sender-name").text(sender);
     const timeElem = $("<div>").addClass("message-time").text(getCurrentTime());
-    const msgElem = $("<div>").addClass("chat-message left").text(msg);
+    const msgElem = $("<div>").addClass("chat-message left").html(formattedMsg); // 🔥 줄바꿈 반영
     messageBlock.append( msgElem, timeElem);
   } else {
     // 사용자 메시지는 이름 없이 메시지만
-    const msgElem = $("<div>").addClass("chat-message right").text(msg);
+    const msgElem = $("<div>").addClass("chat-message right").html(formattedMsg); // 🔥 줄바꿈 반영
     messageBlock.append(msgElem);
   }
 
@@ -103,6 +104,7 @@ $("#sendBtn").click(function () {
 // 엔터 전송
 $("#messageInput").keydown(function (e) {
   if (e.key === "Enter") {
+	if (e.shiftKey) return; // 줄바꿈 허용
     e.preventDefault();
     sendMessage();
   }
@@ -130,7 +132,9 @@ function sendMessage() {
   if (msg !== "") {
 	const msgElem = $("<div>").addClass("message-block right");
 	
-	const message = $("<div>").addClass("chat-message right").text(msg);
+	//const message = $("<div>").addClass("chat-message right").text(msg);
+	const formattedMsg = msg.replace(/\n/g, "<br>");
+	const message = $("<div>").addClass("chat-message right").html(formattedMsg);
 	const timeElem = $("<div>").addClass("message-time").text(getCurrentTime());
 	msgElem.append(message,timeElem);
 

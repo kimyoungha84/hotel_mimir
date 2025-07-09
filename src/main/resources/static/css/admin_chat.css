@@ -158,14 +158,20 @@ body {
 }
 /* 채팅 메시지 */
 .chat-message {
-	display: inline-block;
-	clear: both;
-	margin: 5px 0;
-	padding: 10px 15px;
-	border-radius: 15px;
-	font-size: 14px;
-	max-width: 80%;
-	word-break: break-word;
+  word-break: break-word;          /* 너무 긴 단어 줄바꿈 허용 */
+  overflow-wrap: break-word;
+  white-space: pre-wrap;           /* \n 줄바꿈 보존 + 자동 줄바꿈 허용 */
+
+  display: inline-block;
+  clear: both;
+  margin: 5px 0;
+  padding: 8px 14px;               /* 여유 있는 패딩 */
+
+  border-radius: 15px;
+  font-size: 15px;
+
+  max-width: 95%;                  /* 🔥 기존 80% → 95%로 넓힘 */
+  box-sizing: border-box;
 }
 
 .chat-message.left {
