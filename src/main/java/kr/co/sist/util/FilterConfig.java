@@ -50,7 +50,7 @@ public enum FilterConfig {
 	            null,
 	            null,
 	            List.of(
-	                new Option("id", "아이디", "staff_id")
+	                new Option("id", "아이디", "s.staff_id")
 	            ),
 	            List.of(  // 라벨 + 셀렉터 필터링 항목
 	                new LabelSelectorOption("부서", "selectorDept", "dept_iden",

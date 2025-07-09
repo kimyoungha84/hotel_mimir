@@ -49,7 +49,7 @@
     }
 
     .filter-input {
-      width: 300px;  /* 검색창 크기 키우기 */
+      width: 200px;  /* 검색창 크기 키우기 */
       padding: 8px 12px;  /* 텍스트 입력 패딩 추가 */
       font-size: 14px;
       border: 1px solid #ddd;
@@ -140,6 +140,7 @@
 
       <!-- 검색 버튼 -->
       <button type="button" id="searchApiBtn" class="filter-search-btn">검색</button>
+      <button type="button" id="resetFiltersBtn" class="filter-search-btn" style="background-color: #f44336;">초기화</button>
     </div>
 
     <!-- 숨겨진 필드들 -->
@@ -195,6 +196,33 @@
           });
       });
   });
+  
+  document.getElementById("resetFiltersBtn")?.addEventListener("click", () => {
+	  const $form = document.getElementById("searchApiForm");
+	  if (!$form) return;
+
+	  // 셀렉터들 첫 번째 옵션 선택
+	  const selects = $form.querySelectorAll("select.filter-select-box");
+	  selects.forEach(select => {
+	    select.selectedIndex = 0;
+	  });
+
+	  // 텍스트 입력 초기화
+	  const textInputs = $form.querySelectorAll("input[type='text']");
+	  textInputs.forEach(input => input.value = '');
+
+	  // 날짜 입력 초기화
+	  const dateInputs = $form.querySelectorAll("input[type='date']");
+	  dateInputs.forEach(input => input.value = '');
+
+	  // currentPage 초기화
+	  const currentPageInput = $form.querySelector("input[name='currentPage']");
+	  if (currentPageInput) currentPageInput.value = 1;
+	});
+
+  
+  
+  
 })();
 </script>
 
