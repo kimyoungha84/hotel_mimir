@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html xmlns="http://www.thymeleaf.org">
+<head>
+<!-- favicon 설정 -->
+<link rel="icon shortcut"  href="/admin_common_assets/common_img/mimir_favicon.ico"/>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<!-- jquery CDN -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+
+<th:block th:replace="~{/administrator/fragments/admin_header :: admin_header}"></th:block>
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<!-- CSS -->
+<link rel="stylesheet" href="/employee_assets/css/employee_style.css"/>
+
+<script src="/admin_common_assets/js/pagination.js"></script>
+
+</head>
+<body>
+<th:block th:replace="~{/administrator/fragments/admin_sidebar :: admin_sidebar}"></th:block>
+
+<div id="body-pd" class="body-pd">
+    <h2 class="h2Title">직원 목록</h2>
+    <hr/>
+
+
+    <div>
+    <input type="button" class= "regEmpBtn" value="+ 직원 등록"/>
+    </div>
+    <div class="table-wrapper">
+    <div th:replace="fragments/filter :: filter(${filter})"></div>
+    
+        <table>
+        <thead>
+            <tr>
+                <th>번호</th>
+                <th>아이디</th>
+                <th>이름</th>
+                <th>부서</th>
+                <th>직책</th>
+                <th>권한</th>
+                <th>상태</th>
+            </tr>
+        </thead>
+        
+        <tbody th:fragment="staff_list_fm" id="resultArea" >
+            <tr th:each="staff, stat : ${staffList}">
+                <td th:text="${stat.count}"></td>
+                <td th:text="${staff.staff_id}"></td>
+                <td th:text="${staff.staff_name}"></td>
+                <td th:text="${staff.dept_iden}"></td>
+                <td th:text="${staff.position_identified_code}"></td>
+                <td th:text="${staff.permission_ids}"></td>
+                <td th:text="${staff.staff_status}"></td>
+            </tr>
+        </tbody>
+        </table>
+    </div>
+            <div id="paginationArea" th:insert="fragments/pagination :: pagination">
+    
+</div>
+</body>
+</html>

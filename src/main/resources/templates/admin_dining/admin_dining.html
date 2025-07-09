@@ -14,6 +14,7 @@
 
 <th:block th:replace="~{/administrator/fragments/admin_header :: admin_header}"></th:block>
 
+<script src="/admin_common_assets/js/pagination.js"></script>
 </head>
 <body>
 <th:block th:replace="~{/administrator/fragments/admin_sidebar :: admin_sidebar}"></th:block>
@@ -37,7 +38,7 @@
             <tr>
               <th><input type="checkbox" id="selectAll" /></th>
               <th>이름</th>
-              <th>가격</th>
+              <th>타입</th>
               <th>등록일</th>
               <th>담당자</th>
             </tr>
@@ -68,7 +69,6 @@
       </section>
     </main>
 </div>
-<script src="/admin_common_assets/js/pagination.js"></script>
   <script src="/admin_dining/js/admin_dining.js"></script>
 </body>
 </html>

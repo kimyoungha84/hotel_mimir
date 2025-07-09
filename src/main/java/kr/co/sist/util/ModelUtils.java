@@ -12,12 +12,10 @@ public class ModelUtils {
 	
 	
     private final DynamicSearchService dss;
-    private final PaginationCounter pc;
 
     @Autowired
-    public ModelUtils(DynamicSearchService dss, PaginationCounter pc) {
+    public ModelUtils(DynamicSearchService dss) {
         this.dss = dss;
-        this.pc = pc;
     }
 
     // 필터링 정보 설정
@@ -95,19 +93,24 @@ public class ModelUtils {
     	
     	System.out.println(pageSize);
     	System.out.println(initialCurrentPage);
+//    	if (config != null) {
+//    		switch (config) {
+//    		case DINING:
+//    			dataCount = dss.countDining(null);  // dining 데이터 개수
+//    			break;
+//    		case FAQ:
+//    			dataCount = dss.countFaq(null);    // faq 데이터 개수
+//    			System.out.println("switch-faq");
+//    			break;
+//    		default : 
+//    			dataCount = 0;
+//    			// 다른 필터 유형에 대한 처리 추가 가능
+//    		}
+//    	}
+    	
+    	
     	if (config != null) {
-    		switch (config) {
-    		case DINING:
-    			dataCount = dss.countDining(null);  // dining 데이터 개수
-    			break;
-    		case FAQ:
-    			dataCount = dss.countFaq(null);    // faq 데이터 개수
-    			System.out.println("switch-faq");
-    			break;
-    		default : 
-    			dataCount = 0;
-    			// 다른 필터 유형에 대한 처리 추가 가능
-    		}
+    		dss.countByFilterConfig(config, null);
     	}
     	
     	// 모델에 totalItems 추가

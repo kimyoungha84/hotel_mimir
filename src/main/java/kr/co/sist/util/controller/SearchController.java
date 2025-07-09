@@ -44,6 +44,8 @@ public class SearchController {
         List<SearchDataDomain> result = switch (config) {
             case DINING -> service.searchDining(filters, offset, end, pageSize);
             case FAQ -> service.searchFaq(filters, offset, end, pageSize);
+            case STAFF -> service.searchStaff(filters, offset, end, pageSize);
+            default -> null;
         };
 
 
@@ -87,10 +89,19 @@ public class SearchController {
         FilterConfig config = FilterConfig.fromKey(params.get("filterType"));
         List<FilterCondition> filters = builder.build(params, config);
 
-        int total = switch (config) {
-            case DINING -> service.countDining(filters);
-            case FAQ -> service.countFaq(filters);
-        };
+        
+        
+//        int total = switch (config) {
+//            case DINING -> service.countDining(filters);
+//            case FAQ -> service.countFaq(filters);
+//            case STAFF -> service.countStaff(filters);
+//            default -> 0;
+//        };
+        
+        int total = 0;
+        if (config != null) {
+        	total = service.countByFilterConfig(config, null);
+    	}
 
         return Map.of("totalItems", total); // ✅ JSON 형태로 리턴
     }

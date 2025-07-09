@@ -6,6 +6,9 @@ import java.util.Map;
 
 import org.springframework.stereotype.Component;
 
+import kr.co.sist.util.FilterConfig.LabelSelectorItem;
+import kr.co.sist.util.FilterConfig.LabelSelectorOption;
+
 @Component
 public class FilterConditionBuilder {
 
@@ -39,6 +42,27 @@ public class FilterConditionBuilder {
                 list.add(new FilterCondition(column, FilterOperator.TRUNC_LESS_EQUAL, end));
             }
         }
+        
+        
+        // Label + Selector 필터링 조건
+        List<LabelSelectorOption> selectorOptions = config.getLabelSelectorOptions();
+        if (selectorOptions != null) {
+            for (LabelSelectorOption labelSelector : selectorOptions) {
+                String selectedValue = params.get(labelSelector.getSelectorName());
+
+                if (isNotBlank(selectedValue)) {
+                    for (LabelSelectorItem item : labelSelector.getOptions()) {
+                        if (item.getLabel().equals(selectedValue)) {
+                        	if(item.getSearchValue() != null) {
+                            list.add(new FilterCondition(labelSelector.getSelColumnName(), FilterOperator.EQ, item.getSearchValue()));
+                        	}
+                        }
+                    }
+                }
+            }
+        }
+
+
 
         return list;
     }

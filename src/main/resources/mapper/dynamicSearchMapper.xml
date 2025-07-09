@@ -40,16 +40,52 @@
 </sql>
 
 
+<!-- 단순 셀렉트 -->
 <sql id="diningSelectColumns">
   dining_id, dining_name, type, manager_name, dining_reg_date
 </sql>
 
-
 <sql id="faqSelectColumns">
   faq_num, faq_title, faq_content, faq_date
 </sql>
+<!-- 단순 셀렉트 -->
 
 
+<select id="searchStaff" resultType="kr.co.sist.util.domain.SearchDataDomain">
+  SELECT staff_id, staff_name, dept_iden, position_identified_code, permission_ids, staff_status
+  FROM (
+    SELECT
+      s.staff_id,
+      s.staff_name,
+      s.dept_iden,
+      s.position_identified_code,
+      LISTAGG(p.permission_id_code, ',') WITHIN GROUP (ORDER BY p.permission_id_code) AS permission_ids,
+      s.staff_status,
+      ROW_NUMBER() OVER (ORDER BY TO_DATE(s.date_of_employment, 'YYYY-MM-DD') DESC) AS rnum
+    FROM staff s
+    LEFT JOIN staff_permission p ON s.staff_id = p.staff_id
+    WHERE 1=1
+    <include refid="filter"/>
+    GROUP BY s.staff_id, s.staff_name, s.dept_iden, s.position_identified_code, s.staff_status, s.date_of_employment
+  )
+  WHERE rnum BETWEEN #{offset} AND #{end}
+</select>
+
+
+<select id="countStaff" resultType="int">
+  SELECT COUNT(*)
+  FROM (
+    SELECT s.staff_id
+    FROM staff s
+    LEFT JOIN staff_permission p ON s.staff_id = p.staff_id
+    WHERE 1=1
+    <include refid="filter"/>
+    GROUP BY s.staff_id
+  )
+</select>
+
+
+<!-- 다이닝 -->
 
 <select id="countDining" resultType="int">
      SELECT COUNT(*)
