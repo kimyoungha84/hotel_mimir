@@ -1,16 +1,27 @@
 @charset "UTF-8";
-.h2Title{
-    /* font-size:1.5rem; 
-    font-weight: 700; 
-    margin-bottom: 0.5rem; */
 
-    font-size: 30px;
+
+.h2Title{
+    font-size:1.5rem; 
+    font-weight: 700; 
+    
+    margin-top:2.5rem;
+    
+
+    /* font-size: 30px;
     border-bottom: 3px solid #333;
     padding-bottom: 20px;
-    margin-bottom: 20px;
+    margin-bottom: 20px; */
 
 }
 
+hr{
+  border: none;              /* 기본 테두리 제거 */
+  height: 3px;               /* 두께 */
+  background-color: #333;    /* 색상 */
+  width: calc(100% - 5rem);               /* 너비 */
+  margin: 0 0 20px 0;        /* h2와의 간격 */
+}
 
 table{
     width: 100%;
