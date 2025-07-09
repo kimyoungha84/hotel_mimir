@@ -1,8 +1,10 @@
 package kr.co.sist.member.service;
 
-import org.springframework.stereotype.Service;
+import jakarta.servlet.http.HttpSession;
+import kr.co.sist.member.dto.MemberDTO;
 
-@Service
-public class MemberService {
-	
+public interface MemberService {
+	void sendAuthCode(String email, HttpSession session);
+    boolean verifyAuthCode(String email, String code, HttpSession session);
+    void registerMember(MemberDTO mDTO);
 }
