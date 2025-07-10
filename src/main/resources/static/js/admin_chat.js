@@ -65,7 +65,7 @@ $("#messageInput").keydown(function(e) {
 
 // 메시지 전송 로직
 function sendMessage() {
-	const msg = $("#messageInput").val();
+	const msg = $("#messageInput").val();// 🔥 trim 제거 → 줄바꿈 보존됨
 	if (msg && currentUser) {
 		ws.send(currentUser + ":" + msg);
 
