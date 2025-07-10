@@ -42,16 +42,23 @@ public class AdminController {
 	 * @return "administrator/login";
 	 */
 	@GetMapping("/admin/login")
-	public String adminLogin() {
+	public String adminLogin(Model model, @RequestParam(required=false) String error) {
+		model.addAttribute("error",error);
 		
 		return "administrator/login";
 	}//adminLogin
 	
 	
 	
+	/**
+	 * 아이디와 비밀번호 체크
+	 * @param id
+	 * @param pass
+	 * @return
+	 */
 	@PostMapping("/admin/loginChk")
 	public String loginChk(String id, String pass) {
-		String path="";
+		String path="forward:/admin/login?error=true";
 		boolean flag=false;
 		
 		if(id!=null) {

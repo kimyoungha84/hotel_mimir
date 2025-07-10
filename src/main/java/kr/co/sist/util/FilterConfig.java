@@ -55,27 +55,29 @@ public enum FilterConfig {
 	            List.of(  // 라벨 + 셀렉터 필터링 항목
 	                new LabelSelectorOption("부서", "selectorDept", "dept_iden",
 	                		List.of(new LabelSelectorItem("전체", null), 
-	                				new LabelSelectorItem("객실", "room"), 
-	                				new LabelSelectorItem("다이닝", "dinning"),
-	                				new LabelSelectorItem("문의", "inquiry"),
-	                				new LabelSelectorItem("인사", "person"),
-	            					new LabelSelectorItem("멤버쉽", "member"))
+	                				new LabelSelectorItem("객실관리", "room"), 
+	                				new LabelSelectorItem("다이닝 관리", "dinning"),
+	                				new LabelSelectorItem("문의 관리", "inquiry"),
+	                				new LabelSelectorItem("인사 관리", "person"),
+	            					new LabelSelectorItem("회원 관리", "member"),
+	            					new LabelSelectorItem("경영지원", "member"))
 	                ),
 	                new LabelSelectorOption("직책", "selectorPosition", "position_identified_code",
 	                		List.of(new LabelSelectorItem("전체", null), 
-	                				new LabelSelectorItem("A", "A"), 
-	                				new LabelSelectorItem("B", "B"),
-	                				new LabelSelectorItem("C", "C"),
-	                				new LabelSelectorItem("D", "D"),
-	            					new LabelSelectorItem("E", "E"))
+	                				new LabelSelectorItem("대표", "A"), 
+	                				new LabelSelectorItem("팀장", "B"),
+	                				new LabelSelectorItem("과장", "C"),
+	                				new LabelSelectorItem("대리", "D"),
+	            					new LabelSelectorItem("사원", "E"))
 	                ),
 	                new LabelSelectorOption("권한", "selectorPermission", "permission_id_code",
 	                		List.of(new LabelSelectorItem("전체", null), 
 	                				new LabelSelectorItem("객실", "room"), 
 	                				new LabelSelectorItem("다이닝", "dinning"),
-			                		new LabelSelectorItem("일반", "common"),
+			                		new LabelSelectorItem("문의", "inquiry"),
+			                        new LabelSelectorItem("회원", "member"),
 			                        new LabelSelectorItem("직원", "employee"),
-			                        new LabelSelectorItem("어드민", "admin"))
+			                        new LabelSelectorItem("관리자", "admin"))
 	                ),
 	                new LabelSelectorOption("상태", "selectorStatus", "staff_status",
 	                		List.of(new LabelSelectorItem("전체", null), 

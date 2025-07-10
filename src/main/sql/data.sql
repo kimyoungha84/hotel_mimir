@@ -102,12 +102,14 @@ INSERT INTO staff_permission VALUES ('room', 'mimir_874360');
 INSERT INTO staff_permission VALUES ('room', 'mimir_132784');
 INSERT INTO staff_permission VALUES ('room', 'mimir_712345');
 INSERT INTO staff_permission VALUES ('room', 'mimir_267801');
+INSERT INTO staff_permission VALUES ('inquiry', 'mimir_267801');
 
 -- dinning 부서 → dinning 권한
 INSERT INTO staff_permission VALUES ('dinning', 'mimir_927364');
 INSERT INTO staff_permission VALUES ('dinning', 'mimir_605417');
 INSERT INTO staff_permission VALUES ('dinning', 'mimir_445623');
 INSERT INTO staff_permission VALUES ('dinning', 'mimir_089123');
+INSERT INTO staff_permission VALUES ('inquiry', 'mimir_089123');
 
 -- person 부서 → employee 권한
 INSERT INTO staff_permission VALUES ('employee', 'mimir_318046');
@@ -116,22 +118,23 @@ INSERT INTO staff_permission VALUES ('employee', 'mimir_659432');
 INSERT INTO staff_permission VALUES ('employee', 'mimir_534126');
 INSERT INTO staff_permission VALUES ('employee', 'mimir_843210');
 
+
 -- member 부서 → member 권한
 INSERT INTO staff_permission VALUES ('member', 'mimir_210895');
 INSERT INTO staff_permission VALUES ('member', 'mimir_623451');
 INSERT INTO staff_permission VALUES ('member', 'mimir_356712');
 INSERT INTO staff_permission VALUES ('member', 'mimir_178902');
 
+
 -- manage 부서 → admin 권한
 INSERT INTO staff_permission VALUES ('admin', 'mimir_501276');
 
 -- inquiry 부서 → 제외 (이번 조건에 명시되지 않음)
 -- → 예: 'mimir_954321' 등은 권한 미할당
-INSERT INTO staff_permission VALUES ('inquiry', 'mimir_501276');
-
-commit;
+INSERT INTO staff_permission VALUES ('inquiry', 'mimir_954321');
 
 
+/*
 select * from permission;
 select * from staff;
 select * from log_record;
@@ -139,4 +142,6 @@ select * from department;
 select * from position;
 select * from staff_permission;
 
+*/
 
+commit;
