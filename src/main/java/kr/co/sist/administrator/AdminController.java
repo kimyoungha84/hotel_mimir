@@ -58,7 +58,7 @@ public class AdminController {
 	 */
 	@PostMapping("/admin/loginChk")
 	public String loginChk(String id, String pass) {
-		String path="forward:/admin/login?error=true";
+		String path="redirect:/admin/login?error=true";
 		boolean flag=false;
 		
 		if(id!=null) {
