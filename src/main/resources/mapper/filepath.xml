@@ -8,7 +8,7 @@
 	<select id="selectAllFilePath" resultType="kr.co.sist.filepath.FilePathDomain">
 		SELECT *
 		FROM FILE_PATH
-		WHERE PROPERTY_ID LIKE 'room_%';
+		WHERE PROPERTY_ID LIKE 'room_%'
 	</select>
 	
 	

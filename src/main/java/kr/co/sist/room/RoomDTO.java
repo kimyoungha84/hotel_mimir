@@ -1,7 +1,6 @@
 package kr.co.sist.room;
 
 
-import java.util.List;
 
 import org.apache.ibatis.type.Alias;
 
@@ -24,8 +23,7 @@ public class RoomDTO {
 	private double area_Sqm;
 	private int roomFloor; 
 	private String description; 
-	private List<String> imagePaths;
-	private String thumbnailImage;
+	private String imagePath;
 	private String status;
 	private String floorType;
 	

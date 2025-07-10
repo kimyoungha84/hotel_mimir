@@ -9,7 +9,7 @@ import lombok.ToString;
 @ToString
 public class FilePathDomain {
 
-	private int property_id;
+	private String property_id;
 	private String path;
 	private String target_type;
 	private String target_number;
