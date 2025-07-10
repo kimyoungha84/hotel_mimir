@@ -78,13 +78,14 @@
 </div>
 
 	<div class="room-section">
+	<div class="room-list">
   <th:block th:each="room : ${roomList}">
     <div class="room-card">
       <!-- roomImgList에서 roomId가 일치하는 첫 번째 이미지 선택 -->
       <img th:src="${room.imagePath}" alt="room" />
 
       <div class="room-info">
-        <h3 th:text="${room.typeName} + '룸'">스탠다드룸</h3>
+        <h3 th:text="${room.typeName}">스탠다드룸</h3>
         <p th:text="'위치: ' + ${room.floorType}">위치: 저층</p>
         <p th:text="'침대타입: ' + ${room.bedName}">침대타입: 더블</p>
         <p th:text="'전망: ' + ${room.viewName}">전망: 시티뷰, 리버뷰</p>
@@ -93,6 +94,7 @@
          th:text="'₩' + ${#numbers.formatInteger(room.pricePerNight, 3, 'COMMA')}">₩700,000</a>
     </div>
   </th:block>      
+	</div>
 
 		<div class="reservation-summary">
 			<p onclick="openModal('dateModal')" role="button" tabindex="0">

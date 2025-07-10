@@ -72,13 +72,17 @@ body {
 }
 
 .room-section {
-	display: flex;
-	padding: 0 5% 40px;
-	gap: 20px;
+  display: flex;
+  flex-direction: row;  /* 가로 정렬 */
+  gap: 40px;
+  padding: 0 5% 40px;
 }
 
 .room-list {
-	width: 68%;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
 }
 
 .room-list hr {
@@ -147,11 +151,11 @@ body {
 }
 
 .reservation-summary {
-	background: #f2f2f2;
+	background: #ffffff;
 	padding: 20px;
 	border-radius: 8px;
 	position: sticky;
-	top: 20px;
+	top: 120px;
 	max-height: 200px;
 	width: 320px;
 	flex-shrink: 0;
@@ -159,6 +163,7 @@ body {
 	flex-direction: column;
 	justify-content: center;
 	margin-left: auto;
+    border: 2px solid #bfa758;
 }
 
 .reservation-summary hr {
