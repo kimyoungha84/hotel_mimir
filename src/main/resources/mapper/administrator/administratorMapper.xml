@@ -9,6 +9,6 @@ select staff_pass from staff where staff_id=#{staff_id}
 
 <!-- id를 넣으면, 해당 아이디가 가진 권한 가져오기 -->
 <select id="selectPermissionById" parameterType="String" resultType="String">
-select permission_id_code  from staff_permission where staff_id=#{staff_id}
+select listagg(permission_id_code,',') as permission  from staff_permission where staff_id=#{staff_id}
 </select>
 </mapper>

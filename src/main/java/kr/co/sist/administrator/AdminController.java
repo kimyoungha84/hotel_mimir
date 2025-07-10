@@ -1,5 +1,8 @@
 package kr.co.sist.administrator;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -8,7 +11,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttributes;
 
-@SessionAttributes("session_id")
+@SessionAttributes({"session_id","permissionList"})
 @Controller
 public class AdminController {
 	@Autowired(required = false)
@@ -29,7 +32,6 @@ public class AdminController {
 		String session_id=(String)model.getAttribute("session_id");
 		System.out.println("session_id----------"+session_id);
 		if(session_id==null) {
-			System.out.println("들어오나?!");
 			path="forward:/admin/login";
 		}//end if
 		
@@ -62,6 +64,7 @@ public class AdminController {
 	public String loginChk(String id, String pass, Model model) {
 		String path="redirect:/admin/login?error=true";
 		boolean flag=false;
+		List<String> permissionList=new ArrayList<String>();
 		
 		if(id!=null) {
 			//아이디가 존재 //그러면 flag값이 true겠지.
@@ -70,13 +73,27 @@ public class AdminController {
 			if(flag) {
 				//로그인 성공
 				path="administrator/index";
-				//그럼 여기서 session을 추가
+				
+				//그럼 여기서 id session을 추가
 				model.addAttribute("session_id",id);
+				
 			}//end if
 		}//end if
 		
 		return path;
 	}//loginChk
+	
+	
+	/**/
+	@GetMapping("/admin/permissionChkProcess")
+	public String checkPermission(String id) {
+		boolean result=false;
+		List<String> permissionList=as.getPermissionById(id);
+		
+//		if() {}
+		
+		return "";
+	} //checkPermission
 	
 	
 	/******************************************************************************/
