@@ -92,7 +92,7 @@ INSERT INTO permission VALUES ('inquiry', '문의');
 INSERT INTO permission VALUES ('member', '회원');
 INSERT INTO permission VALUES ('employee', '직원');
 INSERT INTO permission VALUES ('admin', '관리자');
-INSERT INTO permission VALUES ('common', '공통');
+--INSERT INTO permission VALUES ('common', '공통');
 
 
 /*staff_permission - 직원 권한*/
@@ -129,7 +129,7 @@ INSERT INTO staff_permission VALUES ('admin', 'mimir_501276');
 -- → 예: 'mimir_954321' 등은 권한 미할당
 INSERT INTO staff_permission VALUES ('inquiry', 'mimir_501276');
 
-
+commit;
 
 
 select * from permission;

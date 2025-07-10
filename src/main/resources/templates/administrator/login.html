@@ -107,12 +107,12 @@ $(function(){
 <div class="loginTitleFirst">MIMIR</div>
 <div class="loginTitleSecond">Administrator</div>
 
-<form th:action="@{/admin/login}" method="post">
+<form th:action="@{/admin/loginChk}" method="POST">
 <div class="loginFormContainer">
 <div class="inputBoxFirst inputBoxDiv"><span>아이디</span><input type="text" name="id" class="inputBox"/></div>
 <div class="inputBoxSecond inputBoxDiv"><span>비밀번호</span><input type="password" name="pass" class="inputBox"/></div>
 
-<div class="inputBoxDiv"><span></span><input type="button" value="로그인" class="loginBtn"/></div>
+<div class="inputBoxDiv"><span></span><input type="submit" value="로그인" class="loginBtn"/></div>
 </div>
 </form>
 
