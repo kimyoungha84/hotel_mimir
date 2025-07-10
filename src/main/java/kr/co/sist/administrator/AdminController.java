@@ -6,7 +6,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.SessionAttributes;
 
+@SessionAttributes("session_id")
 @Controller
 public class AdminController {
 	@Autowired(required = false)
@@ -31,7 +33,7 @@ public class AdminController {
 			path="forward:/admin/login";
 		}//end if
 		
-		System.out.println("path---------------"+path);
+		
 		
 		return path;
 	}//admin
@@ -57,19 +59,22 @@ public class AdminController {
 	 * @return
 	 */
 	@PostMapping("/admin/loginChk")
-	public String loginChk(String id, String pass) {
+	public String loginChk(String id, String pass, Model model) {
 		String path="redirect:/admin/login?error=true";
 		boolean flag=false;
 		
 		if(id!=null) {
 			//아이디가 존재 //그러면 flag값이 true겠지.
 			flag=as.chkLogin(id,pass);
-			System.out.println("id_flag---------"+flag);
+		
 			if(flag) {
+				//로그인 성공
 				path="administrator/index";
+				//그럼 여기서 session을 추가
+				model.addAttribute("session_id",id);
 			}//end if
 		}//end if
-		System.out.println("loginChk return path -=------------------"+path);
+		
 		return path;
 	}//loginChk
 	

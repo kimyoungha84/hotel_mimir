@@ -2,7 +2,13 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="kr.co.sist.administrator.AdministratorMapper">
+<!-- id를 넣으면, 해당 비밀번호 가져오기 -->
 <select id="selectEmployeeLogin" parameterType="String" resultType="String">
 select staff_pass from staff where staff_id=#{staff_id}
+</select>
+
+<!-- id를 넣으면, 해당 아이디가 가진 권한 가져오기 -->
+<select id="selectPermissionById" parameterType="String" resultType="String">
+select permission_id_code  from staff_permission where staff_id=#{staff_id}
 </select>
 </mapper>
