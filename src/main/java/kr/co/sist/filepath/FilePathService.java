@@ -9,7 +9,7 @@ import kr.co.sist.room.RoomDTO;
 import kr.co.sist.room.RoomMapper;
 
 @Service
-public class AdminRoomService {
+public class FilePathService {
 	
 	@Autowired
 	private FilePathMapper fp;
