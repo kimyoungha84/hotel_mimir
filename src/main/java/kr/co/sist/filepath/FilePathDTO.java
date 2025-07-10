@@ -7,7 +7,7 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
-public class FilePathDomain {
+public class FilePathDTO {
 
 	private int property_id;
 	private String path;
