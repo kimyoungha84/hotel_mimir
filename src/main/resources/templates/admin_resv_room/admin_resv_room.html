@@ -2,12 +2,15 @@
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="UTF-8" />
-  <title>예약 현황</title>
   <link rel="stylesheet" th:href="@{/css/admin_resv_room/admin_resv_room.css}" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" th:href="@{/css/admin_room/admin_room_list.css}" />
   <link rel="icon shortcut"  href="/admin_common_assets/common_img/mimir_favicon.ico"/>
   <style>
 
   </style>
+  <!-- jquery CDN -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
 <th:block th:replace="~{/administrator/fragments/admin_header :: admin_header}"></th:block>
 </head>
 <body>
@@ -74,12 +77,12 @@
       </tr>
     </thead>
     <tbody>
-      <tr th:each="room : ${roomList}"
-          th:onclick="|location.href='@{/room_manage_detail(roomId=${room.roomId})}'|">
-        <td th:text="${room.reserveNo}">20250123</td>
-        <td th:text="${room.roomType}">스탠다드룸(601)</td>
-        <td th:text="${room.reserver}">김재인(회원)</td>
-        <td th:text="${room.status}">예약 대기</td>
+      <tr th:each="resv : ${resvList}"
+          th:onclick="|location.href='@{admin/resvroomdetail(resvId=${resv.resvId})}'|">
+        <td th:text="${resv.reserveNo}">20250123</td>
+        <td th:text="${resv.roomType}">스탠다드룸(601)</td>
+        <td th:text="${resv.reserver}">김재인(회원)</td>
+        <td th:text="${resv.status}">예약 대기</td>
       </tr>
     </tbody>
   </table>

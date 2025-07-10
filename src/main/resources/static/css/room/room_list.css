@@ -16,6 +16,7 @@ body {
 }
 
 .step-indicator .step {
+	position: relative;
 	display: inline-block;
 	width: 36px;
 	height: 36px;
@@ -37,6 +38,21 @@ body {
 	font-size: 20px;
 	font-weight: bold;
 	color: #222;
+}
+
+.step:not(.current):hover::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  background: #333;
+  color: #fff;
+  font-size: 12px;
+  padding: 4px 8px;
+  border-radius: 4px;
+  top: 40px; /* step 아래에 표시되도록 조정 */
+  left: 50%;
+  transform: translateX(-50%);
+  white-space: nowrap;
+  z-index: 10;
 }
 
 .hotel-info {

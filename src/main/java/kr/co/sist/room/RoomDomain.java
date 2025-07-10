@@ -1,6 +1,5 @@
-package kr.co.sist.admin.room;
+package kr.co.sist.room;
 
-import java.sql.Clob;
 
 import org.apache.ibatis.type.Alias;
 
@@ -21,5 +20,6 @@ public class RoomDomain {
 	private double pricePerNight;
 	private double area_Sqm;
 	private int roomFloor;
-	private Clob description;
+	private String description;
+	
 }//class

@@ -8,6 +8,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+@Alias("reservationDTO")
 @Getter
 @Setter
 @ToString
@@ -15,8 +16,14 @@ public class ReservationDTO {
 
 	private int resvId;
 	private int roomId;
+	private String typeName;
 	private int userNum;
+	private String userName;
+	private String userTel;
+	private String userEmail;
 	private int nonMemId;
+	private String nonMemName;
+	private String nonMemTel;
 	private int paymentId;  
 	private Date checkinDate;  
 	private Date checkoutDate;  
@@ -24,5 +31,5 @@ public class ReservationDTO {
 	private String status;  
 	private Date resvRegDate;  
 	private String requestMsg;  
-	private int breakfast;
+	private int paymentPrice;
 }//class

@@ -11,7 +11,7 @@ import kr.co.sist.room.RoomMapper;
 @Service
 public class AdminRoomService {
 	
-	@Autowired(required = false)
+	@Autowired
 	private RoomMapper rm;
 	
 	public List<RoomDTO> searchAllRoom(){

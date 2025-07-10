@@ -2,11 +2,13 @@
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="UTF-8" />
-  <title>객실 관리 상세</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" th:href="@{/css/admin_room/admin_room_detail.css}" />
   <link rel="icon shortcut"  href="/admin_common_assets/common_img/mimir_favicon.ico"/>
   <style>
   </style>
+  <!-- jquery CDN -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
   <th:block th:replace="~{/administrator/fragments/admin_header :: admin_header}"></th:block>
 </head>
 <body>
@@ -14,7 +16,6 @@
 <div id="body-pd" class="body-pd">
 <div class="table-section">
 
-<div class="table-section">
   <h2 class="h2Title">객실 관리</h2>
 
   <form th:action="@{/admin/room/update}" method="post" enctype="multipart/form-data">
@@ -50,17 +51,17 @@
     <!-- 설명 -->
     <div class="section">
       <label>메인 뷰 설명</label>
-      <textarea class="textarea-box" name="mainDescription"> <!-- th:text="${room.mainDescription}"> -->메인 뷰 설명 입력</textarea>
+      <textarea class="textarea-box" name="mainDescription" th:text="${room.description}">메인 뷰 설명 입력</textarea>
     </div>
 
     <div class="section">
       <label>특별서비스</label>
-      <textarea class="textarea-box" name="specialService"> <!-- th:text="${room.specialService}"> -->특별 서비스 입력</textarea>
+      <textarea class="textarea-box" name="specialService" th:text="${room.specialService}">특별 서비스 입력</textarea>
     </div>
 
     <div class="section">
       <label>추가정보</label>
-      <textarea class="textarea-box" name="extraInfo"> <!-- th:text="${room.extraInfo}"> -->추가정보 입력</textarea>
+      <textarea class="textarea-box" name="extraInfo" th:text="${room.extraInfo}" >추가정보 입력</textarea>
     </div>
 
     <!-- 수정 버튼 -->
@@ -68,7 +69,6 @@
       <button type="submit">수정</button>
     </div>
   </form>
-</div>
 </div>
 </div>
 </body>

@@ -1,6 +1,5 @@
 package kr.co.sist.room;
 
-import java.sql.Clob;
 
 import java.util.List;
 
@@ -24,9 +23,7 @@ public class RoomDTO {
 	private double pricePerNight;
 	private double area_Sqm;
 	private int roomFloor; 
-	private Clob description; 
-	private int breakfast; 
-	private String bathtub; 
+	private String description; 
 	private List<String> imagePaths;
 	private String thumbnailImage;
 	private String status;

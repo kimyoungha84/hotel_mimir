@@ -2,12 +2,14 @@
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="UTF-8" />
-  <title>객실 관리</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" th:href="@{/css/admin_room/admin_room_list.css}" />
   <link rel="icon shortcut"  href="/admin_common_assets/common_img/mimir_favicon.ico"/>
   <style>
 
   </style>
+  <!-- jquery CDN -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
 <th:block th:replace="~{/administrator/fragments/admin_header :: admin_header}"></th:block>
 </head>
 <body>
@@ -26,11 +28,12 @@
       </tr>
     </thead>
     <tbody>
+    <!-- (typeName=${room.typeName},bedName=${room.bedName},viewName=${room.viewName}) -->
       <tr th:each="room : ${roomList}"
-          th:onclick="|location.href='@{/room_manage_detail(roomId=${room.roomId})}'|">
-        <td th:text="${room.roomType}">룸 종류</td>
-        <td th:text="${room.bedType}">침대 타입</td>
-        <td th:text="${room.viewType}">전망</td>
+          th:onclick="|location.href='@{/admin/roomdetail(roomId=${room.roomId})}'|">
+        <td th:text="${room.typeName}">룸 종류</td>
+        <td th:text="${room.bedName}">침대 타입</td>
+        <td th:text="${room.viewName}">전망</td>
         <td></td>
       </tr>
     </tbody>

@@ -4,10 +4,69 @@
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="kr.co.sist.room.RoomMapper">
-	<select id="searchAllRoom" resultType="kr.co.sist.room.RoomDTO">
-		SELECT faq_num, faq_title, faq_content, faq_date
-		FROM faq
-		ORDER BY faq_date DESC
-	</select>
-	
+
+  <resultMap id="roomDTOMap" type="roomDTO">
+    <id property="roomId" column="roomId"/>
+    <result property="bedName" column="bedName"/>
+    <result property="typeName" column="typeName"/>
+    <result property="viewName" column="viewName"/>
+    <result property="capacity" column="capacity"/>
+    <result property="pricePerNight" column="pricePerNight"/>
+    <result property="area_Sqm" column="area_Sqm"/>
+    <result property="roomFloor" column="roomFloor"/>
+    <result property="description" column="description"/>
+    <result property="status" column="status"/>
+    <result property="floorType" column="floorType"/>
+  </resultMap>
+
+  <select id="selectAllRoom" resultMap="roomDTOMap">
+    SELECT
+      roomId,
+      bedName,
+      typeName,
+      viewName,
+      capacity,
+      pricePerNight,
+      area_Sqm,
+      roomFloor,
+      description,
+      status,
+      floorType
+    FROM (
+      SELECT 
+        r.room_id roomId,
+        b.bed_Name bedName,
+        t.type_Name typeName,
+        v.view_Name viewName,
+        r.capacity capacity,
+        r.price_Per_Night pricePerNight,
+        r.area_sqm area_Sqm,
+        r.ROOM_FLOOR roomFloor,
+        r.description description,
+        NVL((
+          SELECT status
+          FROM (
+            SELECT res.status
+            FROM RESERVATION res
+            WHERE res.room_id = r.room_id
+            ORDER BY res.RESV_REG_DATE DESC
+          )
+          WHERE ROWNUM = 1
+        ), '없음') AS status,
+        CASE
+          WHEN r.ROOM_FLOOR IN (6, 7) THEN '저층'
+          WHEN r.ROOM_FLOOR = 8 THEN '중층'
+          WHEN r.ROOM_FLOOR = 9 THEN '고층'
+          WHEN r.ROOM_FLOOR = 10 THEN '초고층'
+          ELSE '미정'
+        END AS floorType,
+        ROW_NUMBER() OVER (PARTITION BY t.type_Name, b.bed_Name, v.view_Name ORDER BY r.room_id) rn
+      FROM Room r
+      JOIN Bed_Type b ON r.bed_Id = b.bed_Id
+      JOIN Room_Type t ON r.type_Id = t.type_Id
+      JOIN View_Type v ON r.view_Id = v.view_Id
+    )
+    WHERE rn = 1
+  </select>
+
 </mapper>
