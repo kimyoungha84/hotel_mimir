@@ -15,6 +15,16 @@ public class AdminController {
 		return "administrator/index";
 	}//admin
 	
+	@GetMapping("/admin/test")
+	public String adminTest() {
+		return "administrator/reset_password";
+	}//adminTest
+	
+	@GetMapping("/admin/test2")
+	public String adminTest2() {
+		return "administrator/login";
+	}//adminTest
+	
 	@GetMapping("/admin/login")
 	public String adminLogin(String id, String pass) {
 		String path="redirect:/admin";
