@@ -14,6 +14,15 @@ function openModal(id) {
   document.getElementById('overlay').style.display = 'block';
   const modal = document.getElementById(id);
   modal.style.display = 'flex';
+  
+  if (id === 'guestModal') {
+    const selectedCard = document.querySelector('.room-card.selected');
+    if (selectedCard) {
+      const capacity = parseInt(selectedCard.dataset.capacity);
+      document.getElementById('adultCount').setAttribute('max', capacity);
+    }
+  }
+  
 
   if (id === 'dateModal') {
     setTimeout(() => {
@@ -87,8 +96,14 @@ function closeModal() {
 }
 
 function confirmGuestSelection() {
-  const adults = document.getElementById('adultCount').value;
-  const children = document.getElementById('childCount').value;
+  const adults = parseInt(document.getElementById('adultCount').value);
+  const children = parseInt(document.getElementById('childCount').value);
+
+  if (adults < 1) {
+    alert("성인 인원은 최소 1명 이상이어야 합니다.");
+    return;
+  }
+
 
   const summary = document.querySelector('.reservation-summary p:nth-child(2)');
   summary.innerHTML = `<strong>인원</strong><br /> 성인 ${adults}, 아동 ${children} <span class="arrow">▸</span>`;
@@ -112,6 +127,9 @@ document.addEventListener('DOMContentLoaded', () => {
   // 룸 카드 클릭 시 객실명 갱신
   document.querySelectorAll('.room-card').forEach(card => {
     card.addEventListener('click', () => {
+		document.querySelectorAll('.room-card').forEach(c => c.classList.remove('selected'));
+		    card.classList.add('selected');	
+	
       const roomType = card.querySelector('h3')?.textContent || '';
       updateGuestSummary(roomType);
     });
@@ -187,6 +205,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const typeName = card.querySelector('h3')?.textContent.trim() || '';
       const adult = document.getElementById('adultCount')?.value || "2";
       const child = document.getElementById('childCount')?.value || "0";
+	  const capacity = card.dataset.capacity || '';
 	  
 	  const priceText = this.textContent.trim();
 	  const priceNumber = priceText.replace(/[₩,]/g, '');
@@ -200,6 +219,7 @@ document.addEventListener('DOMContentLoaded', () => {
       url.searchParams.set('child', child);
       url.searchParams.set('typeName', typeName);
 	  url.searchParams.set('pricePerNight', priceNumber);
+	  url.searchParams.set('capacity', capacity);
 
       window.location.href = url.toString();
     });

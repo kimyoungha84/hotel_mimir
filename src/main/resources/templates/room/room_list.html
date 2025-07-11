@@ -4,10 +4,8 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>객실 선택 | HOTEL MIMIR</title>
-<link rel="stylesheet"
-	href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700&display=swap" />
-<link rel="stylesheet"
-	href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700&display=swap" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css" />
 <link rel="stylesheet" th:href="@{/css/room/room_list.css}" />
  <link rel="stylesheet" th:href="@{/css/header.css}" />
 <script th:src="@{/js/room/room_list.js}"></script>
@@ -20,7 +18,7 @@
 </script>
 </head>
 <body>
-<div th:replace="~{fragments/header :: header}"></div>
+	<div th:replace="~{fragments/header.html :: header}"></div>
 
 	<div class="step-indicator">
 		<span class="step current">1</span> <span class="step-title">객실 선택</span> 
@@ -101,7 +99,7 @@
 	<div class="room-section">
 	<div class="room-list">
   <th:block th:each="room : ${roomList}">
-    <div class="room-card">
+    <div class="room-card" th:attr="data-capacity=${room.capacity}">
       <!-- roomImgList에서 roomId가 일치하는 첫 번째 이미지 선택 -->
       <img th:src="${room.imagePath}" alt="room" />
 
