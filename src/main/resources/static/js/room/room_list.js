@@ -177,31 +177,35 @@ document.addEventListener('DOMContentLoaded', () => {
     btn.addEventListener('click', function(event) {
       event.preventDefault(); // 기본 a 링크 이동 막기
 
+      const card = this.closest('.room-card'); // 🔥 여기가 빠졌었음!
       const roomId = new URL(this.href).searchParams.get('roomId');
 
-      // 날짜 선택값 (flatpickr 인스턴스에서 직접 읽기)
+      // 날짜 선택값
       let checkIn = "";
       let checkOut = "";
       if (datePickerInstance && datePickerInstance.selectedDates.length === 2) {
-        const toISO = date => date.toISOString().slice(0,10);
+        const toISO = date => date.toISOString().slice(0, 10);
         checkIn = toISO(datePickerInstance.selectedDates[0]);
         checkOut = toISO(datePickerInstance.selectedDates[1]);
       }
 
-      // 인원 수 (모달 input에서 읽기)
-      let adult = document.getElementById('adultCount')?.value || "2";
-      let child = document.getElementById('childCount')?.value || "0";
+      const typeName = card.querySelector('h3')?.textContent.trim() || '';
 
-      // 새 URL 생성
+      // 인원 수
+      const adult = document.getElementById('adultCount')?.value || "2";
+      const child = document.getElementById('childCount')?.value || "0";
+
+      // URL 생성
       const url = new URL(this.href, window.location.origin);
       url.searchParams.set('checkIn', checkIn);
       url.searchParams.set('checkOut', checkOut);
       url.searchParams.set('adult', adult);
       url.searchParams.set('child', child);
+      url.searchParams.set('typeName', typeName);
 
-      // 이동
       window.location.href = url.toString();
     });
   });
 });
+
 
