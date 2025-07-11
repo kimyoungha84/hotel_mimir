@@ -45,10 +45,14 @@
 }
 
 .reservation-summary {
-  border: 1px solid #ccc;
   padding: 15px;
-  background-color: #f8f8f8;
   border-radius: 12px;
+	background: #ffffff;
+	padding: 20px;
+	border-radius: 8px;
+	position: sticky;
+	top: 120px;
+    border: 2px solid #bfa758; 
 }
 
 .btn-reserve {
@@ -226,18 +230,67 @@
   margin: 4px 0;
 }
 
+.step-indicator {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	gap: 15px;
+	margin: 40px 0 50px;
+}
+
+.step-indicator .step {
+	position: relative;
+	display: inline-block;
+	width: 36px;
+	height: 36px;
+	line-height: 36px;
+	text-align: center;
+	border-radius: 50%;
+	font-weight: bold;
+	background: #eee;
+	color: #555;
+	text-decoration: none;
+}
+
+.step-indicator .step.current {
+	background: #c2a164;
+	color: white;
+}
+
+.step-indicator .step-title {
+	font-size: 20px;
+	font-weight: bold;
+	color: #222;
+}
+
+.step:not(.current):hover::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  background: #333;
+  color: #fff;
+  font-size: 12px;
+  padding: 4px 8px;
+  border-radius: 4px;
+  top: 40px; /* step 아래에 표시되도록 조정 */
+  left: 50%;
+  transform: translateX(-50%);
+  white-space: nowrap;
+  z-index: 10;
+}
+
+
 
   </style>
 </head>
 
 <body>
   <div class="container my-4">
-    <div class="text-center step mb-4">
-      <span>1</span>
-      <span class="active">2</span>
-      <span>3</span>
-      <div class="mt-2">옵션 및 예약정보 입력</div>
-    </div>
+  
+  	<div class="step-indicator">
+		<span class="step" data-tooltip="객실 선택">1</span>  
+		<span class="step current">2</span><span class="step-title">옵션 및 예약정보 입력</span> 
+		<span class="step" data-tooltip="예약 완료">3</span>
+	</div>
 
     <div class="row">
       <div class="col-md-8">
