@@ -1,12 +1,17 @@
 package kr.co.sist.administrator;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.SessionAttributes;
 
+@SessionAttributes({"session_id","permissionList"})
 @Controller
 public class AdminController {
 	@Autowired(required = false)
@@ -27,11 +32,10 @@ public class AdminController {
 		String session_id=(String)model.getAttribute("session_id");
 		System.out.println("session_id----------"+session_id);
 		if(session_id==null) {
-			System.out.println("들어오나?!");
 			path="forward:/admin/login";
 		}//end if
 		
-		System.out.println("path---------------"+path);
+		
 		
 		return path;
 	}//admin
@@ -42,29 +46,54 @@ public class AdminController {
 	 * @return "administrator/login";
 	 */
 	@GetMapping("/admin/login")
-	public String adminLogin() {
+	public String adminLogin(Model model, @RequestParam(required=false) String error) {
+		model.addAttribute("error",error);
 		
 		return "administrator/login";
 	}//adminLogin
 	
 	
 	
+	/**
+	 * 아이디와 비밀번호 체크
+	 * @param id
+	 * @param pass
+	 * @return
+	 */
 	@PostMapping("/admin/loginChk")
-	public String loginChk(String id, String pass) {
-		String path="";
+	public String loginChk(String id, String pass, Model model) {
+		String path="redirect:/admin/login?error=true";
 		boolean flag=false;
+		List<String> permissionList=new ArrayList<String>();
 		
 		if(id!=null) {
 			//아이디가 존재 //그러면 flag값이 true겠지.
 			flag=as.chkLogin(id,pass);
-			System.out.println("id_flag---------"+flag);
+		
 			if(flag) {
+				//로그인 성공
 				path="administrator/index";
+				
+				//그럼 여기서 id session을 추가
+				model.addAttribute("session_id",id);
+				
 			}//end if
 		}//end if
-		System.out.println("loginChk return path -=------------------"+path);
+		
 		return path;
 	}//loginChk
+	
+	
+	/**/
+	@GetMapping("/admin/permissionChkProcess")
+	public String checkPermission(String id) {
+		boolean result=false;
+		List<String> permissionList=as.getPermissionById(id);
+		
+//		if() {}
+		
+		return "";
+	} //checkPermission
 	
 	
 	/******************************************************************************/
@@ -79,6 +108,7 @@ public class AdminController {
 	/*test용*/
 	@GetMapping("/admin/login2")
 	public String adminTest2() {
+		//testtest
 		return "administrator/login";
 	}//adminTest
 	

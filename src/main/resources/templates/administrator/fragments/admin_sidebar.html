@@ -1,5 +1,28 @@
 <th:block th:fragment="admin_sidebar">
 
+<script type="text/javascript">
+    $(function(){
+        //session_id를 가져옴
+        var session_id="[[${session_id}]]";
+        
+        //해당 버튼을 클릭했을 때, 클릭한 버튼의 권한을 넘겨야 하지
+        $(".nav__link").click(function(){
+            alert("여기 들어와?");
+
+            var divPermission=$(this).attr("data-role");
+            console.log("divPermission---------"+divPermission);
+        });
+
+        //이제 ajax를 이용해서 session_id를 넘긴 다음에
+        //넘긴 페이지에서 해당 id에 할당된 권한을 주르륵 찾아보고, 접근 권한이 얘한테 있는지 true, false로 알려주자!
+        // $.ajax({
+        //     url:"/admin/permissionChk",
+
+        // });
+
+    });//ready
+</script>
+
 <div class="up__bar">
 <div class="loginInfo">
     <strong><span>...</span><span>님</span></strong> &nbsp;&nbsp;&nbsp;
@@ -17,21 +40,21 @@
                     <a th:href="@{/admin}" class="nav__logo">MIMIR</a>
                 </div>
                 <div class="nav__list">
-                    <div class="nav__link" th:attr="onclick='movePage('+'\''+@{/admin/dashboard}+'\''+')'">
+                    <div class="nav__link" th:attr="onclick='movePage('+'\''+@{/admin/dashboard}+'\''+')'" data-role="dashboard">
                         <ion-icon name="pie-chart-outline" class="nav__icon"></ion-icon>
                         <span class="nav_name">대쉬보드</span>
                     </div>
-                    <div class="nav__link" th:attr="onclick='movePage('+'\''+@{/admin/employee}+'\''+')'">
+                    <div class="nav__link" th:attr="onclick='movePage('+'\''+@{/admin/employee}+'\''+')'" data-role="employee">
                         <ion-icon name="person-outline" class="nav__icon"></ion-icon>
                         <span class="nav_name">직원 관리</span>
                     </div>
 
-                    <div class="nav__link" th:attr="onclick='movePage('+'\''+@{/admin/member}+'\''+')'">
+                    <div class="nav__link" th:attr="onclick='movePage('+'\''+@{/admin/member}+'\''+')'" data-role="member">
                         <ion-icon name="people-outline" class="nav__icon"></ion-icon>
                         <span class="nav_name">회원 관리</span>
                     </div>
 
-                    <div class="nav__link collapse">
+                    <div class="nav__link collapse" data-role="room">
                         <ion-icon name="bed-outline" class="nav__icon"></ion-icon>
                         <span class="nav_name">객실 관리</span>
 
@@ -45,7 +68,7 @@
 
                     </div>
 
-                    <div class="nav__link collapse">
+                    <div class="nav__link collapse" data-role="dinning">
                         <ion-icon name="restaurant-outline" class="nav__icon"></ion-icon>
                         <span class="nav_name">다이닝 관리</span>
 
@@ -57,7 +80,7 @@
                         </ul>
                     </div>
 
-                    <div class="nav__link collapse">
+                    <div class="nav__link collapse" data-role="inquiry">
                         <ion-icon name="help-outline" class="nav__icon"></ion-icon>
                         <span class="nav_name">문의 관리</span>
 
