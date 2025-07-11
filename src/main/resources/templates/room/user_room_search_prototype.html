@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>객실 검색 프로토타입</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            background: #fafbfc;
+            font-family: 'Noto Sans KR', sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        .filter-bar {
+            display: flex;
+            gap: 16px;
+            padding: 32px 0 16px 0;
+            justify-content: flex-start;
+            align-items: center;
+            background: #fff;
+            border-bottom: 1px solid #eee;
+        }
+        .filter-select {
+            position: relative;
+            min-width: 140px;
+        }
+        .filter-btn {
+            width: 100%;
+            background: #fff;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 10px 36px 10px 16px;
+            font-size: 16px;
+            cursor: pointer;
+            text-align: left;
+            transition: border 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .filter-btn:focus {
+            border: 1.5px solid #222;
+            outline: none;
+        }
+        .arrow-img {
+            width: 18px;
+            height: 18px;
+            transition: transform 0.3s;
+        }
+        .filter-select.open .arrow-img {
+            transform: rotate(180deg);
+        }
+        .custom-dropdown {
+            display: none;
+            position: absolute;
+            left: 0;
+            top: 48px;
+            width: 340px;
+            background: #fff;
+            border: 1px solid #ddd;
+            border-radius: 16px;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.07);
+            z-index: 10;
+            padding: 24px 24px 12px 24px;
+            animation: dropdownOpen 0.3s;
+        }
+        .filter-select.open .custom-dropdown {
+            display: block;
+        }
+        @keyframes dropdownOpen {
+            0% { opacity: 0; transform: translateY(-10px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+        .dropdown-guide {
+            font-size: 14px;
+            color: #888;
+            margin-bottom: 18px;
+        }
+        .pill-options {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-bottom: 18px;
+        }
+        .pill-btn {
+            border: 1.5px solid #d2d2d2;
+            background: #fff;
+            color: #444;
+            border-radius: 20px;
+            padding: 8px 22px;
+            font-size: 15px;
+            cursor: pointer;
+            transition: all 0.18s;
+        }
+        .pill-btn.selected {
+            background: #222;
+            color: #fff;
+            border: 1.5px solid #222;
+        }
+        .dropdown-bottom {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-top: 1px solid #eee;
+            padding-top: 10px;
+            margin-top: 8px;
+        }
+        .reset-btn {
+            background: none;
+            border: none;
+            color: #444;
+            font-size: 15px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .reset-btn img {
+            width: 18px;
+            height: 18px;
+        }
+        .dropdown-arrow {
+            width: 22px;
+            height: 22px;
+            transition: transform 0.3s;
+        }
+        .filter-select.open .dropdown-arrow {
+            transform: rotate(180deg);
+        }
+        .selected-filters {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin: 16px 0 24px 0;
+        }
+        .filter-tag {
+            background: #f2f4f7;
+            color: #333;
+            border-radius: 16px;
+            padding: 6px 16px;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .filter-tag .remove {
+            cursor: pointer;
+            font-size: 16px;
+            color: #888;
+        }
+        .room-list {
+            display: flex;
+            flex-direction: column;
+            gap: 32px;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        .room-card {
+            display: flex;
+            background: #fff;
+            border-radius: 16px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+            overflow: hidden;
+            align-items: stretch;
+        }
+        .room-img {
+            width: 320px;
+            height: 220px;
+            object-fit: cover;
+            background: #eee;
+        }
+        .room-info {
+            flex: 1;
+            padding: 32px 32px 32px 32px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        .room-title {
+            font-size: 22px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+        .room-desc {
+            color: #666;
+            font-size: 15px;
+            margin-bottom: 18px;
+        }
+        .room-meta {
+            font-size: 15px;
+            color: #444;
+            margin-bottom: 18px;
+        }
+        .room-action {
+            margin-top: auto;
+            display: flex;
+            justify-content: flex-end;
+        }
+        .reserve-btn {
+            background: #222;
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            padding: 12px 32px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .reserve-btn:hover {
+            background: #444;
+        }
+        @media (max-width: 900px) {
+            .room-card { flex-direction: column; }
+            .room-img { width: 100%; height: 200px; }
+            .room-info { padding: 24px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="filter-bar">
+        <div class="filter-select" id="roomTypeSelect">
+            <button class="filter-btn" type="button">
+                객실 타입
+                <img class="arrow-img" src="keyword_button_filter.svg" alt="화살표">
+            </button>
+            <div class="custom-dropdown">
+                <div class="dropdown-guide">2개 이상 선택 가능</div>
+                <div class="pill-options">
+                    <button class="pill-btn" data-value="그랜드 디럭스">그랜드 디럭스</button>
+                    <button class="pill-btn" data-value="프리미어">프리미어</button>
+                    <button class="pill-btn" data-value="시그니엘 프리미어">시그니엘 프리미어</button>
+                    <button class="pill-btn" data-value="스위트">스위트</button>
+                </div>
+                <div class="dropdown-bottom">
+                    <button class="reset-btn" type="button">
+                        <img src="keyword_button_filter.svg" alt="초기화"> 선택해제
+                    </button>
+                    <img class="dropdown-arrow" src="keyword_button_filter.svg" alt="화살표">
+                </div>
+            </div>
+        </div>
+        <!-- 다른 필터 셀렉터도 동일하게 커스텀 박스 스타일로 추가 가능 -->
+    </div>
+    <div class="selected-filters" id="selectedFilters"></div>
+    <div class="room-list">
+        <div class="room-card">
+            <img class="room-img" src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=600&q=80" alt="room">
+            <div class="room-info">
+                <div class="room-title">그랜드 디럭스 액세서블 룸</div>
+                <div class="room-desc">투숙인원 2명 &nbsp;|&nbsp; 침대유형 더블 &nbsp;|&nbsp; 면적 40~50㎡ &nbsp;|&nbsp; 전망 시티뷰</div>
+                <div class="room-meta">쾌적한 공간과 모던한 인테리어가 돋보이는 객실입니다.</div>
+                <div class="room-action">
+                    <button class="reserve-btn">예약</button>
+                </div>
+            </div>
+        </div>
+        <div class="room-card">
+            <img class="room-img" src="https://images.unsplash.com/photo-1464983953574-0892a716854b?auto=format&fit=crop&w=600&q=80" alt="room">
+            <div class="room-info">
+                <div class="room-title">프리미어 트윈 룸</div>
+                <div class="room-desc">투숙인원 3명 &nbsp;|&nbsp; 침대유형 트윈 &nbsp;|&nbsp; 면적 45㎡ &nbsp;|&nbsp; 전망 오션뷰</div>
+                <div class="room-meta">여유로운 공간과 아름다운 전망을 자랑하는 프리미어 객실입니다.</div>
+                <div class="room-action">
+                    <button class="reserve-btn">예약</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        // 셀렉터 토글 및 화살표 회전
+        document.querySelectorAll('.filter-select').forEach(function(select) {
+            const btn = select.querySelector('.filter-btn');
+            btn.addEventListener('click', function(e) {
+                document.querySelectorAll('.filter-select').forEach(function(other) {
+                    if (other !== select) other.classList.remove('open');
+                });
+                select.classList.toggle('open');
+            });
+        });
+        // 바깥 클릭 시 닫기
+        document.addEventListener('click', function(e) {
+            if (!e.target.closest('.filter-select')) {
+                document.querySelectorAll('.filter-select').forEach(function(select) {
+                    select.classList.remove('open');
+                });
+            }
+        });
+        // pill 버튼 선택/해제 및 태그 표시
+        const selectedFilters = {};
+        const filterMap = {
+            roomTypeSelect: '객실 타입'
+        };
+        document.querySelectorAll('.pill-btn').forEach(function(btn) {
+            btn.addEventListener('click', function(e) {
+                const selectId = btn.closest('.filter-select').id;
+                const value = btn.dataset.value;
+                if (!selectedFilters[selectId]) selectedFilters[selectId] = [];
+                if (selectedFilters[selectId].includes(value)) {
+                    selectedFilters[selectId] = selectedFilters[selectId].filter(v => v !== value);
+                } else {
+                    selectedFilters[selectId].push(value);
+                }
+                updateSelectedFilters();
+                updatePillSelection();
+            });
+        });
+        function updatePillSelection() {
+            document.querySelectorAll('.pill-btn').forEach(function(btn) {
+                const selectId = btn.closest('.filter-select').id;
+                const value = btn.dataset.value;
+                if (selectedFilters[selectId] && selectedFilters[selectId].includes(value)) {
+                    btn.classList.add('selected');
+                } else {
+                    btn.classList.remove('selected');
+                }
+            });
+        }
+        function updateSelectedFilters() {
+            const container = document.getElementById('selectedFilters');
+            container.innerHTML = '';
+            Object.keys(selectedFilters).forEach(function(key) {
+                selectedFilters[key].forEach(function(val) {
+                    const tag = document.createElement('div');
+                    tag.className = 'filter-tag';
+                    tag.innerHTML = `${filterMap[key]}: ${val} <span class="remove">×</span>`;
+                    tag.querySelector('.remove').onclick = function() {
+                        selectedFilters[key] = selectedFilters[key].filter(v => v !== val);
+                        if (selectedFilters[key].length === 0) delete selectedFilters[key];
+                        updateSelectedFilters();
+                        updatePillSelection();
+                    };
+                    container.appendChild(tag);
+                });
+            });
+        }
+        // 선택해제 버튼
+        document.querySelectorAll('.reset-btn').forEach(function(btn) {
+            btn.onclick = function() {
+                Object.keys(selectedFilters).forEach(function(key) { delete selectedFilters[key]; });
+                updateSelectedFilters();
+                updatePillSelection();
+            };
+        });
+        // 드롭다운 하단 화살표 클릭 시 닫기
+        document.querySelectorAll('.dropdown-arrow').forEach(function(arrow) {
+            arrow.onclick = function() {
+                arrow.closest('.filter-select').classList.remove('open');
+            };
+        });
+    </script>
+</body>
+</html> 

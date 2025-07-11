@@ -25,11 +25,8 @@ public class DiningController {
 			"dining_list_fm",
 			"diningList"
 		);
-//		model.addAttribute("filterType", "dining");
-//		model.addAttribute("pageSize", pageSize);
 		modelUtils.setFilteringInfo(model, FilterConfig.DINING);
 		modelUtils.setPaginationAttributes(model, pageSize, FilterConfig.DINING);
-		System.out.println("labelSelectorOptions : " + FilterConfig.DINING.getLabelSelectorOptions());
 		return "admin_dining/admin_dining";
 	}
 	
