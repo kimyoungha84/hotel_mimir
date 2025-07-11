@@ -170,14 +170,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
       let checkIn = "";
       let checkOut = "";
+      let nights = 0;
+
       if (datePickerInstance && datePickerInstance.selectedDates.length === 2) {
         const toISO = date => date.toISOString().slice(0, 10);
         checkIn = toISO(datePickerInstance.selectedDates[0]);
         checkOut = toISO(datePickerInstance.selectedDates[1]);
+        nights = calcNights(datePickerInstance.selectedDates[0], datePickerInstance.selectedDates[1]);
       } else {
-        const toISO = date => date.toISOString().slice(0, 10);
-        checkIn = toISO(today);
-        checkOut = toISO(tomorrow);
+        // 만약 선택 안 됐으면 기본값으로 today~tomorrow 강제 지정
+        checkIn = today.toISOString().slice(0, 10);
+        checkOut = tomorrow.toISOString().slice(0, 10);
+        nights = calcNights(today, tomorrow);
       }
 
       const typeName = card.querySelector('h3')?.textContent.trim() || '';
@@ -187,6 +191,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const url = new URL(this.href, window.location.origin);
       url.searchParams.set('checkIn', checkIn);
       url.searchParams.set('checkOut', checkOut);
+      url.searchParams.set('nights', nights);
       url.searchParams.set('adult', adult);
       url.searchParams.set('child', child);
       url.searchParams.set('typeName', typeName);
