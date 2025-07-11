@@ -42,7 +42,7 @@
             </tr>
           </thead>
          <tbody th:fragment="faq_list_fm" id="resultArea" >
-  <tr th:each="faq, stat : ${faqList}" th:if="${stat.count <= 5}")>
+  <tr th:each="faq, stat : ${faqList}">
     <td><input type="checkbox" name="chk" th:value="${faq.faq_num}"/></td>
     <td th:text="${stat.count}"></td>
     <td th:text="${faq.faq_title}"></td>

@@ -42,6 +42,13 @@ public class SearchController {
     public static void addFragmentInfo(String filterType, String fragmentTemplate, String fragmentName, String resultKey) {
         fragmentInfoMap.put(filterType, new FragmentInfo(fragmentTemplate, fragmentName, resultKey));
     }
+    
+    /**
+     * FilterConfig enum을 사용하여 fragment 정보 등록
+     */
+    public static void addFragmentInfo(FilterConfig config, String fragmentTemplate, String fragmentName, String resultKey) {
+        fragmentInfoMap.put(config.getFilterType(), new FragmentInfo(fragmentTemplate, fragmentName, resultKey));
+    }
     public static class FragmentInfo {
         private final String fragmentTemplate;
         private final String fragmentName;

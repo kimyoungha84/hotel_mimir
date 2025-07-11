@@ -36,9 +36,9 @@ public class FaqController {
 	@GetMapping("/admin/faq")
 	public String adminFAQPage(Model model) {
 		
-		int pageSize = 5;
+		int pageSize = 10;
 		SearchController.addFragmentInfo(
-				"faq",
+				FilterConfig.FAQ,
 				"inquiry/admin_faq",
 				"faq_list_fm",
 				"faqList"

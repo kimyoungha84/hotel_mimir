@@ -20,7 +20,7 @@ public class DiningController {
 
 		// fragment 정보 동적 등록
 		SearchController.addFragmentInfo(
-			"dining",
+			FilterConfig.DINING,
 			"admin_dining/admin_dining",
 			"dining_list_fm",
 			"diningList"
