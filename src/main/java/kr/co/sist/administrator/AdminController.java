@@ -108,6 +108,7 @@ public class AdminController {
 	/*test용*/
 	@GetMapping("/admin/login2")
 	public String adminTest2() {
+		//testtest
 		return "administrator/login";
 	}//adminTest
 	
