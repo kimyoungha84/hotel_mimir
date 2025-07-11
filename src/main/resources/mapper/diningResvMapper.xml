@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.co.sist.diningresv.DiningResvMapper">
+
+<select id="selectAllResv" resultType="kr.co.sist.diningresv.DiningResvDTO">
+SELECT	dining_resv_id, resv_date, resv_time, resv_cnt, resv_status, request_msg,
+        dining_id,
+        user_num, user_name, user_tel, user_email,
+        non_mem_id, non_mem_name, non_mem_tel,
+        payment_id, payment_price
+FROM	dining_resv
+ORDER BY resv_date DESC
+</select>
+
+</mapper>

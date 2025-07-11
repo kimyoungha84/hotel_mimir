@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>다이닝 예약</title>
+<link rel="stylesheet" th:href="@{/dining_resv/css/diningResv.css}" />
+</head>
+
+<body>
+
+  <div class="banner-container-wrap">
+    <img th:src="@{/dining_resv/images/diningResv.png}" alt="다이닝 예약 메인이미지" />
+  </div>
+
+  <div class="dining-layout-wrap">
+
+    <div class="dining-list-wrap">
+
+      <div class="dining-top-wrap">
+        <div class="dining-row">
+
+          <div class="dining-wrap">
+            <div class="hotel-title">
+              <span>미미르 호텔</span>
+            </div>
+            <span class="dining-title">스테이, 모던 레스토랑</span>
+          </div>
+
+          <div class="detail-wrap">
+            <a class="btn btn-detail-txt" href="">
+              <span class="btn-txt">자세히 보기</span>
+            </a>
+            <a class="btn btn-detail" href="">
+              <span class="arrow rotated">⮜</span>
+            </a>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="dining-info-wrap">
+        <div class="dining-info-inner">
+          <div class="dining-info-list">
+
+            <div class="dining-info-item">
+              <div class="info01"><span>타입</span></div>
+              <div class="info02"><span>프렌치</span></div>
+            </div>
+
+            <div class="dining-info-item">
+              <div class="info01"><span>위치</span></div>
+              <div class="info02">
+                <span>
+                  서울특별시 강남구 테헤란로 132 미미르타워 735
+                  미미르 서울
+                  81층
+                </span>
+                <button class="btn btn-info02" type="button"><span>지도보기</span></button>
+              </div>
+            </div>
+
+            <div class="dining-info-item">
+              <div class="info01"><span>문의</span></div>
+              <div class="info02"><span>82-2-3213-1230-1</span></div>
+            </div>
+
+            <div class="dining-info-item">
+              <div class="info01"><span>소개</span></div>
+              <div class="info02">
+                <span>미미르 호텔에서 미쉐린 3스타 셰프 야닉 알레노의 특별한 프랑스 요리를 경험해봐라.</span>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <div class="tab-btn-wrap">
+        <button class="tab-btn-scheduler active" type="button">예약</button>
+        <button class="tab-btn-menu" type="button">메뉴</button>
+      </div>
+
+      <div id="title" class="tab-title"><span>예약일 선택</span></div>
+
+      <div class="tap-wrap">
+        <div class="tab-content">
+          <div id="scheduler" class="tab-scheduler" style="display: block;">
+          	<!-- 달력 -->
+          </div>
+
+          <div id="menu" class="tab-menu" style="display: none;">
+            <div class="menu-info-item">
+              <div class="menu01"><span>조식</span></div>
+              <div class="price-group">
+                <div class="price01"><span>성인<br />70,000 KRW</span></div>
+                <div class="price01"><span>소인<br />47,000 KRW</span></div>
+              </div>
+            </div>
+
+            <div class="menu-info-item">
+              <div class="menu01"><span>중식</span></div>
+              <div class="price-group">
+                <div class="price01"><span>Fun<br />170,000 KRW</span></div>
+                <div class="price01"><span>Emotion<br />147,000 KRW</span></div>
+              </div>
+            </div>
+
+            <div class="menu-info-item">
+              <div class="menu01"><span>석식</span></div>
+              <div class="price-group">
+                <div class="price01"><span>Modern<br />270,000 KRW</span></div>
+                <div class="price01"><span>Must Try<br />247,000 KRW</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="select-day-wrap">
+          <span class="icon-txt">◆</span>
+          <span class="day-txt">선택 날짜</span>
+        </div>
+      </div>
+
+      <div class="scheduler-content-wrap">
+        <div class="reservation-txt"><span>예약시간 선택</span></div>
+
+        <div class="time-group">
+          <div class="lunch-txt"><span>Lunch</span></div>
+
+          <div class="time-lunch">
+            <div class="time-lunch-btn"><button class="time-btn" type="button"><span>오후 12:00</span></button></div>
+            <div class="time-lunch-btn"><button class="time-btn" type="button"><span>오후 1:00</span></button></div>
+            <div class="time-lunch-btn"><button class="time-btn" type="button"><span>오후 2:00</span></button></div>
+            <div class="time-lunch-btn"><button class="time-btn" type="button"><span>오후 3:00</span></button></div>
+            <div class="time-lunch-btn"><button class="time-btn" type="button"><span>오후 4:00</span></button></div>
+            <div class="time-lunch-btn"><button class="time-btn" type="button"><span>오후 5:00</span></button></div>
+          </div>
+
+          <div class="Dinner-txt"><span>Dinner</span></div>
+
+          <div class="time-Dinner">
+            <div class="time-Dinner-btn"><button class="time-btn" type="button"><span>오후 6:00</span></button></div>
+            <div class="time-lunch-btn"><button class="time-btn" type="button"><span>오후 6:30</span></button></div>
+            <div class="time-lunch-btn"><button class="time-btn" type="button"><span>오후 7:00</span></button></div>
+            <div class="time-lunch-btn"><button class="time-btn" type="button"><span>오후 7:30</span></button></div>
+            <div class="time-lunch-btn"><button class="time-btn" type="button"><span>오후 8:00</span></button></div>
+            <div class="time-lunch-btn"><button class="time-btn" type="button"><span>오후 8:30</span></button></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="reservation-note-wrap">
+        <div class="note-txt"><span>예약 유의사항</span></div>
+          <div class="note-item"><span class="note-ico">▷</span><span>야닉 알레노 셰프의 미쉐린 3스타 레스토랑 파비용 르두아앵(Pavillon Ledoyen)의 메뉴</span></div>
+          <div class="note-item"><span class="note-ico">▷</span><span>디너 이용 시 만12세 이하의 어린이 입장이 제한</span></div>
+          <div class="note-item">
+            <span class="note-ico">▷</span><span>
+       	      드레스코드 : 비지니스 캐쥬얼 / 최상의 격식을 갖춘 서비스를 제공하기 위해 입장 시<br />
+              반바지, 조거팬츠, 트레이닝 팬츠와 블로퍼, 슬러퍼, 샌들 착용을 제한
+            </span>
+          </div>
+          <div class="note-item"><span class="note-ico">▷</span><span>온라인 예약은 신청 후 *예약확정*을 받으셔야 방문이 가능 (예약 확정 시 전화 또는 문자가 발송)</span></div>
+      </div>
+
+    </div>
+
+    <div class="reservation-next-wrap">
+      <div class="reservation-next">
+
+        <div class="reservation-info01">
+          <div class="hotel-name"><span>미미르 호텔</span></div>
+          <button class="dining-name-btn" type="button">
+            <span class="dining-name-txt">스테이, 모던 레스토랑</span>
+            <span class="arrow">➤</span>
+          </button>
+        </div>
+
+        <div class="reservation-info02">
+          <div class="reservation-cnt"><span>예약 인원</span></div>
+          <button class="cnt-btn" type="button">
+  			<span class="cnt-btn-txt">
+    		성인 <span class="cnt-adult-txt">1</span>, 어린이 <span class="cnt-child-txt">0</span>
+  			</span>
+            <span class="arrow">➤</span>
+          </button>
+        </div>
+
+      </div>
+
+      <div class="next-txt">
+        <form id="reservationForm" method="get" th:action="@{/diningNextResv}">
+          <input type="hidden" name="dining" id="inputDining" />
+          <input type="hidden" name="adult" id="inputAdult" />
+          <input type="hidden" name="child" id="inputChild" />
+          <input type="hidden" name="date" id="inputDate" />
+          <input type="hidden" name="time" id="inputTime" />
+          <input type="hidden" name="meal" id="inputMeal" />
+          <button type="submit" class="next-btn disabled" aria-disabled="true">다음</button>
+        </form>
+      </div>
+    </div>
+
+  </div>
+
+  <div th:replace="~{/dining_resv/popup/diningPopup1}"></div>
+  <div th:replace="~{/dining_resv/popup/diningPopup2}"></div>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      loadCalendar(new Date().getFullYear(), new Date().getMonth() + 1);
+    	
+      const btnScheduler = document.querySelector(".tab-btn-scheduler");
+      const btnMenu = document.querySelector(".tab-btn-menu");
+      const schedulerContent = document.getElementById("scheduler");
+      const menuContent = document.getElementById("menu");
+      const tabTitle = document.getElementById("title");
+      const schedulerSection = document.querySelector(".scheduler-content-wrap");
+      const selectDayTxt = document.querySelector(".select-day-wrap");
+      const diningNameBtnSpan = document.querySelector(".dining-name-btn span");
+      const inputDining = document.getElementById("inputDining");
+      const inputAdult = document.getElementById("inputAdult");
+      const inputChild = document.getElementById("inputChild");
+      const inputTime = document.getElementById("inputTime");
+      const nextBtn = document.querySelector(".next-btn");
+      
+      // 탭 전환 이벤트
+      btnScheduler.addEventListener("click", () => {
+        btnScheduler.classList.add("active");
+        btnMenu.classList.remove("active");
+        schedulerContent.style.display = "block";
+        menuContent.style.display = "none";
+        tabTitle.textContent = "예약일 선택";
+        
+        document.querySelectorAll("td.selected-date").forEach(td => td.classList.remove("selected-date"));
+        
+        if (!inputTime.value) {
+            schedulerSection.style.display = "none";
+          }
+          selectDayTxt.style.display = "block";
+      });
+
+      btnMenu.addEventListener("click", () => {
+        btnMenu.classList.add("active");
+        btnScheduler.classList.remove("active");
+        menuContent.style.display = "block";
+        schedulerContent.style.display = "none";
+        tabTitle.textContent = "대표 메뉴";
+        schedulerSection.style.display = "none";
+        selectDayTxt.style.display = "none";
+      });
+
+      // 초기 상태 설정
+      btnScheduler.classList.add("active");
+      schedulerContent.style.display = "block";
+      menuContent.style.display = "none";
+      tabTitle.textContent = "예약일 선택";
+
+      // 다이닝 선택 팝업 열기
+      document.querySelector(".dining-name-btn").addEventListener("click", () => {
+    	  
+        document.querySelectorAll(".dining-popup .dining-item.selected").forEach(item => {
+          item.classList.remove("selected");
+    	});
+    	  
+        document.querySelector(".popup-overlay01").style.display = "block";
+        document.querySelector(".dining-popup").style.display = "block";
+      });
+
+      // 다이닝 선택 팝업 닫기 및 선택 처리
+      let selectedItem = null;
+
+      document.querySelectorAll(".dining-item").forEach(item => {
+        item.addEventListener("click", function () {
+          if (selectedItem) selectedItem.classList.remove("selected");
+          this.classList.add("selected");
+          selectedItem = this;
+        });
+      });
+
+      document.querySelector(".dining-select-btn").addEventListener("click", () => {
+        if (selectedItem) {
+          const name = selectedItem.querySelector(".title-txt")?.textContent.trim();
+          if (name) {
+            diningNameBtnSpan.textContent = name;
+            inputDining.value = name;
+          }
+        }
+        document.querySelector(".popup-overlay01").style.display = "none";
+        document.querySelector(".dining-popup").style.display = "none";
+      });
+
+      // 인원수 팝업 열기
+      document.querySelector(".cnt-btn").addEventListener("click", () => {
+    	  
+    	document.getElementById("adultCnt").textContent = "1";
+        document.getElementById("childCnt").textContent = "0";
+
+        document.querySelector(".popup-overlay02").style.display = "block";
+        document.querySelector(".cnt-popup").style.display = "block";
+      });
+
+      // 인원수 선택 후 반영 및 팝업 닫기
+      document.querySelector(".cntBtn").addEventListener("click", () => {
+        const adult = document.getElementById("adultCnt").textContent;
+        const child = document.getElementById("childCnt").textContent;
+
+        document.querySelector(".cnt-adult-txt").textContent = adult;
+        document.querySelector(".cnt-child-txt").textContent = child;
+
+        inputAdult.value = adult;
+        inputChild.value = child;
+
+        document.querySelector(".popup-overlay02").style.display = "none";
+        document.querySelector(".cnt-popup").style.display = "none";
+      });
+
+      // 예약 시간 버튼 클릭 이벤트
+      document.querySelectorAll(".time-btn").forEach(btn => {
+        btn.addEventListener("click", () => {
+          document.querySelectorAll(".time-btn").forEach(b => b.classList.remove("selected"));
+          btn.classList.add("selected");
+          
+          const timeText = btn.textContent.trim();
+          const isLunch = btn.closest(".time-lunch") !== null;
+          const mealType = isLunch ? "Lunch" : "Dinner";
+          
+          // form 데이터 저장
+          document.getElementById("inputTime").value = `${selectedDateStr} ${timeText}`;
+          if (!document.getElementById("inputMeal")) {
+            const mealInput = document.createElement("input");
+            mealInput.type = "hidden";
+            mealInput.name = "meal";
+            mealInput.id = "inputMeal";
+            document.getElementById("reservationForm").appendChild(mealInput);
+          }
+          document.getElementById("inputMeal").value = mealType;
+
+          // 선택된 시간값 form hidden input에 저장
+          inputTime.value = btn.textContent.trim();
+          
+       	  // 날짜값 hidden input에 저장
+          if (!document.getElementById("inputDate")) {
+            const dateInput = document.createElement("input");
+            dateInput.type = "hidden";
+            dateInput.name = "date";
+            dateInput.id = "inputDate";
+            document.getElementById("reservationForm").appendChild(dateInput);
+          }
+          document.getElementById("inputDate").value = selectedDateStr;
+
+          // 다음 버튼 활성화
+          nextBtn.classList.remove("disabled");
+          nextBtn.removeAttribute("aria-disabled");
+        });
+      });
+
+    });
+
+    let selectedDateStr = "";
+    
+    // 부모 윈도우로부터 선택 날짜 메시지 받으면 예약시간 선택 영역 보이기
+    window.addEventListener("message", function(event) {
+      if (event.data && event.data.type === "dateSelected") {
+    	  
+    	selectedDateStr = event.data.date;
+    	  
+        const schedulerSection = document.querySelector(".scheduler-content-wrap");
+        if (schedulerSection) schedulerSection.style.display = "block";
+        
+        // 시간 초기화
+        const inputTime = document.getElementById("inputTime");
+        inputTime.value = "";
+
+        // 시간 버튼 선택 해제
+        document.querySelectorAll(".time-btn.selected").forEach(btn => btn.classList.remove("selected"));
+
+        // 다음 버튼 비활성화
+        const nextBtn = document.querySelector(".next-btn");
+        if (nextBtn) {
+          nextBtn.classList.add("disabled");
+          nextBtn.setAttribute("aria-disabled", "true");
+        }
+      }
+    });
+    
+    window.addEventListener("pageshow", function (event) {
+      if (event.persisted) {
+        // 뒤로가기로 돌아온 경우: 초기화
+    	document.getElementById("inputDining").value = "";
+    	document.getElementById("inputAdult").value = "";
+    	document.getElementById("inputChild").value = "";
+    	document.getElementById("inputTime").value = "";
+    	document.getElementById("inputDate").value = "";
+    	document.getElementById("inputMeal").value = "";
+
+    	// 표시된 텍스트도 초기화
+    	document.querySelector(".dining-name-txt").textContent = "스테이, 모던 레스토랑";
+    	document.querySelector(".cnt-adult-txt").textContent = "1";
+    	document.querySelector(".cnt-child-txt").textContent = "0";
+
+    	// 선택된 시간 버튼 초기화
+    	document.querySelectorAll(".time-btn.selected").forEach(btn => btn.classList.remove("selected"));
+    	
+    	// 시간 버튼 영역 숨김
+        const schedulerSection = document.querySelector(".scheduler-content-wrap");
+        if (schedulerSection) schedulerSection.style.display = "none";
+
+        // 달력 선택 날짜 제거
+        document.querySelectorAll("td.selected-date").forEach(td => td.classList.remove("selected-date"));
+        
+    	// 다음 버튼 비활성화
+    	const nextBtn = document.querySelector(".next-btn");
+    	if (nextBtn) {
+    	nextBtn.classList.add("disabled");
+    	nextBtn.setAttribute("aria-disabled", "true");
+    	}
+      }
+    });
+  </script>
+
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script th:inline="javascript">
+  	/*<![CDATA[*/
+  	const calendarUrl = /*[[@{/calendar}]]*/ '';
+  	/*]]>*/
+  
+    function loadCalendar(year, month) {
+      document.querySelector('.scheduler-content-wrap').style.display = 'none';
+
+      $.ajax({
+        url: calendarUrl,
+        data: { year, month },
+        success: data => $('#scheduler').html(data),
+        error: () => alert('달력을 불러오는 데 실패했습니다.')
+      });
+    }
+
+    $(document).on('click', '.calendar-nav', function (e) {
+      e.preventDefault();
+      const year = $(this).data('year');
+      const month = $(this).data('month');
+      loadCalendar(year, month);
+    });
+  </script>
+
+</body>
+
+</html>

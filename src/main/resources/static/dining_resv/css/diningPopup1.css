@@ -1,0 +1,211 @@
+@charset "UTF-8";
+
+.popup-overlay01 {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+}
+
+.dining-popup {
+  display: none;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  width: 100%;
+  max-width: 700px;
+  min-height: 500px;
+  background: #fff;
+  border-radius: 0.5rem;
+  transform: translate(-50%, -50%);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  z-index: 1000;
+}
+
+.popup-close01 {
+  position: absolute;
+  top: 0.6rem;
+  right: 0.6rem;
+  font-size: 2rem;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: #111;
+}
+
+.popup-row {
+  display: flex;
+  gap: 2rem;
+  padding: 1rem;
+  flex-wrap: wrap;
+  min-height: 400px;
+}
+
+.popup-txt {
+  display: flex;
+  height: 2.5rem;
+  margin: 0 auto 2rem auto;
+  font-size: 1rem;
+  color: #111;
+  border-bottom: 1px solid #ddd;
+  width: 95%;
+}
+
+.popup-wrap {
+  display: flex;
+  margin-top: -6rem;
+}
+
+.popup-info01 {
+  flex: 1 1 200px;
+  padding-left: 1rem;
+  margin-right: 2rem;
+}
+
+.popup-info02 {
+  flex: 2 1 300px;
+  min-width: 300px;
+}
+
+
+.dining-select-txt {
+  font-size: 0.8rem;
+  font-weight: bold;
+}
+
+.hotel-select-txt {
+  font-size: 0.8rem;
+  font-weight: bold;
+  margin-bottom: 0.2rem;
+}
+
+.hotel-list {
+  display: flex;
+  padding: 0.4rem 0;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.dining-list {
+  display: flex;
+  padding: 0.8rem 0;
+  flex-direction: column;
+  gap: 0.8rem;
+}
+
+.hotel-btn {
+  width: 12rem;
+  height: 2rem;
+  border: 1px solid #ccc;
+  background-color: #ffffff;
+  border-radius: 0.5rem;
+  font-size: 0.8rem;
+  text-align: center;
+  cursor: pointer;
+}
+
+.hotel-btn.selected {
+  background-color: #111;
+  color: #fff;
+}
+
+.dining-item {
+  display: flex;
+  position: relative;
+  align-items: center;
+  gap: 1rem;
+  padding: 0;
+  cursor: pointer;
+}
+
+.checkmark {
+  position: absolute;
+  top: 50%;
+  left: 100%;
+  transform: translateY(-50%);
+  width: 1.2rem;
+  height: 1.2rem;
+  border: 2px solid #333;
+  border-radius: 50%;
+  background-color: white;
+  box-sizing: border-box;
+}
+
+.dining-item.selected .checkmark {
+  background-color: #a38c67;
+  border-color: #a38c67;
+}
+
+.dining-item.selected .checkmark::after {
+  content: '✔';
+  color: white;
+  position: absolute;
+  top: -30%;
+  left: 20%;
+  font-size: 1rem;
+}
+
+.dining-img {
+  width: 7rem;
+  height: 7rem;
+}
+
+.dining-info01 {
+  flex: 2;
+  border-bottom: 1px solid #ddd;
+  padding-bottom: 0.8rem;
+}
+
+.dining-info02 {
+  flex: 2;
+}
+
+.dining-info-txt {
+  display: flex;
+  flex-direction: column;
+}
+
+.title-txt {
+  font-size: 1rem;
+  font-weight: bold;
+  color: #111;
+  margin-bottom: 0.4rem;
+}
+
+.type-txt01,
+.location-txt01 {
+  border-right: 1px solid #ddd;
+  padding-right: 0.4rem;
+  font-size: 0.8rem;
+  color: #111;
+}
+
+.type-txt02,
+.location-txt02 {
+  font-size: 0.8rem;
+  color: #111;
+}
+
+.dining-select-btn {
+  display: flex;
+  justify-content: center;
+  margin: 1.2rem auto;
+  padding: 0;            
+  width: 30%; 
+}
+
+.diningBtn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: none;
+  font-size: 1rem;   
+  background-color: #111;
+  border-radius: 0.5rem;
+  color: white;
+  width: 10rem;        
+  height: 3rem;       
+}

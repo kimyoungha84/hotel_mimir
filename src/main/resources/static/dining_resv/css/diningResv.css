@@ -1,0 +1,439 @@
+@charset "UTF-8";
+
+.banner-container-wrap {
+  position: relative;
+  width: 100%;
+}
+
+.banner-container-wrap img {
+  width: 100%;
+  object-fit: cover;
+}
+
+.dining-layout-wrap {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  max-width: 1200px;
+  margin: 3rem auto;
+}
+
+.dining-list-wrap {
+  flex: 3;
+  max-width: 900px;
+}
+
+.reservation-next-wrap {
+  position: sticky;
+  top: 100px;
+  border: 1px solid #ccc;
+  flex: 1;
+  min-width: 280px;
+  border-radius: 0.5rem;
+  background-color: #ffffff;
+}
+
+.reservation-next {
+  border-bottom: 2px solid #dddddd;
+}
+
+.reservation-info01 {
+  padding: 1.4rem;
+  border-bottom: 2px solid #dddddd;
+}
+
+.reservation-info02 {
+  padding: 1.4rem;
+}
+
+.hotel-name {
+  font-size: 0.8rem;
+  margin-bottom: 0.2rem;
+  color: #816c5b;
+}
+
+.reservation-cnt {
+  font-size: 0.8rem;
+  margin-bottom: 0.2rem;
+  color: #111;
+}
+
+.dining-name-btn,
+.cnt-btn {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  border: none;
+  margin-bottom: 0.6rem;
+  padding: 0;
+  font-size: 1rem;
+  background: none;
+  cursor: pointer;
+}
+
+.arrow {
+  font-weight: bold;
+}
+
+.next-txt {
+  padding: 0.2rem 0.2rem;
+}
+
+.next-btn {
+  display: flex;          
+  justify-content: center;  
+  align-items: center;     
+  width: 100%;       
+  height: 3.5rem; 
+  border: none;
+  font-size: 1rem;
+  border-radius: 0.5rem;
+  color: white;
+  background: #aaa;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.next-btn.disabled {
+  background-color: #111;
+  pointer-events: none;
+  opacity: 0.5;
+  cursor: not-allowed;
+  text-decoration: none;
+}
+
+.next-btn:not(.disabled) {
+  background-color: #111;
+  color: white;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.dining-top-wrap {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  margin: 0;
+}
+
+.dining-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  width: 100%;
+  max-width: 800px;
+}
+
+.dining-wrap {
+  text-align: left;
+}
+
+.hotel-title {
+  font-size: 1rem;
+  text-align: start;
+  line-height: 1.8rem;
+  margin: 0;
+  padding: 0;
+  color: #816c5b;
+}
+
+.dining-title {
+  font-size: 1.8rem;
+  line-height: 2.2rem;
+  text-align: start;
+  margin: 0;
+  padding: 0;
+  color: #111;
+}
+
+.detail-wrap {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  gap: 0.7rem;
+}
+
+.btn-detail {
+  position: relative;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 50%;
+  background-color: #ffffff;
+  border: 1px solid #111;
+  text-decoration: none;
+  font-size: 1.2rem;
+  color: #111;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+.btn-detail::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  background-color: #111;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  transition: width 0.4s ease, height 0.4s ease;
+  z-index: 1;
+}
+
+.detail-wrap:hover .btn-detail::before {
+  width: 3.2rem;
+  height: 3.2rem;
+}
+
+.btn-detail > .rotated {
+  position: relative;
+  z-index: 2;
+  transform: rotate(180deg);
+  top: 0.1rem;
+}
+
+.detail-wrap:hover .btn-detail > span {
+  color: #fff;
+}
+
+.btn-detail-txt {
+  display: flex;
+  font-size: 1.2rem;
+  text-decoration: none;
+  color: #111;
+}
+
+.btn-detail-txt:hover {
+  color: #111;
+}
+
+.btn-detail-txt:focus {
+    outline: none;
+}
+
+.dining-info-wrap {
+  display: flex;
+  justify-content: center;
+  margin-top: 3.2rem;
+}
+
+.dining-info-inner {
+  border-bottom: 2px solid #111111;
+  border-top: 2px solid #111111;
+  width: 100%;
+  max-width: 800px;
+}
+
+.dining-info-item {
+  display: flex;
+}
+
+.btn-info02 {
+	border: none;
+	background: none;
+	border-bottom: 2px solid #111111;
+}
+
+.dining-info-item:first-child {
+  margin-top: 0.8rem;
+}
+
+.dining-info-item:last-child {
+  margin-bottom: 1rem;
+}
+
+.dining-info-item .info01 {
+  width: 20%;
+  align-items: center;
+  font-size: 1rem;
+  font-weight: bold;
+  line-height: 3rem;
+  color: #111;
+}
+
+.dining-info-item .info02 {
+  align-items: center;
+  font-size: 1rem;
+  line-height: 3rem;
+  color: #111;
+}
+
+.tab-title {
+  display: flex;
+  justify-content: flex-start;
+  width: 100%;
+  max-width: 800px;
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin: 0 auto 2rem auto;
+}
+
+.tab-content {
+  display: flex;
+  justify-content: center;
+  margin: 0;
+}
+
+.tab-btn-wrap {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  max-width: 800px;
+  margin: 6.2rem auto 3rem;
+}
+
+.tab-btn-wrap button {
+  min-width: 120px;
+  flex: 1;
+  background: none;
+  border: none;
+  padding: 0.6rem;
+  text-align: center;
+  font-size: 1rem;
+  border-bottom: 2px solid #dddddd;
+  cursor: pointer;
+}
+
+.tab-menu {
+  display: flex;
+  width: 100%;
+  max-width: 800px;
+  border-top: 2px solid #111111;
+}
+
+.tab-btn-scheduler.active,
+.tab-btn-menu.active {
+  border-bottom-color: #111;
+  font-weight: bold;
+}
+
+.menu-info-item {
+  display: flex;
+  border-bottom: 2px solid #dddddd;
+  padding-bottom: 6rem;
+}
+
+.menu-info-item .menu01 {
+  width: 50%;
+  font-size: 1rem;
+  font-weight: bold;
+  line-height: 3rem;
+  color: #111;
+}
+
+.price-group {
+  display: flex;
+  width: 100%;
+}
+
+.menu-info-item .price01 {
+  width: 50%;
+  font-size: 1rem;
+  line-height: 3rem;
+  color: #111;
+}
+
+.scheduler-content-wrap {
+  display: none;
+}
+
+.select-day-wrap {
+  display: flex;
+  justify-content: flex-start;
+  width: 100%;
+  max-width: 800px;
+  font-size: 0.8rem;
+  margin: 4rem auto 0 auto;
+  border-top: 2px solid #dddddd;
+  gap: 0.4rem;
+  padding-top: 0.8rem;
+}
+
+.icon-txt {
+  color: #a38c67;
+}
+
+.reservation-txt {
+  display: flex;
+  justify-content: flex-start;
+  width: 100%;
+  max-width: 800px;
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin: 2rem auto 0.5rem auto;
+}
+
+.time-group {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.lunch-txt,
+.Dinner-txt {
+  font-size: 1.2rem;
+  font-weight: bold;
+  margin: 1.5rem 0 0.5rem 0;
+}
+
+.time-lunch,
+.time-Dinner {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.time-btn {
+  width: 10rem;
+  height: 3rem;
+  background-color: #ffffff;
+  border: 1px solid #dddddd;
+  color: #111;
+  font-size: 0.8rem;
+  border-radius: 0.5rem;
+  cursor: pointer;
+}
+
+.time-btn.selected  {
+  background-color: #111;
+  color: #fff;
+}
+
+.reservation-note-wrap {
+  display: flex;
+  justify-content: flex-start;
+  flex-direction: column;
+  width: 80%;
+  max-width: 800px;
+  background-color: #eeeeee;
+  border-radius: 0.5rem;
+  padding: 2rem;
+  margin: 3rem auto 8rem auto;
+}
+
+.note-txt {
+  font-size: 1.2rem;
+  font-weight: bold;
+  margin-bottom: 0.6rem;
+}
+
+.note-item {
+  display: flex;
+  align-items: center;
+  font-size: 1rem;
+  color: #111;
+  margin-top: 0.6rem;
+}
+
+.note-ico {
+  font-size: 0.8rem;
+  color: #111;
+  margin-right: 0.4rem;
+}

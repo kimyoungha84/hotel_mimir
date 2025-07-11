@@ -1,0 +1,442 @@
+@charset "UTF-8";
+
+.layout {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  max-width: 1200px;
+  margin: 3rem auto;
+}
+
+.form-wrap {
+  flex: 3;
+  max-width: 900px;
+}
+
+.reservation-next-wrap {
+  position: sticky;
+  top: 100px;
+  border: 1px solid #ccc;
+  flex: 1;
+  min-width: 280px;
+  border-radius: 0.5rem;
+  background-color: #ffffff;
+}
+
+.reservation-next {
+  border-bottom: 2px solid #dddddd;
+}
+
+.reservation-info01 {
+  padding: 1.4rem;
+  border-bottom: 2px solid #dddddd;
+}
+
+.reservation-info02 {
+  padding: 1.4rem;
+  border-bottom: 2px solid #dddddd;
+}
+
+.reservation-info03 {
+  padding: 1.4rem;
+  border-bottom: 2px solid #111111;
+}
+
+.reservation-info04 {
+  padding: 1.4rem;
+  border-bottom: 2px solid #dddddd;
+}
+
+.hotel-name {
+  font-size: 0.8rem;
+  margin-bottom: 0.2rem;
+  color: #816c5b;
+}
+
+.reservation-cnt {
+  font-size: 0.8rem;
+  margin-bottom: 0.2rem;
+  color: #111;
+}
+
+.reservation-time {
+  font-size: 0.8rem;
+  margin-bottom: 0.2rem;
+  color: #111;
+}
+
+.reservation-price {
+  font-size: 0.8rem;
+  margin-bottom: 0.2rem;
+  color: #111;
+}
+
+.price-txt {
+  text-align: right;
+}
+
+.price-num {
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+
+.reservation-txt {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.reservation-btn,
+.dining-name-btn,
+.cnt-btn {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  border: none;
+  margin-bottom: 0.6rem;
+  padding: 0;
+  font-size: 1rem;
+  background: none;
+  cursor: pointer;
+}
+
+.arrow {
+  font-weight: bold;
+}
+
+.next-txt {
+  padding: 0.2rem 0.2rem;
+}
+
+.next-btn {
+  display: flex;          
+  justify-content: center;  
+  align-items: center;     
+  width: 100%;       
+  height: 3.5rem; 
+  border: none;
+  font-size: 1rem;
+  border-radius: 0.5rem;
+  color: white;
+  background: #aaa;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.next-btn.disabled {
+  background-color: #111;
+  pointer-events: none;
+  opacity: 0.5;
+  cursor: not-allowed;
+  text-decoration: none;
+}
+
+.next-btn:not(.disabled) {
+  background-color: #111;
+  color: white;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.next-btn.disabled {
+  background-color: #ccc;
+  pointer-events: none;
+  color: #888;
+}
+
+.online-btn.selected,
+.field-btn.selected {
+  background-color: #111;
+  color: #fff;
+}
+
+.form-header {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+.form-header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  width: 100%;
+  max-width: 800px;
+}
+
+.title-wrap {
+  text-align: left;
+}
+
+.title {
+  font-size: 1.8rem;
+  line-height: 2.2rem;
+  color: #111;
+}
+
+.required-info {
+  display: flex;
+  align-items: center;
+  font-size: 1.2rem;
+  color: #111;
+}
+
+.input-section {
+  display: flex;
+  justify-content: center;
+  margin-top: 3.2rem;
+}
+
+.input-inner {
+  border-top: 2px solid #111;
+  border-bottom: 2px solid #111;
+  width: 100%;
+  max-width: 800px;
+}
+
+.input-item {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  margin: 0.8rem 0;
+}
+
+.input-item label {
+  width: 20%;
+  margin-bottom: 0.4rem;
+  font-size: 1rem;
+  font-weight: bold;
+  color: #111;
+}
+
+.required-star {
+  color: #ff6666;
+}
+
+.input-field {
+  box-sizing: border-box;
+  width: 100%;
+  padding: 0.6rem 1rem;
+  font-size: 1rem;
+  border: 1px solid #ddd;
+  border-radius: 0.5rem;
+}
+
+.input-field:focus {
+  border-color: #111;
+}
+
+.input-field.error {
+  border-color: red !important;
+}
+
+.error-message {
+  color: red;
+  font-size: 0.85rem;
+  margin-top: 0.2rem;
+  display: none;
+}
+.error-message.active {
+  display: block;
+}
+
+.request-section {
+  display: flex;
+  justify-content: center;
+  margin-top: 1.6rem;
+}
+
+.request-inner {
+  width: 100%;
+  max-width: 800px;
+  display: flex;
+  flex-direction: column;
+}
+
+.section-title {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 1.2rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
+  color: #111;
+}
+
+#toggleRequestBtn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 1.2rem;
+  line-height: 1;
+  padding: 0;
+  width: 2rem;
+  height: 2rem;
+}
+
+.request-content {
+  display: none;
+  border-top: 2px solid #111;
+  padding: 1.2rem 0;
+}
+
+.request-label {
+  font-size: 1rem;
+  font-weight: bold;
+  margin-bottom: 0.8rem;
+}
+
+.request-box {
+  height: 150px;
+  border: 1px solid #ddd;
+  border-radius: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.request-input {
+  width: 80%;
+  border: none;
+  outline: none;
+  font-size: 1rem;
+  margin-top: 0.8rem;
+  margin-left: 0.8rem;
+  color: #666;
+}
+
+.request-tip {
+  font-size: 0.8rem;
+  color: #666;
+  margin-bottom: 0.5rem;
+}
+
+.payment-wrap {
+  display: flex;
+  justify-content: center;
+  margin-top: 1.6rem;
+}
+
+.payment-inner {
+  width: 100%;
+  max-width: 800px;
+  display: flex;
+  flex-direction: column;
+}
+
+.payment-title {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 1.2rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
+  color: #111;
+}
+
+.payment-content {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  border-top: 2px solid #111;
+  padding: 1.2rem 0;
+}
+
+.payment-btn {
+  font-size: 1rem;
+  font-weight: bold;
+}
+
+.online-btn,
+.field-btn {
+  flex: 1;
+  width: 10rem;
+  height: 3rem;
+  cursor: pointer;
+  background-color: #fff;
+  border-radius: 0.5rem;
+}
+
+.reservation-note-wrap {
+  display: flex;
+  justify-content: flex-start;
+  flex-direction: column;
+  width: 80%;
+  max-width: 800px;
+  background-color: #eeeeee;
+  border-radius: 0.5rem;
+  padding: 2rem;
+  margin: 3rem auto 6rem auto;
+}
+
+.note-txt {
+  font-size: 1.2rem;
+  font-weight: bold;
+  margin-bottom: 0.6rem;
+}
+
+.note-item {
+  display: flex;
+  align-items: center;
+  font-size: 1rem;
+  color: #111;
+  margin-top: 0.6rem;
+}
+
+.note-ico {
+  font-size: 0.8rem;
+  color: #111;
+  margin-right: 0.4rem;
+}
+
+.term-wrap {
+  display: flex;
+  justify-content: flex-start;
+  flex-direction: column;
+  width: 90%;
+  margin: 3rem auto 8rem auto;
+  max-width: 800px;
+}
+
+.term-wrap-txt {
+  font-size: 1.2rem;
+  font-weight: bold;
+  margin-bottom: 0.6rem;
+}
+
+.term-box-wrap {
+  border: 2px solid #ddd;
+  background-color: #fff;
+  border-radius: 0.5rem;
+}
+
+.term-box01 {
+  border-bottom: 2px solid #ddd;
+  padding: 1rem;
+}
+
+.term-box02 {
+  border-bottom: 2px solid #ddd;
+  padding: 1rem;
+}
+
+.agree-inner {
+  display: flex;
+}
+
+.agree-inner-txt {
+  margin-right: 0.6rem;
+}
+
+.agree-item {
+  margin-bottom: 1rem;
+}
+
+.agree-item:last-child {
+  margin-left: 1.5rem;
+}
+
+.agree-btn {
+  border: none;
+  background-color: #fff;
+  cursor: pointer;
+}

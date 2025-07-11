@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>다이닝 선택</title>
+  <link rel="stylesheet" th:href="@{/dining_resv/css/diningPopup3.css}" />
+</head>
+<body>
+
+<div class="popup-overlay" id="reselectPopup">
+  <div class="popup-box">
+    <p>예약 정보를 변경하시면 입력하신 정보가<br>모두 초기화됩니다.<br>변경하시겠습니까?</p>
+    <div class="popup-buttons">
+      <button id="reselectBtn" class="reselectBtn" type="button">재선택</button>
+      <button id="closePopupBtn" class="closePopupBtn" type="button">취소</button>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>다이닝 선택</title>
+  <link rel="stylesheet" th:href="@{/dining_resv/css//diningPopup1.css}" />
+</head>
+<body>
+
+<div class="popup-overlay01"></div>
+
+<div class="dining-popup">
+  <button class="popup-close01" type="button">×</button>
+
+  <div class="popup-row">
+    <div class="popup-txt">
+      <span>다이닝 선택</span>
+    </div>
+
+    <div class="popup-wrap">
+      <div class="popup-info01">
+        <div class="popup-content">
+          <div class="hotel-select-txt"><span>호텔 선택</span></div>
+
+          <div class="hotel-list">
+            <div class="hotel-item">
+              <button class="hotel-btn selected" data-name="미미르 호텔"><span>미미르 호텔</span></button>
+            </div>
+          </div>
+          <div class="hotel-list">
+            <div class="hotel-item">
+              <button class="hotel-btn" data-name="트윈 드래곤 호텔"><span>트윈 드래곤 호텔</span></button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="popup-info02">
+        <div class="dining-select-txt"><span>다이닝 선택</span></div>
+
+        <div class="dining-list">
+          <div class="dining-info01">
+            <div class="dining-item" data-id="01">
+              <img th:src="@{/dining_resv/images/modern.png}" alt="모던 레스토랑 이미지" class="dining-img" />
+              <div class="dining-info-txt">
+                <span class="title-txt">스테이, 모던 레스토랑</span>
+                <div class="type-info">
+                  <span class="type-txt01">타입</span>
+                  <span class="type-txt02">프렌치</span>
+                </div>
+                <div class="location-txt">
+                  <span class="location-txt01">위치</span>
+                  <span class="location-txt02">81층</span>
+                </div>
+              </div>
+              <div class="checkmark"></div>
+            </div>
+          </div>
+
+          <div class="dining-info02">
+            <div class="dining-item" data-id="02">
+              <img th:src="@{/dining_resv/images/lounge.png}" alt="라운지 이미지" class="dining-img" />
+              <div class="dining-info-txt">
+                <span class="title-txt">더 라운지</span>
+                <div class="type-info">
+                  <span class="type-txt01">타입</span>
+                  <span class="type-txt02">바</span>
+                </div>
+                <div class="location-txt">
+                  <span class="location-txt01">위치</span>
+                  <span class="location-txt02">79층</span>
+                </div>
+              </div>
+              <div class="checkmark"></div>
+            </div>
+          </div>
+        </div>
+      </div> 
+    </div> 
+  </div> 
+
+  <div class="dining-select-btn">
+    <button class="diningBtn" type="button">선택</button>
+  </div>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    document.querySelector('.popup-close01').addEventListener('click', function () {
+      document.querySelector('.dining-popup').style.display = 'none';
+      document.querySelector('.popup-overlay01').style.display = 'none';
+    });
+  });
+</script>
+
+</body>
+</html>
