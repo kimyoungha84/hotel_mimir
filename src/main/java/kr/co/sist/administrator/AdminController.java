@@ -11,7 +11,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttributes;
 
-@SessionAttributes({"session_id","permissionList"})
+import jakarta.servlet.http.HttpSession;
+
+@SessionAttributes("permissionList")
 @Controller
 public class AdminController {
 	@Autowired(required = false)
@@ -26,18 +28,9 @@ public class AdminController {
 	 * @return 
 	 */
 	@GetMapping("/admin")
-	public String admin(Model model) {
-		String path="administrator/index";
+	public String admin() {
 		
-		String session_id=(String)model.getAttribute("session_id");
-		System.out.println("session_id----------"+session_id);
-		if(session_id==null) {
-			path="forward:/admin/login";
-		}//end if
-		
-		
-		
-		return path;
+		return "administrator/index";
 	}//admin
 	
 	
@@ -61,10 +54,12 @@ public class AdminController {
 	 * @return
 	 */
 	@PostMapping("/admin/loginChk")
-	public String loginChk(String id, String pass, Model model) {
+	public String loginChk(String id, String pass, HttpSession httpSession) {
 		String path="redirect:/admin/login?error=true";
 		boolean flag=false;
 		List<String> permissionList=new ArrayList<String>();
+		
+		System.out.println("/admin/loginChk");
 		
 		if(id!=null) {
 			//아이디가 존재 //그러면 flag값이 true겠지.
@@ -75,7 +70,7 @@ public class AdminController {
 				path="administrator/index";
 				
 				//그럼 여기서 id session을 추가
-				model.addAttribute("session_id",id);
+				httpSession.setAttribute("session_id", id);
 				
 			}//end if
 		}//end if

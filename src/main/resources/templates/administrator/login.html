@@ -97,11 +97,13 @@ span{
 
 <script type="text/javascript">
 $(function(){
+
     const params = new URLSearchParams(window.location.search);
     //alert("param====="+params);
     if (params.get("error") == "true") {
         alert("아이디 또는 비밀번호가 일치하지 않습니다.");
     }//end if
+    
 });
 
 </script>
