@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import kr.co.sist.util.FilterConfig;
 import kr.co.sist.util.ModelUtils;
+import kr.co.sist.util.controller.SearchController;
 
 @Controller
 public class FaqController {
@@ -34,18 +35,20 @@ public class FaqController {
 
 	@GetMapping("/admin/faq")
 	public String adminFAQPage(Model model) {
-		List<FAQDTO> list = service.selectAllFAQ();
-
-		int pageSize = 5; // 페이지당 항목 수
-
-		modelUtils.setFilteringInfo(model, FilterConfig.FAQ);
-
-		modelUtils.setPageInfoAttributes(model, "inquiry/admin_faq", "faq_list_fm", "faqList");
-
-		modelUtils.setPaginationAttributes(model, pageSize, FilterConfig.FAQ);
-
-		model.addAttribute("faqList", list);
-		return "inquiry/admin_faq"; // templates/admin_chat.html
+		
+		int pageSize = 5;
+		SearchController.addFragmentInfo(
+				"faq",
+				"inquiry/admin_faq",
+				"faq_list_fm",
+				"faqList"
+			);
+//			model.addAttribute("filterType", "dining");
+//			model.addAttribute("pageSize", pageSize);
+			modelUtils.setFilteringInfo(model, FilterConfig.FAQ);
+			modelUtils.setPaginationAttributes(model, pageSize, FilterConfig.FAQ);
+			return "inquiry/admin_faq";
+		
 	}//adminFAQPage
 
 	@GetMapping("/admin/faq/register")

@@ -2,8 +2,13 @@ package kr.co.sist.util.controller;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
+import java.util.concurrent.ConcurrentHashMap;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,10 +23,39 @@ import kr.co.sist.util.ModelUtils;
 import kr.co.sist.util.domain.SearchDataDomain;
 import kr.co.sist.util.service.DynamicSearchService;
 
-
 @Controller
 public class SearchController {
+    
+    private static final Logger logger = LoggerFactory.getLogger(SearchController.class);
 
+    // filterType별 fragment 정보 Map
+    public static final Map<String, FragmentInfo> fragmentInfoMap = new ConcurrentHashMap<>();
+    static {
+//        fragmentInfoMap.put("faq", new FragmentInfo("fragments/faq", "faqList", "faqList"));
+//        fragmentInfoMap.put("dining", new FragmentInfo("fragments/dining", "diningList", "diningList"));
+//        fragmentInfoMap.put("staff", new FragmentInfo("fragments/staff", "staffList", "staffList"));
+        // 필요시 추가
+    }
+    /**
+     * filterType별 fragment 정보 등록을 쉽게 하기 위한 static 메소드
+     */
+    public static void addFragmentInfo(String filterType, String fragmentTemplate, String fragmentName, String resultKey) {
+        fragmentInfoMap.put(filterType, new FragmentInfo(fragmentTemplate, fragmentName, resultKey));
+    }
+    public static class FragmentInfo {
+        private final String fragmentTemplate;
+        private final String fragmentName;
+        private final String resultKey;
+        public FragmentInfo(String fragmentTemplate, String fragmentName, String resultKey) {
+            this.fragmentTemplate = fragmentTemplate;
+            this.fragmentName = fragmentName;
+            this.resultKey = resultKey;
+        }
+        public String getFragmentTemplate() { return fragmentTemplate; }
+        public String getFragmentName() { return fragmentName; }
+        public String getResultKey() { return resultKey; }
+    }
+    
     @Autowired
     private ModelUtils modelUtils;
     @Autowired 
@@ -30,81 +64,99 @@ public class SearchController {
     private FilterConditionBuilder builder;
 
     @GetMapping("/search")
-    public String search(@RequestParam Map<String, String> params, HttpServletRequest request, Model model) {
-        FilterConfig config = FilterConfig.fromKey(params.get("filterType"));
-        int offset = Integer.parseInt(params.getOrDefault("offset", "1"));
-        int pageSize = Integer.parseInt(params.getOrDefault("pageSize", "10"));
-        int end = offset + pageSize - 1; 
-        
-        System.out.println("offset : " + offset);
-        System.out.println("end : " + end);
+    public String search(@RequestParam Map<String, String> params, 
+                        HttpServletRequest request, 
+                        Model model) {
+        try {
+            // filterType만 프론트에서 받음
+            String filterType = params.get("filterType");
+            if (filterType == null || filterType.trim().isEmpty()) {
+                logger.error("filterType 파라미터가 누락되었습니다.");
+                throw new IllegalArgumentException("검색 타입이 지정되지 않았습니다.");
+            }
+            FragmentInfo fragmentInfo = fragmentInfoMap.get(filterType);
+            if (fragmentInfo == null) {
+                logger.error("허용되지 않은 filterType: {}", filterType);
+                throw new IllegalArgumentException("허용되지 않은 filterType입니다.");
+            }
+            FilterConfig config = FilterConfig.fromKey(filterType);
+            int offset = parseIntegerParam(params, "offset", 1);
+            int pageSize = parseIntegerParam(params, "pageSize", 10);
+            int end = offset + pageSize - 1; 
+            logger.debug("검색 요청 - filterType: {}, offset: {}, end: {}", filterType, offset, end);
 
-        List<FilterCondition> filters = builder.build(params, config);
-
-        List<SearchDataDomain> result = switch (config) {
-            case DINING -> service.searchDining(filters, offset, end, pageSize);
-            case FAQ -> service.searchFaq(filters, offset, end, pageSize);
-            case STAFF -> service.searchStaff(filters, offset, end, pageSize);
-            default -> null;
-        };
-
-
-        String resultKey = params.get("filter_resultKey");
-        String fragmentTemplate = params.get("filter_fragmentTemplate");
-        String fragmentName = params.get("filter_fragmentName");
-
-        if (resultKey == null || fragmentTemplate == null || fragmentName == null) {
-            System.out.println("fragementTemplate : " + fragmentTemplate + fragmentName + resultKey);
-            throw new IllegalArgumentException("뷰 렌더링 정보가 누락되었습니다.");
+            List<FilterCondition> filters = builder.build(params, config);
+            List<SearchDataDomain> result = service.searchByFilterConfig(config, filters, offset, end, pageSize);
+            if (result == null) {
+                logger.warn("검색 결과가 null입니다. filterType: {}", filterType);
+                result = List.of();
+            }
+            model.addAttribute(fragmentInfo.getResultKey(), result);
+            model.addAttribute("pageSize", pageSize);
+            logger.debug("검색 완료 - 결과 개수: {}", result.size());
+            return fragmentInfo.getFragmentTemplate() + " :: " + fragmentInfo.getFragmentName();
+        } catch (IllegalArgumentException e) {
+            logger.error("검색 파라미터 오류: {}", e.getMessage());
+            model.addAttribute("error", e.getMessage());
+            return "fragments/error :: error";
+        } catch (Exception e) {
+            logger.error("검색 중 예상치 못한 오류 발생", e);
+            model.addAttribute("error", "검색 중 오류가 발생했습니다.");
+            return "fragments/error :: error";
         }
-
-        model.addAttribute(resultKey, result);
-        System.out.println("resultKey : " + resultKey);
-        System.out.println("fragmentTemplate : " + fragmentTemplate);
-        System.out.println("fragmentName : " + fragmentName);
-        for(SearchDataDomain sdd : result) {
-        	System.out.println(sdd);
-        }
-        model.addAttribute("pageSize", pageSize);
-
-        return fragmentTemplate + " :: " + fragmentName;
     }
 
     @GetMapping("/reBuildPagination")
     public String reBuildPagination(@RequestParam Map<String, String> params, Model model) {
-        int pageSize = Integer.parseInt(params.getOrDefault("pageSize", "10"));
-        int totalItems = Integer.parseInt(params.getOrDefault("totalItems", "0"));
-        int currentPage = Integer.parseInt(params.getOrDefault("currentPage","1"));
-        System.out.println("pageSize : " + pageSize + ", totalItems : " + totalItems + ", currentPage : " + currentPage);
-        
-        //마지막 파라미터 int로 오버로딩된 메소드 호출
-        modelUtils.setPaginationAttributes(model, pageSize, currentPage, totalItems);
-
-        return "fragments/pagination :: pagination";
+        try {
+            int pageSize = parseIntegerParam(params, "pageSize", 10);
+            int totalItems = parseIntegerParam(params, "totalItems", 0);
+            int currentPage = parseIntegerParam(params, "currentPage", 1);
+            logger.debug("페이지네이션 재구성 - pageSize: {}, totalItems: {}, currentPage: {}", 
+                       pageSize, totalItems, currentPage);
+            modelUtils.setPaginationAttributes(model, pageSize, currentPage, totalItems);
+            System.out.println("fragments/pagination :: pagination");
+            return "fragments/pagination :: pagination";
+        } catch (Exception e) {
+            logger.error("페이지네이션 재구성 중 오류 발생", e);
+            model.addAttribute("error", "페이지네이션 처리 중 오류가 발생했습니다.");
+            return "fragments/error :: error";
+        }
     }
 
     @GetMapping("/count")
     @ResponseBody
-    public Map<String, Integer> getCount(@RequestParam Map<String, String> params) {
-        FilterConfig config = FilterConfig.fromKey(params.get("filterType"));
-        List<FilterCondition> filters = builder.build(params, config);
-
-        
-        
-//        int total = switch (config) {
-//            case DINING -> service.countDining(filters);
-//            case FAQ -> service.countFaq(filters);
-//            case STAFF -> service.countStaff(filters);
-//            default -> 0;
-//        };
-        
-        int total = 0;
-        if (config != null) {
-        	total = service.countByFilterConfig(config, filters);
-    	}
-
-        return Map.of("totalItems", total); // ✅ JSON 형태로 리턴
+    public ResponseEntity<Map<String, Object>> getCount(@RequestParam Map<String, String> params) {
+        try {
+            String filterType = params.get("filterType");
+            if (filterType == null || filterType.trim().isEmpty()) {
+                return ResponseEntity.badRequest()
+                    .body(Map.of("error", "filterType 파라미터가 누락되었습니다."));
+            }
+            FilterConfig config = FilterConfig.fromKey(filterType);
+            List<FilterCondition> filters = builder.build(params, config);
+            int total = service.countByFilterConfig(config, filters);
+            logger.debug("카운트 조회 완료 - filterType: {}, total: {}", filterType, total);
+            return ResponseEntity.ok(Map.of("totalItems", total));
+        } catch (IllegalArgumentException e) {
+            logger.error("카운트 조회 파라미터 오류: {}", e.getMessage());
+            return ResponseEntity.badRequest()
+                .body(Map.of("error", e.getMessage()));
+        } catch (Exception e) {
+            logger.error("카운트 조회 중 예상치 못한 오류 발생", e);
+            return ResponseEntity.internalServerError()
+                .body(Map.of("error", "카운트 조회 중 오류가 발생했습니다."));
+        }
     }
-
+    
+    private int parseIntegerParam(Map<String, String> params, String key, int defaultValue) {
+        try {
+            String value = params.get(key);
+            return value != null ? Integer.parseInt(value) : defaultValue;
+        } catch (NumberFormatException e) {
+            logger.warn("파라미터 '{}'를 정수로 변환할 수 없습니다. 기본값 {} 사용", key, defaultValue);
+            return defaultValue;
+        }
+    }
 
 } // class

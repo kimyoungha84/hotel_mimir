@@ -53,6 +53,48 @@
 <!-- 단순 셀렉트 -->
 
 <!--///////////////////////////////// STAFF /////////////////////////////////-->
+
+<sql id="whereFilter">
+  <if test="filters != null and filters.size() > 0">
+    <foreach collection="filters" item="filter">
+      <if test="filter.column != 'permission_id_code'">
+        <choose>
+          <when test="filter.operator.name() == 'EQ'">
+            AND ${filter.column} = #{filter.value}
+          </when>
+          <when test="filter.operator.name() == 'LIKE'">
+            AND ${filter.column} LIKE '%' || #{filter.value} || '%'
+          </when>
+          <when test="filter.operator.name() == 'IN'">
+            <foreach collection="filter.value" item="v" open="AND ${filter.column} IN (" separator="," close=")">
+              #{v}
+            </foreach>
+          </when>
+          <when test="filter.operator.name() == 'TRUNC_BETWEEN'">
+            AND TRUNC(${filter.column}) BETWEEN #{filter.value[0]} AND #{filter.value[1]}
+          </when>
+          <when test="filter.operator.name() == 'TRUNC_GREATER_EQUAL'">
+            AND TRUNC(${filter.column}) &gt;= #{filter.value}
+          </when>
+          <when test="filter.operator.name() == 'TRUNC_LESS_EQUAL'">
+            AND TRUNC(${filter.column}) &lt;= #{filter.value}
+          </when>
+        </choose>
+      </if>
+    </foreach>
+  </if>
+</sql>
+
+
+<sql id="havingFilter">
+  <if test="filters != null and filters.size() > 0">
+    <foreach collection="filters" item="filter">
+      <if test="filter.column == 'permission_id_code'">
+        HAVING INSTR(LISTAGG(p.permission_id_code, ','), #{filter.value}) > 0
+      </if>
+    </foreach>
+  </if>
+</sql>
 <select id="searchStaff" resultType="kr.co.sist.util.domain.SearchDataDomain">
   SELECT staff_id, staff_name, dept_iden, position_identified_code, permission_ids, staff_status
   FROM (
@@ -67,8 +109,9 @@
     FROM staff s
     LEFT JOIN staff_permission p ON s.staff_id = p.staff_id
     WHERE 1=1
-    <include refid="filter"/>
+    <include refid="whereFilter"/>
     GROUP BY s.staff_id, s.staff_name, s.dept_iden, s.position_identified_code, s.staff_status, s.date_of_employment
+    <include refid="havingFilter"/>
   )
   WHERE rnum BETWEEN #{offset} AND #{end}
 </select>
@@ -81,8 +124,9 @@
     FROM staff s
     LEFT JOIN staff_permission p ON s.staff_id = p.staff_id
     WHERE 1=1
-    <include refid="filter"/>
+    <include refid="whereFilter"/>
     GROUP BY s.staff_id, s.staff_name, s.dept_iden, s.position_identified_code, s.staff_status, s.date_of_employment
+    <include refid="havingFilter"/>
   )
 </select>
 

@@ -2,6 +2,8 @@ package kr.co.sist.util.service;
 
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -10,48 +12,116 @@ import kr.co.sist.util.FilterConfig;
 import kr.co.sist.util.domain.SearchDataDomain;
 import kr.co.sist.util.mapper.DynamicSearchMapper;
 
-
 @Service
-public class DynamicSearchService{
-    @Autowired private DynamicSearchMapper mapper;
+public class DynamicSearchService {
+    
+    private static final Logger logger = LoggerFactory.getLogger(DynamicSearchService.class);
+    
+    @Autowired 
+    private DynamicSearchMapper mapper;
 
+    /**
+     * FilterConfig에 따른 통합 검색 메서드
+     */
+    public List<SearchDataDomain> searchByFilterConfig(FilterConfig config, 
+                                                      List<FilterCondition> filters, 
+                                                      int offset, 
+                                                      int end, 
+                                                      int pageSize) {
+        try {
+            return switch (config) {
+                case DINING -> searchDining(filters, offset, end, pageSize);
+                case FAQ -> searchFaq(filters, offset, end, pageSize);
+                case STAFF -> searchStaff(filters, offset, end, pageSize);
+                default -> {
+                    logger.warn("지원하지 않는 FilterConfig: {}", config);
+                    yield List.of();
+                }
+            };
+        } catch (Exception e) {
+            logger.error("검색 중 오류 발생 - config: {}, offset: {}, end: {}", config, offset, end, e);
+            return List.of();
+        }
+    }
 
-	public List<SearchDataDomain> searchDining(List<FilterCondition> filters, int offset, int end, int pageSize) {
-		return mapper.searchDining(filters, offset, end, pageSize);
-	}
+    public List<SearchDataDomain> searchDining(List<FilterCondition> filters, int offset, int end, int pageSize) {
+        try {
+            logger.debug("다이닝 검색 - filters: {}, offset: {}, end: {}", filters.size(), offset, end);
+            return mapper.searchDining(filters, offset, end, pageSize);
+        } catch (Exception e) {
+            logger.error("다이닝 검색 중 오류 발생", e);
+            return List.of();
+        }
+    }
 
-	public List<SearchDataDomain> searchFaq(List<FilterCondition> filters, int offset, int end, int pageSize) {
-			
-		return mapper.searchFaq(filters, offset, end, pageSize);
-	}
-	
-	public List<SearchDataDomain> searchStaff(List<FilterCondition> filters, int offset, int end, int pageSize) {
-		return mapper.searchStaff(filters, offset, end, pageSize);
-	}
-	
-	
+    public List<SearchDataDomain> searchFaq(List<FilterCondition> filters, int offset, int end, int pageSize) {
+        try {
+            logger.debug("FAQ 검색 - filters: {}, offset: {}, end: {}", filters.size(), offset, end);
+            return mapper.searchFaq(filters, offset, end, pageSize);
+        } catch (Exception e) {
+            logger.error("FAQ 검색 중 오류 발생", e);
+            return List.of();
+        }
+    }
+    
+    public List<SearchDataDomain> searchStaff(List<FilterCondition> filters, int offset, int end, int pageSize) {
+        try {
+            logger.debug("직원 검색 - filters: {}, offset: {}, end: {}", filters.size(), offset, end);
+            for(FilterCondition filter : filters) {
+            System.out.println(filter);
+            }
+            return mapper.searchStaff(filters, offset, end, pageSize);
+        } catch (Exception e) {
+            logger.error("직원 검색 중 오류 발생", e);
+            return List.of();
+        }
+    }
 
+    /**
+     * FilterConfig에 따른 통합 카운트 메서드
+     */
+    public int countByFilterConfig(FilterConfig config, List<FilterCondition> filters) {
+        try {
+            return switch (config) {
+                case DINING -> countDining(filters);
+                case FAQ -> countFaq(filters);
+                case STAFF -> countStaff(filters);
+                default -> {
+                    logger.warn("지원하지 않는 FilterConfig: {}", config);
+                    yield 0;
+                }
+            };
+        } catch (Exception e) {
+            logger.error("카운트 조회 중 오류 발생 - config: {}", config, e);
+            return 0;
+        }
+    }
+    
+    public int countFaq(List<FilterCondition> filters) {
+        try {
+            return mapper.countFaq(filters);
+        } catch (Exception e) {
+            logger.error("FAQ 카운트 조회 중 오류 발생", e);
+            return 0;
+        }
+    }
 
-	public int countByFilterConfig(FilterConfig config, List<FilterCondition> filters) {
-	    return switch(config) {
-	        case DINING -> countDining(filters);
-	        case FAQ -> countFaq(filters);
-	        case STAFF -> countStaff(filters);
-	        default -> 0;
-	    };
-	}
-	
-	public int countFaq(List<FilterCondition> filters) {
-		return mapper.countFaq(filters);
-	}
-
-	public int countDining(List<FilterCondition> filters) {
-		return mapper.countDining(filters);
-	}
-	
-	public int countStaff(List<FilterCondition> filters) {
-		return mapper.countStaff(filters);
-	}
-	
-	
-}//class
+    public int countDining(List<FilterCondition> filters) {
+        try {
+            return mapper.countDining(filters);
+        } catch (Exception e) {
+            logger.error("다이닝 카운트 조회 중 오류 발생", e);
+            return 0;
+        }
+    }
+    
+    public int countStaff(List<FilterCondition> filters) {
+        try {
+            return mapper.countStaff(filters);
+        } catch (Exception e) {
+            logger.error("직원 카운트 조회 중 오류 발생", e);
+            return 0;
+        }
+    }
+    
+} // class

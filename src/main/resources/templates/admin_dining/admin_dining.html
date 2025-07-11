@@ -30,7 +30,7 @@
         <h1>다이닝</h1>
 
         <!-- 검색 필터 Fragment -->
-		<div class="search-bar" th:replace="fragments/filter :: filter(${filter})"></div>
+		<div th:replace="~{fragments/filter :: filter(${filter})}"></div>
 
         <!-- FAQ 테이블 -->
         <table class="faq-table">
@@ -63,7 +63,7 @@
         </div>
 
         <!-- 페이징 -->
-        <div id="paginationArea" th:insert="fragments/pagination :: pagination">
+        <div th:replace="~{fragments/pagination :: pagination}">
 </div>
         
       </section>

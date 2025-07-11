@@ -12,23 +12,15 @@ window.loadPage = function (pageNum) {
 
     const config = document.getElementById("pagination-config");
 
-    var filterType = window.filterType || 'defaultFilterType';
-    var filterFragmentTemplate = window.filterFragmentTemplate || 'defaultTemplate';
-    var filterFragmentName = window.filterFragmentName || 'defaultFragment';
-    var filterResultKey = window.filterResultKey || 'defaultResultKey';
-
-    console.log('filterType:', filterType);
-    console.log('filterFragmentTemplate:', filterFragmentTemplate);
-    console.log('filterFragmentName:', filterFragmentName);
-    console.log('filterResultKey:', filterResultKey);
+    // filterType만 사용, fragment 관련 변수 제거
+    // var filterType = window.filterType || 'defaultFilterType';
+    // var filterFragmentTemplate = window.filterFragmentTemplate || 'defaultTemplate';
+    // var filterFragmentName = window.filterFragmentName || 'defaultFragment';
+    // var filterResultKey = window.filterResultKey || 'defaultResultKey';
 
     // URLSearchParams 사용
-    baseParams.set("filterType", filterType);
-    baseParams.set("filter_fragmentTemplate", filterFragmentTemplate);
-    baseParams.set("filter_fragmentName", filterFragmentName);
-    baseParams.set("filter_resultKey", filterResultKey);
-
-    console.log(baseParams.toString());
+    // baseParams.set("filterType", filterType); // 이미 포함되어 있음
+    // fragment 관련 파라미터 세팅 제거
 
     // 페이지네이션 세팅
     const pageSize = config.querySelector('input[name="pageSize"]').value;
@@ -65,5 +57,16 @@ window.loadPage = function (pageNum) {
 
 // 최초 페이지 로딩 후 loadPage 함수 호출
 document.addEventListener('DOMContentLoaded', function() {
-    window.loadPage(1); // 최초 1회 페이지 호출
+    var config = document.getElementById("pagination-config");
+    var params = new URLSearchParams();
+    if (config) {
+        var pageSize = config.querySelector('input[name="pageSize"]').value;
+        var filterTypeInput = config.querySelector('input[name="filterType"]');
+        if (filterTypeInput) {
+            params.set("filterType", filterTypeInput.value);
+        }
+        params.set("pageSize", pageSize);
+    }
+    window.lastSearchParams = params;
+    window.loadPage(1);
 });

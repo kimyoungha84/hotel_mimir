@@ -72,6 +72,23 @@
       background-color: #45a049;
     }
 
+    .filter-search-btn:disabled {
+      background-color: #cccccc;
+      cursor: not-allowed;
+    }
+
+    .loading {
+      opacity: 0.6;
+      pointer-events: none;
+    }
+
+    .error-message {
+      color: #f44336;
+      font-size: 14px;
+      margin-top: 10px;
+      display: none;
+    }
+
     /* 모바일 대응 */
     @media (max-width: 768px) {
       .filter-form {
@@ -96,6 +113,7 @@
   </style>
 
   <form id="searchApiForm" class="filter-form">
+    <input type="hidden" name="filterType" th:value="${filterType}" />
     
     <!-- 왼쪽: Date Picker -->
     <div th:if="${filter.showDatePicker}" class="filter-date-picker">
@@ -117,11 +135,8 @@
   </div>
 </div>
 
-    
-
     <!-- 오른쪽: 콤보박스, 텍스트 입력, 검색 버튼 -->
     <div class="filter-right-section">
-      
       <!-- 셀렉터가 1개일 경우, 라벨만 표시 -->
       <div th:if="${filter.showSelector}" class="filter-selector">
       	<input type="hidden" name="searchType" th:value="${filter.selectOptions[0].value}" />
@@ -147,12 +162,81 @@
     <input type="hidden" name="currentPage" th:value="${currentPage}" />
     <input type="hidden" name="pageSize" th:value="${pageSize}" />
     
+    <!-- 에러 메시지 영역 -->
+    <div id="errorMessage" class="error-message"></div>
+    
   </form>
 
 <script th:inline="javascript">
 (function () {
   const $btn = document.getElementById("searchApiBtn");
   const $form = document.getElementById("searchApiForm");
+  const $errorMessage = document.getElementById("errorMessage");
+  let isSearching = false;
+
+  function showError(message) {
+    $errorMessage.textContent = message;
+    $errorMessage.style.display = 'block';
+    setTimeout(() => {
+      $errorMessage.style.display = 'none';
+    }, 5000);
+  }
+
+  function setLoading(loading) {
+    isSearching = loading;
+    $btn.disabled = loading;
+    $form.classList.toggle('loading', loading);
+    $btn.textContent = loading ? '검색 중...' : '검색';
+  }
+
+  async function performSearch() {
+    if (isSearching) return;
+    try {
+      setLoading(true);
+      $errorMessage.style.display = 'none';
+      const params = new URLSearchParams(new FormData($form));
+      window.lastSearchParams = new URLSearchParams(params);
+      // filterType만 서버로 전송
+      // (fragmentTemplate, fragmentName, resultKey 등은 더 이상 넘기지 않음)
+      const [searchResponse, countResponse] = await Promise.all([
+        fetch('/search?' + params.toString()),
+        fetch('/count?' + params.toString())
+      ]);
+      if (!searchResponse.ok) {
+        throw new Error(`검색 요청 실패: ${searchResponse.status}`);
+      }
+      if (!countResponse.ok) {
+        throw new Error(`카운트 요청 실패: ${countResponse.status}`);
+      }
+      const [searchHtml, countJson] = await Promise.all([
+        searchResponse.text(),
+        countResponse.json()
+      ]);
+      if (countJson.error) {
+        throw new Error(countJson.error);
+      }
+      const resultArea = document.getElementById("resultArea");
+      if (resultArea) {
+        resultArea.innerHTML = searchHtml;
+      }
+      const totalItems = countJson.totalItems;
+      params.set("totalItems", totalItems);
+      const paginationResponse = await fetch('/reBuildPagination?' + params.toString());
+      if (!paginationResponse.ok) {
+        throw new Error(`페이지네이션 요청 실패: ${paginationResponse.status}`);
+      }
+      const paginationHtml = await paginationResponse.text();
+      const paginationArea = document.getElementById("paginationArea");
+      if (paginationArea) {
+        paginationArea.innerHTML = paginationHtml;
+      }
+    } catch (error) {
+      console.error('검색 중 오류 발생:', error);
+      showError(`검색 중 오류가 발생했습니다: ${error.message}`);
+    } finally {
+      setLoading(false);
+    }
+  }
 
   $form.addEventListener("keydown", function(event) {
     if (event.key === "Enter") {
@@ -160,69 +244,24 @@
     }
   });
 
-  $btn?.addEventListener("click", function () {
-	  
-	  
-	const params = new URLSearchParams(new FormData($form));
-	window.lastSearchParams = new URLSearchParams(params);
-	
-	params.set("filterType", /*[[${filterType}]]*/ 'someFilterType');
-    params.set("filter_fragmentTemplate", /*[[${filter_fragmentTemplate}]]*/);
-    params.set("filter_fragmentName", /*[[${filter_fragmentName}]]*/);
-    params.set("filter_resultKey", /*[[${filter_resultKey}]]*/ );
-
-    // 검색 결과 요청
-    fetch('/search?' + params.toString())
-      .then(res => res.text())
-      .then(html => {
-        // 결과 영역 갱신
-        document.getElementById("resultArea").innerHTML = html;
-
-        // 🔹 1. count 요청
-      		fetch('/count?' + params.toString())
-			  .then(res => res.json())
-			  .then(json => {
-			    const totalItems = json.totalItems;
-			    console.log("총 개수:", totalItems);
-			    params.set("totalItems", totalItems);
-
-
-            // 🔹 3. 페이지네이션 요청
-            fetch('/reBuildPagination?' + params.toString())
-              .then(res => res.text())
-              .then(paginationHtml => {
-                document.getElementById("paginationArea").innerHTML = paginationHtml;
-              });
-          });
-      });
-  });
+  $btn?.addEventListener("click", performSearch);
   
   document.getElementById("resetFiltersBtn")?.addEventListener("click", () => {
-	  const $form = document.getElementById("searchApiForm");
-	  if (!$form) return;
+    const $form = document.getElementById("searchApiForm");
+    if (!$form) return;
+    const selects = $form.querySelectorAll("select.filter-select-box");
+    selects.forEach(select => {
+      select.selectedIndex = 0;
+    });
+    const textInputs = $form.querySelectorAll("input[type='text']");
+    textInputs.forEach(input => input.value = '');
+    const dateInputs = $form.querySelectorAll("input[type='date']");
+    dateInputs.forEach(input => input.value = '');
+    const currentPageInput = $form.querySelector("input[name='currentPage']");
+    if (currentPageInput) currentPageInput.value = 1;
+    $errorMessage.style.display = 'none';
+  });
 
-	  // 셀렉터들 첫 번째 옵션 선택
-	  const selects = $form.querySelectorAll("select.filter-select-box");
-	  selects.forEach(select => {
-	    select.selectedIndex = 0;
-	  });
-
-	  // 텍스트 입력 초기화
-	  const textInputs = $form.querySelectorAll("input[type='text']");
-	  textInputs.forEach(input => input.value = '');
-
-	  // 날짜 입력 초기화
-	  const dateInputs = $form.querySelectorAll("input[type='date']");
-	  dateInputs.forEach(input => input.value = '');
-
-	  // currentPage 초기화
-	  const currentPageInput = $form.querySelector("input[name='currentPage']");
-	  if (currentPageInput) currentPageInput.value = 1;
-	});
-
-  
-  
-  
 })();
 </script>
 

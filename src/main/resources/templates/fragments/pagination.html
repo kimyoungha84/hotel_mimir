@@ -1,4 +1,4 @@
-<div th:fragment="pagination">
+<div th:fragment="pagination" id="paginationArea">
     <style>
         .pagination {
             display: flex;
@@ -87,18 +87,13 @@
     </div>
     <div id="pagination-config">
     <input type="hidden" name="pageSize" th:value="${pageSize}" />
+    <input type="hidden" name="filterType" th:value="${filterType}" />
 	</div>
 	
-	<script th:inline="javascript">
-	  window.filterType = /*[[${filterType}]]*/ 'defaultFilterType';
-	  window.filterFragmentTemplate = /*[[${filter_fragmentTemplate}]]*/ 'defaultTemplate';
-	  window.filterFragmentName = /*[[${filter_fragmentName}]]*/ 'defaultFragment';
-	  window.filterResultKey = /*[[${filter_resultKey}]]*/ 'defaultResultKey';
-	</script>
-	
-
+	<!-- filterType만 필요, fragment 관련 JS 변수 제거 -->
 	
 </div>
+
 
 
 
