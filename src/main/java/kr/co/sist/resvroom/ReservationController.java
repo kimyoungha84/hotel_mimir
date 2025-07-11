@@ -15,6 +15,9 @@ public class ReservationController {
 		    @RequestParam("adult") int adult,
 		    @RequestParam("child") int child,
 		    @RequestParam("typeName") String typeName,
+		    @RequestParam("nights") int nights,
+		    @RequestParam("capacity") int capacity,
+		    @RequestParam("pricePerNight") int pricePerNight,
 		    Model model) {
 		
 		 model.addAttribute("roomId", roomId);
@@ -22,8 +25,10 @@ public class ReservationController {
 		    model.addAttribute("checkOut", checkOut);
 		    model.addAttribute("adult", adult);
 		    model.addAttribute("child", child);
+		    model.addAttribute("nights", nights);
+		    model.addAttribute("capacity", capacity);
 		    model.addAttribute("typeName", typeName);
-		    System.out.println(checkIn);
+		    model.addAttribute("pricePerNight", pricePerNight);
 		    return "room_resv/resvRoom"; // 보여줄 페이지 경로
 
 	}//roomList
