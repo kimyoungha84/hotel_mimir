@@ -40,18 +40,26 @@
 
 <div class="filter-bar">
   <!-- 정렬 기준 아코디언 -->
-  <div class="accordion sort-accordion">
+
+<div class="accordion bed-accordion">
     <button class="accordion-btn">정렬 기준</button>
-    <div class="accordion-content">
-      <button class="dropdown-item sort-option selected">낮은 요금순</button>
-      <button class="dropdown-item sort-option">높은 요금순</button>
+    <div class="accordion-content" style="min-height: 100px;">
+    <p style="position: relative; left: 30px; bottom: 10px;">정렬 기준</p>
+     <div class="accordion-content-sub">
+     <hr style="position: relative; bottom: 10px; right: 20px">
+      <div class="filter-tags" style=" position: relative; bottom: 10px">
+        <button class="tag-btn selected">낮은 요금순</button>
+        <button class="tag-btn">높은 요금순</button>
+      </div>
+      </div>
     </div>
   </div>
-
+  
   <!-- 침대 타입 필터 -->
   <div class="accordion bed-accordion">
     <button class="accordion-btn">침대 타입</button>
     <div class="accordion-content">
+     <div class="accordion-content-sub">
       <p>2개 이상 선택 가능</p>
       <div class="filter-tags">
         <button class="tag-btn">더블</button>
@@ -59,7 +67,13 @@
         <button class="tag-btn">트리플</button>
         <button class="tag-btn">패밀리 트윈</button>
       </div>
+      </div>
+      <div class="accordion-hr">
+      <hr>
+       <div class="accordion-content-sub accordion-hr2">
       <button class="reset-btn">⟳ 선택해제</button>
+      </div>
+      </div>
     </div>
   </div>
 
@@ -67,12 +81,19 @@
   <div class="accordion view-accordion">
     <button class="accordion-btn">전망 타입</button>
     <div class="accordion-content">
+    <div class="accordion-content-sub">
       <p>2개 이상 선택 가능</p>
       <div class="filter-tags">
         <button class="tag-btn">시티뷰</button>
         <button class="tag-btn">리버뷰</button>
       </div>
+    </div>
+    <div class="accordion-hr">
+      <hr>
+       <div class="accordion-content-sub accordion-hr2">
       <button class="reset-btn">⟳ 선택해제</button>
+    </div>
+      </div>
     </div>
   </div>
 </div>

@@ -531,12 +531,16 @@ body {
   background: #fff;
   border: 1px solid #ccc;
   z-index: 10;
-  padding: 10px 15px;
-  border-radius: 0 0 4px 4px;
+  padding: 10px 0px;
+  border-radius: 10px;
   box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-  min-width: 180px;
+  min-width: 500px;
+  min-height: 200px;
 }
-
+.accordion-content-sub{
+	position: relative;
+	left: 20px;
+}
 .accordion.active .accordion-content {
   display: block;
 }
@@ -569,11 +573,23 @@ body {
   color: white;
   font-weight: bold;
 }
-
+.accordion-hr{
+	position: relative;
+	top: 30px;
+	
+}
+.accordion-hr2{
+	position: relative;
+	right:10px;
+	
+}
 /* 선택 해제 버튼 */
 .reset-btn {
+	position:relative;
+	top:0px;
   background: white;
-  border: 1px solid #ccc;
+  border: 0px solid #5B5B5B;
+  color: #5B5B5B;
   padding: 6px 12px;
   border-radius: 4px;
   cursor: pointer;
