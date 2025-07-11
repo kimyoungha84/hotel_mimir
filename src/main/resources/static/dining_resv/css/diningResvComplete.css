@@ -1,0 +1,118 @@
+@charset "UTF-8";
+
+ .reservation-complete {
+  width: 90%;
+  max-width: 600px;
+  margin: 0 auto;
+  font-family: 'Pretendard', sans-serif;
+  color: #111;
+}
+
+.step-indicator {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1.8rem;
+  gap: 0.6rem;
+}
+
+.step-indicator span {
+  width: 1.8rem;
+  height: 1.8rem;
+  border-radius: 50%;
+  border: 1px solid #999;
+  text-align: center;
+  line-height: 1.8rem;
+  font-weight: bold;
+  font-size: 1rem;
+}
+
+.step-indicator .active {
+  background-color: #7a5028;
+  color: white;
+  border: none;
+}
+
+.step-indicator .step-label {
+  background: none;
+  border: none;
+  color: #888;
+  font-weight: normal;
+  font-size: 1rem;
+  margin-left: 0.6rem;
+}
+
+.reservation-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 2.5rem;
+  margin: 1.8rem 0;
+  position: relative;
+  border-bottom: 2px solid #111;
+  padding-bottom: 1.8rem;
+}
+
+.reservation-header img {
+  width: 14rem;
+  height: auto;
+}
+
+.reservation-title {
+  font-size: 1.4rem;
+  font-weight: bold;
+  white-space: nowrap;
+}
+
+.reservation-info {
+  margin-top: 1.8rem;
+  font-size: 1rem;
+  margin-bottom: 1.8rem;
+}
+
+.info-row {
+  display: flex;
+  margin-bottom: 0.8rem;
+}
+
+.info-row span {
+  display: inline-block;
+}
+
+.info-row .info-colon {
+  width: 1.2rem;
+  text-align: center;
+  margin: 0 0.5rem;
+}
+
+.info-value {
+  flex: 1;
+}
+
+.italic {
+  font-style: italic;
+  color: #444;
+}
+
+.button-wrapper {
+  border-top: 2px solid #111;
+  padding-top : 2.5rem;
+  text-align: center;
+  margin-bottom: 2.5rem;
+}
+
+.confirm-btn {
+  background-color: #111;
+  color: white;
+  padding: 0.7rem 2.5rem;
+  border: none;
+  font-size: 1.2rem;
+  font-weight: bold;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.confirm-btn:hover {
+  background-color: #222;
+}

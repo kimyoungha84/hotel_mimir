@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>인원 선택 팝업</title>
+  <link rel="stylesheet" th:href="@{/dining_resv/css/diningPopup2.css}">
+</head>
+<body>
+
+  <div class="popup-overlay02"></div>
+
+  <div class="cnt-popup">
+    <button class="popup-close02" type="button">×</button>
+
+    <div class="cnt-popup-wrap">
+      <div class="cnt-txt">
+        <span>인원 수</span>
+      </div>
+
+      <div class="cnt-popup-body">
+        <div class="cnt-group01">
+          <span>성인</span>
+          <div class="cnt-adult-btn">
+            <button class="minus" type="button" data-type="adult">-</button>
+            <span id="adultCnt">1</span>
+            <button class="plus" type="button" data-type="adult">+</button>
+          </div>
+        </div>
+
+        <div class="cnt-group02">
+          <span>어린이</span>
+          <div class="cnt-child-btn">
+            <button class="minus" type="button" data-type="child">-</button>
+            <span id="childCnt">0</span>
+            <button class="plus" type="button" data-type="child">+</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="cnt-select-btn">
+      <button class="cntBtn" type="button">선택</button>
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      const maxCount = 20;
+      const minCount = 0;
+
+      document.querySelectorAll(".plus, .minus").forEach(button => {
+        button.addEventListener("click", function () {
+          const type = this.dataset.type;
+          const countSpan = document.getElementById(type + "Cnt");
+          let count = parseInt(countSpan.textContent);
+
+          if (this.classList.contains("plus") && count < maxCount) {
+            count++;
+          } else if (this.classList.contains("minus") && count > minCount) {
+            count--;
+          }
+
+          countSpan.textContent = count;
+        });
+      });
+
+      const closeBtn = document.querySelector(".popup-close02");
+      const popup = document.querySelector(".cnt-popup");
+      const overlay = document.querySelector(".popup-overlay02");
+
+      closeBtn.addEventListener("click", function () {
+        popup.style.display = "none";
+        overlay.style.display = "none";
+      });
+    });
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8" />
+  <title>행사 달력</title>
+  <link rel="stylesheet" th:href="@{dining_resv/css/calendar.css}" />
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+
+<body>
+
+<div class="calendar-container">
+
+  <div th:each="i : ${#numbers.sequence(0,1)}">
+    <div th:with="
+        calYear = ${i == 0 ? baseYear : secondYear},
+        calMonth = ${i == 0 ? baseMonth : secondMonth}
+    " class="calendar-box">
+
+      <div class="calendar-header">
+<a th:if="${i == 0}"
+   th:href="@{'/calendar'(year=${prevYear}, month=${prevMonth})}"
+   th:attr="data-year=${prevYear}, data-month=${prevMonth}"
+   class="circle-button calendar-nav">
+  <span class="arrow">⮜</span>
+</a>
+
+        <strong th:text="${calYear} + '. ' + ${calMonth < 10 ? '0' + calMonth : calMonth}"></strong>
+
+<a th:if="${i == 1}"
+   th:href="@{'/calendar'(year=${nextYear}, month=${nextMonth})}"
+   th:attr="data-year=${nextYear}, data-month=${nextMonth}"
+   class="circle-button calendar-nav">
+  <span class="arrow rotated">⮜</span>
+</a>
+      </div>
+
+      <table>
+        <thead>
+          <tr>
+            <th class="sunday">일</th><th>월</th><th>화</th><th>수</th><th>목</th><th>금</th><th class="saturday">토</th>
+          </tr>
+        </thead>
+		<tbody>
+		  <tr th:each="weekIdx : ${#numbers.sequence(0,5)}"
+    		th:with="
+      		  cal = ${T(java.util.Calendar).getInstance()},
+      		  _ = ${cal.set(calYear, calMonth - 1, 1)},
+      		  startDay = ${cal.get(7)},
+      		  lastDay = ${cal.getActualMaximum(5)},
+      		  day = ${1 + (weekIdx * 7 - startDay + 1)}
+    		  ">
+    <td th:each="d : ${#numbers.sequence(1,7)}"
+      th:with="
+        currentDay = ${day + d - 1},
+        cellDate = ${T(java.util.Calendar).getInstance()},
+        _ = ${cellDate.set(calYear, calMonth - 1, currentDay)},
+        isValidDay = ${currentDay > 0 and currentDay <= lastDay},
+        isPastOrToday = ${isValidDay and (
+                          cellDate.get(1) < today.get(1) or
+                          (cellDate.get(1) == today.get(1) and cellDate.get(2) < today.get(2)) or
+                          (cellDate.get(1) == today.get(1) and cellDate.get(2) == today.get(2) and cellDate.get(5) <= today.get(5))
+                        )},
+        isToday = ${cellDate.get(1) == today.get(1) and cellDate.get(2) == today.get(2) and cellDate.get(5) == today.get(5)},
+        fullDate = ${calYear + '-' + (calMonth < 10 ? '0' + calMonth : calMonth) + '-' + (currentDay < 10 ? '0' + currentDay : currentDay)}
+      "
+      th:classappend="
+        ${isValidDay} ?
+          (${isPastOrToday} ? ' gray' : ' clickable') + (${isToday} ? ' today' : '') :
+          ' gray'
+      "
+      th:attr="data-date=${(!isPastOrToday and isValidDay)} ? ${fullDate} : null"
+      >
+        <div th:classappend="${isToday} ? ' today-circle' : ''"
+          th:text="${isValidDay} ? ${currentDay} : ''">
+        </div>
+    </td>
+		  </tr>
+		</tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<script>
+  function onDateClick(dateStr) {
+    window.parent.postMessage({ type: "dateSelected", date: dateStr }, "*");
+  }
+
+  $(document).ready(function () {
+    $('td[data-date]').on('click', function () {
+      var dateStr = $(this).data('date');
+      $('td[data-date]').removeClass('selected-date');
+      $(this).addClass('selected-date');
+      onDateClick(dateStr);
+    });
+  });
+</script>
+
+</body>
+
+</html>

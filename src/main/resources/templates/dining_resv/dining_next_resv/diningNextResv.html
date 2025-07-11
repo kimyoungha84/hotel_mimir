@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8" />
+  <title>예약 정보 입력</title>
+  <link rel="stylesheet" th:href="@{/dining_resv/css/diningNextResv.css}" />
+</head>
+<body>
+
+<div class="layout">
+  <div class="form-wrap">
+    <div class="form-header">
+      <div class="form-header-row">
+        <div class="title-wrap"><span class="title">예약정보 입력</span></div>
+        <div class="required-info"><span>필수입력<span class="required-star">*</span></span></div>
+      </div>
+    </div>
+
+    <div class="input-section">
+      <div class="input-inner">
+        <div class="input-item">
+          <label>성명<span class="required-star">*</span></label>
+          <input type="text" name="name" class="input-field" placeholder="성명 입력"/>
+          <div class="error-message">성명을 입력해주세요.</div>
+        </div>
+        <div class="input-item">
+          <label>이메일<span class="required-star">*</span></label>
+          <input type="email" name="email" class="input-field" placeholder="이메일 입력"/>
+          <div class="error-message">이메일 주소를 입력해주세요.</div>
+        </div>
+        <div class="input-item">
+          <label>연락처<span class="required-star">*</span></label>
+          <input type="tel" name="tel" class="input-field" placeholder="연락처 입력"/>
+          <div class="error-message">연락처를 입력해주세요.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="request-section">
+      <div class="request-inner">
+        <div class="section-title">
+          <span>추가 정보 입력</span>
+          <button id="toggleRequestBtn" type="button" aria-expanded="false" aria-controls="requestContent">＋</button>
+        </div>
+        <div class="request-content" id="requestContent" style="display:none;">
+          <div class="request-label">요청 내용</div>
+          <div class="request-box">
+            <input type="text" id="request" name="request" placeholder="예약 시 문의사항이나 추가 요청사항이 있으시면 입력해주세요." class="request-input"/>
+          </div>
+          <div class="request-tip">자세한 내용은 업장으로 문의하시면 빠른 답변을 받으실 수 있습니다.</div>
+          <div class="request-tip">외국에서 오시는 고객의 경우, 로밍된 연락처나 추가로 가능한 수단을 입력해주세요.</div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="payment-wrap">
+      <div class="payment-inner">
+        <div class="payment-title">
+          <span>결제 방법 선택</span>
+        </div>
+        <div class="payment-content">
+          <div class="payment-btn">
+          	<button class="field-btn" type="button">현장 결제</button>
+          </div>
+          <div class="payment-btn">
+          	<button class="online-btn" type="button">온라인 결제</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="reservation-note-wrap">
+      <div class="note-txt"><span>예약 유의사항</span></div>
+      <div class="note-item"><span class="note-ico">▷</span><span>야닉 알레노 셰프의 미쉐린 3스타 레스토랑 파비용 르두아앵(Pavillon Ledoyen)의 메뉴</span></div>
+      <div class="note-item"><span class="note-ico">▷</span><span>디너 이용 시 만12세 이하의 어린이 입장이 제한</span></div>
+      <div class="note-item">
+        <span class="note-ico">▷</span><span>
+       	  드레스코드 : 비지니스 캐쥬얼 / 최상의 격식을 갖춘 서비스를 제공하기 위해 입장 시<br />
+          반바지, 조거팬츠, 트레이닝 팬츠와 블로퍼, 슬러퍼, 샌들 착용을 제한
+        </span>
+      </div>
+      <div class="note-item"><span class="note-ico">▷</span><span>온라인 예약은 신청 후 *예약확정*을 받으셔야 방문이 가능 (예약 확정 시 전화 또는 문자가 발송)</span></div>
+    </div>
+    
+      <div class="term-wrap">
+  	<div class="term-wrap-txt">
+  	  <span>이용약관</span>
+  	</div>
+  	<div class="term-box-wrap">
+  	  <div class="term-box01">
+  	    <label class="checkbox-inner01">
+  		  <input type="checkbox" id="checkAll" name="check-all"/>
+  		    <span>전체동의</span>
+  		</label>
+  	  </div>
+  	  <div class="term-box02">
+  	    <div class="agree-list">
+  	    
+  	      <div class="agree-item">
+  	        <div class="agree-inner">
+  	          <div class="agree-inner-txt">
+  	            <label class="checkbox-inner02">
+  		          <input type="checkbox" id="check01" name="check"/>
+  		            <span>(필수)</span>
+  		            <span>필수항목에 대한 개인정보 수집이용 동의</span>
+  		        </label>
+  	          </div>
+  	          <div>
+  	          	<button class="agree-btn" type="button"><span>➤</span></button>
+  	          </div>
+  	        </div>
+  	      </div>
+  	      <div class="agree-item">
+  	        <div class="agree-inner">
+  	          <div class="agree-inner-txt">
+  	            <label class="checkbox-inner02">
+  		          <input type="checkbox" id="check02" name="check"/>
+  		            <span>(선택)</span>
+  		            <span>선택항목에 대한 개인정보 수집이용 동의</span>
+  		        </label>
+  	          </div>
+  	          <div>
+  	          	<button class="agree-btn" type="button"><span>➤</span></button>
+  	          </div>
+  	        </div>
+  	      </div>
+  	      <div class="agree-item">
+  	        <div class="agree-inner">
+  	          <div class="agree-inner-txt">
+  	            <label class="checkbox-inner02">
+  		          <input type="checkbox" id="check03" name="check"/>
+  		            <span>(선택)</span>
+  		            <span>미미르호텔 다이닝의 마케팅 활용 동의</span>
+  		        </label>
+  	          </div>
+  	          <div>
+  	          	<button class="agree-btn" type="button"><span>➤</span></button>
+  	          </div>
+  	        </div>
+  	      </div>
+  	      <div class="agree-item">
+  	        <div class="agree-inner">
+  	          <div class="agree-inner-txt">
+  	            <label class="checkbox-inner02">
+  		          <input type="checkbox" id="check04" name="check"/>
+  		            <span>(선택)</span>
+  		            <span>SMS, 이메일을 통한 서비스 관련 정보, 레스토랑 할인 상품 및 신상품 안내 등 마케팅 정보 수신 동의</span>
+  		        </label>
+  	          </div>
+  	          <div>
+  	          	<button class="agree-btn" type="button"><span>➤</span></button>
+  	          </div>
+  	        </div>
+  	      </div>
+  	      <div class="agree-item">
+  	        <div class="agree-inner">
+  	          <div class="agree-inner-txt">
+  	            <label class="checkbox-inner02">
+  		          <input type="checkbox" id="check05" name="check"/>
+  		            <span>SMS</span>
+  		        </label>
+  	            <label class="checkbox-inner02">
+  		          <input type="checkbox" id="check06" name="check"/>
+  		            <span>E-mail</span>
+  		        </label>
+  	          </div>
+  	        </div>
+  	      </div>
+  	    </div>
+  	  </div>
+  	</div>
+  </div>
+  </div>
+
+  <div class="reservation-next-wrap">
+    <div class="reservation-next">
+      <div class="reservation-info01">
+        <div class="hotel-name"><span>미미르 호텔</span></div>
+        <button class="dining-name-btn" type="button">
+          <span class="dining-name-txt" th:text="${dining}"></span>
+          <span class="arrow">➤</span>
+        </button>
+      </div>
+
+      <div class="reservation-info02">
+        <div class="reservation-cnt"><span>예약 인원</span></div>
+        <button class="cnt-btn" type="button">
+          <span class="cnt-btn-txt">
+          성인 <span class="cnt-adult-txt" th:text="${adult}"></span>
+          , 어린이 <span class="cnt-child-txt" th:text="${child}"></span>
+          </span>
+          <span class="arrow">➤</span>
+        </button>
+      </div>
+      
+      <div class="reservation-info03">
+        <div class="reservation-time"><span>예약 일시</span></div>
+        <button class="reservation-btn" type="button">
+  		  <div class="reservation-txt">
+    	    <span class="meal-txt" th:text="${mealLabel}"></span>
+    	    <span class="date-txt" th:text="${formattedDate} + ' ' + ${time}"></span>
+  	      </div>
+      	  <span class="arrow">➤</span>
+        </button>
+      </div>
+      
+      <div class="reservation-info04">
+        <div class="reservation-price"><span>총 금액</span></div>
+        <div class="price-txt">
+          <span class="price-num">0</span>
+          <span class="price-num-txt">원</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="next-txt">
+      <a href="#" class="next-btn disabled" aria-disabled="true"><span>결제</span></a>
+    </div>
+  </div>
+  
+</div>
+
+  <div th:replace="~{/dining_resv/popup/diningPopup3}"></div>
+
+<script th:inline="javascript">
+  document.addEventListener("DOMContentLoaded", () => {
+    const toggleBtn = document.getElementById("toggleRequestBtn");
+    const requestContent = document.getElementById("requestContent");
+
+    toggleBtn.addEventListener("click", () => {
+      const isVisible = requestContent.style.display === "block";
+      requestContent.style.display = isVisible ? "none" : "block";
+      toggleBtn.textContent = isVisible ? "＋" : "−";
+      toggleBtn.setAttribute("aria-expanded", (!isVisible).toString());
+    });
+
+    // 입력필드 유효성 체크
+    document.querySelectorAll('.input-field').forEach(input => {
+      const errorMessage = input.nextElementSibling;
+
+      input.addEventListener('blur', () => {
+        if (input.value.trim() === '') {
+          input.classList.add('error');
+          errorMessage?.classList.add('active');
+        } else {
+          input.classList.remove('error');
+          errorMessage?.classList.remove('active');
+        }
+      });
+
+      input.addEventListener('focus', () => {
+        input.classList.remove('error');
+        errorMessage?.classList.remove('active');
+      });
+    });
+    
+    // 전체 동의 체크박스 로직
+    const checkAll = document.getElementById("checkAll");
+    const otherChecks = document.querySelectorAll("input[name='check']");
+
+    checkAll.addEventListener("change", () => {
+      otherChecks.forEach(chk => {
+        chk.checked = checkAll.checked;
+      });
+    });
+	
+    // 개별 체크 시 전체동의 해제
+    otherChecks.forEach(chk => {
+      chk.addEventListener("change", () => {
+        const allChecked = Array.from(otherChecks).every(c => c.checked);
+        checkAll.checked = allChecked;
+      });
+    });
+    
+    const reselectPopup = document.getElementById("reselectPopup");
+    const reselectBtn = document.getElementById("reselectBtn");
+    const closePopupBtn = document.getElementById("closePopupBtn");
+
+    const infoButtons = document.querySelectorAll(".reservation-info01 button, .reservation-info02 button, .reservation-info03 button");
+
+    infoButtons.forEach(btn => {
+      btn.addEventListener("click", () => {
+        reselectPopup.style.display = "flex";
+      });
+    });
+
+    closePopupBtn.addEventListener("click", () => {
+      reselectPopup.style.display = "none";
+    });
+
+    reselectBtn.addEventListener("click", () => {
+      /*<![CDATA[*/
+      window.location.href = /*[[@{/diningResv}]]*/ '';
+      /*]]>*/
+    });
+    
+    let isPaymentSelected = false;
+    let selectedPaymentText = "";
+
+    const requiredInputs = document.querySelectorAll(".input-field");
+    const requiredCheck = document.getElementById("check01");
+    const payBtn = document.querySelector(".next-btn");
+    const payBtnText = payBtn.querySelector("span");
+    const onSiteBtn = document.querySelector(".field-btn");
+    const onlineBtn = document.querySelector(".online-btn");
+
+    function validateAll() {
+      const allFilled = Array.from(requiredInputs).every(input => input.value.trim() !== "");
+      const isChecked = requiredCheck.checked;
+
+      if (allFilled && isChecked && isPaymentSelected) {
+        payBtn.classList.remove("disabled");
+        payBtn.setAttribute("aria-disabled", "false");
+      } else {
+        payBtn.classList.add("disabled");
+        payBtn.setAttribute("aria-disabled", "true");
+      }
+    }
+
+    requiredInputs.forEach(input => input.addEventListener("input", validateAll));
+    requiredCheck.addEventListener("change", validateAll);
+
+    // 전체 동의 체크시 validateAll 호출
+    checkAll.addEventListener("change", () => {
+      otherChecks.forEach(chk => {
+        chk.checked = checkAll.checked;
+      });
+      validateAll(); // 전체 동의 시에도 다시 유효성 검사
+    });
+
+    otherChecks.forEach(chk => {
+      chk.addEventListener("change", () => {
+        const allChecked = Array.from(otherChecks).every(c => c.checked);
+        checkAll.checked = allChecked;
+        validateAll(); // 개별 동의 변경 시에도 유효성 검사
+      });
+    });
+
+    // 결제 버튼 텍스트 바꾸기
+    onSiteBtn.addEventListener("click", () => {
+      isPaymentSelected = true;
+      selectedPaymentText = "현장결제";
+      onSiteBtn.classList.add("selected");
+      onlineBtn.classList.remove("selected");
+      payBtnText.textContent = selectedPaymentText;
+      validateAll();
+    });
+
+    onlineBtn.addEventListener("click", () => {
+      isPaymentSelected = true;
+      selectedPaymentText = "온라인결제";
+      onlineBtn.classList.add("selected");
+      onSiteBtn.classList.remove("selected");
+      payBtnText.textContent = selectedPaymentText;
+      validateAll();
+    });
+
+    payBtn.addEventListener("click", (e) => {
+      if (!payBtn.classList.contains("disabled")) {
+        /*<![CDATA[*/
+        window.location.href = /*[[@{/diningResvComplete}]]*/ '';
+        /*]]>*/
+      } else {
+        e.preventDefault();
+      }
+    });
+    
+  });
+</script>
+
+</body>
+</html>

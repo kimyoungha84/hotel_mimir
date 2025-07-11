@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>예약 완료</title>
+  <link rel="stylesheet" th:href="@{/dining_resv/css/diningResvComplete.css}" />
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+
+<body>
+
+<div class="reservation-complete">
+
+  <div class="reservation-header">
+    <img th:src="@{/dining_resv/images/leftleaf.png}" alt="왼쪽 잎사귀">
+    <div class="reservation-title">예약 정보</div>
+    <img th:src="@{/dining_resv/images/rightleaf.png}" alt="오른쪽 잎사귀">
+  </div>
+
+  <div class="reservation-info">
+    <div class="info-row">
+      <span>예약번호</span>
+      <span class="info-colon">:</span>
+      <span class="info-value italic" th:text="${resvId}"></span>
+    </div>
+    <div class="info-row">
+      <span>예약자</span>
+      <span class="info-colon">:</span>
+      <span class="info-value" th:text="${resvName}"></span>
+    </div>
+    <div class="info-row">
+      <span>휴대전화</span>
+      <span class="info-colon">:</span>
+      <span class="info-value italic" th:text="${resvTel}"></span>
+    </div>
+    <div class="info-row">
+      <span>다이닝</span>
+      <span class="info-colon">:</span>
+      <span class="info-value" th:text="${dining}"></span>
+    </div>
+    <div class="info-row">
+      <span>인원</span>
+      <span class="info-colon">:</span>
+      <span class="info-value" th:text="${resvCnt} + '명'"></span>
+    </div>
+    <div class="info-row">
+      <span>예약 일시</span>
+      <span class="info-colon">:</span>
+      <span class="info-value italic"> 
+      <span class="meal-txt" th:text="${mealLabel}"></span>
+      <span class="date-txt" th:text="${formattedDate} + ' ' + ${time}"></span>
+      </span>
+    </div>
+  </div>
+
+  <div class="button-wrapper">
+    <button class="confirm-btn" onclick="window.location.href='/'">확인</button>
+  </div>
+
+</div>
+
+</body>
+
+</html>
