@@ -87,32 +87,6 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 
-// flatpickr 초기화 시 날짜 선택 이벤트 추가
-datePickerInstance = flatpickr("#datepicker", {
-  mode: "range",
-  dateFormat: "Y-m-d",
-  showMonths: 2,
-  inline: true,
-  locale: "ko",
-  onChange: function(selectedDates) {
-    if (selectedDates.length === 2) {
-      updateDateSummary(selectedDates[0], selectedDates[1]);
-    }
-  },
-  onDayCreate: function(dObj, dStr, fp, dayElem) {
-    const date = dayElem.dateObj;
-    const y = date.getFullYear();
-    const m = (date.getMonth() + 1).toString().padStart(2, '0');
-    const d = date.getDate().toString().padStart(2, '0');
-    const yyyymmdd = `${y}-${m}-${d}`;
-    if (holidays.includes(yyyymmdd)) {
-      dayElem.classList.add("holiday");
-    }
-    const day = date.getDay();
-    dayElem.classList.add("weekday" + day);
-  }
-});
-
 
 function changeGuestCount(delta) {
   const input = document.getElementById("adultCount");
@@ -120,8 +94,6 @@ function changeGuestCount(delta) {
   if (value < 1) value = 1;
   input.value = value;
 }
-
-
 
 
 
