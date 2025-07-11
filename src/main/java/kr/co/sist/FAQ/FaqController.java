@@ -3,6 +3,7 @@ package kr.co.sist.FAQ;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.util.List;
+import java.security.Principal;
 
 import org.jsoup.Jsoup;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,11 +59,12 @@ public class FaqController {
 	}//faqRegisterForm
 
 	@GetMapping("/inquiry")
-	public String inquiryPage(Model model) {
+	public String inquiryPage(Model model, Principal principal) {
 		
 		List<FAQDTO> faqList = service.selectAllFAQ(); // DB에서 FAQ 불러오기
 		
 		model.addAttribute("faqList", faqList);
+		model.addAttribute("isLogin", principal != null);
 		
 		return "inquiry/inquiry"; // => templates/inquiry.html
 		

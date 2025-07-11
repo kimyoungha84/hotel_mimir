@@ -77,18 +77,27 @@ $("#startChatBtn").click(function() {
 });
 
 let inquiryType = null;
+let roomId = null;
 
+// 문의 유형 선택 시 채팅방 및 메시지 내역을 DB에서 불러와 렌더링하는 로직
 $(document).on("click", ".chat-option", function() {
 	inquiryType = $(this).data("type");
-
-	const typeName = {
-		"0": "객실 문의",
-		"1": "다이닝 문의",
-		"2": "일반 문의"
-	}[inquiryType];
-
-	$("#chatBody").html(`<p style="text-align:center; color:#555;">[${typeName}] 문의를 시작합니다.</p>`);
-	$("#inputArea").css("display", "flex");
+	// 1. 채팅방 생성/조회 (user_num=21 고정)
+	$.get("/test/chat/room", { user_num: 21, chat_type: inquiryType }, function(room) {
+        roomId = room.room_id;
+		// 2. 채팅 메시지 불러오기
+		$.get("/test/chat/messages", { room_id: room.room_id }, function(messages) {
+			$("#chatBody").html("");
+			messages.forEach(function(msg) {
+				const alignClass = msg.staff_id === room.staff_id ? "left" : "right";
+				const messageBlock = $("<div>").addClass("message-block " + alignClass);
+				const message = $("<div>").addClass("chat-message " + alignClass).text(msg.content);
+				messageBlock.append(message);
+				$("#chatBody").append(messageBlock);
+			});
+		});
+		$("#inputArea").css("display", "flex");
+	});
 });
 
 // 보낸 타임스템프 저장
@@ -139,7 +148,11 @@ function sendMessage() {
 		msgElem.append(message, timeElem);
 
 		$("#chatBody").append(msgElem).scrollTop($("#chatBody")[0].scrollHeight);
-		ws.send(msg);
+        if (roomId) {
+            ws.send(roomId + ':' + msg);
+        } else {
+            showError('채팅방이 선택되지 않았습니다.');
+        }
 		$("#messageInput").val("");
 		messageTimestamps.push(now);
 	}

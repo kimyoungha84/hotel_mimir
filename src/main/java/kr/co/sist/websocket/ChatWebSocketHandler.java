@@ -8,12 +8,23 @@ import org.springframework.web.socket.CloseStatus;
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
+import org.springframework.beans.factory.annotation.Autowired;
+import kr.co.sist.chat.ChatRoomMapper;
+import kr.co.sist.chat.ChatMessageMapper;
+import kr.co.sist.chat.ChatRoomDTO;
+import kr.co.sist.chat.ChatMessageDTO;
+import java.sql.Timestamp;
 
 @Component
 public class ChatWebSocketHandler extends TextWebSocketHandler {
 
     private static final Map<String, WebSocketSession> userSessions = new ConcurrentHashMap<>();
     private static final Map<WebSocketSession, String> sessionUserMap = new ConcurrentHashMap<>();
+
+    @Autowired
+    private ChatRoomMapper chatRoomMapper;
+    @Autowired
+    private ChatMessageMapper chatMessageMapper;
 
     @Override
     public void afterConnectionEstablished(WebSocketSession session) throws Exception {
@@ -30,21 +41,31 @@ public class ChatWebSocketHandler extends TextWebSocketHandler {
         String sender = sessionUserMap.get(session);
         String payload = message.getPayload();
 
-        // 관리자 → "user123:메시지", 사용자 → "메시지"
+        // payload: "room_id:content"
         if (payload.contains(":")) {
             String[] parts = payload.split(":", 2);
-            String toUser = parts[0];
+            int roomId = Integer.parseInt(parts[0]);
             String msg = parts[1];
 
-            WebSocketSession targetSession = userSessions.get(toUser);
+            // 1. 채팅방 정보 조회
+            ChatRoomDTO room = chatRoomMapper.findByRoomId(roomId);
+            if (room == null) return;
+
+            // 2. 메시지 저장
+            ChatMessageDTO chatMsg = new ChatMessageDTO();
+            chatMsg.setRoom_id(roomId);
+            chatMsg.setStaff_id(sender.equals(room.getStaff_id()) ? sender : room.getStaff_id());
+            chatMsg.setDept_iden(room.getDept_iden());
+            chatMsg.setContent(msg);
+            chatMsg.setSend_time(new Timestamp(System.currentTimeMillis()));
+            chatMsg.setIs_read("0");
+            chatMessageMapper.insert(chatMsg);
+
+            // 3. 상대방 세션에 전달
+            String targetId = sender.equals(room.getStaff_id()) ? String.valueOf(room.getUser_num()) : room.getStaff_id();
+            WebSocketSession targetSession = userSessions.get(targetId);
             if (targetSession != null && targetSession.isOpen()) {
                 targetSession.sendMessage(new TextMessage(sender + ":" + msg));
-            }
-        } else {
-            // 사용자 메시지는 관리자에게만 전달
-            WebSocketSession adminSession = userSessions.get("admin");
-            if (adminSession != null && adminSession.isOpen()) {
-                adminSession.sendMessage(new TextMessage(sender + ":" + payload));
             }
         }
     }
