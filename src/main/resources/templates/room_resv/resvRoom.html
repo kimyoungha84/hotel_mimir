@@ -369,7 +369,7 @@
           <strong>체크인 / 아웃</strong><br>
           <p th:text="|${checkIn} ~ ${checkOut}|">06월 17일(화) ~ 06월 18일(수) / 1박</p><br><br>
           <strong>객실 / 인원</strong><br>
-          스탠다드룸 / 성인 2
+          <span th:text="${typeName}">스탠다드룸</span> / 성인 <span th:text="${adult}">2</span>, 아동 <span th:text="${child}">0</span>
         </div>
 
         <div class="price-box mb-3">
