@@ -17,6 +17,8 @@
 <!-- CSS -->
 <link rel="stylesheet" href="/employee_assets/css/employee_style.css"/>
 
+<script src="/admin_common_assets/js/pagination.js"></script>
+
 </head>
 <body>
 <th:block th:replace="~{/administrator/fragments/admin_sidebar :: admin_sidebar}"></th:block>
@@ -27,9 +29,10 @@
 
 
     <div>
-    <input type="button" class= "regEmpBtn" value="+ 직원 등록"/>
+    <input type="button" class= "regEmpBtn" value="+ 직원 등록" onclick="location.href='/admin/employee/register'"/>
     </div>
     <div class="table-wrapper">
+        <div th:replace="fragments/filter :: filter(${filter})"></div>
         <table>
         <thead>
             <tr>
@@ -42,27 +45,19 @@
                 <th>상태</th>
             </tr>
         </thead>
-        <tbody>
-            <tr>
-                <td>1</td>
-                <td>mimir_000001</td>
-                <td>어드민</td>
-                <td>객실 관리</td>
-                <td>최고 관리자(대표)</td>
-                <td>All</td>
-                <td>재직</td>
-            </tr>
-            <tr>
-                <td>2</td>
-                <td>mimir_000002</td>
-                <td>어드민</td>
-                <td>객실 관리</td>
-                <td>최고 관리자(대표)</td>
-                <td>All</td>
-                <td>재직</td>
+        <tbody th:fragment="staff_list_fm" id="resultArea" >
+            <tr th:each="staff, stat : ${staffList}">
+                <td th:text="${stat.count}"></td>
+                <td th:text="${staff.staff_id}"></td>
+                <td th:text="${staff.staff_name}"></td>
+                <td th:text="${staff.dept_iden}"></td>
+                <td th:text="${staff.position_identified_code}"></td>
+                <td th:text="${staff.permission_ids}"></td>
+                <td th:text="${staff.staff_status}"></td>
             </tr>
         </tbody>
         </table>
+        <div th:replace="fragments/pagination :: pagination"></div>
     </div>
 </div>
 </body>

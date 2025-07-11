@@ -1,10 +1,19 @@
 package kr.co.sist.administrator;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+
+import kr.co.sist.util.FilterConfig;
+import kr.co.sist.util.ModelUtils;
+import kr.co.sist.util.controller.SearchController;
 
 @Controller
 public class PageConnectController {
+	
+	@Autowired
+	ModelUtils modelUtils;
 	
 	/*dashboard*/
 	@GetMapping("/admin/dashboard")
@@ -13,11 +22,33 @@ public class PageConnectController {
 	}//examplePage
 	
 	/*************************************/
-	/*직원 관리*/
+	/*직원 관리 페이지*/
 	@GetMapping("/admin/employee")
-	public String employeeManagePage() {
+	public String employeeManagePage(Model model) {
+		int pageSize=5;//페이지당 항목수
+		
+		//fragment 정보 동적 등록
+		SearchController.addFragmentInfo(
+				FilterConfig.STAFF, 
+				"employee/empManage", 
+				"staff_list_fm", 
+				"staffList"
+				);
+		
+		modelUtils.setFilteringInfo(model, FilterConfig.STAFF);
+		modelUtils.setPaginationAttributes(model, pageSize, FilterConfig.STAFF);
+		
+		
 		return "employee/empManage";
 	}//employeeManagePage
+	
+	/*직원 등록 페이지*/
+	@GetMapping("/admin/employee/register")
+	public String employeeRegister() {
+		
+		
+		return "employee/empRegister";
+	}//employeeRegister
 	
 	/*************************************/
 	/*회원 관리*/

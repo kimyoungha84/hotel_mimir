@@ -79,7 +79,7 @@ public class AdminController {
 	}//loginChk
 	
 	
-	/**/
+	/*이거 권한 가져오는건데 ..... 흠......*/
 	@GetMapping("/admin/permissionChkProcess")
 	public String checkPermission(String id) {
 		boolean result=false;
