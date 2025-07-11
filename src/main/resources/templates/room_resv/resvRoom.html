@@ -162,7 +162,7 @@
 
 .checkbox-wrapper input[type="checkbox"]:checked + span::before {
   background-color: #5d3d0c;
-  background-image: url('http://192.168.10.72/jsp_prj/common/images/default_check.svg');
+  background-image: url('/images/room/RM/default_check.svg');
   border: none;
 }
 
@@ -264,13 +264,9 @@
           </div>
 
           <div class="row g-3 mb-4">
-            <div class="col-md-6">
+            <div class="mb-3">
               <label for="phone" class="form-label">연락처</label>
               <input type="text" id="phone" class="form-control">
-            </div>
-            <div class="col-md-6">
-              <label for="phone-confirm" class="form-label">연락처 확인</label>
-              <input type="text" id="phone-confirm" class="form-control">
             </div>
           </div>
         </div>
@@ -278,7 +274,7 @@
 
         <div class="border-title" onclick="toggleSection('option-info', 'toggle-icon-option')">
           옵션 선택
-          <img style="float: right;" id="toggle-icon-option" src="/jsp_prj/common/images/minus.svg" alt="toggle icon" width="20" height="20">
+          <img style="float: right;" id="toggle-icon-option" th:src="@{/images/room/RM/minus.svg}" alt="toggle icon" width="20" height="20">
         </div>
         <div id="option-info" class="collapse-transition mb-3">
           <div class="mb-2">
@@ -371,7 +367,7 @@
       <div class="col-md-4">
         <div class="reservation-summary mb-3">
           <strong>체크인 / 아웃</strong><br>
-          <p th:text="${}">06월 17일(화) ~ 06월 18일(수) / 1박</p><br><br>
+          <p th:text="|${checkIn} ~ ${checkOut}|">06월 17일(화) ~ 06월 18일(수) / 1박</p><br><br>
           <strong>객실 / 인원</strong><br>
           스탠다드룸 / 성인 2
         </div>
@@ -394,9 +390,9 @@
       section.classList.toggle("collapsed");
 
       if (section.classList.contains("collapsed")) {
-        icon.src = "/jsp_prj/common/images/plus.svg";
+        icon.src = "/images/room/RM/plus.svg";
       } else {
-        icon.src = "/jsp_prj/common/images/minus.svg";
+        icon.src = "/images/room/RM/minus.svg";
       }
     }
 

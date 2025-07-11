@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 public class ReservationController {
 
 	@GetMapping("/room_resv/resvRoom")
-
 	public String roomList(@RequestParam("roomId") int roomId,
 		    @RequestParam("checkIn") String checkIn,
 		    @RequestParam("checkOut") String checkOut,
@@ -24,7 +23,7 @@ public class ReservationController {
 		    model.addAttribute("adult", adult);
 		    model.addAttribute("child", child);
 		    model.addAttribute("typeName", typeName);
-
+		    System.out.println(checkIn);
 		    return "room_resv/resvRoom"; // 보여줄 페이지 경로
 
 	}//roomList
