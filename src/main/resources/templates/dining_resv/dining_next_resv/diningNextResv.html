@@ -68,6 +68,29 @@
         </div>
       </div>
     </div>
+    
+    <div class="payment-rule-wrap">
+      <div class="payment-inner">
+        <div class="payment-title">요금 및 취소 규정</div>
+
+        <div class="payment-rule-box">
+          <div class="payment-inner01">
+            <div class="rule-txt01"><span>요금규정</span></div>
+            <div class="rule-txt02"><span>Credit Card</span></div>
+          </div>
+        <div class="payment-inner02">
+          <div class="rule-txt01"><span>취소규정</span></div>
+          <div class="rule-txt02">
+            <div class="cancel-warning">무료 취소 가능일이 지나면 위약금 발생 및 예약 취소가 불가합니다.</div>
+            <div>
+              - 예약 취소 및 변경은 2일 전 18:00(한국시간)까지 가능하며, 예약일 이후 예약 취소할 경우, 환불이 불가합니다.
+              현장결제 예약 후 신용카드의 유효성 확인을 위하여 카드 승인 후 취소될 수 있습니다.
+            </div>
+          </div>
+        </div>
+        </div>
+      </div>
+    </div>
 
     <div class="reservation-note-wrap">
       <div class="note-txt"><span>예약 유의사항</span></div>
@@ -100,9 +123,9 @@
   	        <div class="agree-inner">
   	          <div class="agree-inner-txt">
   	            <label class="checkbox-inner02">
-  		          <input type="checkbox" id="check01" name="check"/>
+  		          <input type="checkbox" id="check01" name="check-required"/>
   		            <span>(필수)</span>
-  		            <span>필수항목에 대한 개인정보 수집이용 동의</span>
+  		            <span>다이닝 이용약관 동의</span>
   		        </label>
   	          </div>
   	          <div>
@@ -114,9 +137,9 @@
   	        <div class="agree-inner">
   	          <div class="agree-inner-txt">
   	            <label class="checkbox-inner02">
-  		          <input type="checkbox" id="check02" name="check"/>
-  		            <span>(선택)</span>
-  		            <span>선택항목에 대한 개인정보 수집이용 동의</span>
+  		          <input type="checkbox" id="check02" name="check-required"/>
+  		            <span>(필수)</span>
+  		            <span>필수항목에 대한 개인정보 수집이용 동의(다이닝 예약)</span>
   		        </label>
   	          </div>
   	          <div>
@@ -128,9 +151,9 @@
   	        <div class="agree-inner">
   	          <div class="agree-inner-txt">
   	            <label class="checkbox-inner02">
-  		          <input type="checkbox" id="check03" name="check"/>
-  		            <span>(선택)</span>
-  		            <span>미미르호텔 다이닝의 마케팅 활용 동의</span>
+  		          <input type="checkbox" id="check03" name="check-required"/>
+  		            <span>(필수)</span>
+  		            <span>취소규정 동의</span>
   		        </label>
   	          </div>
   	          <div>
@@ -144,7 +167,7 @@
   	            <label class="checkbox-inner02">
   		          <input type="checkbox" id="check04" name="check"/>
   		            <span>(선택)</span>
-  		            <span>SMS, 이메일을 통한 서비스 관련 정보, 레스토랑 할인 상품 및 신상품 안내 등 마케팅 정보 수신 동의</span>
+  		            <span>SMS, 이메일을 통한 서비스 관련 정보 수신 동의</span>
   		        </label>
   	          </div>
   	          <div>
@@ -175,11 +198,12 @@
   <div class="reservation-next-wrap">
     <div class="reservation-next">
       <div class="reservation-info01">
-        <div class="hotel-name"><span>미미르 호텔</span></div>
+        <div class="hotel-name"><span>미미르 호텔</span>
         <button class="dining-name-btn" type="button">
           <span class="dining-name-txt" th:text="${dining}"></span>
           <span class="arrow">➤</span>
         </button>
+        </div>
       </div>
 
       <div class="reservation-info02">
@@ -298,7 +322,7 @@
     let selectedPaymentText = "";
 
     const requiredInputs = document.querySelectorAll(".input-field");
-    const requiredCheck = document.getElementById("check01");
+    const requiredChecks = document.querySelectorAll("input[name='check-required']");
     const payBtn = document.querySelector(".next-btn");
     const payBtnText = payBtn.querySelector("span");
     const onSiteBtn = document.querySelector(".field-btn");
@@ -306,9 +330,9 @@
 
     function validateAll() {
       const allFilled = Array.from(requiredInputs).every(input => input.value.trim() !== "");
-      const isChecked = requiredCheck.checked;
+      const allRequiredChecked = Array.from(requiredChecks).every(chk => chk.checked);
 
-      if (allFilled && isChecked && isPaymentSelected) {
+      if (allFilled && allRequiredChecked && isPaymentSelected) {
         payBtn.classList.remove("disabled");
         payBtn.setAttribute("aria-disabled", "false");
       } else {
@@ -318,12 +342,13 @@
     }
 
     requiredInputs.forEach(input => input.addEventListener("input", validateAll));
-    requiredCheck.addEventListener("change", validateAll);
+    requiredChecks.forEach(chk => chk.addEventListener("change", validateAll));
 
     // 전체 동의 체크시 validateAll 호출
     checkAll.addEventListener("change", () => {
-      otherChecks.forEach(chk => {
-        chk.checked = checkAll.checked;
+      const isChecked = checkAll.checked;
+      document.querySelectorAll("input[type='checkbox']").forEach(chk => {
+    	  chk.checked = isChecked;
       });
       validateAll(); // 전체 동의 시에도 다시 유효성 검사
     });
