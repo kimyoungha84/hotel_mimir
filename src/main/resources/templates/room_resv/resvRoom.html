@@ -302,13 +302,23 @@
         </div>
 
         <div class="border-title">
-          결제 정보
-        </div>
-        <div id="payment-info" class="mb-3">
-          <div class="d-flex justify-content-between mb-3">
-            <button class="btn btn-payment w-50 me-2" onclick="selectPayment(this)">현장 결제</button>
-            <button class="btn btn-payment w-50" onclick="selectPayment(this)">온라인 결제</button>
-          </div>
+  결제 정보
+</div>
+
+<div id="payment-info" class="mb-3">
+  <!-- 결제 방식 선택 버튼 -->
+  <div class="d-flex justify-content-between mb-3">
+    <button class="btn btn-payment w-50 me-2" onclick="selectPayment(this)">현장 결제</button>
+    <button class="btn btn-payment w-50" onclick="selectPayment(this)">온라인 결제</button>
+  </div>
+
+  <!-- ⬇ 온라인 결제 수단 버튼은 여기에 위치해야 함 -->
+  <div id="online-payment-options" class="d-none">
+  <button class="btn btn-outline-primary w-100 mb-2" onclick="selectOnlineMethod(this)">토스페이</button>
+  <button class="btn btn-outline-warning w-100 mb-2" onclick="selectOnlineMethod(this)">카카오페이</button>
+  <button class="btn btn-outline-secondary w-100" onclick="selectOnlineMethod(this)">카드결제</button>
+</div>
+
 
           <div>
             <strong>요금 및 취소 규정</strong>
@@ -361,7 +371,7 @@
       <div class="col-md-4">
         <div class="reservation-summary mb-3">
           <strong>체크인 / 아웃</strong><br>
-          06월 17일(화) ~ 06월 18일(수) / 1박<br><br>
+          <p th:text="${}">06월 17일(화) ~ 06월 18일(수) / 1박</p><br><br>
           <strong>객실 / 인원</strong><br>
           스탠다드룸 / 성인 2
         </div>
@@ -391,14 +401,30 @@
     }
 
     function selectPayment(button) {
-      if (button.classList.contains('active')) {
-        button.classList.remove('active');
-      } else {
-        const allButtons = document.querySelectorAll('.btn-payment');
-        allButtons.forEach(btn => btn.classList.remove('active'));
-        button.classList.add('active');
-      }
-    }
+    	  const allButtons = document.querySelectorAll('.btn-payment');
+    	  const onlineOptions = document.getElementById('online-payment-options');
+
+    	  if (button.classList.contains('active')) {
+    	    button.classList.remove('active');
+    	    onlineOptions.classList.add('d-none'); // 모든 옵션 숨기기
+    	  } else {
+    	    allButtons.forEach(btn => btn.classList.remove('active'));
+    	    button.classList.add('active');
+
+    	    // 선택된 버튼 텍스트 확인
+    	    if (button.textContent.trim() === '온라인 결제') {
+    	      onlineOptions.classList.remove('d-none');
+    	    } else {
+    	      onlineOptions.classList.add('d-none');
+    	    }
+    	  }
+    	}
+    
+    function selectOnlineMethod(button) {
+    	  const methodButtons = document.querySelectorAll('#online-payment-options button');
+    	  methodButtons.forEach(btn => btn.classList.remove('active'));
+    	  button.classList.add('active');
+    	}
     
     function changeBreakfast(amount) {
         const countEl = document.getElementById("breakfast-count");
