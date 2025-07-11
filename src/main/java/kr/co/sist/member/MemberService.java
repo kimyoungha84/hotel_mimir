@@ -1,11 +1,10 @@
-package kr.co.sist.member.service;
+package kr.co.sist.member;
 
 import java.util.Map;
 
-import jakarta.servlet.http.HttpSession;
-import kr.co.sist.member.dto.MemberDTO;
-
 public interface MemberService {
+	
+	LoginResponseDTO login(LoginRequestDTO loginDTO);
 	
 	boolean registerMember(MemberDTO mDTO);
 	

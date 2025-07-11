@@ -1,8 +1,9 @@
-package kr.co.sist.member.controller;
+package kr.co.sist.member;
 
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -14,10 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
-import kr.co.sist.member.dto.MemberDTO;
-import kr.co.sist.member.service.MemberService;
 
 @Controller
 @RequestMapping("/member")
@@ -37,35 +35,8 @@ public class MemberController {
 		
 		return "member/registerFrm";
 	}
-	
-	//이메일 인증 팝업 호출
-	@GetMapping("/email-popup")
-	public String emailPopup() {
-		
-		return "member/email_popup";
-	}
-	
-	// 이메일 인증번호 발송
-    @PostMapping("/send-auth-code")
-    @ResponseBody
-    public Map<String, String> sendAuthCode(@RequestBody Map<String, String> body) {
-        String email = body.get("email");
-        return memberService.sendAuthCodeWithJwt(email);
-    }
 
-    // 이메일 인증번호 검증
-    @PostMapping("/verify-auth-code")
-    @ResponseBody
-    public String verifyAuthCode(@RequestBody Map<String, String> body) {
-        String email = body.get("email");
-        String code = body.get("code");
-        String token = body.get("token");
-
-        boolean result = memberService.verifyAuthCodeWithJwt(token, email, code);
-        return result ? "success" : "fail";
-    }
-
-	//회원가입 
+	//회원가입처리
     @PostMapping("/register")
     public String registerMember(@ModelAttribute @Valid MemberDTO mDTO,
     							@RequestParam("token") String token,
@@ -86,7 +57,6 @@ public class MemberController {
     		return "member/registerFrm";
     	}
     	
-    	//가입처리
     	
     	boolean success = memberService.registerMember(mDTO);
     	
@@ -101,9 +71,53 @@ public class MemberController {
     }
 	
 	
-	
-	
 	/*
 	 * ============ 회원로그인 ============
 	 */
+    
+    //로그인 폼 호출
+    @GetMapping("/loginFrm")
+    public String loginFrm() {
+        return "member/loginFrm";
+    }
+    
+    @PostMapping("/login")
+    @ResponseBody
+    public ResponseEntity<LoginResponseDTO> login(@RequestBody @Valid LoginRequestDTO loginDTO){
+    	
+    	LoginResponseDTO response = memberService.login(loginDTO);
+    	
+    	return ResponseEntity.ok(response);
+    }
+    
+    
+    /*
+	 * ============ 이메일 인증 ============
+	 */
+  //이메일 인증 팝업 호출
+  	@GetMapping("/email-popup")
+  	public String emailPopup() {
+  		
+  		return "member/email_popup";
+  	}
+  	
+  	// 이메일 인증번호 발송
+      @PostMapping("/send-auth-code")
+      @ResponseBody
+      public Map<String, String> sendAuthCode(@RequestBody Map<String, String> body) {
+          String email = body.get("email");
+          return memberService.sendAuthCodeWithJwt(email);
+      }
+
+      // 이메일 인증번호 검증
+      @PostMapping("/verify-auth-code")
+      @ResponseBody
+      public String verifyAuthCode(@RequestBody Map<String, String> body) {
+          String email = body.get("email");
+          String code = body.get("code");
+          String token = body.get("token");
+
+          boolean result = memberService.verifyAuthCodeWithJwt(token, email, code);
+          return result ? "success" : "fail";
+      }
 }

@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="kr.co.sist.member.dao.MemberMapper">
+<mapper namespace="kr.co.sist.member.MemberMapper">
 	
 	<!-- 회원가입 -->
-	<insert id="insertMember" parameterType="kr.co.sist.member.dto.MemberDTO">
+	<insert id="insertMember" parameterType="kr.co.sist.member.MemberDTO">
 		INSERT INTO MIMIR_USER(
 			USER_NUM,
 			LOGIN_TYPE,
@@ -29,10 +29,22 @@
 			#{use_yn}
 		)
 	</insert>
+	
+	<!-- RefreshToken 갱신 -->
+	<update id="updateRefreshToken" parameterType="kr.co.sist.member.MemberDTO">
+		UPDATE MIMIR_USER
+	</update>
+	
 
   <!-- 이메일 중복 체크 -->
   <select id="countByEmail" parameterType="string" resultType="int">
     SELECT COUNT(*) 
+    FROM MIMIR_USER 
+    WHERE EMAIL_ID = #{email_id}
+  </select>
+  
+  <select id="selectMemberByEmail" parameterType="string" resultType="kr.co.sist.member.MemberDTO">
+    SELECT *
     FROM MIMIR_USER 
     WHERE EMAIL_ID = #{email_id}
   </select>

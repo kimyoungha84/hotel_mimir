@@ -1,4 +1,4 @@
-package kr.co.sist.member.dto;
+package kr.co.sist.member;
 
 import java.sql.Date;
 import java.sql.Timestamp;
