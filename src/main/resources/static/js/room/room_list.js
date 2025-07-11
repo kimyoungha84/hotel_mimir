@@ -187,6 +187,10 @@ document.addEventListener('DOMContentLoaded', () => {
       const typeName = card.querySelector('h3')?.textContent.trim() || '';
       const adult = document.getElementById('adultCount')?.value || "2";
       const child = document.getElementById('childCount')?.value || "0";
+	  
+	  const priceText = this.textContent.trim();
+	  const priceNumber = priceText.replace(/[₩,]/g, '');
+	  
 
       const url = new URL(this.href, window.location.origin);
       url.searchParams.set('checkIn', checkIn);
@@ -195,6 +199,7 @@ document.addEventListener('DOMContentLoaded', () => {
       url.searchParams.set('adult', adult);
       url.searchParams.set('child', child);
       url.searchParams.set('typeName', typeName);
+	  url.searchParams.set('pricePerNight', priceNumber);
 
       window.location.href = url.toString();
     });
