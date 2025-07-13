@@ -16,11 +16,12 @@
 }
 
 hr{
-  border: none;              /* 기본 테두리 제거 */
-  height: 3px;               /* 두께 */
-  background-color: #333;    /* 색상 */
-  width: calc(100% - 1.87rem);               /* 너비 */
-  margin: 0 0 20px 0;        /* h2와의 간격 */
+    border: none;              /* 기본 테두리 제거 */
+    height: 3px;               /* 두께 */
+    background-color: #333;    /* 색상 */
+    width: calc(100% - 1.87rem);               /* 너비 */
+    margin: 0 0 20px 0;        /* h2와의 간격 */
+    
 }
 
 table{
@@ -63,9 +64,10 @@ table tr:hover{
 
 /* 세로형 전용 스타일 */
 .vertical-table {
-  width: 100%; /* 또는 max-width: 100%; margin으로 가운데 정렬도 가능 */
-  max-width:700px; /*최대 너비 제한   */
-  margin: 0 auto; /* 가운데 정렬 */
+    width: 100%; /* 또는 max-width: 100%; margin으로 가운데 정렬도 가능 */
+    max-width:700px; /*최대 너비 제한   */
+    margin: 0 auto; /* 가운데 정렬 */
+    margin-top:5rem; /*표와 hr 사이의 간격*/
 }
 
 .vertical-table th {
@@ -85,4 +87,28 @@ table tr:hover{
 .vertical-table tr:hover{
     background-color: transparent;
     cursor: default;
+}
+
+.btnGroup{
+    margin-top: 2rem;
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+}
+
+
+.darkBtn {
+    background-color: #C89FA3;
+    color: white;
+    border: 1px solid #ccc;
+      width: 120px;
+  height: 56px;
+}
+
+.softBtn {
+    background-color: #F3ECE7;
+    color: black;
+    border: 1px solid #ccc;
+      width: 120px;
+  height: 56px;
 }

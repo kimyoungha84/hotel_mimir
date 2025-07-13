@@ -34,6 +34,14 @@ public class AdminService {
 		return flag;
 	}//chkLogin
 	
+	/*해당 id에 mapping되는 name 가져오기*/
+	public String getNameById(String id) {
+		String name=am.selectNamebyId(id);
+		
+		return name;
+	}//getNameById
+	
+	
 	/*해당 id에 mapping되는 permission 가져오기*/
 	public List<String> getPermissionById(String id) {
 		String permissions=null;

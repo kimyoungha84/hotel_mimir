@@ -5,6 +5,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
+import jakarta.servlet.http.HttpServletRequest;
 import kr.co.sist.util.FilterConfig;
 import kr.co.sist.util.ModelUtils;
 import kr.co.sist.util.controller.SearchController;
@@ -24,7 +25,7 @@ public class PageConnectController {
 	/*************************************/
 	/*직원 관리 페이지*/
 	@GetMapping("/admin/employee")
-	public String employeeManagePage(Model model) {
+	public String employeeManagePage(Model model,HttpServletRequest request) {
 		int pageSize=5;//페이지당 항목수
 		
 		//fragment 정보 동적 등록
@@ -37,7 +38,6 @@ public class PageConnectController {
 		
 		modelUtils.setFilteringInfo(model, FilterConfig.STAFF);
 		modelUtils.setPaginationAttributes(model, pageSize, FilterConfig.STAFF);
-		
 		
 		return "employee/empManage";
 	}//employeeManagePage

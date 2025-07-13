@@ -14,6 +14,13 @@ href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css"/>
 <!-- jquery CDN -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
 
+<!-- Vue CDN -->
+<script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+
+<!-- axios CDN -->
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+
 <style type="text/css">
 body{
     background-color: #0d1225; /* 딥 네이비 계열 */
@@ -98,11 +105,11 @@ span{
 <script type="text/javascript">
 $(function(){
 
-    const params = new URLSearchParams(window.location.search);
+    // const params = new URLSearchParams(window.location.search);
     //alert("param====="+params);
-    if (params.get("error") == "true") {
-        alert("아이디 또는 비밀번호가 일치하지 않습니다.");
-    }//end if
+    // if (params.get("error") == "true") {
+    //     alert("아이디 또는 비밀번호가 일치하지 않습니다.");
+    // }//end if
     
 });
 
@@ -113,14 +120,51 @@ $(function(){
 <div class="loginTitleFirst">MIMIR</div>
 <div class="loginTitleSecond">Administrator</div>
 
-<form th:action="@{/admin/loginChk}" method="POST">
+<div  id="login">
+
 <div class="loginFormContainer">
-<div class="inputBoxFirst inputBoxDiv"><span>아이디</span><input type="text" name="id" class="inputBox"/></div>
-<div class="inputBoxSecond inputBoxDiv"><span>비밀번호</span><input type="password" name="pass" class="inputBox"/></div>
+<div class="inputBoxFirst inputBoxDiv"><span>아이디</span><input type="text" v-model="jsonLoginObj.id" class="inputBox"/></div>
+<div class="inputBoxSecond inputBoxDiv"><span>비밀번호</span><input type="password" v-model="jsonLoginObj.pass" class="inputBox" @keyup.enter="loginChk"/></div>
 
-<div class="inputBoxDiv"><span></span><input type="submit" value="로그인" class="loginBtn"/></div>
+<div class="inputBoxDiv"><span></span><input type="button" value="로그인" class="loginBtn" @Click="loginChk"/></div>
 </div>
-</form>
 
+<div id="loginResult">{{resultMsg}}</div>
+</div>
+
+
+
+<script>
+var preUrl="";
+
+
+Vue.createApp({
+    data(){
+        return {
+            jsonLoginObj : {id:"",pass:""},
+            resultMsg : "",
+            
+        }
+    },
+    methods:{
+        loginChk(){
+
+            /*아이디, 비밀번호가 URL에 노출되지 않도록하기 위해 POST 사용*/
+            axios.post(`${preUrl}/admin/loginChk`,this.jsonLoginObj) 
+            .then(res=>{
+                console.log(res.data);
+                if(res.data == "success"){
+                    window.location.href="/admin";
+                }
+            })
+            .catch(err=>{
+                //alert(err.status);
+                //alert("id" + this.id);
+                this.resultMsg="아이디와 비밀번호가 일치하지 않습니다.";
+            });
+        },
+    }
+}).mount("#login");
+</script>
 </body>
 </html> 
