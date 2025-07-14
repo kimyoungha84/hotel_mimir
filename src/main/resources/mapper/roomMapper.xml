@@ -82,5 +82,94 @@ FROM (
 )
 WHERE rn = 1
   </select>
+  
+  
+  <select id="selectOneRoom" resultType="roomDTO" parameterType="int">
+SELECT 
+  roomId,
+  bedName,
+  typeName,
+  viewName,
+  capacity,
+  pricePerNight,
+  area_Sqm,
+  roomFloor,
+  description,
+  imagePath,
+  status,
+  floorType
+FROM (
+  SELECT 
+    r.room_id roomId,
+    b.bed_Name bedName,
+    t.type_Name typeName,
+    v.view_Name viewName,
+    r.capacity capacity,
+    r.price_Per_Night pricePerNight,
+    r.area_sqm area_Sqm,
+    r.ROOM_FLOOR roomFloor,
+    r.description description,
+    
+    fp.path AS imagePath,
+    
+    NVL((
+      SELECT status
+      FROM (
+        SELECT res.status
+        FROM RESERVATION res
+        WHERE res.room_id = r.room_id
+        ORDER BY res.RESV_REG_DATE DESC
+      )
+      WHERE ROWNUM = 1
+    ), '없음') AS status,
+    
+    CASE
+      WHEN r.ROOM_FLOOR IN (6, 7) THEN '저층'
+      WHEN r.ROOM_FLOOR = 8 THEN '중층'
+      WHEN r.ROOM_FLOOR = 9 THEN '고층'
+      WHEN r.ROOM_FLOOR = 10 THEN '초고층'
+      ELSE '미정'
+    END AS floorType,
+    
+    ROW_NUMBER() OVER (
+      PARTITION BY t.type_Name, b.bed_Name, v.view_Name
+      ORDER BY r.room_id
+    ) rn
+  FROM Room r
+  JOIN Bed_Type b ON r.bed_Id = b.bed_Id
+  JOIN Room_Type t ON r.type_Id = t.type_Id
+  JOIN View_Type v ON r.view_Id = v.view_Id
+  LEFT JOIN FILE_PATH fp
+    ON fp.target_type = t.type_Name
+   AND fp.target_number = b.bed_Name
+  WHERE r.room_id = #{roomId}
+)
+WHERE rn = 1
+
+  </select>
+  
+  <update id="updateRoom">
+  UPDATE room r
+  SET r.description = #{description}
+  WHERE r.type_id = (SELECT type_id FROM room_type WHERE type_name = #{typeName})
+    AND r.bed_id  = (SELECT bed_id FROM bed_type WHERE bed_name = #{bedName})
+    AND r.view_id = (SELECT view_id FROM view_type WHERE view_name = #{viewName})
+</update>
+
+<update id="updateRoomImg">
+  UPDATE file_path
+  SET path = #{imagePath}
+  WHERE target_type = #{typeName}
+    AND target_number = #{bedName}
+</update>
+
+<select id="findRoomIdByNames" resultType="int">
+  SELECT room_id
+  FROM room
+  WHERE type_id = (SELECT type_id FROM room_type WHERE type_name = #{typeName})
+    AND bed_id  = (SELECT bed_id  FROM bed_type  WHERE bed_name  = #{bedName})
+    AND view_id = (SELECT view_id FROM view_type WHERE view_name = #{viewName})
+  FETCH FIRST 1 ROWS ONLY
+</select>
 
 </mapper>
