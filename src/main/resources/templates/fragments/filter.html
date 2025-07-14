@@ -228,7 +228,7 @@
       const paginationHtml = await paginationResponse.text();
       const paginationArea = document.getElementById("paginationArea");
       if (paginationArea) {
-        paginationArea.innerHTML = paginationHtml;
+        paginationArea.outerHTML = paginationHtml;
       }
     } catch (error) {
       console.error('검색 중 오류 발생:', error);

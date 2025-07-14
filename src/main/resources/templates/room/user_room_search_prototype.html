@@ -5,53 +5,87 @@
     <title>객실 검색 프로토타입</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
+        :root {
+            --mimir-brown: #a68a6d;
+            --mimir-brown-light: #f7f3ef;
+        }
         body {
             background: #fafbfc;
             font-family: 'Noto Sans KR', sans-serif;
             margin: 0;
             padding: 0;
         }
-        .filter-bar {
+        .filtering-area {
+            height: 60px;
             display: flex;
-            gap: 16px;
-            padding: 32px 0 16px 0;
-            justify-content: flex-start;
+            margin-bottom: 30px;
+            flex-direction: row;
             align-items: center;
-            background: #fff;
-            border-bottom: 1px solid #eee;
+            gap: 12px;
         }
-        .filter-select {
-            position: relative;
-            min-width: 140px;
-        }
-        .filter-btn {
-            width: 100%;
-            background: #fff;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            padding: 10px 36px 10px 16px;
-            font-size: 16px;
-            cursor: pointer;
-            text-align: left;
-            transition: border 0.2s;
+        .fi-btn-area {
             display: flex;
-            align-items: center;
             gap: 8px;
         }
-        .filter-btn:focus {
+        .filtering-btn {
+            width: auto;
+            min-width: 110px;
+            height: 45px;
+            background: none;
             border: 1.5px solid #222;
-            outline: none;
+            color: #222;
+            font-weight: 600;
+            font-size: 16px;
+            border-radius: 24px;
+            cursor: pointer;
+            margin-right: 0.4rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0 22px;
+            transition: background 0.18s, color 0.18s, border 0.18s;
+            position: relative;
         }
-        .arrow-img {
+        .filtering-btn.selected {
+            background: var(--mimir-brown-light);
+            color: var(--mimir-brown);
+            border: 1.5px solid var(--mimir-brown);
+        }
+        .filtering-btn .count {
+            margin-left: 7px;
+            font-size: 15px;
+            font-weight: 700;
+            color: var(--mimir-brown);
+        }
+        .filtering-btn.keyword::after {
+            content: "";
+            display: inline-block;
+            width: 1.1rem;
+            height: 1.1rem;
+            background-image: url('keyword_button_filter.svg');
+            background-repeat: no-repeat;
+            background-size: 100% 100%;
+            background-position: center;
+            margin-left: 5px;
+        }
+        .filtering-btn.reset {
+            color: #222;
+            border: 1.5px solid #222;
+            background: none;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+        }
+        .filtering-btn.reset img {
             width: 18px;
             height: 18px;
-            transition: transform 0.3s;
+            margin-right: 5px;
         }
-        .filter-select.open .arrow-img {
-            transform: rotate(180deg);
+        .filter-bar {
+            display: none;
         }
         .custom-dropdown {
-            display: none;
+            display: block;
             position: absolute;
             left: 0;
             top: 48px;
@@ -62,14 +96,24 @@
             box-shadow: 0 4px 16px rgba(0,0,0,0.07);
             z-index: 10;
             padding: 24px 24px 12px 24px;
-            animation: dropdownOpen 0.3s;
+            opacity: 0;
+            pointer-events: none;
+            transform: translateY(-10px);
+            transition: opacity 0.3s, transform 0.3s;
         }
         .filter-select.open .custom-dropdown {
-            display: block;
+            opacity: 1;
+            pointer-events: auto;
+            transform: translateY(0);
         }
-        @keyframes dropdownOpen {
-            0% { opacity: 0; transform: translateY(-10px); }
-            100% { opacity: 1; transform: translateY(0); }
+        .arrow-img {
+            width: 18px;
+            height: 18px;
+            transition: transform 0.3s;
+            margin-left: 7px;
+        }
+        .filter-select.open .arrow-img {
+            transform: rotate(180deg);
         }
         .dropdown-guide {
             font-size: 14px;
@@ -83,9 +127,9 @@
             margin-bottom: 18px;
         }
         .pill-btn {
-            border: 1.5px solid #d2d2d2;
+            border: 1.5px solid var(--mimir-brown);
             background: #fff;
-            color: #444;
+            color: var(--mimir-brown);
             border-radius: 20px;
             padding: 8px 22px;
             font-size: 15px;
@@ -93,9 +137,10 @@
             transition: all 0.18s;
         }
         .pill-btn.selected {
-            background: #222;
-            color: #fff;
-            border: 1.5px solid #222;
+            background: var(--mimir-brown-light);
+            color: var(--mimir-brown);
+            border: 1.5px solid var(--mimir-brown);
+            font-weight: 600;
         }
         .dropdown-bottom {
             display: flex;
@@ -108,7 +153,7 @@
         .reset-btn {
             background: none;
             border: none;
-            color: #444;
+            color: var(--mimir-brown);
             font-size: 15px;
             cursor: pointer;
             display: flex;
@@ -134,19 +179,21 @@
             margin: 16px 0 24px 0;
         }
         .filter-tag {
-            background: #f2f4f7;
-            color: #333;
+            background: var(--mimir-brown-light);
+            color: var(--mimir-brown);
             border-radius: 16px;
+            border: 1.5px solid var(--mimir-brown);
             padding: 6px 16px;
             font-size: 14px;
             display: flex;
             align-items: center;
             gap: 6px;
+            font-weight: 600;
         }
         .filter-tag .remove {
             cursor: pointer;
             font-size: 16px;
-            color: #888;
+            color: #a68a6d;
         }
         .room-list {
             display: flex;
@@ -217,29 +264,32 @@
     </style>
 </head>
 <body>
-    <div class="filter-bar">
-        <div class="filter-select" id="roomTypeSelect">
-            <button class="filter-btn" type="button">
-                객실 타입
-                <img class="arrow-img" src="keyword_button_filter.svg" alt="화살표">
-            </button>
-            <div class="custom-dropdown">
-                <div class="dropdown-guide">2개 이상 선택 가능</div>
-                <div class="pill-options">
-                    <button class="pill-btn" data-value="그랜드 디럭스">그랜드 디럭스</button>
-                    <button class="pill-btn" data-value="프리미어">프리미어</button>
-                    <button class="pill-btn" data-value="시그니엘 프리미어">시그니엘 프리미어</button>
-                    <button class="pill-btn" data-value="스위트">스위트</button>
-                </div>
-                <div class="dropdown-bottom">
-                    <button class="reset-btn" type="button">
-                        <img src="keyword_button_filter.svg" alt="초기화"> 선택해제
-                    </button>
-                    <img class="dropdown-arrow" src="keyword_button_filter.svg" alt="화살표">
+    <div class="filtering-area">
+        <div class="fi-btn-area">
+            <div class="filter-select" id="roomTypeSelect">
+                <button class="filtering-btn" type="button">
+                    객실 타입<span class="count" style="display:none"></span>
+                    <img class="arrow-img" src="/filter/images/keyword_button_filter.svg" alt="화살표">
+                </button>
+                <div class="custom-dropdown">
+                    <div class="dropdown-guide">2개 이상 선택 가능</div>
+                    <div class="pill-options">
+                        <button class="pill-btn" data-value="그랜드 디럭스">그랜드 디럭스</button>
+                        <button class="pill-btn" data-value="프리미어">프리미어</button>
+                        <button class="pill-btn" data-value="시그니엘 프리미어">시그니엘 프리미어</button>
+                        <button class="pill-btn" data-value="스위트">스위트</button>
+                    </div>
+                    <div class="dropdown-bottom">
+                        <button class="reset-btn" type="button">
+                            <img src="/filter/images/ico_btn_refresh_small.png" alt="초기화"> 선택해제
+                        </button>
+                        <img class="dropdown-arrow" src="/filter/images/keyword_button_filter.svg" alt="화살표">
+                    </div>
                 </div>
             </div>
+            <button class="filtering-btn keyword" type="button">키워드</button>
+            <button class="filtering-btn reset" type="button" id="resetBtn"><img src="/filter/images/ico_btn_refresh_small.png" alt="초기화">초기화</button>
         </div>
-        <!-- 다른 필터 셀렉터도 동일하게 커스텀 박스 스타일로 추가 가능 -->
     </div>
     <div class="selected-filters" id="selectedFilters"></div>
     <div class="room-list">
@@ -269,7 +319,7 @@
     <script>
         // 셀렉터 토글 및 화살표 회전
         document.querySelectorAll('.filter-select').forEach(function(select) {
-            const btn = select.querySelector('.filter-btn');
+            const btn = select.querySelector('.filtering-btn');
             btn.addEventListener('click', function(e) {
                 document.querySelectorAll('.filter-select').forEach(function(other) {
                     if (other !== select) other.classList.remove('open');
@@ -302,6 +352,8 @@
                 }
                 updateSelectedFilters();
                 updatePillSelection();
+                updateFilterBtnStyle();
+                updateFilterBtnCount();
             });
         });
         function updatePillSelection() {
@@ -322,31 +374,63 @@
                 selectedFilters[key].forEach(function(val) {
                     const tag = document.createElement('div');
                     tag.className = 'filter-tag';
-                    tag.innerHTML = `${filterMap[key]}: ${val} <span class="remove">×</span>`;
+                    tag.innerHTML = `${filterMap[key]}: ${val} <span class=\"remove\">×</span>`;
                     tag.querySelector('.remove').onclick = function() {
                         selectedFilters[key] = selectedFilters[key].filter(v => v !== val);
                         if (selectedFilters[key].length === 0) delete selectedFilters[key];
                         updateSelectedFilters();
                         updatePillSelection();
+                        updateFilterBtnStyle();
+                        updateFilterBtnCount();
                     };
                     container.appendChild(tag);
                 });
             });
         }
         // 선택해제 버튼
-        document.querySelectorAll('.reset-btn').forEach(function(btn) {
-            btn.onclick = function() {
-                Object.keys(selectedFilters).forEach(function(key) { delete selectedFilters[key]; });
-                updateSelectedFilters();
-                updatePillSelection();
-            };
-        });
+        document.getElementById('resetBtn').onclick = function() {
+            Object.keys(selectedFilters).forEach(function(key) { delete selectedFilters[key]; });
+            updateSelectedFilters();
+            updatePillSelection();
+            updateFilterBtnStyle();
+            updateFilterBtnCount();
+        };
         // 드롭다운 하단 화살표 클릭 시 닫기
         document.querySelectorAll('.dropdown-arrow').forEach(function(arrow) {
             arrow.onclick = function() {
                 arrow.closest('.filter-select').classList.remove('open');
             };
         });
+        // 필터 버튼 스타일 동적 적용
+        function updateFilterBtnStyle() {
+            document.querySelectorAll('.filter-select').forEach(function(select) {
+                const btn = select.querySelector('.filtering-btn');
+                const selectId = select.id;
+                if (selectedFilters[selectId] && selectedFilters[selectId].length > 0) {
+                    btn.classList.add('selected');
+                } else {
+                    btn.classList.remove('selected');
+                }
+            });
+        }
+        // 필터 버튼 옆에 선택 개수 표시
+        function updateFilterBtnCount() {
+            document.querySelectorAll('.filter-select').forEach(function(select) {
+                const btn = select.querySelector('.filtering-btn');
+                const selectId = select.id;
+                const countSpan = btn.querySelector('.count');
+                if (selectedFilters[selectId] && selectedFilters[selectId].length > 0) {
+                    countSpan.textContent = selectedFilters[selectId].length;
+                    countSpan.style.display = '';
+                } else {
+                    countSpan.textContent = '';
+                    countSpan.style.display = 'none';
+                }
+            });
+        }
+        // 최초 로딩 시 스타일/카운트 적용
+        updateFilterBtnStyle();
+        updateFilterBtnCount();
     </script>
 </body>
 </html> 

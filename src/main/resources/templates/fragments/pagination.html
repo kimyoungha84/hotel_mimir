@@ -1,97 +1,118 @@
-<div th:fragment="pagination" id="paginationArea">
+<div th:fragment="pagination" id="paginationArea" style="min-height: 80px;">
     <style>
-        .pagination {
+        .mimir-pg-container {
             display: flex;
             justify-content: center;
-            gap: 15px;
-            list-style: none;
-            padding: 0;
+            align-items: center;
+            gap: 20px;
+            margin: 15px 0;
         }
-
-        .pagination li {
-            display: inline-block;
+        .mimir-pg-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .mimir-pg-btn {
             width: 40px;
             height: 40px;
-            text-align: center;
-            line-height: 40px;
-            border: 1px solid #ddd;
-            border-radius: 5px; /* 네모 형태 */
+            border-radius: 50%;
+            border: 1.5px solid #222;
+            background: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: background 0.18s, border 0.18s;
+            padding: 0;
+            position: relative;
         }
-        
-
-        .pagination li a {
-            text-decoration: none;
-            color: #333;
-            font-size: 16px;
-            display: block;
-            height: 100%;
-            width: 100%;
-            line-height: 40px;
-        }
-
-        .pagination li.active {
-            background-color: #000; /* 현재 페이지 하이라이트는 검은색 */
-            color: #fff; /* 폰트 색을 하얀색으로 변경 */
-            font-weight: bold;
-        }
-        
-        .pagination li.disabled {
-		  pointer-events: none;
-		  /* opacity: 0.5; */
-		}
-        
-
-        .pagination li.disabled a {
-            color: #ddd;
+        .mimir-pg-btn:disabled,
+        .mimir-pg-btn.mimir-pg-disabled {
+            opacity: 0.5;
             cursor: not-allowed;
+            background: #fff;
         }
-
-        .pagination li a:hover {
-            background-color: #f0f0f0;
+        .mimir-pg-btn img {
+            width: 18px;
+            height: 18px;
+            transition: filter 0.18s;
+        }
+        .mimir-pg-btn:not(:disabled):not(.mimir-pg-disabled):hover {
+            background: #111;
+            border: 1.5px solid #111;
+            transition: background 0.18s, border 0.18s;
+        }
+        .mimir-pg-btn:not(:disabled):not(.mimir-pg-disabled):hover img {
+            filter: brightness(0) invert(1);
+            /* 흰색으로 보이게 */
+            transition: filter 0.18s;
+        }
+        .mimir-pg-page {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: none;
+            background: transparent;
+            color: #222;
+            font-size: 17px;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 1px;
+            transition: background 0.18s, color 0.18s;
             cursor: pointer;
         }
-
-        .pagination li a:hover:not(.active) {
-            background-color: #ddd; /* hover 시 회색 배경 */
+        .mimir-pg-page.mimir-pg-active {
+            background: #111;
+            color: #fff;
+            border: none;
+        }
+        .mimir-pg-page:not(.mimir-pg-active):hover {
+            background: #e0e0e0;
+            border: none;
+            color: #222;
+            transition: background 0.18s;
         }
     </style>
-
-    <div class="pagination">
-        <ul>
-		    <!-- << 버튼 -->
-		    <li th:classappend="${currentPage == 1} ? 'disabled' : ''">
-		        <a href="#" th:onclick="|loadPage(1)|" th:text="'<<'"></a>
-		    </li>
-		
-		    <!-- < 버튼 -->
-		    <li th:classappend="${currentPage == 1} ? 'disabled' : ''">
-		        <a href="#" th:onclick="|loadPage(${currentPage - 1})|" th:text="'<'"></a>
-		    </li>
-		
-		    <!-- 페이지 번호 -->
-		    <li th:each="pageNum : ${#numbers.sequence(1, totalPages)}"
-		        th:classappend="${pageNum == currentPage} ? 'active' : ''">
-		        <a href="#" th:onclick="|loadPage(${pageNum})|" th:text="${pageNum}"></a>
-		    </li>
-		
-		    <!-- > 버튼 -->
-		    <li th:classappend="${currentPage == totalPages} ? 'disabled' : ''">
-		        <a href="#" th:onclick="|loadPage(${currentPage + 1})|" th:text="'>'"></a>
-		    </li>
-		
-		    <!-- >> 버튼 -->
-		    <li th:classappend="${currentPage == totalPages} ? 'disabled' : ''">
-		        <a href="#" th:onclick="|loadPage(${totalPages})|" th:text="'>>'"></a>
-		    </li>
-		</ul>
+    <div class="mimir-pg-container">
+        <div class="mimir-pg-group">
+            <!-- 처음으로 -->
+            <button type="button" class="mimir-pg-btn" th:classappend="${currentPage == 1} ? 'mimir-pg-disabled' : ''" th:disabled="${currentPage == 1}" th:onclick="|loadPage(1)|">
+                <img th:src="${currentPage == 1} ? '/pagination/images/firstPage_disable.svg' : '/pagination/images/firstPage_enable.svg'" alt="처음">
+            </button>
+            <!-- 이전 -->
+            <button type="button" class="mimir-pg-btn" th:classappend="${currentPage == 1} ? 'mimir-pg-disabled' : ''" th:disabled="${currentPage == 1}" th:onclick="|loadPage(${currentPage - 1})|">
+                <img th:src="${currentPage == 1} ? '/pagination/images/prevPage_disable.svg' : '/pagination/images/prevPage_enable.svg'" alt="이전">
+            </button>
+        </div>
+        <div class="mimir-pg-group">
+            <!-- 페이지 번호 동적 생성 -->
+            <th:block th:each="pageNum : ${#numbers.sequence(1, totalPages)}">
+                <button type="button"
+                        class="mimir-pg-page"
+                        th:classappend="${pageNum == currentPage} ? 'mimir-pg-active' : ''"
+                        th:onclick="|loadPage(${pageNum})|"
+                        th:text="${pageNum}">
+                    1
+                </button>
+            </th:block>
+        </div>
+        <div class="mimir-pg-group">
+            <!-- 다음 -->
+            <button type="button" class="mimir-pg-btn" th:classappend="${currentPage == totalPages} ? 'mimir-pg-disabled' : ''" th:disabled="${currentPage == totalPages}" th:onclick="|loadPage(${currentPage + 1})|">
+                <img th:src="${currentPage == totalPages} ? '/pagination/images/nextPage_disable.svg' : '/pagination/images/nextPage_enable.svg'" alt="다음">
+            </button>
+            <!-- 마지막으로 -->
+            <button type="button" class="mimir-pg-btn" th:classappend="${currentPage == totalPages} ? 'mimir-pg-disabled' : ''" th:disabled="${currentPage == totalPages}" th:onclick="|loadPage(${totalPages})|">
+                <img th:src="${currentPage == totalPages} ? '/pagination/images/lastPage_disable.svg' : '/pagination/images/lastPage_enable.svg'" alt="마지막">
+            </button>
+        </div>
     </div>
     <div id="pagination-config">
-    <input type="hidden" name="pageSize" th:value="${pageSize}" />
-    <input type="hidden" name="filterType" th:value="${filterType}" />
-	</div>
-	
-	<!-- filterType만 필요, fragment 관련 JS 변수 제거 -->
-	
+        <input type="hidden" name="pageSize" th:value="${pageSize}" />
+        <input type="hidden" name="filterType" th:value="${filterType}" />
+    </div>
 </div>
 
 

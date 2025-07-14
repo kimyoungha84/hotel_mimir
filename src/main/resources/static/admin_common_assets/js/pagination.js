@@ -49,7 +49,10 @@ window.loadPage = function (pageNum) {
                     fetch('/reBuildPagination?' + baseParams.toString())
                         .then(res => res.text())
                         .then(paginationHtml => {
-                            document.getElementById("paginationArea").innerHTML = paginationHtml;
+                            const pgArea = document.getElementById("paginationArea");
+                            if (pgArea) {
+                                pgArea.outerHTML = paginationHtml;
+                            }
                         });
                 });
         });

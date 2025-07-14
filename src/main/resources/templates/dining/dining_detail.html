@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<style>
+body{
+margin: 0px;
+}
+
+
+.north-tab{
+height : 32px;
+margin-left: 250px;
+color: white;
+}
+
+.ico {
+    display: inline-block;
+    vertical-align: middle;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 100% 100%;
+}
+
+.ico-breadcrumb-home {
+    width: 1.5rem;
+    height: 1.5rem;
+    background-image: url('home_img.svg');
+    color: white;
+}
+
+.main-img{
+	position: fixed;
+    overflow: hidden;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    max-height: 800px;
+
+}
+
+.main-img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: brightness(70%);
+}
+
+.main-img-txt-area{
+	font-size: 60px;
+	color: white;
+	text-align: center;
+	margin-top: 300px;
+	font-weight: 500;
+}
+
+.content{
+	display: -webkit-box;
+    display: -webkit-flex;
+    display: flex;
+    -webkit-box-align: center;
+    -webkit-align-items: center;
+    align-items: center;
+    max-width: 140rem;
+    margin-top: 150px;
+    background-color: white;
+    flex-direction: column; /* 수직으로 배치 */
+    
+
+}
+.category-wrap{
+    display: flex;
+    -webkit-box-align: center;
+    align-items: center;
+    max-width: 140rem;
+    margin-right: 300px;
+    padding: 0rem 0rem;
+
+}
+.category-img {
+	position: relative;
+	align-items: center;
+    width: 25.8rem;
+    height: 14.5rem;
+    overflow: hidden;
+    margin-right: auto;
+
+}
+.category-img > img {
+	position: absolute;
+    top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+    width: 70%;
+    height: 70%;
+    object-fit: contain;
+
+}
+
+.di-info-wrap{
+
+margin-top: 50px;
+display: flex;
+width: 70%;
+
+}
+
+.di-info-header{
+margin-right: auto;
+
+
+}
+
+.di-info-header-tit{
+
+text-align: start;
+
+
+}
+
+.info-list{
+  width: 100%;
+  margin-top: auto;
+  margin-bottom: auto;
+  padding: 2rem 0rem;
+  border-bottom: 1px solid #333;
+
+}
+
+.list-row{
+padding: 4rem 0rem;
+border-bottom: 1px solid #dddddd;
+
+}
+
+.info-row{
+display: flex;
+
+}
+
+.info-list-wrap{
+width:70%;
+border-top: 2px solid #333;
+}
+
+.list-col-1{
+width: 30%;
+}
+
+.list-col-2{
+}
+
+
+.menu-wrap{
+
+margin-top: 100px;
+width: 70%;
+margin-left: auto;
+margin-right: auto;
+
+
+}
+
+.menu-list-wrap{
+
+width: 100%;
+border-top : 2px solid #333;
+
+
+}
+
+.menu-list{
+  width: 100%;
+  margin-top: auto;
+  margin-bottom: auto;
+  padding: 2rem 0rem;
+  border-bottom: 1px solid #333;
+
+}
+
+.gallery-wrap{
+	margin-top: 130px;
+	width: 70%;
+	margin-left: auto;
+	margin-right: auto;
+
+}
+
+.gallery-con{
+	width: 70%;
+	margin-left: 400px;
+
+
+}
+
+.gallery-con img{
+width: 100%;         /* 이미지가 부모 카드의 너비에 맞게 크기 조정 */
+  height: 100%;        /* 이미지가 부모 카드의 높이에 맞게 크기 조정 */
+  object-fit: cover;   /* 부모 요소를 덮도록 이미지 크기 조정 (비율 유지) */
+  transform-origin: center center;
+}
+
+
+</style>
+</head>
+<body>
+<div id="container">
+<main id="content">
+<div class="north-tab">
+<i class="ico ico-breadcrumb-home" aria-hidden="true"></i>
+<span>  >  다이닝  > <span>스테이,모던 레스토랑</span></span> 
+</div>
+
+
+
+<div class="main-img">
+<img alt="시그니엘 서울 - 다이닝 - 시그니엘 서울, 스테이, 모던 레스토랑 - 스테이, 모던 레스토랑" aria-label="시그니엘 서울, 스테이, 모던 레스토랑" src="https://img.lottehotel.com/cms/asset/2025/01/31/430/180708-40-2000-din-seoul-signiel.webp" loading="lazy">
+</div>
+<div class="main-img-txt-area">
+스테이, 모던 레스토랑
+</div>
+<div class="content">
+    <div class="category-wrap">
+        <div class="category-img">
+            <img alt="시그니엘 서울 - 다이닝" aria-hidden="true" src="https://img.lottehotel.com/cms/asset/2025/04/14/26017/img-logo-stay.png" loading="lazy">
+        </div>
+        <div class="category-copy">
+            <p class="txt01">시그니엘 서울 STAY에서 미쉐린 3스타 셰프 야닉 알레노의 특별한 프랑스 요리를 경험해 보시기 바랍니다.</p>
+        </div>
+    </div> 
+
+    <div class="di-info-wrap">
+        <div class="di-info-header">
+            <h1 class="di-info-header-tit">다이닝 정보</h1>
+        </div>
+        <div class="info-list-wrap">
+        
+        <div class="info-list">
+        <div class="info-row">
+        <div class="list-col-1">
+        타입
+        </div>
+        <div class="list-col-2">
+        프렌치
+        </div>
+        </div>
+        </div>
+        <div class="info-list">
+        <div class="info-row">
+        <div class="list-col-1">
+        타입
+        </div>
+        <div class="list-col-2">
+        프렌치
+        </div>
+        </div>
+        </div>
+        <div class="info-list">
+        <div class="info-row">
+        <div class="list-col-1">
+        타입
+        </div>
+        <div class="list-col-2">
+        프렌치
+        </div>
+        </div>
+        </div>
+        <div class="info-list">
+        <div class="info-row">
+        <div class="list-col-1">
+        타입
+        </div>
+        <div class="list-col-2">
+        프렌치
+        </div>
+        </div>
+        </div>
+        </div>
+    </div> 
+    
+    <div class="menu-wrap">
+    <h1>대표메뉴</h1>
+    <div class="menu-list-wrap">
+    <div class="menu-list">
+    <div class="info-row">
+    <div class="list-col-1">
+        타입
+    </div>
+    <div class="list-col-2">
+        프렌치
+    </div>
+    </div>
+    </div>
+    <div class="menu-list">
+    <div class="info-row">
+    <div class="list-col-1">
+        타입
+    </div>
+    <div class="list-col-2">
+        프렌치
+    </div>
+    </div>
+    </div>
+    <div class="menu-list">
+    <div class="info-row">
+    <div class="list-col-1">
+        타입
+    </div>
+    <div class="list-col-2">
+        프렌치
+    </div>
+    </div>
+    </div>
+    <div class="menu-list">
+    <div class="info-row">
+    <div class="list-col-1">
+        타입
+    </div>
+    <div class="list-col-2">
+        프렌치
+    </div>
+    </div>
+    </div>
+    
+    
+    
+    </div>
+    
+    </div>
+    
+    <div class="gallery-wrap">
+    <h1>갤러리</h1>
+    
+    
+    <div class="gallery-con">
+    <img alt="시그니엘 서울 - 다이닝 - 시그니엘 서울, 스테이, 모던 레스토랑 - 스테이, 모던 레스토랑" aria-label="시그니엘 서울, 스테이, 모던 레스토랑" src="https://img.lottehotel.com/cms/asset/2025/01/31/433/180708-43-2000-din-seoul-signiel.webp" loading="lazy">
+    
+    </div>
+    
+    
+    </div>
+</div> 
+
+
+</main>
+</div>
+</body>
+</html>

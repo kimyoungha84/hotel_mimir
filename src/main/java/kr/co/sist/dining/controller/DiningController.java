@@ -50,4 +50,15 @@ public class DiningController {
 	public String diningMain(Model model) {
 		return "dining/dining_main";
 	}
+	
+	@GetMapping("/user/dining_detail")
+	public String diningDetail(Model model) {
+		return "dining/dining_detail";
+	}
+	
+	@GetMapping("/user/user_filter")
+	public String userFilter(Model model) {
+		return "room/user_room_search_prototype";
+	}
+	
 }
