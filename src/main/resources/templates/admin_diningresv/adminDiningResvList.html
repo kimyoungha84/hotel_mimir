@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns="http://www.thymeleaf.org">
+<head>
+<!-- favicon 설정 -->
+<link rel="icon shortcut"  href="/admin_common_assets/common_img/mimir_favicon.ico"/>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<!-- jquery CDN -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+
+<th:block th:replace="~{/administrator/fragments/admin_header :: admin_header}"></th:block>
+
+</head>
+<body>
+<th:block th:replace="~{/administrator/fragments/admin_sidebar :: admin_sidebar}"></th:block>
+
+<div id="body-pd" class="body-pd">
+<h2 class="h2Title">다이닝 예약 관리</h2>
+<hr/>
+
+  <table class="reservation-table" border="1" cellspacing="0" cellpadding="8" style="width:100%; text-align:center;">
+    <thead>
+      <tr>
+        <th>예약번호</th>
+        <th>예약자명</th>
+        <th>다이닝 이름</th>
+        <th>예약 날짜</th>
+        <th>예약 상태</th>
+      </tr>
+    </thead>
+  <tbody>
+    <tr th:each="resv : ${reservationList}">
+      <td th:text="${resv.reservationId}">예약번호</td>
+      <td th:text="${resv.reservationName != null ? resv.reservationName : resv.nonMemName}">예약자명</td>
+      <td th:text="${resv.diningName}">다이닝 이름</td>
+      <td th:text="${#dates.format(resv.reservationDate, 'yyyy-MM-dd')}">예약 날짜</td>
+      <td th:text="${resv.reservationStatus}">예약 상태</td>
+    </tr>
+  </tbody>
+  </table>
+</div>
+
+</body>
+</html>

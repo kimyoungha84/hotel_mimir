@@ -1,14 +1,17 @@
-package kr.co.sist.diningresv;
+package kr.co.sist.admin.diningresv;
 
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import kr.co.sist.diningresv.DiningResvDTO;
+import kr.co.sist.diningresv.DiningResvMapper;
+
 @Service
-public class DiningResvService {
+public class AdminDiningResvService {
 	
-	@Autowired(required = false)
+	@Autowired
 	private DiningResvMapper drm;
 	
 	public List<DiningResvDTO> selectAllResv() {

@@ -1,14 +1,10 @@
 package kr.co.sist.diningresv;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 
 @Controller
 public class DiningResvController {
-
-    @Autowired(required = false)
-    private DiningResvService drs;
 	
     @GetMapping("diningResv")
     public String diningResv() {
