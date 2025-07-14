@@ -23,9 +23,10 @@ $("#startChatBtn").click(function() {
 });
 
 // WebSocket 객찰
-const urlParams = new URLSearchParams(location.search);
-const userId = urlParams.get("userId");  // 예: user1
-const ws = new WebSocket("ws://192.168.10.78:8080/chat?userId=" + userId);
+//const urlParams = new URLSearchParams(location.search);
+//const userId = urlParams.get("userId");  // 예: user1
+let userNum = 21; // 하드코딩 또는 서버에서 넘겨받기
+const ws = new WebSocket("ws://192.168.10.78:8080/chat?userId=" + userNum);
 
 // 메시지 수신 처리
 ws.onmessage = function(event) {
