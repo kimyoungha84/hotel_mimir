@@ -25,7 +25,7 @@ public class AdminService {
 		boolean flag=false;
 		//현재 사용자가 입력한 아이디와 비밀번호가 맞는지 check
 		String resultPass=am.selectEmployeeLogin(id);
-		System.out.println("resultPass------------"+resultPass);
+		//System.out.println("resultPass------------"+resultPass);
 		
 		
 		if(pass.equals(resultPass)) {
@@ -94,11 +94,11 @@ public class AdminService {
 			}//end while -- loopFlag
 			
 			sb.append(pre_idStr).append(randNumStr);
-			System.out.println("id===================="+sb.toString());
+//			System.out.println("id===================="+sb.toString());
 			id=sb.toString();
 			
 			resInt=am.selectCheckExistId(id);
-			System.out.println("resInt==================="+resInt);
+//			System.out.println("resInt==================="+resInt);
 			
 			if(resInt != 0) {
 				//같은 id가 존재!

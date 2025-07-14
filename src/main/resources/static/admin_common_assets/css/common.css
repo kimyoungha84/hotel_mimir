@@ -67,6 +67,16 @@ table tr:hover{
     max-width:700px; /*최대 너비 제한   */
     margin: 0 auto; /* 가운데 정렬 */
     margin-top:5rem; /*표와 hr 사이의 간격*/
+    font-size:1.2rem;
+}
+
+.vertical-table select{
+    font-size:1.2rem;
+}
+
+
+.vertical-table input{
+    font-size:1.2rem;
 }
 
 .vertical-table th {
@@ -79,21 +89,23 @@ table tr:hover{
 
 .vertical-table td {
     text-align: left;
-    padding: 10px 8px;
+    padding: 20px 8px;
     text-align: center;
+
 }
 
-.vertical-table tr:hover{
+.vertical-table tr:hover, .vertical-table td:hover{
     background-color: transparent;
     cursor: default;
 }
 
 .btnGroup{
     position: absolute;
-    right: 0;  /* 버튼을 부모 요소의 오른쪽 끝에 배치 */
     margin-top: 2rem;
     display: flex;
-    gap: 1rem;
+    gap: 1rem; 
+    width: calc(100%-(100% -43.75rem));
+    justify-content: flex-end;
 }
 
 
@@ -101,14 +113,41 @@ table tr:hover{
     background-color: #C89FA3;
     color: black;
     border: 1px solid #ccc;
-    width: 120px;
-    height: 56px;
 }
 
 .softBtn {
     background-color: #F3ECE7;
     color: black;
     border: 1px solid #ccc;
+}
+
+.darkBtn, .softBtn{
     width: 120px;
     height: 56px;
+    font-size:1.5rem;
+    
+}
+
+/* Hover 상태 */
+.darkBtn:hover {
+    background-color: #A68A8A;  /* 호버 시 배경색 변경 */
+    color: white;                /* 호버 시 글씨 색 변경 */
+    cursor: pointer;            /* 커서 포인터로 변경 */
+}
+.softBtn:hover{
+    background-color: #B0B0B0 ;
+    color: white;                /* 호버 시 글씨 색 변경 */
+    cursor: pointer;  
+}
+
+
+/* Active 상태 (클릭 시) */
+.darkBtn:active {
+    background-color: #8A6D6D;  /* 클릭 시 배경색 변경 */
+    transform: scale(0.98);      /* 클릭 시 살짝 눌린 느낌 */
+}
+
+.softBtn:active{
+    background-color: #636363 ;  /* 클릭 시 배경색 변경 */
+    transform: scale(0.98);      /* 클릭 시 살짝 눌린 느낌 */
 }

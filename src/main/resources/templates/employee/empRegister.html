@@ -45,6 +45,7 @@
     <th>부서</th>
     <td>
         <select id="dept">
+        <option th:value="disable" th:text="-----선택-----" disabled selected></option>
         <option v-for="dept in this.depts" :value="dept.dept_iden" :key="dept.dept_iden">{{dept.dept_name}}</option>
         </select>
     </td>
@@ -53,6 +54,7 @@
     <th>직책</th>
     <td>
         <select id="position">
+        <option th:value="disable" th:text="---선택---" disabled selected></option>
         <option v-for="position in this.positions" :value="position.position_iden_code" :key="position.position_iden_code">{{position.position_name}}</option>
         </select>
     </td>
@@ -61,6 +63,7 @@
     <th>권한</th>
     <td>
     <select id="authority">
+    <option th:value="disable" th:text="---선택---" disabled selected></option>
     <option v-for="authority in this.authorities" :value="authority.permission_id" :key="authority.permission_id">{{authority.permission_type}}</option>
     </select>
     </td>

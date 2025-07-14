@@ -19,7 +19,7 @@ public class AdminInterceptor implements HandlerInterceptor{
 		HttpSession session=request.getSession(false);//기존에 session이 없으면 null 출력
 		
 		if(session == null || session.getAttribute("session_id") == null) {
-			System.out.println("----------------------------AdminInterceptor 수정--------------------------------------------");
+//			System.out.println("----------------------------AdminInterceptor 수정--------------------------------------------");
 			//세션아이디가 없으니까, 로그인 페이지로 이동
 			response.sendRedirect("/admin/login"); 
 		}else {

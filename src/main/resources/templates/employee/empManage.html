@@ -19,6 +19,78 @@
 
 <script src="/admin_common_assets/js/pagination.js"></script>
 
+<script type="text/javascript">
+$(function(){
+        //부서
+    var deptMapping={
+        "room":"객실 관리",
+        "dinning":"다이닝 관리",
+        "inquiry":"문의 관리",
+        "person":"인사 관리",
+        "member":"회원 관리",
+        "manage":"경영지원실"
+    };
+    //직책
+    var positionMapping={
+        "A" : "대표",
+        "B" : "팀장",
+        "C" : "과장",
+        "D" : "대리",
+        "E" : "사원"
+    }
+    //권한
+    var permissionMapping={
+        "room" : "객실",
+        "dinning" : "다이닝",
+        "inquiry" : "문의",
+        "member" : "회원",
+        "employee":"직원",
+        "admin":"관리자"
+    }
+    //상태
+    var statusMapping={
+        "activate" : "재직",
+        "deactivate" : "퇴사"
+    }
+
+    //MutationObserver 생성
+    var observer=new MutationObserver(function(mutationsList){
+        mutationsList.forEach(function(mutation){
+            //자식 node일 경우에만 처리
+            if(mutation.type === 'childList'){
+                //노드가 추가되는 경우
+                $(mutation.addedNodes).each(function(){
+                    if($(this).is('tr')){
+                        /*tr이면....*/
+                        //0 부터 index 시작
+                        //${staff.dept_iden}
+                        $(this).find('td').eq(3).each(function(){
+                            var deptCode=this.val;
+                            debugger;
+                            alert(deptCode);
+                        });
+                    }//end if
+                });
+            }//end if
+
+        });
+    });//observer
+
+
+   // MutationObserver 대상 설정
+    var config = { childList: true, subtree: true };
+    observer.observe(document.getElementById('resultArea'), config);
+
+    // 초기 렌더링된 tr 요소들에 대해서도 deptCode 출력
+    $('#resultArea tr').each(function() {
+        $(this).find('td').eq(3).each(function(){
+            var deptCode = $(this).text();
+            alert(deptCode); // 부서 코드 출력
+        });
+    });
+
+});//ready
+</script>
 </head>
 <body>
 <th:block th:replace="~{/administrator/fragments/admin_sidebar :: admin_sidebar}"></th:block>
@@ -32,34 +104,37 @@
     </div>
 
     <div th:replace="fragments/filter :: filter(${filter})"></div>
-    <div class="table-wrapper">
-        
-        <table>
-        <thead>
-            <tr>
-                <th>번호</th>
-                <th>아이디</th>
-                <th>이름</th>
-                <th>부서</th>
-                <th>직책</th>
-                <th>권한</th>
-                <th>상태</th>
-            </tr>
-        </thead>
-        <tbody th:fragment="staff_list_fm" id="resultArea" >
-            <tr th:each="staff, stat : ${staffList}">
-                <td th:text="${stat.count}"></td>
-                <td th:text="${staff.staff_id}"></td>
-                <td th:text="${staff.staff_name}"></td>
-                <td th:text="${staff.dept_iden}"></td>
-                <td th:text="${staff.position_identified_code}"></td>
-                <td th:text="${staff.permission_ids}"></td>
-                <td th:text="${staff.staff_status}"></td>
-            </tr>
-        </tbody>
-        </table>
-        <div th:replace="fragments/pagination :: pagination"></div>
+    
+    <div class="table-wrapper" id="app">    
+    <table>
+    <thead>
+        <tr>
+            <th>번호</th>
+            <th>아이디</th>
+            <th>이름</th>
+            <th>부서</th>
+            <th>직책</th>
+            <th>권한</th>
+            <th>상태</th>
+        </tr>
+    </thead>
+    <tbody th:fragment="staff_list_fm" id="resultArea" >
+        <tr th:each="staff, stat : ${staffList}">
+            <td th:value="${stat.count}"></td>
+            <td th:value="${staff.staff_id}"></td>
+            <td th:value="${staff.staff_name}"></td>
+            <td th:value="${staff.dept_iden}"></td>
+            <td th:value="${staff.position_identified_code}"></td>
+            <td th:value="${staff.permission_ids}"></td>
+            <td th:value="${staff.staff_status}"></td>
+        </tr>
+    </tbody>
+    </table>
+    <div th:replace="fragments/pagination :: pagination"></div>
     </div>
+    
 </div>
+
+
 </body>
 </html>
