@@ -323,7 +323,8 @@ $(function(){
 
 
 <div class="filtering-area">
-<div class="fi-btn-area">
+<div th:replace="~{fragments/filter_user :: filter_user(${filter})}"></div>
+<!-- <div class="fi-btn-area">
 <button class="filtering-btn keyword">키워드</button>
 <button class="filtering-btn">
 <i aria-hidden="true" class="ico ico-btn-refresh-small"></i>
@@ -333,7 +334,7 @@ $(function(){
 <input type="text" placeholder="검색어를 입력하세요" aria-label="검색어">
 <button class="btn-input-search" type="button" data-init="true"><i aria-hidden="true" class="ico ico-input-search"></i></button>
 
-</div>
+</div> -->
 </div>
 
 <div class="di-list-container">

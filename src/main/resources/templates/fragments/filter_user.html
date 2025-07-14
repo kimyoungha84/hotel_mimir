@@ -1,0 +1,388 @@
+<div th:fragment="filter_user(filter)">
+  <style>
+    :root {
+      --mimir-brown: #a68a6d;
+      --mimir-brown-light: #f7f3ef;
+    }
+    .filtering-area {
+      height: 60px;
+      display: flex;
+      margin-bottom: 30px;
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+    .fi-btn-area {
+      display: flex;
+      gap: 4px;
+    }
+    .filtering-btn {
+      width: auto;
+      min-width: 110px;
+      height: 45px;
+      background: none;
+      border: 1.5px solid #222;
+      color: #222;
+      font-weight: 600;
+      font-size: 16px;
+      border-radius: 24px;
+      cursor: pointer;
+      margin-right: 0.2rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0 22px;
+      transition: background 0.18s, color 0.18s, border 0.18s;
+      position: relative;
+    }
+    .filtering-btn.selected {
+      background: var(--mimir-brown-light);
+      color: var(--mimir-brown);
+      border: 1.5px solid var(--mimir-brown);
+    }
+    .filtering-btn .count {
+      margin-left: 7px;
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--mimir-brown);
+    }
+    .filtering-btn.reset {
+      color: #222;
+      border: 1.5px solid #222;
+      background: none;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+    }
+    .filtering-btn.reset img {
+      width: 18px;
+      height: 18px;
+      margin-right: 5px;
+    }
+    .filter-select {
+      position: relative;
+      min-width: 140px;
+    }
+    .arrow-img {
+      width: 18px;
+      height: 18px;
+      transition: transform 0.3s;
+      margin-left: 7px;
+    }
+    .filter-select.open .arrow-img {
+      transform: rotate(180deg);
+    }
+    .custom-dropdown {
+      display: block;
+      position: absolute;
+      left: 0;
+      top: 48px;
+      width: 340px;
+      background: #fff;
+      border: 1px solid #ddd;
+      border-radius: 16px;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.07);
+      z-index: 10;
+      padding: 24px 24px 12px 24px;
+      opacity: 0;
+      pointer-events: none;
+      transform: translateY(-10px);
+      transition: opacity 0.3s, transform 0.3s;
+    }
+    .filter-select.open .custom-dropdown {
+      opacity: 1;
+      pointer-events: auto;
+      transform: translateY(0);
+    }
+    .dropdown-guide {
+      font-size: 14px;
+      color: #888;
+      margin-bottom: 18px;
+    }
+    .pill-options {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-bottom: 18px;
+    }
+    .pill-btn {
+      border: 1.5px solid var(--mimir-brown);
+      background: #fff;
+      color: var(--mimir-brown);
+      border-radius: 20px;
+      padding: 8px 22px;
+      font-size: 15px;
+      cursor: pointer;
+      transition: all 0.18s;
+    }
+    .pill-btn.selected {
+      background: var(--mimir-brown-light);
+      color: var(--mimir-brown);
+      border: 1.5px solid var(--mimir-brown);
+      font-weight: 600;
+    }
+    .dropdown-bottom {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-top: 1px solid #eee;
+      padding-top: 10px;
+      margin-top: 8px;
+    }
+    .reset-btn {
+      background: none;
+      border: none;
+      color: var(--mimir-brown);
+      font-size: 15px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .reset-btn img {
+      width: 18px;
+      height: 18px;
+    }
+    .dropdown-arrow {
+      width: 22px;
+      height: 22px;
+      transition: transform 0.3s;
+    }
+    .filter-select.open .dropdown-arrow {
+      transform: rotate(180deg);
+    }
+    .selected-filters {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin: 0 0 12px 0;
+    }
+    .filter-tag {
+      background: var(--mimir-brown-light);
+      color: var(--mimir-brown);
+      border-radius: 16px;
+      border: 1.5px solid var(--mimir-brown);
+      padding: 6px 16px;
+      font-size: 14px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-weight: 600;
+    }
+    .filter-tag .remove {
+      cursor: pointer;
+      font-size: 16px;
+      color: #a68a6d;
+    }
+    .input-search-area {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .user-filter-input {
+      width: 200px;
+      height: 40px;
+      font-size: 15px;
+      border: 1.5px solid #ddd;
+      border-radius: 8px;
+      padding: 0 14px;
+      outline: none;
+      transition: border 0.18s;
+    }
+    .user-filter-input:focus {
+      border: 1.5px solid var(--mimir-brown);
+    }
+    .user-search-btn {
+      height: 40px;
+      min-width: 80px;
+      border-radius: 8px;
+      border: 1.5px solid #222;
+      background: #222;
+      color: #fff;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.18s, color 0.18s;
+    }
+    .user-search-btn:hover {
+      background: var(--mimir-brown);
+      color: #fff;
+      border: 1.5px solid var(--mimir-brown);
+    }
+  </style>
+  
+  <form id="userSearchForm" onsubmit="return false;">
+    <div class="filtering-area">
+      <div class="fi-btn-area">
+        <!-- FilterConfig의 labelSelectorOptions 기반 동적 필터 생성 -->
+        <div th:if="${filter.labelSelectorOptions != null and #lists.size(filter.labelSelectorOptions) > 0}">
+          <div th:each="selector : ${filter.labelSelectorOptions}" class="filter-select" th:id="${selector.selectorName + 'Select'}">
+            <button class="filtering-btn" type="button">
+              <span th:text="${selector.label}"></span>
+              <span class="count" style="display:none"></span>
+              <img class="arrow-img" src="/filter/images/keyword_button_filter.svg" alt="화살표">
+            </button>
+            <div class="custom-dropdown">
+              <div class="dropdown-guide">2개 이상 선택 가능</div>
+              <div class="pill-options">
+                <button class="pill-btn"
+                        th:each="item : ${selector.options}"
+                        th:data-value="${item.searchValue}"
+                        th:text="${item.label}"></button>
+              </div>
+              <!-- 선택된 필터 태그를 셀렉터별로 표시 -->
+              <div class="selected-filters" th:attr="id='selectedFilters-' + ${selector.selectorName}"></div>
+              <div class="dropdown-bottom">
+                <button class="reset-btn" type="button">
+                  <img src="/filter/images/ico_btn_refresh_small.png" alt="초기화"> 선택해제
+                </button>
+                <img class="dropdown-arrow" src="/filter/images/keyword_button_filter.svg" alt="화살표">
+              </div>
+            </div>
+          </div>
+        </div>
+        <button class="filtering-btn reset" type="button" id="resetBtn"><img src="/filter/images/ico_btn_refresh_small.png" alt="초기화">초기화</button>
+      </div>
+      <!-- 텍스트 검색 옵션 -->
+      <div class="input-search-area" th:if="${filter.showSearchText}">
+        <input type="text" class="user-filter-input" name="searchKeyword" placeholder="검색어 입력">
+        <button class="user-search-btn" type="button" id="userSearchBtn">검색</button>
+      </div>
+    </div>
+  </form>
+
+  <script>
+    // 셀렉터 토글 및 화살표 회전
+    document.querySelectorAll('.filter-select').forEach(function(select) {
+      const btn = select.querySelector('.filtering-btn');
+      btn.addEventListener('click', function(e) {
+        document.querySelectorAll('.filter-select').forEach(function(other) {
+          if (other !== select) other.classList.remove('open');
+        });
+        select.classList.toggle('open');
+      });
+    });
+    
+    // 바깥 클릭 시 닫기
+    document.addEventListener('click', function(e) {
+      if (!e.target.closest('.filter-select')) {
+        document.querySelectorAll('.filter-select').forEach(function(select) {
+          select.classList.remove('open');
+        });
+      }
+    });
+    
+    // pill 버튼 선택/해제 및 태그 표시
+    const selectedFilters = {};
+    const filterMap = {};
+    
+    // FilterConfig 기반으로 filterMap 동적 생성
+    document.querySelectorAll('.filter-select').forEach(function(select) {
+      const btn = select.querySelector('.filtering-btn');
+      const label = btn.querySelector('span').textContent;
+      filterMap[select.id] = label;
+    });
+    
+    document.querySelectorAll('.pill-btn').forEach(function(btn) {
+      btn.addEventListener('click', function(e) {
+        const selectId = btn.closest('.filter-select').id;
+        const value = btn.dataset.value;
+        if (!selectedFilters[selectId]) selectedFilters[selectId] = [];
+        if (selectedFilters[selectId].includes(value)) {
+          selectedFilters[selectId] = selectedFilters[selectId].filter(v => v !== value);
+        } else {
+          selectedFilters[selectId].push(value);
+        }
+        updateSelectedFilters();
+        updatePillSelection();
+        updateFilterBtnStyle();
+        updateFilterBtnCount();
+      });
+    });
+    
+    function updatePillSelection() {
+      document.querySelectorAll('.pill-btn').forEach(function(btn) {
+        const selectId = btn.closest('.filter-select').id;
+        const value = btn.dataset.value;
+        if (selectedFilters[selectId] && selectedFilters[selectId].includes(value)) {
+          btn.classList.add('selected');
+        } else {
+          btn.classList.remove('selected');
+        }
+      });
+    }
+    
+    // 셀렉터별로 선택된 필터 태그를 해당 위치에만 렌더링
+    function updateSelectedFilters() {
+      Object.keys(selectedFilters).forEach(function(key) {
+        const container = document.getElementById('selectedFilters-' + key.replace('Select', ''));
+        if (!container) return;
+        container.innerHTML = '';
+        selectedFilters[key].forEach(function(val) {
+          const tag = document.createElement('div');
+          tag.className = 'filter-tag';
+          tag.innerHTML = `${filterMap[key]}: ${val} <span class="remove">×</span>`;
+          tag.querySelector('.remove').onclick = function() {
+            selectedFilters[key] = selectedFilters[key].filter(v => v !== val);
+            if (selectedFilters[key].length === 0) delete selectedFilters[key];
+            updateSelectedFilters();
+            updatePillSelection();
+            updateFilterBtnStyle();
+            updateFilterBtnCount();
+          };
+          container.appendChild(tag);
+        });
+      });
+    }
+    
+    // 선택해제 버튼
+    document.getElementById('resetBtn').onclick = function() {
+      Object.keys(selectedFilters).forEach(function(key) { delete selectedFilters[key]; });
+      updateSelectedFilters();
+      updatePillSelection();
+      updateFilterBtnStyle();
+      updateFilterBtnCount();
+    };
+    
+    // 드롭다운 하단 화살표 클릭 시 닫기
+    document.querySelectorAll('.dropdown-arrow').forEach(function(arrow) {
+      arrow.onclick = function() {
+        arrow.closest('.filter-select').classList.remove('open');
+      };
+    });
+    
+    // 필터 버튼 스타일 동적 적용
+    function updateFilterBtnStyle() {
+      document.querySelectorAll('.filter-select').forEach(function(select) {
+        const btn = select.querySelector('.filtering-btn');
+        const selectId = select.id;
+        if (selectedFilters[selectId] && selectedFilters[selectId].length > 0) {
+          btn.classList.add('selected');
+        } else {
+          btn.classList.remove('selected');
+        }
+      });
+    }
+    
+    // 필터 버튼 옆에 선택 개수 표시
+    function updateFilterBtnCount() {
+      document.querySelectorAll('.filter-select').forEach(function(select) {
+        const btn = select.querySelector('.filtering-btn');
+        const selectId = select.id;
+        const countSpan = btn.querySelector('.count');
+        if (selectedFilters[selectId] && selectedFilters[selectId].length > 0) {
+          countSpan.textContent = selectedFilters[selectId].length;
+          countSpan.style.display = '';
+        } else {
+          countSpan.textContent = '';
+          countSpan.style.display = 'none';
+        }
+      });
+    }
+    
+    // 최초 로딩 시 스타일/카운트 적용
+    updateFilterBtnStyle();
+    updateFilterBtnCount();
+  </script>
+</div> 

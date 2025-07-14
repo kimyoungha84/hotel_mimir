@@ -35,5 +35,11 @@ public class SearchDataDomain {
 	private String permission_ids; 
 	private String staff_status;
 	
+	//DINING_RESV
+	private int reservation_id;
+	private String reservation_name;
+	private Date reservation_date;
+	private String reservation_status;
+	
 	
 }//class

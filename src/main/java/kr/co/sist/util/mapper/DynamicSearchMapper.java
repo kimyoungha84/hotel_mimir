@@ -17,8 +17,12 @@ public interface DynamicSearchMapper {
     
     List<SearchDataDomain> searchStaff( @Param("filters") List<FilterCondition> filters, int offset, int end, int pageSize);
     
+    List<SearchDataDomain> searchDiningResv( @Param("filters") List<FilterCondition> filters, int offset, int end, int pageSize);
+    
+    
     int countFaq(@Param("filters") List<FilterCondition> filters);
     int countDining(@Param("filters") List<FilterCondition> filters);
     int countStaff(@Param("filters") List<FilterCondition> filters);
+    int countDiningResv(@Param("filters") List<FilterCondition> filters);
 
 }

@@ -34,6 +34,38 @@ public enum FilterConfig {
         				)
         		)
     ),
+    
+    
+    DINING_USER("dining_user", false, false, true, true
+    			, null
+    			, null,
+    			List.of(new Option("name", "", "dining_name")), 
+    			
+    			List.of(  // 라벨 + 셀렉터 필터링 항목
+    		        new LabelSelectorOption("키워드", "selectorType", "type",
+    		        		List.of(
+    		        			new LabelSelectorItem("한식", "한식"), 
+    		        			new LabelSelectorItem("프렌치", "프렌치"), 
+    		        			new LabelSelectorItem("레스토랑&바", "레스토랑&바"),
+		    		        	new LabelSelectorItem("스카이 바", "스카이 바"),
+    		        			new LabelSelectorItem("프리미엄 베이커리&카페", "프리미엄 베이커리&카페"),
+    		        			new LabelSelectorItem("인룸 다이닝", "인룸 다이닝"))
+    		        			)
+    		    )
+    ),
+    
+    
+    DINING_RESV("dining_resv", true, true, true, true,
+    		"reservationDate",
+    		"reservation_date",
+    		List.of(new Option("name", "이름", "dining_name")),
+    		null
+    		),
+    
+    
+    
+    
+    
 
     FAQ(
             "faq", true, true, true, true,

@@ -158,6 +158,41 @@ WHERE rnum BETWEEN #{offset} AND #{end}
 <!--///////////////////////////////// DINING-END /////////////////////////////////-->
 
 
+<!--///////////////////////////////// DINING_RESV /////////////////////////////////-->
+
+<sql id="diningResvSelectColumnsInner">
+  r.RESERVATION_ID AS reservation_id,
+  r.RESERVATION_NAME AS reservation_name,
+  d.DINING_NAME AS dining_name,
+  r.RESERVATION_DATE AS reservation_date,
+  r.RESERVATION_STATUS AS reservation_status
+</sql>
+<sql id="diningResvSelectColumnsOuter">
+  reservation_id, reservation_name, dining_name, reservation_date, reservation_status
+</sql>
+
+<select id="searchDiningResv" resultType="kr.co.sist.util.domain.SearchDataDomain">
+  SELECT <include refid="diningResvSelectColumnsOuter"/>
+  FROM (
+    SELECT <include refid="diningResvSelectColumnsInner"/>,
+           ROW_NUMBER() OVER (ORDER BY r.RESERVATION_TIME DESC) rnum
+    FROM DINING_RESERVATION r
+    LEFT JOIN DINING d ON r.DINING_ID = d.DINING_ID
+    WHERE 1=1
+    <include refid="filter"/>
+  )
+  WHERE rnum BETWEEN #{offset} AND #{end}
+</select>
+
+<select id="countDiningResv" resultType="int">
+  SELECT COUNT(*)
+  FROM DINING_RESERVATION r
+  LEFT JOIN DINING d ON r.DINING_ID = d.DINING_ID
+  WHERE 1=1
+  <include refid="filter"/>
+</select>
+
+<!--///////////////////////////////// DINING_RESV-END /////////////////////////////////-->
 
 
 

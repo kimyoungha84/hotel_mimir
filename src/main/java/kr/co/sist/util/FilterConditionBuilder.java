@@ -21,12 +21,15 @@ public class FilterConditionBuilder {
     // 허용된 컬럼명들 (SQL Injection 방지)
     private static final Set<String> ALLOWED_COLUMNS = Set.of(
         // 다이닝 관련 컬럼
-        "dining_name", "type", "location", "dining_reg_date",
+        "dining_id", "dining_name", "type", "location", "dining_reg_date",
+        //다이닝 예약 관련 컬럼
+        "reservation_id", "reservation_name", "reservation_date", "reservation_status",
         // FAQ 관련 컬럼  
         "faq_title", "faq_content", "faq_date",
         // 직원 관련 컬럼
         "s.staff_id", "staff_name", "dept_iden", "position_identified_code", 
         "permission_id_code", "staff_status"
+        
     );
 
     public List<FilterCondition> build(Map<String, String> params, FilterConfig config) {

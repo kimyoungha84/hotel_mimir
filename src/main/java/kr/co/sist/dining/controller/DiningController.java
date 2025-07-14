@@ -20,13 +20,13 @@ public class DiningController {
 
 		// fragment 정보 동적 등록
 		SearchController.addFragmentInfo(
-			FilterConfig.DINING,
+			FilterConfig.DINING_RESV,
 			"admin_dining/admin_dining",
 			"dining_list_fm",
 			"diningList"
 		);
-		modelUtils.setFilteringInfo(model, FilterConfig.DINING);
-		modelUtils.setPaginationAttributes(model, pageSize, FilterConfig.DINING);
+		modelUtils.setFilteringInfo(model, FilterConfig.DINING_RESV);
+		modelUtils.setPaginationAttributes(model, pageSize, FilterConfig.DINING_RESV);
 		return "admin_dining/admin_dining";
 	}
 	
@@ -48,6 +48,17 @@ public class DiningController {
 	
 	@GetMapping("/user/dining_main")
 	public String diningMain(Model model) {
+		
+		// fragment 정보 동적 등록
+				SearchController.addFragmentInfo(
+					FilterConfig.DINING,
+					"dining/dining_main",
+					"dining_list_fm",
+					"diningList"
+				);
+				modelUtils.setFilteringInfo(model, FilterConfig.DINING_USER);
+		
+		
 		return "dining/dining_main";
 	}
 	
