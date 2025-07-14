@@ -6,34 +6,45 @@ console.log("[admin_chat.js] staffId:", staffId);
 const ws = new WebSocket("ws://192.168.10.78:8080/chat?userId=" + staffId);
 const chatHistory = {}; // { user1: ["msg1", "msg2"], user2: [...] }
 
-// WebSocket 메시지 수신
+function loadUserList() {
+    $.get("/chat/rooms", { staff_id: staffId }, function(rooms) {
+        $("#userList").html("");
+        rooms.forEach(room => {
+            // 각 방의 안읽은 메시지 개수 조회
+            $.get("/chat/unread-count", { room_id: room.room_id, staff_id: staffId }, function(count) {
+                addUserToList(room.user_num, "", count);
+            });
+        });
+    });
+}
+
+// 페이지 로드 시 채팅방 리스트 불러오기
+$(document).ready(function() {
+    loadUserList();
+});
+
+// WebSocket 메시지 수신 시에도 유저 목록 갱신
 ws.onmessage = function(event) {
-	const [sender, msg] = event.data.split(":", 2);
-
-	// 메시지 기록 저장
-	if (!chatHistory[sender]) chatHistory[sender] = [];
-	chatHistory[sender].push(`${sender}: ${msg}`);
-
-	// 사용자 목록 업데이트 or 새 메시지 알림 처리
-	if (sender !== "admin") {
-		addUserToList(sender, msg);
-		if (sender === currentUser) {
-			appendChat(sender, msg, false);
-		}
-	}
+    const [sender, msg] = event.data.split(":", 2);
+    // sender가 staffId(문자열)이면 오른쪽(관리자), 아니면 왼쪽(사용자)
+    const isMine = sender === staffId;
+    appendChat(sender, msg, isMine);
+    if (!isMine) addUserToList(sender, msg);
+    loadUserList(); // 메시지 수신 시 리스트 갱신
 };
 
 // 유저 목록 추가 또는 메시지 갱신
-function addUserToList(user, lastMsg) {
+function addUserToList(user, lastMsg, unreadCount) {
 	if ($("#userList").find(`[data-user='${user}']`).length === 0) {
 		$("#userList").append(`
 			<div class="user-item" data-user="${user}">
 				<div class="user-info"><strong>${user}</strong><br><span>${lastMsg}</span></div>
-				<div class="badge">1</div>
+				<div class="badge">${unreadCount && unreadCount > 0 ? unreadCount : ''}</div>
 			</div>
 		`);
 	} else {
 		$(`[data-user='${user}'] .user-info span`).text(lastMsg);
+		$(`[data-user='${user}'] .badge`).text(unreadCount && unreadCount > 0 ? unreadCount : '');
 	}
 }
 
@@ -42,13 +53,16 @@ $(document).on("click", ".user-item", function() {
 	currentUser = $(this).data("user");
 	$("#chatWith").text(currentUser);
 	$("#chatBody").html("");
-	// 1. 채팅방(room_id) 조회 (staff_id는 'mimir_267801'로 고정)
-	$.get("/test/chat/room", { user_num: currentUser, chat_type: 0 }, function(room) {
+	// 1. 채팅방(room_id) 조회
+	$.get("/chat/room", { user_num: currentUser, chat_type: 0 }, function(room) {
 		// 2. 메시지 내역 불러오기
-		$.get("/test/chat/messages", { room_id: room.room_id }, function(messages) {
+		$.get("/chat/messages", { room_id: room.room_id }, function(messages) {
 			messages.forEach(function(msg) {
-				const isMine = msg.staff_id === 'mimir_267801';
-				appendChat(isMine ? 'admin' : currentUser, msg.content, isMine);
+				// 관리자가 보낸 메시지는 오른쪽, 사용자가 보낸 메시지는 왼쪽
+				const isMine = msg.staff_id === staffId;
+				const isUser = msg.user_num == currentUser;
+				// 관리자가 보낸 메시지는 오른쪽, 사용자가 보낸 메시지는 왼쪽
+				appendChat(isMine ? staffId : currentUser, msg.content, isMine);
 			});
 		});
 	});
@@ -71,16 +85,15 @@ $("#messageInput").keydown(function(e) {
 
 // 메시지 전송 로직
 function sendMessage() {
-	const msg = $("#messageInput").val();// 🔥 trim 제거 → 줄바꿈 보존됨
+	const msg = $("#messageInput").val();
 	if (msg && currentUser) {
-		ws.send(currentUser + ":" + msg);
-
-		if (!chatHistory["admin"]) chatHistory["admin"] = [];
-		if (!chatHistory[currentUser]) chatHistory[currentUser] = [];
-		chatHistory[currentUser].push(`admin: ${msg}`);
-
-		appendChat("admin", msg, true);
-		$("#messageInput").val("");
+		// room_id를 반드시 알아야 함!
+		$.get("/chat/room", { user_num: currentUser, chat_type: 0 }, function(room) {
+			ws.send(room.room_id + ":" + msg);
+			appendChat(staffId, msg, true);
+			$("#messageInput").val("");
+			loadUserList(); // 메시지 전송 시 리스트 갱신
+		});
 	}
 }
 

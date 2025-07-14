@@ -9,8 +9,8 @@
 
     <!-- 2. 메시지 저장 (message_id는 시퀀스, 나머지는 DTO에서 전달) -->
     <insert id="insert" parameterType="kr.co.sist.chat.ChatMessageDTO">
-        INSERT INTO chat_message (message_id, room_id, staff_id, dept_iden, content, send_time, is_read)
-        VALUES (FINAL.SEQ_CHAT_MSG.NEXTVAL, #{room_id}, #{staff_id}, #{dept_iden}, #{content}, #{send_time}, #{is_read})
+        INSERT INTO chat_message (message_id, room_id, user_num, staff_id, dept_iden, content, send_time, is_read)
+        VALUES (FINAL.SEQ_CHAT_MSG.NEXTVAL, #{room_id}, #{user_num}, #{staff_id}, #{dept_iden}, #{content}, #{send_time}, #{is_read})
     </insert>
 
     <!-- 3. 읽음 처리 (특정 방, 특정 staff_id의 안 읽은 메시지 모두 읽음으로 변경) -->
@@ -18,5 +18,10 @@
         UPDATE chat_message SET is_read = '1'
         WHERE room_id = #{room_id} AND staff_id = #{staff_id} AND is_read = '0'
     </update>
+
+    <!-- 4. 안읽은 메시지 개수 (특정 방, 특정 staff_id 기준) -->
+    <select id="countUnreadByRoomAndStaff" resultType="int">
+        SELECT COUNT(*) FROM chat_message WHERE room_id = #{room_id} AND staff_id = #{staff_id} AND is_read = '0'
+    </select>
 
 </mapper> 

@@ -14,6 +14,7 @@ public class ChatMessageDTO {
 	
 	private int message_id;
 	private int room_id;
+	private int user_num;
 	private String staff_id;
 	private String dept_iden;
 	private String content;

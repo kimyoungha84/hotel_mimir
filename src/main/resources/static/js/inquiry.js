@@ -33,7 +33,8 @@ ws.onmessage = function(event) {
 	$(".placeholder-text").hide();
 
 	const [sender, msg] = event.data.split(":", 2);
-	const isMine = sender === userId;
+	// sender가 userNum(숫자)이면 오른쪽(사용자), 아니면 왼쪽(관리자)
+	const isMine = sender == userNum;
 	const alignClass = isMine ? "right" : "left";
 	const formattedMsg = msg.replace(/\n/g, "<br>"); // 🔥 줄바꿈 처리
 
@@ -84,13 +85,15 @@ let roomId = null;
 $(document).on("click", ".chat-option", function() {
 	inquiryType = $(this).data("type");
 	// 1. 채팅방 생성/조회 (user_num=21 고정)
-	$.get("/test/chat/room", { user_num: 21, chat_type: inquiryType }, function(room) {
+	$.get("/chat/room", { user_num: userNum, chat_type: inquiryType }, function(room) {
         roomId = room.room_id;
-		// 2. 채팅 메시지 불러오기
-		$.get("/test/chat/messages", { room_id: room.room_id }, function(messages) {
+		// 2. 채팅 메시지 불러오기 (항상 DB에서 전체 내역 불러오기)
+		$.get("/chat/messages", { room_id: room.room_id }, function(messages) {
 			$("#chatBody").html("");
 			messages.forEach(function(msg) {
-				const alignClass = msg.staff_id === room.staff_id ? "left" : "right";
+				// 사용자가 보낸 메시지는 오른쪽, 관리자가 보낸 메시지는 왼쪽
+				const isMine = msg.user_num == userNum;
+				const alignClass = isMine ? "right" : "left";
 				const messageBlock = $("<div>").addClass("message-block " + alignClass);
 				const message = $("<div>").addClass("chat-message " + alignClass).text(msg.content);
 				messageBlock.append(message);

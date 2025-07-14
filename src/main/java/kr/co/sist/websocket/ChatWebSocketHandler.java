@@ -51,14 +51,29 @@ public class ChatWebSocketHandler extends TextWebSocketHandler {
             ChatRoomDTO room = chatRoomMapper.findByRoomId(roomId);
             if (room == null) return;
 
-            // 2. 메시지 저장
+            // 2. 메시지 저장 (user/admin 구분)
             ChatMessageDTO chatMsg = new ChatMessageDTO();
             chatMsg.setRoom_id(roomId);
-            chatMsg.setStaff_id(sender.equals(room.getStaff_id()) ? sender : room.getStaff_id());
+            if (sender.equals(room.getStaff_id())) {
+                // 관리자가 보낸 메시지
+                chatMsg.setStaff_id(sender);
+                chatMsg.setUser_num(room.getUser_num());
+            } else {
+                try {
+                    chatMsg.setUser_num(Integer.parseInt(sender));
+                } catch (NumberFormatException e) {
+                    chatMsg.setUser_num(room.getUser_num()); // fallback
+                }
+                chatMsg.setStaff_id(room.getStaff_id());
+            }
             chatMsg.setDept_iden(room.getDept_iden());
             chatMsg.setContent(msg);
             chatMsg.setSend_time(new Timestamp(System.currentTimeMillis()));
             chatMsg.setIs_read("0");
+
+            // 로그 추가
+            System.out.println("[채팅메시지 저장] sender=" + sender + ", room.getUser_num()=" + room.getUser_num() + ", chatMsg.getUser_num()=" + chatMsg.getUser_num());
+
             chatMessageMapper.insert(chatMsg);
 
             // 3. 상대방 세션에 전달

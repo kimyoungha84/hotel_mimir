@@ -42,4 +42,15 @@ public class ChatServiceImpl implements ChatService {
     public void markMessagesAsRead(int room_id, String staff_id) {
         chatMessageMapper.markAsRead(room_id, staff_id);
     }
+
+    @Override
+    public List<ChatRoomDTO> getRoomsByStaffId(String staff_id) {
+        return chatRoomMapper.findRoomsByStaffId(staff_id);
+    }
+
+    @Override
+    public int countUnreadByRoomAndStaff(int room_id, String staff_id) {
+        // 특정 방, 특정 staff_id 기준 안읽은 메시지 개수 반환
+        return chatMessageMapper.countUnreadByRoomAndStaff(room_id, staff_id);
+    }
 }

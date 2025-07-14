@@ -24,4 +24,9 @@ public interface ChatRoomMapper {
      * 채팅방 생성
      */
     void insert(ChatRoomDTO room);
+
+    /**
+     * staff_id로 담당 채팅방 리스트 조회
+     */
+    java.util.List<ChatRoomDTO> findRoomsByStaffId(@Param("staff_id") String staff_id);
 } 

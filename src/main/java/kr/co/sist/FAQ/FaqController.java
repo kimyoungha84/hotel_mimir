@@ -18,6 +18,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import kr.co.sist.util.FilterConfig;
 import kr.co.sist.util.ModelUtils;
 import kr.co.sist.util.controller.SearchController;
+import kr.co.sist.member.MemberMapper;
+import kr.co.sist.member.MemberDTO;
 
 @Controller
 public class FaqController {
@@ -27,6 +29,9 @@ public class FaqController {
 
 	@Autowired
 	private ModelUtils modelUtils;
+
+	@Autowired
+	private MemberMapper memberMapper;
 
 	@GetMapping("/admin/chat")
 	public String adminChatPage() {
@@ -65,6 +70,16 @@ public class FaqController {
 		
 		model.addAttribute("faqList", faqList);
 		model.addAttribute("isLogin", principal != null);
+
+		int userNum = 0;
+		if (principal != null) {
+			String email = principal.getName();
+			MemberDTO member = memberMapper.selectMemberByEmail(email);
+			if (member != null) {
+				userNum = member.getUser_num();
+			}
+		}
+		model.addAttribute("userNum", userNum);
 		
 		return "inquiry/inquiry"; // => templates/inquiry.html
 		
