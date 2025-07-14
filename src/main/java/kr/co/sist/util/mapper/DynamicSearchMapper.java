@@ -19,6 +19,9 @@ public interface DynamicSearchMapper {
     
     List<SearchDataDomain> searchDiningResv( @Param("filters") List<FilterCondition> filters, int offset, int end, int pageSize);
     
+    List<SearchDataDomain> searchUserDining( @Param("filters") List<FilterCondition> filters, int offset, int end, int pageSize);
+    
+    
     
     int countFaq(@Param("filters") List<FilterCondition> filters);
     int countDining(@Param("filters") List<FilterCondition> filters);

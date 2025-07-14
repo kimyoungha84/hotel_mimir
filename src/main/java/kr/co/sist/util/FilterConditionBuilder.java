@@ -9,6 +9,7 @@ import java.util.Set;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
+import org.springframework.util.MultiValueMap;
 
 import kr.co.sist.util.FilterConfig.LabelSelectorItem;
 import kr.co.sist.util.FilterConfig.LabelSelectorOption;
@@ -32,14 +33,13 @@ public class FilterConditionBuilder {
         
     );
 
-    public List<FilterCondition> build(Map<String, String> params, FilterConfig config) {
+    // 다중 선택 필터용 (MultiValueMap)
+    public List<FilterCondition> build(MultiValueMap<String, String> params, FilterConfig config) {
         List<FilterCondition> list = new ArrayList<>();
-
         try {
             // 텍스트 검색 조건
-            String searchType = params.get("searchType");
-            String keyword = params.get("searchKeyword");
-
+            String searchType = params.getFirst("searchType");
+            String keyword = params.getFirst("searchKeyword");
             if (isNotBlank(searchType) && isNotBlank(keyword)) {
                 String column = config.resolveColumnName(searchType);
                 if (isValidColumn(column)) {
@@ -49,15 +49,12 @@ public class FilterConditionBuilder {
                     logger.warn("허용되지 않은 컬럼명: {}", column);
                 }
             }
-
             // 날짜 검색 조건
-            String start = params.get("startDate");
-            String end = params.get("endDate");
-            String dateNameParam = params.get("dateName");
-
+            String start = params.getFirst("startDate");
+            String end = params.getFirst("endDate");
+            String dateNameParam = params.getFirst("dateName");
             if (isNotBlank(dateNameParam) && dateNameParam.equals(config.getFilteringDateName())) {
                 String column = config.getDateColumnName();
-                
                 if (isValidColumn(column)) {
                     if (isNotBlank(start) && isNotBlank(end)) {
                         list.add(new FilterCondition(column, FilterOperator.TRUNC_BETWEEN, List.of(start, end)));
@@ -73,18 +70,101 @@ public class FilterConditionBuilder {
                     logger.warn("허용되지 않은 날짜 컬럼명: {}", column);
                 }
             }
-            
-            // 라벨 + 셀렉터 필터링 조건
-            List<LabelSelectorOption> selectorOptions = config.getLabelSelectorOptions();
+            // 라벨+셀렉터 필터링 조건 (다중 선택 지원)
+            List<FilterConfig.LabelSelectorOption> selectorOptions = config.getLabelSelectorOptions();
             if (selectorOptions != null) {
-                for (LabelSelectorOption labelSelector : selectorOptions) {
-                    String selectedValue = params.get(labelSelector.getSelectorName());
+                for (FilterConfig.LabelSelectorOption labelSelector : selectorOptions) {
+                    List<String> selectedValues = params.get(labelSelector.getSelectorName());
+                    if (selectedValues != null && !selectedValues.isEmpty()) {
+                        String column = labelSelector.getSelColumnName();
+                        if (isValidColumn(column)) {
+                            // 여러 개 선택 시 IN, 한 개면 EQ
+                            if (selectedValues.size() == 1) {
+                                String selectedValue = selectedValues.get(0);
+                                for (FilterConfig.LabelSelectorItem item : labelSelector.getOptions()) {
+                                    if (item.getLabel().equals(selectedValue)) {
+                                        if (item.getSearchValue() != null) {
+                                            list.add(new FilterCondition(column, FilterOperator.EQ, item.getSearchValue()));
+                                            logger.debug("셀렉터 검색 조건 추가 - column: {}, value: {}", column, item.getSearchValue());
+                                        }
+                                        break;
+                                    }
+                                }
+                            } else {
+                                // 여러 개 선택(IN)
+                                List<String> inValues = new ArrayList<>();
+                                for (String selectedValue : selectedValues) {
+                                    for (FilterConfig.LabelSelectorItem item : labelSelector.getOptions()) {
+                                        if (item.getLabel().equals(selectedValue) && item.getSearchValue() != null) {
+                                            inValues.add(item.getSearchValue());
+                                        }
+                                    }
+                                }
+                                if (!inValues.isEmpty()) {
+                                    list.add(new FilterCondition(column, FilterOperator.IN, inValues));
+                                    logger.debug("셀렉터 IN 검색 조건 추가 - column: {}, values: {}", column, inValues);
+                                }
+                            }
+                        } else {
+                            logger.warn("허용되지 않은 셀렉터 컬럼명: {}", column);
+                        }
+                    }
+                }
+            }
+            logger.debug("검색 조건 생성 완료 - 총 {}개 조건", list.size());
+            return list;
+        } catch (Exception e) {
+            logger.error("검색 조건 생성 중 오류 발생", e);
+            return new ArrayList<>();
+        }
+    }
 
+    // 기존 단일값 Map 기반 기능은 그대로 유지
+    public List<FilterCondition> build(Map<String, String> params, FilterConfig config) {
+        List<FilterCondition> list = new ArrayList<>();
+        try {
+            // 텍스트 검색 조건
+            String searchType = params.get("searchType");
+            String keyword = params.get("searchKeyword");
+            if (isNotBlank(searchType) && isNotBlank(keyword)) {
+                String column = config.resolveColumnName(searchType);
+                if (isValidColumn(column)) {
+                    list.add(new FilterCondition(column, FilterOperator.LIKE, keyword));
+                    logger.debug("텍스트 검색 조건 추가 - column: {}, keyword: {}", column, keyword);
+                } else {
+                    logger.warn("허용되지 않은 컬럼명: {}", column);
+                }
+            }
+            // 날짜 검색 조건
+            String start = params.get("startDate");
+            String end = params.get("endDate");
+            String dateNameParam = params.get("dateName");
+            if (isNotBlank(dateNameParam) && dateNameParam.equals(config.getFilteringDateName())) {
+                String column = config.getDateColumnName();
+                if (isValidColumn(column)) {
+                    if (isNotBlank(start) && isNotBlank(end)) {
+                        list.add(new FilterCondition(column, FilterOperator.TRUNC_BETWEEN, List.of(start, end)));
+                        logger.debug("날짜 범위 검색 조건 추가 - column: {}, start: {}, end: {}", column, start, end);
+                    } else if (isNotBlank(start)) {
+                        list.add(new FilterCondition(column, FilterOperator.TRUNC_GREATER_EQUAL, start));
+                        logger.debug("시작일 검색 조건 추가 - column: {}, start: {}", column, start);
+                    } else if (isNotBlank(end)) {
+                        list.add(new FilterCondition(column, FilterOperator.TRUNC_LESS_EQUAL, end));
+                        logger.debug("종료일 검색 조건 추가 - column: {}, end: {}", column, end);
+                    }
+                } else {
+                    logger.warn("허용되지 않은 날짜 컬럼명: {}", column);
+                }
+            }
+            // 라벨+셀렉터 필터링 조건 (단일값만 지원)
+            List<FilterConfig.LabelSelectorOption> selectorOptions = config.getLabelSelectorOptions();
+            if (selectorOptions != null) {
+                for (FilterConfig.LabelSelectorOption labelSelector : selectorOptions) {
+                    String selectedValue = params.get(labelSelector.getSelectorName());
                     if (isNotBlank(selectedValue)) {
                         String column = labelSelector.getSelColumnName();
-                        
                         if (isValidColumn(column)) {
-                            for (LabelSelectorItem item : labelSelector.getOptions()) {
+                            for (FilterConfig.LabelSelectorItem item : labelSelector.getOptions()) {
                                 if (item.getLabel().equals(selectedValue)) {
                                     if (item.getSearchValue() != null) {
                                         list.add(new FilterCondition(column, FilterOperator.EQ, item.getSearchValue()));
@@ -99,10 +179,8 @@ public class FilterConditionBuilder {
                     }
                 }
             }
-
             logger.debug("검색 조건 생성 완료 - 총 {}개 조건", list.size());
             return list;
-            
         } catch (Exception e) {
             logger.error("검색 조건 생성 중 오류 발생", e);
             return new ArrayList<>();

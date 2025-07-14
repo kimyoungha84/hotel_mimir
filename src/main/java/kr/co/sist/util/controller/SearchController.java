@@ -14,6 +14,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.util.MultiValueMap;
 
 import jakarta.servlet.http.HttpServletRequest;
 import kr.co.sist.util.FilterCondition;
@@ -71,12 +72,12 @@ public class SearchController {
     private FilterConditionBuilder builder;
 
     @GetMapping("/search")
-    public String search(@RequestParam Map<String, String> params, 
+    public String search(@RequestParam MultiValueMap<String, String> params, 
                         HttpServletRequest request, 
                         Model model) {
         try {
             // filterType만 프론트에서 받음
-            String filterType = params.get("filterType");
+            String filterType = params.getFirst("filterType");
             if (filterType == null || filterType.trim().isEmpty()) {
                 logger.error("filterType 파라미터가 누락되었습니다.");
                 throw new IllegalArgumentException("검색 타입이 지정되지 않았습니다.");
@@ -87,8 +88,8 @@ public class SearchController {
                 throw new IllegalArgumentException("허용되지 않은 filterType입니다.");
             }
             FilterConfig config = FilterConfig.fromKey(filterType);
-            int offset = parseIntegerParam(params, "offset", 1);
-            int pageSize = parseIntegerParam(params, "pageSize", 10);
+            int offset = parseIntegerParamMulti(params, "offset", 1);
+            int pageSize = parseIntegerParamMulti(params, "pageSize", 10);
             int end = offset + pageSize - 1; 
             logger.debug("검색 요청 - filterType: {}, offset: {}, end: {}", filterType, offset, end);
 
@@ -159,6 +160,15 @@ public class SearchController {
     private int parseIntegerParam(Map<String, String> params, String key, int defaultValue) {
         try {
             String value = params.get(key);
+            return value != null ? Integer.parseInt(value) : defaultValue;
+        } catch (NumberFormatException e) {
+            logger.warn("파라미터 '{}'를 정수로 변환할 수 없습니다. 기본값 {} 사용", key, defaultValue);
+            return defaultValue;
+        }
+    }
+    private int parseIntegerParamMulti(MultiValueMap<String, String> params, String key, int defaultValue) {
+        try {
+            String value = params.getFirst(key);
             return value != null ? Integer.parseInt(value) : defaultValue;
         } catch (NumberFormatException e) {
             logger.warn("파라미터 '{}'를 정수로 변환할 수 없습니다. 기본값 {} 사용", key, defaultValue);

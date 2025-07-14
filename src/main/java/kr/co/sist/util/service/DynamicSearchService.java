@@ -34,6 +34,7 @@ public class DynamicSearchService {
                 case FAQ -> searchFaq(filters, offset, end, pageSize);
                 case STAFF -> searchStaff(filters, offset, end, pageSize);
                 case DINING_RESV -> searchDiningResv(filters, offset, end, pageSize);
+                case DINING_USER -> searchUserDining(filters, offset, end, pageSize);
                 default -> {
                     logger.warn("지원하지 않는 FilterConfig: {}", config);
                     yield List.of();
@@ -54,6 +55,17 @@ public class DynamicSearchService {
             return List.of();
         }
     }
+    
+    public List<SearchDataDomain> searchUserDining(List<FilterCondition> filters, int offset, int end, int pageSize) {
+    	try {
+    		logger.debug("다이닝 검색 - filters: {}, offset: {}, end: {}", filters.size(), offset, end);
+    		return mapper.searchUserDining(filters, offset, end, pageSize);
+    	} catch (Exception e) {
+    		logger.error("다이닝 검색 중 오류 발생", e);
+    		return List.of();
+    	}
+    }
+    
     public List<SearchDataDomain> searchDiningResv(List<FilterCondition> filters, int offset, int end, int pageSize) {
     	try {
     		logger.debug("다이닝 예약 검색 - filters: {}, offset: {}, end: {}", filters.size(), offset, end);

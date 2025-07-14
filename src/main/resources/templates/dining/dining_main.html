@@ -192,8 +192,8 @@ margin-bottom: 3.0rem;
   margin-bottom: 1.0rem;
   padding: 0.5rem;
   position: relative; 
-  
-  
+  min-width: 250px; /* 카드 최소 너비 지정 */
+  max-width: none;
 }
 
 .card-top{
@@ -217,25 +217,38 @@ margin-bottom: 3.0rem;
 .card-info{
 	margin-right: auto;
 	margin-top: 1.0rem;
-
+	text-align: left;
 }
 
+.card-di-type {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    width: 100%;
+    text-align: left !important;
+    padding: 0;
+    margin: 0;
+}
 
 .di-type-wrap {
-    display: block; 
-    color: #675b57; 
+    display: inline-block;
+    color: #675b57;
     border: 1px solid #675b57;
-    /* background-color: #fff; */
-	width: 5.0rem;
+    min-width: 3.5rem;
+    max-width: 100%;
+    white-space: nowrap;
+    padding: 0 0.7rem;
+    overflow-x: auto;
+    box-sizing: border-box;
+    vertical-align: middle;
+    /* margin, align-self, text-align 모두 제거 */
 }
-
 .di-type-txt {
     font-size: 0.85rem;
     line-height: 2.2rem;
     font-weight: 500;
-    margin-left: 0.7rem;
-    margin-right: 0.7rem;
-    display: block;
+    display: inline;            /* block 대신 inline로 */
+    white-space: nowrap;
 }
 
 .di-name-wrap {
@@ -338,372 +351,33 @@ $(function(){
 </div>
 
 <div class="di-list-container">
-<div class="di-list-sec">
+<div class="di-list-sec" id="resultArea">
 
-
 <!-- cardStart -->
- <div class="card">
+<div class="card" th:fragment="dining_list_fm" th:each="dining : ${diningList}" >
  <div class="card-top">
- <div class="card-img motion-scale"><img alt="시그니엘 서울 - 다이닝 - 시그니엘 서울, 레스토랑, 비채나 - 다이닝" aria-label="시그니엘 서울, 레스토랑, 비채나" src="https://img.lottehotel.com/cms/asset/2025/01/31/424/180708-39-2000-din-seoul-signiel.webp" loading="lazy"></div>
- 
- 
- 
+   <div class="card-img motion-scale">
+     <img th:src="'https://img.lottehotel.com/cms/asset/2025/01/31/424/180708-39-2000-din-seoul-signiel.webp'" alt="다이닝 이미지" loading="lazy">
+   </div>
  </div>
  <div class="card-info">
- <div class="card-di-type">
- <span class="di-type-wrap">
- <span class="di-type-txt">레스토랑</span>
- </span>
- 
- 
+   <div class="card-di-type">
+     <span class="di-type-wrap">
+       <span class="di-type-txt" th:text="${dining.type}">타입</span>
+     </span>
+   </div>
+   <div class="di-name-wrap">
+     <div class="di-name-txt-area" th:text="${dining.dining_name}">다이닝명</div>
+   </div>
+   <div class="di-card-info-wrap">
+     <div class="di-info-row">위치 | <span th:text="${dining.location}">위치</span></div>
+     <div class="di-info-row">문의 | <span th:text="${dining.phone_number}">문의</span></div>
+   </div>
  </div>
- 
- <div class="di-name-wrap">
- <div class="di-name-txt-area">비채나</div>
- 
- 
- </div>
- 
- <div class="di-card-info-wrap">
- <div class="di-info-row">타입 | 한식</div>
- <div class="di-info-row">타입 | 81층</div>
- <div class="di-info-row">문의 | 02-3213-1261</div>
- 
- 
- 
- 
- </div>
- 
- </div>
- </div>
- <!-- cardEnd -->
-<!-- cardStart -->
- <div class="card">
- <div class="card-top">
- <div class="card-img motion-scale"><img alt="시그니엘 서울 - 다이닝 - 시그니엘 서울, 레스토랑, 비채나 - 다이닝" aria-label="시그니엘 서울, 레스토랑, 비채나" src="https://img.lottehotel.com/cms/asset/2025/01/31/424/180708-39-2000-din-seoul-signiel.webp" loading="lazy"></div>
- 
- 
- 
- </div>
- <div class="card-info">
- <div class="card-di-type">
- <span class="di-type-wrap">
- <span class="di-type-txt">레스토랑</span>
- </span>
- 
- 
- </div>
- 
- <div class="di-name-wrap">
- <div class="di-name-txt-area">비채나</div>
- 
- 
- </div>
- 
- <div class="di-card-info-wrap">
- <div class="di-info-row">타입 | 한식</div>
- <div class="di-info-row">타입 | 81층</div>
- <div class="di-info-row">문의 | 02-3213-1261</div>
- 
- 
- 
- 
- </div>
- 
- </div>
- </div>
- <!-- cardEnd -->
-<!-- cardStart -->
- <div class="card">
- <div class="card-top">
- <div class="card-img motion-scale"><img alt="시그니엘 서울 - 다이닝 - 시그니엘 서울, 레스토랑, 비채나 - 다이닝" aria-label="시그니엘 서울, 레스토랑, 비채나" src="https://img.lottehotel.com/cms/asset/2025/01/31/424/180708-39-2000-din-seoul-signiel.webp" loading="lazy"></div>
- 
- 
- 
- </div>
- <div class="card-info">
- <div class="card-di-type">
- <span class="di-type-wrap">
- <span class="di-type-txt">레스토랑</span>
- </span>
- 
- 
- </div>
- 
- <div class="di-name-wrap">
- <div class="di-name-txt-area">비채나</div>
- 
- 
- </div>
- 
- <div class="di-card-info-wrap">
- <div class="di-info-row">타입 | 한식</div>
- <div class="di-info-row">타입 | 81층</div>
- <div class="di-info-row">문의 | 02-3213-1261</div>
- 
- 
- 
- 
- </div>
- 
- </div>
- </div>
- <!-- cardEnd -->
-<!-- cardStart -->
- <div class="card">
- <div class="card-top">
- <div class="card-img motion-scale"><img alt="시그니엘 서울 - 다이닝 - 시그니엘 서울, 레스토랑, 비채나 - 다이닝" aria-label="시그니엘 서울, 레스토랑, 비채나" src="https://img.lottehotel.com/cms/asset/2025/01/31/424/180708-39-2000-din-seoul-signiel.webp" loading="lazy"></div>
- 
- 
- 
- </div>
- <div class="card-info">
- <div class="card-di-type">
- <span class="di-type-wrap">
- <span class="di-type-txt">레스토랑</span>
- </span>
- 
- 
- </div>
- 
- <div class="di-name-wrap">
- <div class="di-name-txt-area">비채나</div>
- 
- 
- </div>
- 
- <div class="di-card-info-wrap">
- <div class="di-info-row">타입 | 한식</div>
- <div class="di-info-row">위치 | 81층</div>
- <div class="di-info-row">문의 | 02-3213-1261</div>
- 
- 
- 
- 
- </div>
- 
- </div>
- </div>
- <!-- cardEnd -->
-<!-- cardStart -->
- <div class="card">
- <div class="card-top">
- <div class="card-img motion-scale"><img alt="시그니엘 서울 - 다이닝 - 시그니엘 서울, 레스토랑, 비채나 - 다이닝" aria-label="시그니엘 서울, 레스토랑, 비채나" src="https://img.lottehotel.com/cms/asset/2025/01/31/424/180708-39-2000-din-seoul-signiel.webp" loading="lazy"></div>
- 
- 
- 
- </div>
- <div class="card-info">
- <div class="card-di-type">
- <span class="di-type-wrap">
- <span class="di-type-txt">레스토랑</span>
- </span>
- 
- 
- </div>
- 
- <div class="di-name-wrap">
- <div class="di-name-txt-area">비채나</div>
- 
- 
- </div>
- 
- <div class="di-card-info-wrap">
- <div class="di-info-row">타입 | 한식</div>
- <div class="di-info-row">타입 | 81층</div>
- <div class="di-info-row">문의 | 02-3213-1261</div>
- 
- 
- 
- 
- </div>
- 
- </div>
- </div>
- <!-- cardEnd -->
-<!-- cardStart -->
- <div class="card">
- <div class="card-top">
- <div class="card-img motion-scale"><img alt="시그니엘 서울 - 다이닝 - 시그니엘 서울, 레스토랑, 비채나 - 다이닝" aria-label="시그니엘 서울, 레스토랑, 비채나" src="https://img.lottehotel.com/cms/asset/2025/01/31/424/180708-39-2000-din-seoul-signiel.webp" loading="lazy"></div>
- 
- 
- 
- </div>
- <div class="card-info">
- <div class="card-di-type">
- <span class="di-type-wrap">
- <span class="di-type-txt">레스토랑</span>
- </span>
- 
- 
- </div>
- 
- <div class="di-name-wrap">
- <div class="di-name-txt-area">비채나</div>
- 
- 
- </div>
- 
- <div class="di-card-info-wrap">
- <div class="di-info-row">타입 | 한식</div>
- <div class="di-info-row">타입 | 81층</div>
- <div class="di-info-row">문의 | 02-3213-1261</div>
- 
- 
- 
- 
- </div>
- 
- </div>
- </div>
- <!-- cardEnd -->
-<!-- cardStart -->
- <div class="card">
- <div class="card-top">
- <div class="card-img motion-scale"><img alt="시그니엘 서울 - 다이닝 - 시그니엘 서울, 레스토랑, 비채나 - 다이닝" aria-label="시그니엘 서울, 레스토랑, 비채나" src="https://img.lottehotel.com/cms/asset/2025/01/31/424/180708-39-2000-din-seoul-signiel.webp" loading="lazy"></div>
- 
- 
- 
- </div>
- <div class="card-info">
- <div class="card-di-type">
- <span class="di-type-wrap">
- <span class="di-type-txt">레스토랑</span>
- </span>
- 
- 
- </div>
- 
- <div class="di-name-wrap">
- <div class="di-name-txt-area">비채나</div>
- 
- 
- </div>
- 
- <div class="di-card-info-wrap">
- <div class="di-info-row">타입 | 한식</div>
- <div class="di-info-row">타입 | 81층</div>
- <div class="di-info-row">문의 | 02-3213-1261</div>
- 
- 
- 
- 
- </div>
- 
- </div>
- </div>
- <!-- cardEnd -->
-<!-- cardStart -->
- <div class="card">
- <div class="card-top">
- <div class="card-img motion-scale"><img alt="시그니엘 서울 - 다이닝 - 시그니엘 서울, 레스토랑, 비채나 - 다이닝" aria-label="시그니엘 서울, 레스토랑, 비채나" src="https://img.lottehotel.com/cms/asset/2025/01/31/424/180708-39-2000-din-seoul-signiel.webp" loading="lazy"></div>
- 
- 
- 
- </div>
- <div class="card-info">
- <div class="card-di-type">
- <span class="di-type-wrap">
- <span class="di-type-txt">레스토랑</span>
- </span>
- 
- 
- </div>
- 
- <div class="di-name-wrap">
- <div class="di-name-txt-area">비채나</div>
- 
- 
- </div>
- 
- <div class="di-card-info-wrap">
- <div class="di-info-row">타입 | 한식</div>
- <div class="di-info-row">타입 | 81층</div>
- <div class="di-info-row">문의 | 02-3213-1261</div>
- 
- 
- 
- 
- </div>
- 
- </div>
- </div>
- <!-- cardEnd -->
-<!-- cardStart -->
- <div class="card">
- <div class="card-top">
- <div class="card-img motion-scale"><img alt="시그니엘 서울 - 다이닝 - 시그니엘 서울, 레스토랑, 비채나 - 다이닝" aria-label="시그니엘 서울, 레스토랑, 비채나" src="https://img.lottehotel.com/cms/asset/2025/01/31/424/180708-39-2000-din-seoul-signiel.webp" loading="lazy"></div>
- 
- 
- 
- </div>
- <div class="card-info">
- <div class="card-di-type">
- <span class="di-type-wrap">
- <span class="di-type-txt">레스토랑</span>
- </span>
- 
- 
- </div>
- 
- <div class="di-name-wrap">
- <div class="di-name-txt-area">비채나</div>
- 
- 
- </div>
- 
- <div class="di-card-info-wrap">
- <div class="di-info-row">타입 | 한식</div>
- <div class="di-info-row">타입 | 81층</div>
- <div class="di-info-row">문의 | 02-3213-1261</div>
- 
- 
- 
- 
- </div>
- 
- </div>
- </div>
- <!-- cardEnd -->
-<!-- cardStart -->
- <div class="card">
- <div class="card-top">
- <div class="card-img motion-scale"><img alt="시그니엘 서울 - 다이닝 - 시그니엘 서울, 레스토랑, 비채나 - 다이닝" aria-label="시그니엘 서울, 레스토랑, 비채나" src="https://img.lottehotel.com/cms/asset/2025/01/31/424/180708-39-2000-din-seoul-signiel.webp" loading="lazy"></div>
- 
- 
- 
- </div>
- <div class="card-info">
- <div class="card-di-type">
- <span class="di-type-wrap">
- <span class="di-type-txt">레스토랑</span>
- </span>
- 
- 
- </div>
- 
- <div class="di-name-wrap">
- <div class="di-name-txt-area">비채나</div>
- 
- 
- </div>
- 
- <div class="di-card-info-wrap">
- <div class="di-info-row">타입 | 한식</div>
- <div class="di-info-row">타입 | 81층</div>
- <div class="di-info-row">문의 | 02-3213-1261</div>
- 
- 
- 
- 
- </div>
- 
- </div>
- </div>
- <!-- cardEnd -->
- 
-
 </div>
+<!-- cardEnd -->
+ 
+
 
 
 

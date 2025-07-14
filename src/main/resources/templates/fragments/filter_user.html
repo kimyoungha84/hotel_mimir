@@ -213,6 +213,7 @@
   </style>
   
   <form id="userSearchForm" onsubmit="return false;">
+    <input type="hidden" name="filterType" th:value="${filterType}" />
     <div class="filtering-area">
       <div class="fi-btn-area">
         <!-- FilterConfig의 labelSelectorOptions 기반 동적 필터 생성 -->
@@ -284,6 +285,28 @@
       filterMap[select.id] = label;
     });
     
+    // 검색 함수: filter.html 구조와 완전 호환
+    function search() {
+      const form = document.getElementById('userSearchForm');
+      const formData = new FormData(form);
+      // filterType이 form에 있으면 자동 포함됨
+      // selectedFilters → MultiValueMap 형태로 변환
+      Object.keys(selectedFilters).forEach(key => {
+        const paramKey = key.replace('Select', '');
+        selectedFilters[key].forEach(val => {
+          formData.append(paramKey, val);
+        });
+      });
+      fetch('/search?' + new URLSearchParams(formData), {
+        method: 'GET'
+      })
+      .then(res => res.text())
+      .then(html => {
+        const resultArea = document.getElementById('resultArea');
+        if (resultArea) resultArea.innerHTML = html;
+      });
+    }
+    
     document.querySelectorAll('.pill-btn').forEach(function(btn) {
       btn.addEventListener('click', function(e) {
         const selectId = btn.closest('.filter-select').id;
@@ -298,6 +321,7 @@
         updatePillSelection();
         updateFilterBtnStyle();
         updateFilterBtnCount();
+        search(); // 필터 선택 시마다 검색
       });
     });
     
@@ -315,21 +339,28 @@
     
     // 셀렉터별로 선택된 필터 태그를 해당 위치에만 렌더링
     function updateSelectedFilters() {
+      // 모든 selected-filters 영역을 먼저 비움 (초기화/마지막 삭제 시 잔상 방지)
+      document.querySelectorAll('[id^="selectedFilters-"]').forEach(function(container) {
+        container.innerHTML = '';
+      });
       Object.keys(selectedFilters).forEach(function(key) {
         const container = document.getElementById('selectedFilters-' + key.replace('Select', ''));
         if (!container) return;
-        container.innerHTML = '';
+        // 이미 위에서 비웠으므로, 값이 없으면 아무것도 안함
+        if (!selectedFilters[key] || selectedFilters[key].length === 0) return;
         selectedFilters[key].forEach(function(val) {
           const tag = document.createElement('div');
           tag.className = 'filter-tag';
-          tag.innerHTML = `${filterMap[key]}: ${val} <span class="remove">×</span>`;
-          tag.querySelector('.remove').onclick = function() {
+          tag.innerHTML = `${filterMap[key]}: ${val} <span class=\"remove\">×</span>`;
+          tag.querySelector('.remove').onclick = function(e) {
+            e.stopPropagation(); // 드롭다운 닫힘 방지
             selectedFilters[key] = selectedFilters[key].filter(v => v !== val);
             if (selectedFilters[key].length === 0) delete selectedFilters[key];
             updateSelectedFilters();
             updatePillSelection();
             updateFilterBtnStyle();
             updateFilterBtnCount();
+            search(); // 태그 삭제 시도 검색
           };
           container.appendChild(tag);
         });
@@ -339,10 +370,34 @@
     // 선택해제 버튼
     document.getElementById('resetBtn').onclick = function() {
       Object.keys(selectedFilters).forEach(function(key) { delete selectedFilters[key]; });
+      // 모든 pill-btn의 selected 클래스 해제
+      document.querySelectorAll('.pill-btn').forEach(function(btn) {
+        btn.classList.remove('selected');
+      });
+      // 모든 드롭다운 닫기
+      document.querySelectorAll('.filter-select').forEach(function(select) {
+        select.classList.remove('open');
+      });
+      // 모든 selected-filters 영역 비우기 (리스트창 즉시 비움)
+      document.querySelectorAll('[id^="selectedFilters-"]').forEach(function(container) {
+        container.innerHTML = '';
+      });
+      // 리스트창에 남아있는 모든 태그와 연동된 pill-btn도 선택해제
+      document.querySelectorAll('.filter-tag').forEach(function(tag) {
+        const text = tag.textContent.split(':')[1]?.trim().replace('×','').trim();
+        if (text) {
+          document.querySelectorAll('.pill-btn').forEach(function(btn) {
+            if (btn.textContent.trim() === text) {
+              btn.classList.remove('selected');
+            }
+          });
+        }
+      });
       updateSelectedFilters();
       updatePillSelection();
       updateFilterBtnStyle();
       updateFilterBtnCount();
+      search(); // 초기화 시도 검색
     };
     
     // 드롭다운 하단 화살표 클릭 시 닫기
