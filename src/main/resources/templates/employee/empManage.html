@@ -27,12 +27,13 @@
     <h2 class="h2Title">직원 목록</h2>
     <hr/>
 
-
     <div>
     <input type="button" class= "regEmpBtn" value="+ 직원 등록" onclick="location.href='/admin/employee/register'"/>
     </div>
+
+    <div th:replace="fragments/filter :: filter(${filter})"></div>
     <div class="table-wrapper">
-        <div th:replace="fragments/filter :: filter(${filter})"></div>
+        
         <table>
         <thead>
             <tr>

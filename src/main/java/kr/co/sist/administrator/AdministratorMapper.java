@@ -11,4 +11,9 @@ public interface AdministratorMapper {
 	public String selectNamebyId(String employee_id);
 	/*id를 입력값으로 넣으면, 해당 아이디가 가진 권한을 가져옴.*/
 	public String selectPermissionById(String employee_id);
+	
+	/*아이디가 이미 있는 아이디인지 확인*/
+	public Integer selectCheckExistId(String employee_id);
 }//interface
+
+

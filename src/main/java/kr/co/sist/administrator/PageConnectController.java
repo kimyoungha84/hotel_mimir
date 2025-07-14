@@ -16,6 +16,9 @@ public class PageConnectController {
 	@Autowired
 	ModelUtils modelUtils;
 	
+	@Autowired(required = false)
+	AdminService as;
+	
 	/*dashboard*/
 	@GetMapping("/admin/dashboard")
 	public String examplePage() {
@@ -36,6 +39,8 @@ public class PageConnectController {
 				"staffList"
 				);
 		
+		System.out.println("-----------------------FilterConfigstaff --------"+FilterConfig.STAFF);
+		
 		modelUtils.setFilteringInfo(model, FilterConfig.STAFF);
 		modelUtils.setPaginationAttributes(model, pageSize, FilterConfig.STAFF);
 		
@@ -44,9 +49,11 @@ public class PageConnectController {
 	
 	/*직원 등록 페이지*/
 	@GetMapping("/admin/employee/register")
-	public String employeeRegister() {
+	public String employeeRegister(Model model) {
+		//여기서 아이디를 만들어서 줘야 함.
+		model.addAttribute("staff_id",as.makeAdminId());
 		
-		
+		System.out.println("여기는 /admin/employee/register");
 		return "employee/empRegister";
 	}//employeeRegister
 	

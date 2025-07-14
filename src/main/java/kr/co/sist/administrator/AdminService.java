@@ -12,6 +12,8 @@ public class AdminService {
 	@Autowired(required = false)
 	AdministratorMapper am;
 	
+
+	
 	/**
 	 * 로그인할 때,
 	 * 아이디와 비밀번호 check
@@ -59,5 +61,58 @@ public class AdminService {
 		return permissionList;
 	}//getPermissionById
 	
+	
+	
+	/*아이디 만들기 : 형태 mimir_6자리 랜덤숫자*/
+	public String makeAdminId() {
+		
+		String pre_idStr="mimir_";
+		String id=null;
+		int randNum=0;
+		String randNumStr=null;
+		
+		int resInt=0;
+		
+		boolean loopFlag=true;
+		boolean idChkFlag=true;
+		
+		StringBuilder sb=new StringBuilder();
+		
+		//id생성하고, 해당 ID와 같은 id가 DB에 있는지 확인!
+		while(idChkFlag) {
+			while(loopFlag) {
+				randNum=(int)((Math.random())*1000000);
+	//			System.out.println("randNum----------------------"+randNum);
+				randNumStr=randNum+"";
+				
+				if(randNumStr.length() != 6) {
+					continue;
+				}else {
+					loopFlag=false;
+				}//end if~else
+				
+			}//end while -- loopFlag
+			
+			sb.append(pre_idStr).append(randNumStr);
+			System.out.println("id===================="+sb.toString());
+			id=sb.toString();
+			
+			resInt=am.selectCheckExistId(id);
+			System.out.println("resInt==================="+resInt);
+			
+			if(resInt != 0) {
+				//같은 id가 존재!
+				continue;
+				//그러면 다시 loop돌아서 id값을 받아와야 한다.
+			}else {
+				//다른 id임!
+				idChkFlag=false;
+				
+			}
+		}//end while -- idChkFlag
+		
+		return id;
+	}//makeAdminId
+
 	
 }//class

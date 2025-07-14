@@ -16,4 +16,10 @@ select staff_name from staff where staff_id=#{staff_id}
 <select id="selectPermissionById" parameterType="String" resultType="String">
 select listagg(permission_id_code,',') as permission  from staff_permission where staff_id=#{staff_id}
 </select>
+
+<!-- 아이디가 이미 있는 아이디인지 확인 -->
+<select id="selectCheckExistId" parameterType="String" resultType="Integer">
+select count(staff_id) from staff where staff_id=#{staff_id}
+</select>
+
 </mapper>
