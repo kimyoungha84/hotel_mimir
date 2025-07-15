@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/springsecurity6">
 <head>
 <meta charset="UTF-8">
 <title>Header</title>
@@ -11,8 +11,14 @@
 		<div class="toolbar">
 			<div class="toolbar-left">HOTEL MIMIR</div>
 			<div class="toolbar-right">
-				<a th:href="@{/member/loginFrm}">로그인</a> <a th:href="@{/member/registerFrm}">회원가입</a>
-			</div>
+    <div sec:authorize="isAuthenticated()">
+        <a th:href="@{/member/mypage}">마이페이지</a>
+        <a th:href="@{/logout}">로그아웃</a>
+    </div>
+    <div sec:authorize="!isAuthenticated()">
+        <a th:href="@{/member/loginFrm}">로그인</a> <a th:href="@{/member/registerFrm}">회원가입</a>
+    </div>
+</div>
 		</div>
 
 		<!-- 네비게이션 -->

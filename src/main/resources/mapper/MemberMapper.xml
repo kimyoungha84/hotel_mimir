@@ -31,8 +31,10 @@
 	</insert>
 	
 	<!-- RefreshToken 갱신 -->
-	<update id="updateRefreshToken" parameterType="kr.co.sist.member.MemberDTO">
+	<update id="updateRefreshToken" parameterType="map">
 		UPDATE MIMIR_USER
+		SET EMAIL_REFRESH_TOKEN = #{refreshToken}
+		WHERE EMAIL_ID = #{emailId}
 	</update>
 	
 

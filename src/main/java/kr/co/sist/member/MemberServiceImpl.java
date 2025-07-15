@@ -26,7 +26,7 @@ public class MemberServiceImpl implements MemberService {
     private JwtUtil jwtUtil;
     
     @Autowired
-    private LoginJwtUtil loginJwtUtill;
+    private LoginJwtUtil loginJwtUtil;
     
     @Autowired
     BCryptPasswordEncoder passwordEncoder;
@@ -48,12 +48,17 @@ public class MemberServiceImpl implements MemberService {
     	}
     	
     	// 토큰발급
-    	String accessToken = loginJwtUtill.generateAccessToken(mDTO.getUser_num(), mDTO.getEmail_id());
-    	String refreshToken = loginJwtUtill.generateRefreshToken(mDTO.getUser_num());
+    	String accessToken = loginJwtUtil.generateAccessToken(mDTO.getUser_num(), mDTO.getEmail_id());
+    	String refreshToken = loginJwtUtil.generateRefreshToken(mDTO.getUser_num());
     	
     	// 응답 반환
     	return new LoginResponseDTO(accessToken, refreshToken, mDTO.getUser_num(), mDTO.getEmail_id());
-    	
+    }
+
+    @Override
+    public void updateRefreshToken(String emailId, String refreshToken) {
+        Map<String, String> params = Map.of("emailId", emailId, "refreshToken", refreshToken);
+        memberMapper.updateRefreshToken(params);
     }
     
     

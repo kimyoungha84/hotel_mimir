@@ -14,8 +14,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
+import kr.co.sist.util.JwtUtil;
+import kr.co.sist.util.LoginJwtUtil;
 
 @Controller
 @RequestMapping("/member")
@@ -23,6 +28,8 @@ public class MemberController {
 	
 	@Autowired
 	private MemberService memberService;
+	
+	
 	
 	/*
 	 * ============ 회원가입 ============
@@ -82,12 +89,35 @@ public class MemberController {
     }
     
     @PostMapping("/login")
-    @ResponseBody
-    public ResponseEntity<LoginResponseDTO> login(@RequestBody @Valid LoginRequestDTO loginDTO){
-    	
-    	LoginResponseDTO response = memberService.login(loginDTO);
-    	
-    	return ResponseEntity.ok(response);
+    public String login(@RequestParam String email_id,
+                        @RequestParam String password,
+                        HttpServletResponse response,
+                        RedirectAttributes redirectAttrs) {
+
+        try {
+            LoginRequestDTO loginRequestDTO = new LoginRequestDTO(email_id, password);
+            loginRequestDTO.setEmail_id(email_id);
+            loginRequestDTO.setPassword(password);
+
+            LoginResponseDTO loginResponseDTO = memberService.login(loginRequestDTO);
+
+            String accessToken = loginResponseDTO.getAccessToken();
+            String refreshToken = loginResponseDTO.getRefreshToken();
+
+            memberService.updateRefreshToken(email_id, refreshToken);
+
+            Cookie jwtCookie = new Cookie("access_token", accessToken);
+            jwtCookie.setHttpOnly(true);
+            jwtCookie.setPath("/");
+            jwtCookie.setMaxAge(60 * 30); // 30분
+            response.addCookie(jwtCookie);
+
+            return "redirect:/";
+
+        } catch (RuntimeException e) {
+            redirectAttrs.addFlashAttribute("loginError", e.getMessage());
+            return "redirect:/member/loginFrm";
+        }
     }
     
     

@@ -5,8 +5,10 @@ import java.util.Map;
 public interface MemberService {
 	
 	LoginResponseDTO login(LoginRequestDTO loginDTO);
-	
+
 	boolean registerMember(MemberDTO mDTO);
+	
+	void updateRefreshToken(String emailId, String refreshToken);
 	
     Map<String, String> sendAuthCodeWithJwt(String email);
     

@@ -21,7 +21,8 @@ public class JwtUtil {
     private Key getSigningKey() {
         return Keys.hmacShaKeyFor(secretKey.getBytes());
     }
-
+    
+    //메일 인증용 토큰
     public String generateEmailAuthToken(String email, String authCode, long expirationMillis) {
         return Jwts.builder()
                 .setSubject("email-auth")
@@ -49,5 +50,58 @@ public class JwtUtil {
             return false;
         }
     }
+    
+    //로그인용 Access Token
+    public String createAccessToken(String email) {
+    	return Jwts
+    			.builder()
+    			.setSubject("access-token")
+    			.claim("email", email)
+    			.setIssuedAt(new Date())
+    			.setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 30 ))
+    			.signWith(getSigningKey(), SignatureAlgorithm.HS256)
+    			.compact();
+    }
+    
+    //로그인용 Refresh Token
+    public String createRefreshToken(String email) {
+    	return Jwts
+    			.builder()
+    			.setSubject("refresh-token")
+    			.claim("email", email)
+    			.setIssuedAt(new Date())
+    			.setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 30 ))
+    			.signWith(getSigningKey(), SignatureAlgorithm.HS256)
+    			.compact();
+    }
+    
+    //토큰 검증
+    public boolean verifyToken(String token) {
+    	try {
+    		parseToken(token);
+    		return true;
+    	} catch (Exception e) {
+    		return false;
+		}
+    }
+    
+    //이메일 추출
+    public String getEmail(String token) {
+    	try {
+    		return parseToken(token).get("email", String.class);
+    	} catch (Exception e) {
+			return null;
+		}
+    }
+    
+    private Claims parseToken(String token) {
+    	return Jwts
+    			.parserBuilder()
+    			.setSigningKey(getSigningKey())
+    			.build()
+    			.parseClaimsJws(token)
+    			.getBody();
+    }
+    
 }
 
