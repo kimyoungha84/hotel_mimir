@@ -14,90 +14,12 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<!-- Vue CDN -->
-<script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
-
 <!-- CSS -->
 <link rel="stylesheet" href="/employee_assets/css/employee_style.css"/>
 
 <script src="/admin_common_assets/js/pagination.js"></script>
 
-<script type="text/javascript">
-$(function(){
-   /*     //부서
-    var deptMapping={
-        "room":"객실 관리",
-        "dinning":"다이닝 관리",
-        "inquiry":"문의 관리",
-        "person":"인사 관리",
-        "member":"회원 관리",
-        "manage":"경영지원실"
-    };
-    //직책
-    var positionMapping={
-        "A" : "대표",
-        "B" : "팀장",
-        "C" : "과장",
-        "D" : "대리",
-        "E" : "사원"
-    }
-    //권한
-    var permissionMapping={
-        "room" : "객실",
-        "dinning" : "다이닝",
-        "inquiry" : "문의",
-        "member" : "회원",
-        "employee":"직원",
-        "admin":"관리자"
-    }
-    //상태
-    var statusMapping={
-        "activate" : "재직",
-        "deactivate" : "퇴사"
-    }
 
-
-
-
-    //MutationObserver 생성
-    var observer=new MutationObserver(function(mutationsList){
-        mutationsList.forEach(function(mutation){
-            //자식 node일 경우에만 처리
-            if(mutation.type === 'childList'){
-                //노드가 추가되는 경우
-                $(mutation.addedNodes).each(function(){
-                    if($(this).is('tr')){
-                        /*tr이면....
-                        //0 부터 index 시작
-                        //${staff.dept_iden}
-                        $(this).find('td').eq(3).each(function(){
-                            var deptCode=$(this).text();
-                            debugger;
-                            console.log("1---"+deptCode);
-                        });
-                    }//end if
-                });
-            }//end if
-
-        });
-    });//observer
-
-
-    // MutationObserver 대상 설정
-    var config = { childList: true, subtree: true };
-    observer.observe(document.getElementById('resultArea'), config);
-
-     // 초기 렌더링된 tr 요소들에 대해서도 deptCode 출력
-    $('#resultArea tr').each(function() {
-        $(this).find('td').eq(3).each(function(){
-            var deptCode = $(this).text();
-            console.log("2---"+deptCode); // 부서 코드 출력
-        });
-    });
-*/
-
-});//ready
-</script>
 </head>
 <body>
 <th:block th:replace="~{/administrator/fragments/admin_sidebar :: admin_sidebar}"></th:block>
@@ -130,10 +52,10 @@ $(function(){
             <td th:text="${stat.count}"></td>
             <td th:text="${staff.staff_id}"></td>
             <td th:text="${staff.staff_name}"></td>
-            <td th:text="${staff.dept_iden}"></td>
-            <td th:text="${staff.position_identified_code}"></td>
-            <td th:text="${staff.permission_ids}"></td>
-            <td th:text="${staff.staff_status}"></td>
+            <td th:id="'dept-'+${stat.count}" th:text="${staff.dept_iden}"></td> <!-- 부서 -->
+            <td th:id="'position-'+${stat.count}" th:text="${staff.position_identified_code}"></td> <!-- 직책 -->
+            <td th:id="'permission-'+${stat.count}" th:text="${staff.permission_ids}"></td> <!-- 권한 -->
+            <td th:id="'status-'+${stat.count}" th:text="${staff.staff_status}"></td> <!-- 상태 -->
         </tr>
     </tbody>
     </table>
@@ -141,87 +63,80 @@ $(function(){
     </div>
     
 </div>
-<script>
-Vue.createApp({
-    data(){
-        return{
-            //부서
-            deptMapping:{
-                "room":"객실 관리",
-                "dinning":"다이닝 관리",
-                "inquiry":"문의 관리",
-                "person":"인사 관리",
-                "member":"회원 관리",
-                "manage":"경영지원실"
-            },
-            //직책
-            positionMapping:{
-                "A" : "대표",
-                "B" : "팀장",
-                "C" : "과장",
-                "D" : "대리",
-                "E" : "사원"
-            },
-            //권한
-            permissionMapping:{
-                "room" : "객실",
-                "dinning" : "다이닝",
-                "inquiry" : "문의",
-                "member" : "회원",
-                "employee":"직원",
-                "admin":"관리자"
-            },
-            //상태
-            statusMapping:{
-                "activate" : "재직",
-                "deactivate" : "퇴사"
-            }
-        }
-    },
-    methods:{ 
-        updateStaffListFromDOM() {
-            const rows = document.querySelectorAll('#resultArea tr');
-            rows.forEach((row, index) => {
-                
-                const deptCode = row.cells[3].innerText; // 부서 코드
-                const positionCode = row.cells[4].innerText; // 직책 코드
-                const permissionCode=row.cells[5].innerText;//권한
-                const staffStatus = row.cells[6].innerText; // 상태
 
-                console.log("deptCode-----"+deptCode);
-                console.log("positionCode-----"+positionCode);
-                console.log("permissionCode-----"+permissionCode);
-                console.log("staffStatus-----"+staffStatus);
-                
 
-                
-                // 예시로 staffList 배열에 부서명, 직책명, 상태명 등을 추가하는 방법
-                this.staffList.push({
-                    staff_id: row.cells[1].innerText,
-                    staff_name: row.cells[2].innerText,
-                    dept_name: this.deptMapping[deptCode] || deptCode,
-                    position_name: this.positionMapping[positionCode] || positionCode,
-                    status_name: this.statusMapping[staffStatus] || staffStatus
+<script type="text/javascript">
+$(function(){
+    //부서
+    var deptMapping={
+        "room":"객실 관리",
+        "dinning":"다이닝 관리",
+        "inquiry":"문의 관리",
+        "person":"인사 관리",
+        "member":"회원 관리",
+        "manage":"경영지원실"
+    };
+    //직책
+    var positionMapping={
+        "A" : "대표",
+        "B" : "팀장",
+        "C" : "과장",
+        "D" : "대리",
+        "E" : "사원"
+    }
+    //권한
+    var permissionMapping={
+        "room" : "객실",
+        "dinning" : "다이닝",
+        "inquiry" : "문의",
+        "member" : "회원",
+        "employee":"직원",
+        "admin":"관리자"
+    }
+    //상태
+    var statusMapping={
+        "ACTIVE" : "재직",
+        "DEACTIVE" : "퇴사"
+    }
+
+
+     // MutationObserver로 동적으로 추가된 tr 처리
+    var observer = new MutationObserver(function(mutationsList) {
+        mutationsList.forEach(function(mutation) {
+            if (mutation.type === 'childList') {
+                $(mutation.addedNodes).each(function(index,node){
+                    //각 노드가 <tr>인지 확인
+                    if($(this).is('tr')) {
+
+                        var trTag=$(node);//그럼 이게 tr인가? //jQuery 객체로 변환
+                        
+                        //.get(0)로 jQuery 객체를 원시 DOM 객체로 변환 후 querySelector
+                        //부서
+                        var deptVal=trTag.get(0).querySelector('td:nth-child(4)').innerText;
+                        //직책
+                        var positionVal=trTag.get(0).querySelector('td:nth-child(5)').innerText;
+                        //권한
+                        //상태
+                        var statusVal=trTag.get(0).querySelector('td:nth-child(7)').innerText;
+
+                        //부서
+                        trTag.get(0).querySelector('td:nth-child(4)').innerText=deptMapping[deptVal];
+                        //직책
+                        trTag.get(0).querySelector('td:nth-child(5)').innerText=positionMapping[positionVal];
+                        //권한
+                        //상태
+                        trTag.get(0).querySelector('td:nth-child(7)').innerText=statusMapping[statusVal];
+                    }
                 });
-            });
-        }
-    },
-        mounted() {
-            // 페이지 로딩 후 초기 DOM 값 가져오기
-            this.updateStaffListFromDOM();
+            }
+        });
+    });
 
-            // MutationObserver 설정
-            var observer = new MutationObserver(() => {
-                this.updateStaffListFromDOM();
-            });
+    var config = { childList: true, subtree: true };
+    observer.observe(document.getElementById('resultArea'), config);
 
-            // MutationObserver 설정
-            var config = { childList: true, subtree: true };
-            observer.observe(document.getElementById('resultArea'), config);
-        }//mount
+});    //ready
 
-}).mount("#app");
 </script>
-
 </body>
 </html>
