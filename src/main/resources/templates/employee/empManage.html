@@ -14,6 +14,9 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+<!-- Vue CDN -->
+<script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+
 <!-- CSS -->
 <link rel="stylesheet" href="/employee_assets/css/employee_style.css"/>
 
@@ -21,7 +24,7 @@
 
 <script type="text/javascript">
 $(function(){
-        //부서
+   /*     //부서
     var deptMapping={
         "room":"객실 관리",
         "dinning":"다이닝 관리",
@@ -53,6 +56,9 @@ $(function(){
         "deactivate" : "퇴사"
     }
 
+
+
+
     //MutationObserver 생성
     var observer=new MutationObserver(function(mutationsList){
         mutationsList.forEach(function(mutation){
@@ -61,13 +67,13 @@ $(function(){
                 //노드가 추가되는 경우
                 $(mutation.addedNodes).each(function(){
                     if($(this).is('tr')){
-                        /*tr이면....*/
+                        /*tr이면....
                         //0 부터 index 시작
                         //${staff.dept_iden}
                         $(this).find('td').eq(3).each(function(){
                             var deptCode=$(this).text();
-                            //debugger;
-                            alert("1---"+deptCode);
+                            debugger;
+                            console.log("1---"+deptCode);
                         });
                     }//end if
                 });
@@ -77,7 +83,7 @@ $(function(){
     });//observer
 
 
-//    // MutationObserver 대상 설정
+    // MutationObserver 대상 설정
     var config = { childList: true, subtree: true };
     observer.observe(document.getElementById('resultArea'), config);
 
@@ -85,9 +91,10 @@ $(function(){
     $('#resultArea tr').each(function() {
         $(this).find('td').eq(3).each(function(){
             var deptCode = $(this).text();
-            alert("2---"+deptCode); // 부서 코드 출력
+            console.log("2---"+deptCode); // 부서 코드 출력
         });
     });
+*/
 
 });//ready
 </script>
@@ -134,7 +141,82 @@ $(function(){
     </div>
     
 </div>
+<script>
+Vue.createApp({
+    data(){
+        return{
+            //부서
+            deptMapping:{
+                "room":"객실 관리",
+                "dinning":"다이닝 관리",
+                "inquiry":"문의 관리",
+                "person":"인사 관리",
+                "member":"회원 관리",
+                "manage":"경영지원실"
+            },
+            //직책
+            positionMapping:{
+                "A" : "대표",
+                "B" : "팀장",
+                "C" : "과장",
+                "D" : "대리",
+                "E" : "사원"
+            },
+            //권한
+            permissionMapping:{
+                "room" : "객실",
+                "dinning" : "다이닝",
+                "inquiry" : "문의",
+                "member" : "회원",
+                "employee":"직원",
+                "admin":"관리자"
+            },
+            //상태
+            statusMapping:{
+                "activate" : "재직",
+                "deactivate" : "퇴사"
+            }
+        }
+    },
+    methods:{ 
+        updateStaffListFromDOM() {
+            const rows = document.querySelectorAll('#resultArea tr');
+            rows.forEach((row, index) => {
+                const deptCode = row.cells[3].innerText; // 부서 코드
+                const positionCode = row.cells[4].innerText; // 직책 코드
+                const staffStatus = row.cells[6].innerText; // 상태
+                alert("deptCode-----"+deptCode);
+                alert("positionCode-----"+positionCode);                
+                alert("staffStatus-----"+staffStatus);
 
+                
+                // 예시로 staffList 배열에 부서명, 직책명, 상태명 등을 추가하는 방법
+                this.staffList.push({
+                    staff_id: row.cells[1].innerText,
+                    staff_name: row.cells[2].innerText,
+                    dept_name: this.deptMapping[deptCode] || deptCode,
+                    position_name: this.positionMapping[positionCode] || positionCode,
+                    status_name: this.statusMapping[staffStatus] || staffStatus
+                });
+            });
+        }
+    },
+        mounted() {
+            // 페이지 로딩 후 초기 DOM 값 가져오기
+            this.updateStaffListFromDOM();
+
+            // MutationObserver 설정
+            var observer = new MutationObserver(() => {
+                this.updateStaffListFromDOM();
+            });
+
+            // MutationObserver 설정
+            var config = { childList: true, subtree: true };
+            observer.observe(document.getElementById('resultArea'), config);
+        }//mount
+
+}).mount("#app");
+</script>
 
 </body>
 </html>
