@@ -37,4 +37,9 @@
         SELECT * FROM chat_room WHERE staff_id = #{staff_id}
     </select>
 
+    <!-- user_num으로 사용자의 채팅방 리스트 조회 -->
+    <select id="findRoomsByUserId" resultType="kr.co.sist.chat.ChatRoomDTO">
+        SELECT * FROM chat_room WHERE user_num = #{user_num} ORDER BY room_id ASC
+    </select>
+
 </mapper> 
