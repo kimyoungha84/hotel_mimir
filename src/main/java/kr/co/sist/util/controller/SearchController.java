@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.util.MultiValueMap;
@@ -71,7 +72,7 @@ public class SearchController {
     @Autowired 
     private FilterConditionBuilder builder;
 
-    @GetMapping("/search")
+    @PostMapping("/search")
     public String search(@RequestParam MultiValueMap<String, String> params, 
                         HttpServletRequest request, 
                         Model model) {
@@ -114,7 +115,7 @@ public class SearchController {
         }
     }
 
-    @GetMapping("/reBuildPagination")
+    @PostMapping("/reBuildPagination")
     public String reBuildPagination(@RequestParam Map<String, String> params, Model model) {
         try {
             int pageSize = parseIntegerParam(params, "pageSize", 10);
@@ -132,7 +133,7 @@ public class SearchController {
         }
     }
 
-    @GetMapping("/count")
+    @PostMapping("/count")
     @ResponseBody
     public ResponseEntity<Map<String, Object>> getCount(@RequestParam Map<String, String> params) {
         try {

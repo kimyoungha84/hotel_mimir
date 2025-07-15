@@ -321,8 +321,9 @@
           formData.append(paramKey, val);
         });
       });
-      fetch('/search?' + new URLSearchParams(formData), {
-        method: 'GET'
+      fetch('/search', {
+        method: 'POST',
+        body: formData
       })
       .then(res => res.text())
       .then(html => {

@@ -199,8 +199,14 @@
       // filterType만 서버로 전송
       // (fragmentTemplate, fragmentName, resultKey 등은 더 이상 넘기지 않음)
       const [searchResponse, countResponse] = await Promise.all([
-        fetch('/search?' + params.toString()),
-        fetch('/count?' + params.toString())
+        fetch('/search', {
+          method: 'POST',
+          body: params
+        }),
+        fetch('/count', {
+          method: 'POST',
+          body: params
+        })
       ]);
       if (!searchResponse.ok) {
         throw new Error(`검색 요청 실패: ${searchResponse.status}`);
@@ -221,7 +227,10 @@
       }
       const totalItems = countJson.totalItems;
       params.set("totalItems", totalItems);
-      const paginationResponse = await fetch('/reBuildPagination?' + params.toString());
+      const paginationResponse = await fetch('/reBuildPagination', {
+        method: 'POST',
+        body: params
+      });
       if (!paginationResponse.ok) {
         throw new Error(`페이지네이션 요청 실패: ${paginationResponse.status}`);
       }

@@ -34,19 +34,28 @@ window.loadPage = function (pageNum) {
     baseParams.set("pageSize", pageSize);
 
     // count 요청
-    fetch('/count?' + baseParams.toString())
+    fetch('/count', {
+        method: 'POST',
+        body: baseParams
+    })
         .then(res => res.json())
         .then(json => {
             baseParams.set("totalItems", json.totalItems);
 
             // search 요청
-            fetch('/search?' + baseParams.toString())
+            fetch('/search', {
+                method: 'POST',
+                body: baseParams
+            })
                 .then(res => res.text())
                 .then(html => {
                     document.getElementById("resultArea").innerHTML = html;
 
                     // pagination 재빌드
-                    fetch('/reBuildPagination?' + baseParams.toString())
+                    fetch('/reBuildPagination', {
+                        method: 'POST',
+                        body: baseParams
+                    })
                         .then(res => res.text())
                         .then(paginationHtml => {
                             const pgArea = document.getElementById("paginationArea");
