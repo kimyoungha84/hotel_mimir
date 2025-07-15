@@ -16,23 +16,7 @@ public enum FilterConfig {
         List.of(
             new Option("name", "이름", "dining_name")
         ),
-        List.of(  // 라벨 + 셀렉터 필터링 항목
-        		new LabelSelectorOption("타입", "selectorType", "type",
-        				List.of(
-        						new LabelSelectorItem("전체", null), 
-        						new LabelSelectorItem("한식", "한식"), 
-        						new LabelSelectorItem("프렌치", "프렌치"), 
-        						new LabelSelectorItem("레스토랑&바", "레스토랑&바"))
-        				),
-        		new LabelSelectorOption("위치", "selectorLocation", "location",
-        				List.of(
-        						
-        						new LabelSelectorItem("전체", null), 
-        						new LabelSelectorItem("1", "주소1"), 
-        						new LabelSelectorItem("2", "주소2"), 
-        						new LabelSelectorItem("3", "주소3"))
-        				)
-        		)
+        null
     ),
     
     
@@ -46,12 +30,41 @@ public enum FilterConfig {
     		        		List.of(
     		        			new LabelSelectorItem("한식", "한식"), 
     		        			new LabelSelectorItem("프렌치", "프렌치"), 
+    		        			new LabelSelectorItem("회원제 레스토랑", "회원제 레스토랑"), 
     		        			new LabelSelectorItem("레스토랑&바", "레스토랑&바"),
 		    		        	new LabelSelectorItem("스카이 바", "스카이 바"),
     		        			new LabelSelectorItem("프리미엄 베이커리&카페", "프리미엄 베이커리&카페"),
     		        			new LabelSelectorItem("인룸 다이닝", "인룸 다이닝"))
-    		        			)
+    		        			),
+    		        new LabelSelectorOption("위치", "selectorLocation", "location",
+    		        		List.of(
+    		        				new LabelSelectorItem("주소1", "주소1"), 
+    		        				new LabelSelectorItem("주소2", "주소2"), 
+    		        				new LabelSelectorItem("주소3", "주소3"), 
+    		        				new LabelSelectorItem("주소4", "주소4"),
+    		        				new LabelSelectorItem("주소5", "주소5"))
+    		        		)
     		    )
+    ),
+    
+    
+    ROOM_USER("dining_user", false, false, true, true
+			, null
+			, null,
+			List.of(new Option("name", "", "dining_name")), 
+			
+			List.of(  // 라벨 + 셀렉터 필터링 항목
+		        new LabelSelectorOption("키워드", "selectorType", "type",
+		        		List.of(
+		        			new LabelSelectorItem("한식", "한식"), 
+		        			new LabelSelectorItem("프렌치", "프렌치"), 
+		        			new LabelSelectorItem("회원제 레스토랑", "회원제 레스토랑"), 
+		        			new LabelSelectorItem("레스토랑&바", "레스토랑&바"),
+	    		        	new LabelSelectorItem("스카이 바", "스카이 바"),
+		        			new LabelSelectorItem("프리미엄 베이커리&카페", "프리미엄 베이커리&카페"),
+		        			new LabelSelectorItem("인룸 다이닝", "인룸 다이닝"))
+		        			)
+		    )
     ),
     
     

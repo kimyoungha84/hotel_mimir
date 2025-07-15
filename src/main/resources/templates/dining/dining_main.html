@@ -363,13 +363,14 @@ $(function(){
  <div class="card-info">
    <div class="card-di-type">
      <span class="di-type-wrap">
-       <span class="di-type-txt" th:text="${dining.type}">타입</span>
+       <span class="di-type-txt" th:text="${dining.dining_classification}">분류</span>
      </span>
    </div>
    <div class="di-name-wrap">
      <div class="di-name-txt-area" th:text="${dining.dining_name}">다이닝명</div>
    </div>
    <div class="di-card-info-wrap">
+     <div class="di-info-row">타입 | <span th:text="${dining.type}">타입</span></div>
      <div class="di-info-row">위치 | <span th:text="${dining.location}">위치</span></div>
      <div class="di-info-row">문의 | <span th:text="${dining.phone_number}">문의</span></div>
    </div>

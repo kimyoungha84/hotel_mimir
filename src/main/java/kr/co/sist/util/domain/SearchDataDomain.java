@@ -22,6 +22,7 @@ public class SearchDataDomain {
 	private Date dining_reg_date;
 	private String location;
 	private String phone_number;
+	private String dining_classification;
 	
 	//FAQ
 	private int faq_num;

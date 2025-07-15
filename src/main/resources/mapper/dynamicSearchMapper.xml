@@ -167,7 +167,7 @@ WHERE rnum BETWEEN #{offset} AND #{end}
 <!--///////////////////////////////// USER-DINING /////////////////////////////////-->
 
 <sql id="userDiningSelectColumns">
-  dining_id, dining_name, type, location, phone_number
+  dining_id, dining_name, type, location, phone_number, dining_classification
 </sql>
 
 

@@ -392,6 +392,30 @@
       });
     }
     
+    // 각 셀렉터별 선택해제 버튼
+    document.querySelectorAll('.user-reset-btn').forEach(function(btn) {
+      btn.onclick = function(e) {
+        e.stopPropagation();
+        const select = btn.closest('.user-filter-select');
+        if (!select) return;
+        const selectId = select.id;
+        // 해당 셀렉터의 선택값만 해제
+        delete selectedFilters[selectId];
+        // 해당 셀렉터의 pill-btn만 해제
+        select.querySelectorAll('.user-pill-btn').forEach(function(pill) {
+          pill.classList.remove('selected');
+        });
+        // 해당 셀렉터의 태그만 비움
+        const tagArea = select.querySelector('.user-selected-filters');
+        if (tagArea) tagArea.innerHTML = '';
+        updateSelectedFilters();
+        updatePillSelection();
+        updateFilterBtnStyle();
+        updateFilterBtnCount();
+        search();
+      };
+    });
+    
     // 선택해제 버튼
     document.getElementById('resetBtn').onclick = function() {
       Object.keys(selectedFilters).forEach(function(key) { delete selectedFilters[key]; });
