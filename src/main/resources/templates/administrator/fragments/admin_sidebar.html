@@ -62,7 +62,7 @@
                         <span class="nav_name">회원 관리</span>
                     </div>
 
-                    <div class="nav__link collapse" data-role="room">
+                    <div class="nav__link collapse" th:attr="onclick='movePage('+'\''+@{/admin/roomlist}+'\''+')'" data-role="room">
                         <ion-icon name="bed-outline" class="nav__icon"></ion-icon>
                         <span class="nav_name">객실 관리</span>
 
@@ -76,7 +76,7 @@
 
                     </div>
 
-                    <div class="nav__link collapse" data-role="dinning">
+                    <div class="nav__link collapse" th:attr="onclick='movePage('+'\''+@{/admin/dining}+'\''+')'" data-role="dinning">
                         <ion-icon name="restaurant-outline" class="nav__icon"></ion-icon>
                         <span class="nav_name">다이닝 관리</span>
 
@@ -90,7 +90,7 @@
                         </ul>
                     </div>
 
-                    <div class="nav__link collapse" data-role="inquiry">
+                    <div class="nav__link collapse" th:attr="onclick='movePage('+'\''+@{/admin/faq}+'\''+')'" data-role="inquiry">
                         <ion-icon name="help-outline" class="nav__icon"></ion-icon>
                         <span class="nav_name">문의 관리</span>
 

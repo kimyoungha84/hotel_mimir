@@ -182,12 +182,17 @@ Vue.createApp({
         updateStaffListFromDOM() {
             const rows = document.querySelectorAll('#resultArea tr');
             rows.forEach((row, index) => {
+                
                 const deptCode = row.cells[3].innerText; // 부서 코드
                 const positionCode = row.cells[4].innerText; // 직책 코드
+                const permissionCode=row.cells[5].innerText;//권한
                 const staffStatus = row.cells[6].innerText; // 상태
-                alert("deptCode-----"+deptCode);
-                alert("positionCode-----"+positionCode);                
-                alert("staffStatus-----"+staffStatus);
+
+                console.log("deptCode-----"+deptCode);
+                console.log("positionCode-----"+positionCode);
+                console.log("permissionCode-----"+permissionCode);
+                console.log("staffStatus-----"+staffStatus);
+                
 
                 
                 // 예시로 staffList 배열에 부서명, 직책명, 상태명 등을 추가하는 방법
