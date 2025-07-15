@@ -8,7 +8,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <!-- jquery CDN -->
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+
 
 <th:block th:replace="~{/administrator/fragments/admin_header :: admin_header}"></th:block>
 
@@ -107,7 +107,6 @@ $(function(){
                 $(mutation.addedNodes).each(function(index,node){
                     //각 노드가 <tr>인지 확인
                     if($(this).is('tr')) {
-
                         var trTag=$(node);//그럼 이게 tr인가? //jQuery 객체로 변환
                         
                         //.get(0)로 jQuery 객체를 원시 DOM 객체로 변환 후 querySelector
@@ -116,8 +115,12 @@ $(function(){
                         //직책
                         var positionVal=trTag.get(0).querySelector('td:nth-child(5)').innerText;
                         //권한
+                        var authoritiesVal=trTag.get(0).querySelector('td:nth-child(6)').innerText;
                         //상태
                         var statusVal=trTag.get(0).querySelector('td:nth-child(7)').innerText;
+
+                        console.log("authoritiesVal----------"+authoritiesVal);
+                        
 
                         //부서
                         trTag.get(0).querySelector('td:nth-child(4)').innerText=deptMapping[deptVal];
@@ -136,6 +139,16 @@ $(function(){
     observer.observe(document.getElementById('resultArea'), config);
 
 });    //ready
+function authorChk(authorStr){
+    var testStr="hello,nice,to,meet,you";
+    var seperator=",";
+    var index=0;
+
+    if(testStr.include(seperator)){
+        //권한 , 로 분리하고, 반환
+
+    }//end if
+}//authorChk
 
 </script>
 </body>
