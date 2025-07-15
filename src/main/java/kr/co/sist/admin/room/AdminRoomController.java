@@ -50,7 +50,8 @@ public class AdminRoomController {
 
 	        String imagePath = null;
 	        if (thumbnail != null && !thumbnail.isEmpty()) {
-	            String uploadDir = "C:/upload/room_images/";
+				/* String uploadDir = "C:/upload/room_images/"; */
+	        	String uploadDir = new File("src/main/resources/static/upload/room_images/").getAbsolutePath();
 	            File dir = new File(uploadDir);
 	            if (!dir.exists()) dir.mkdirs();
 
