@@ -29,4 +29,9 @@ public interface ChatRoomMapper {
      * staff_id로 담당 채팅방 리스트 조회
      */
     java.util.List<ChatRoomDTO> findRoomsByStaffId(@Param("staff_id") String staff_id);
+    
+    /**
+     * user_num으로 사용자의 채팅방 리스트 조회
+     */
+    java.util.List<ChatRoomDTO> findRoomsByUserId(@Param("user_num") int user_num);
 } 

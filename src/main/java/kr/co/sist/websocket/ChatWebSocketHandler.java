@@ -54,30 +54,46 @@ public class ChatWebSocketHandler extends TextWebSocketHandler {
             // 2. 메시지 저장 (user/admin 구분)
             ChatMessageDTO chatMsg = new ChatMessageDTO();
             chatMsg.setRoom_id(roomId);
-            if (sender.equals(room.getStaff_id())) {
+            
+            // sender가 숫자인지 확인하여 사용자/관리자 구분
+            boolean isUser = false;
+            try {
+                Integer.parseInt(sender);
+                isUser = true;
+            } catch (NumberFormatException e) {
+                isUser = false;
+            }
+            
+            if (isUser) {
+                // 사용자가 보낸 메시지
+                chatMsg.setUser_num(Integer.parseInt(sender));
+                chatMsg.setStaff_id(room.getStaff_id());
+            } else {
                 // 관리자가 보낸 메시지
                 chatMsg.setStaff_id(sender);
                 chatMsg.setUser_num(room.getUser_num());
-            } else {
-                try {
-                    chatMsg.setUser_num(Integer.parseInt(sender));
-                } catch (NumberFormatException e) {
-                    chatMsg.setUser_num(room.getUser_num()); // fallback
-                }
-                chatMsg.setStaff_id(room.getStaff_id());
             }
+            
             chatMsg.setDept_iden(room.getDept_iden());
             chatMsg.setContent(msg);
             chatMsg.setSend_time(new Timestamp(System.currentTimeMillis()));
             chatMsg.setIs_read("0");
 
             // 로그 추가
-            System.out.println("[채팅메시지 저장] sender=" + sender + ", room.getUser_num()=" + room.getUser_num() + ", chatMsg.getUser_num()=" + chatMsg.getUser_num());
+            System.out.println("[채팅메시지 저장] sender=" + sender + ", isUser=" + isUser + ", room.getUser_num()=" + room.getUser_num() + ", chatMsg.getUser_num()=" + chatMsg.getUser_num());
 
             chatMessageMapper.insert(chatMsg);
 
             // 3. 상대방 세션에 전달
-            String targetId = sender.equals(room.getStaff_id()) ? String.valueOf(room.getUser_num()) : room.getStaff_id();
+            String targetId;
+            if (isUser) {
+                // 사용자가 보낸 메시지 → 관리자에게 전달
+                targetId = room.getStaff_id();
+            } else {
+                // 관리자가 보낸 메시지 → 사용자에게 전달
+                targetId = String.valueOf(room.getUser_num());
+            }
+            
             WebSocketSession targetSession = userSessions.get(targetId);
             if (targetSession != null && targetSession.isOpen()) {
                 targetSession.sendMessage(new TextMessage(sender + ":" + msg));

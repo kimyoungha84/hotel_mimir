@@ -21,7 +21,22 @@ public class ChatServiceImpl implements ChatService {
             room = new ChatRoomDTO();
             room.setUser_num(user_num);
             room.setStaff_id(staff_id);
-            room.setDept_iden("room");
+            
+            // chat_type에 따라 dept_iden 설정
+            switch (chat_type) {
+                case "0":
+                    room.setDept_iden("room");
+                    break;
+                case "1":
+                    room.setDept_iden("dining");
+                    break;
+                case "2":
+                    room.setDept_iden("inquiry");
+                    break;
+                default:
+                    room.setDept_iden("inquiry");
+            }
+            
             room.setChat_type(chat_type);
             chatRoomMapper.insert(room);
         }
@@ -46,6 +61,11 @@ public class ChatServiceImpl implements ChatService {
     @Override
     public List<ChatRoomDTO> getRoomsByStaffId(String staff_id) {
         return chatRoomMapper.findRoomsByStaffId(staff_id);
+    }
+
+    @Override
+    public List<ChatRoomDTO> getRoomsByUserId(int user_num) {
+        return chatRoomMapper.findRoomsByUserId(user_num);
     }
 
     @Override
