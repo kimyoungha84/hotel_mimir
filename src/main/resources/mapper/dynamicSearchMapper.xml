@@ -189,7 +189,7 @@ WHERE rnum BETWEEN #{offset} AND #{end}
 
 <!--///////////////////////////////// DINING_RESV /////////////////////////////////-->
 
-<sql id="diningResvSelectColumns">
+<sql id="diningResvSelectColumnsAlias">
   r.RESERVATION_ID AS reservation_id,
   r.RESERVATION_NAME AS reservation_name,
   d.DINING_NAME AS dining_name,
@@ -197,10 +197,18 @@ WHERE rnum BETWEEN #{offset} AND #{end}
   r.RESERVATION_STATUS AS reservation_status
 </sql>
 
+<sql id="diningResvSelectColumns">
+  reservation_id,
+  reservation_name,
+  dining_name,
+  reservation_date,
+  reservation_status
+</sql>
+
 <select id="searchDiningResv" resultType="kr.co.sist.util.domain.SearchDataDomain">
   SELECT <include refid="diningResvSelectColumns"/>
   FROM (
-    SELECT <include refid="diningResvSelectColumns"/>,
+    SELECT <include refid="diningResvSelectColumnsAlias"/>,
            ROW_NUMBER() OVER (ORDER BY r.RESERVATION_TIME DESC) rnum
     FROM DINING_RESERVATION r
     LEFT JOIN DINING d ON r.DINING_ID = d.DINING_ID

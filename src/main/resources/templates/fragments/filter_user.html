@@ -4,29 +4,30 @@
       --mimir-brown: #a68a6d;
       --mimir-brown-light: #f7f3ef;
     }
-    .filtering-area {
+    .user-filtering-area {
       height: 60px;
       display: flex;
       margin-bottom: 30px;
       flex-direction: row;
       align-items: center;
-      justify-content: space-between;
+      justify-content: flex-start;
       gap: 12px;
     }
-    .fi-btn-area {
+    .user-fi-btn-area {
       display: flex;
       gap: 4px;
+      flex-grow: 1;
     }
-    .filtering-btn {
+    .user-filtering-btn {
       width: auto;
       min-width: 110px;
-      height: 45px;
+      height: 50px;
       background: none;
-      border: 1.5px solid #222;
+      border: 1px solid #dddddd;
       color: #222;
-      font-weight: 600;
+      font-weight: 500;
       font-size: 16px;
-      border-radius: 24px;
+      border-radius: 5px;
       cursor: pointer;
       margin-right: 0.2rem;
       display: flex;
@@ -36,44 +37,44 @@
       transition: background 0.18s, color 0.18s, border 0.18s;
       position: relative;
     }
-    .filtering-btn.selected {
+    .user-filtering-btn.selected {
       background: var(--mimir-brown-light);
       color: var(--mimir-brown);
       border: 1.5px solid var(--mimir-brown);
     }
-    .filtering-btn .count {
+    .user-filtering-btn .count {
       margin-left: 7px;
       font-size: 15px;
       font-weight: 700;
       color: var(--mimir-brown);
     }
-    .filtering-btn.reset {
+    .user-filtering-btn.user-reset {
       color: #222;
-      border: 1.5px solid #222;
+      border: 1px solid #dddddd;
       background: none;
-      font-weight: 600;
+      font-weight: 500;
       display: flex;
       align-items: center;
     }
-    .filtering-btn.reset img {
+    .user-filtering-btn.user-reset img {
       width: 18px;
       height: 18px;
       margin-right: 5px;
     }
-    .filter-select {
+    .user-filter-select {
       position: relative;
-      min-width: 140px;
+      /* min-width: 140px; */
     }
-    .arrow-img {
+    .user-arrow-img {
       width: 18px;
       height: 18px;
       transition: transform 0.3s;
       margin-left: 7px;
     }
-    .filter-select.open .arrow-img {
+    .user-filter-select.open .user-arrow-img {
       transform: rotate(180deg);
     }
-    .custom-dropdown {
+    .user-custom-dropdown {
       display: block;
       position: absolute;
       left: 0;
@@ -90,23 +91,25 @@
       transform: translateY(-10px);
       transition: opacity 0.3s, transform 0.3s;
     }
-    .filter-select.open .custom-dropdown {
+    .user-filter-select.open .user-custom-dropdown {
       opacity: 1;
       pointer-events: auto;
       transform: translateY(0);
     }
-    .dropdown-guide {
+    .user-dropdown-guide {
       font-size: 14px;
       color: #888;
       margin-bottom: 18px;
     }
-    .pill-options {
+    .user-pill-options {
       display: flex;
       gap: 12px;
       flex-wrap: wrap;
       margin-bottom: 18px;
+      border-bottom: 2px solid #595959;
+      padding-bottom: 18px;
     }
-    .pill-btn {
+    .user-pill-btn {
       border: 1.5px solid var(--mimir-brown);
       background: #fff;
       color: var(--mimir-brown);
@@ -116,13 +119,13 @@
       cursor: pointer;
       transition: all 0.18s;
     }
-    .pill-btn.selected {
+    .user-pill-btn.selected {
       background: var(--mimir-brown-light);
       color: var(--mimir-brown);
       border: 1.5px solid var(--mimir-brown);
       font-weight: 600;
     }
-    .dropdown-bottom {
+    .user-dropdown-bottom {
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -130,7 +133,7 @@
       padding-top: 10px;
       margin-top: 8px;
     }
-    .reset-btn {
+    .user-reset-btn {
       background: none;
       border: none;
       color: var(--mimir-brown);
@@ -140,29 +143,29 @@
       align-items: center;
       gap: 4px;
     }
-    .reset-btn img {
+    .user-reset-btn img {
       width: 18px;
       height: 18px;
     }
-    .dropdown-arrow {
+    .user-dropdown-arrow {
       width: 22px;
       height: 22px;
       transition: transform 0.3s;
     }
-    .filter-select.open .dropdown-arrow {
+    .user-filter-select.open .user-dropdown-arrow {
       transform: rotate(180deg);
     }
-    .selected-filters {
+    .user-selected-filters {
       display: flex;
       gap: 8px;
       flex-wrap: wrap;
       margin: 0 0 12px 0;
     }
-    .filter-tag {
+    .user-filter-tag {
       background: var(--mimir-brown-light);
       color: var(--mimir-brown);
       border-radius: 16px;
-      border: 1.5px solid var(--mimir-brown);
+      /* border: 1.5px solid var(--mimir-brown); */
       padding: 6px 16px;
       font-size: 14px;
       display: flex;
@@ -170,95 +173,116 @@
       gap: 6px;
       font-weight: 600;
     }
-    .filter-tag .remove {
+    .user-filter-tag .user-remove {
       cursor: pointer;
       font-size: 16px;
       color: #a68a6d;
     }
-    .input-search-area {
+    .user-input-search-area {
       display: flex;
       align-items: center;
-      gap: 8px;
+      width: 260px;
+      border: 1.5px solid #ddd;
+      border-radius: 5px;
+      background: #fff;
+      padding: 0 12px;
+      height: 50px;
+      transition: border 0.18s;
+      margin-left: auto;
+      flex-shrink: 0;
+    }
+    .user-input-search-area:focus-within {
+      border: 1.5px solid #333;
     }
     .user-filter-input {
-      width: 200px;
-      height: 40px;
-      font-size: 15px;
-      border: 1.5px solid #ddd;
-      border-radius: 8px;
-      padding: 0 14px;
+      border: none;
       outline: none;
-      transition: border 0.18s;
+      background: transparent;
+      font-size: 16px;
+      color: #444;
+      flex: 1;
+      height: 40px;
+      padding: 0;
     }
-    .user-filter-input:focus {
-      border: 1.5px solid var(--mimir-brown);
+    .user-filter-input::placeholder {
+      color: #888;
+      font-size: 16px;
     }
     .user-search-btn {
-      height: 40px;
-      min-width: 80px;
-      border-radius: 8px;
-      border: 1.5px solid #222;
-      background: #222;
-      color: #fff;
-      font-size: 16px;
-      font-weight: 600;
+      width: 32px;
+      height: 32px;
+      min-width: 32px;
+      min-height: 32px;
+      border: 1.5px solid #bbb;
+      background: #fff;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-left: 8px;
+      padding: 0;
       cursor: pointer;
-      transition: background 0.18s, color 0.18s;
+      transition: border 0.18s;
     }
     .user-search-btn:hover {
-      background: var(--mimir-brown);
-      color: #fff;
-      border: 1.5px solid var(--mimir-brown);
+      border: 1.5px solid #333;
+    }
+    .user-search-btn img {
+      width: 18px;
+      height: 18px;
+      display: block;
     }
   </style>
   
   <form id="userSearchForm" onsubmit="return false;">
     <input type="hidden" name="filterType" th:value="${filterType}" />
-    <div class="filtering-area">
-      <div class="fi-btn-area">
+    <div class="user-filtering-area">
+      <div class="user-fi-btn-area">
         <!-- FilterConfig의 labelSelectorOptions 기반 동적 필터 생성 -->
         <div th:if="${filter.labelSelectorOptions != null and #lists.size(filter.labelSelectorOptions) > 0}">
-          <div th:each="selector : ${filter.labelSelectorOptions}" class="filter-select" th:id="${selector.selectorName + 'Select'}">
-            <button class="filtering-btn" type="button">
+          <div th:each="selector : ${filter.labelSelectorOptions}" class="user-filter-select" th:id="${selector.selectorName + 'Select'}">
+            <button class="user-filtering-btn" type="button">
               <span th:text="${selector.label}"></span>
               <span class="count" style="display:none"></span>
-              <img class="arrow-img" src="/filter/images/keyword_button_filter.svg" alt="화살표">
+              <img class="user-arrow-img" src="/filter/images/keyword_button_filter.svg" alt="화살표">
             </button>
-            <div class="custom-dropdown">
-              <div class="dropdown-guide">2개 이상 선택 가능</div>
-              <div class="pill-options">
-                <button class="pill-btn"
+            <div class="user-custom-dropdown">
+              <div class="user-dropdown-guide">2개 이상 선택 가능</div>
+              <div class="user-pill-options">
+                <button class="user-pill-btn"
                         th:each="item : ${selector.options}"
                         th:data-value="${item.searchValue}"
                         th:text="${item.label}"></button>
               </div>
               <!-- 선택된 필터 태그를 셀렉터별로 표시 -->
-              <div class="selected-filters" th:attr="id='selectedFilters-' + ${selector.selectorName}"></div>
-              <div class="dropdown-bottom">
-                <button class="reset-btn" type="button">
+              <div class="user-selected-filters" th:attr="id='selectedFilters-' + ${selector.selectorName}"></div>
+              <div class="user-dropdown-bottom">
+                <button class="user-reset-btn" type="button">
                   <img src="/filter/images/ico_btn_refresh_small.png" alt="초기화"> 선택해제
                 </button>
-                <img class="dropdown-arrow" src="/filter/images/keyword_button_filter.svg" alt="화살표">
+                <img class="user-dropdown-arrow" src="/filter/images/keyword_button_filter.svg" alt="화살표">
               </div>
             </div>
           </div>
         </div>
-        <button class="filtering-btn reset" type="button" id="resetBtn"><img src="/filter/images/ico_btn_refresh_small.png" alt="초기화">초기화</button>
+        <button class="user-filtering-btn user-reset" type="button" id="resetBtn"><img src="/filter/images/ico_btn_refresh_small.png" alt="초기화">초기화</button>
       </div>
       <!-- 텍스트 검색 옵션 -->
-      <div class="input-search-area" th:if="${filter.showSearchText}">
-        <input type="text" class="user-filter-input" name="searchKeyword" placeholder="검색어 입력">
-        <button class="user-search-btn" type="button" id="userSearchBtn">검색</button>
+      <div class="user-input-search-area" th:if="${filter.showSearchText}">
+        <input type="text" class="user-filter-input" name="searchKeyword" placeholder="검색어를 입력하세요">
+        <button class="user-search-btn" type="button" id="userSearchBtn">
+          <img src="/filter/images/searchbtn.svg" alt="검색">
+        </button>
       </div>
     </div>
   </form>
 
   <script>
     // 셀렉터 토글 및 화살표 회전
-    document.querySelectorAll('.filter-select').forEach(function(select) {
-      const btn = select.querySelector('.filtering-btn');
+    document.querySelectorAll('.user-filter-select').forEach(function(select) {
+      const btn = select.querySelector('.user-filtering-btn');
       btn.addEventListener('click', function(e) {
-        document.querySelectorAll('.filter-select').forEach(function(other) {
+        document.querySelectorAll('.user-filter-select').forEach(function(other) {
           if (other !== select) other.classList.remove('open');
         });
         select.classList.toggle('open');
@@ -267,8 +291,8 @@
     
     // 바깥 클릭 시 닫기
     document.addEventListener('click', function(e) {
-      if (!e.target.closest('.filter-select')) {
-        document.querySelectorAll('.filter-select').forEach(function(select) {
+      if (!e.target.closest('.user-filter-select')) {
+        document.querySelectorAll('.user-filter-select').forEach(function(select) {
           select.classList.remove('open');
         });
       }
@@ -279,8 +303,8 @@
     const filterMap = {};
     
     // FilterConfig 기반으로 filterMap 동적 생성
-    document.querySelectorAll('.filter-select').forEach(function(select) {
-      const btn = select.querySelector('.filtering-btn');
+    document.querySelectorAll('.user-filter-select').forEach(function(select) {
+      const btn = select.querySelector('.user-filtering-btn');
       const label = btn.querySelector('span').textContent;
       filterMap[select.id] = label;
     });
@@ -307,9 +331,9 @@
       });
     }
     
-    document.querySelectorAll('.pill-btn').forEach(function(btn) {
+    document.querySelectorAll('.user-pill-btn').forEach(function(btn) {
       btn.addEventListener('click', function(e) {
-        const selectId = btn.closest('.filter-select').id;
+        const selectId = btn.closest('.user-filter-select').id;
         const value = btn.dataset.value;
         if (!selectedFilters[selectId]) selectedFilters[selectId] = [];
         if (selectedFilters[selectId].includes(value)) {
@@ -326,8 +350,8 @@
     });
     
     function updatePillSelection() {
-      document.querySelectorAll('.pill-btn').forEach(function(btn) {
-        const selectId = btn.closest('.filter-select').id;
+      document.querySelectorAll('.user-pill-btn').forEach(function(btn) {
+        const selectId = btn.closest('.user-filter-select').id;
         const value = btn.dataset.value;
         if (selectedFilters[selectId] && selectedFilters[selectId].includes(value)) {
           btn.classList.add('selected');
@@ -350,9 +374,9 @@
         if (!selectedFilters[key] || selectedFilters[key].length === 0) return;
         selectedFilters[key].forEach(function(val) {
           const tag = document.createElement('div');
-          tag.className = 'filter-tag';
-          tag.innerHTML = `${filterMap[key]}: ${val} <span class=\"remove\">×</span>`;
-          tag.querySelector('.remove').onclick = function(e) {
+          tag.className = 'user-filter-tag';
+          tag.innerHTML = `${filterMap[key]}: ${val} <span class=\"user-remove\">×</span>`;
+          tag.querySelector('.user-remove').onclick = function(e) {
             e.stopPropagation(); // 드롭다운 닫힘 방지
             selectedFilters[key] = selectedFilters[key].filter(v => v !== val);
             if (selectedFilters[key].length === 0) delete selectedFilters[key];
@@ -371,11 +395,11 @@
     document.getElementById('resetBtn').onclick = function() {
       Object.keys(selectedFilters).forEach(function(key) { delete selectedFilters[key]; });
       // 모든 pill-btn의 selected 클래스 해제
-      document.querySelectorAll('.pill-btn').forEach(function(btn) {
+      document.querySelectorAll('.user-pill-btn').forEach(function(btn) {
         btn.classList.remove('selected');
       });
       // 모든 드롭다운 닫기
-      document.querySelectorAll('.filter-select').forEach(function(select) {
+      document.querySelectorAll('.user-filter-select').forEach(function(select) {
         select.classList.remove('open');
       });
       // 모든 selected-filters 영역 비우기 (리스트창 즉시 비움)
@@ -383,10 +407,10 @@
         container.innerHTML = '';
       });
       // 리스트창에 남아있는 모든 태그와 연동된 pill-btn도 선택해제
-      document.querySelectorAll('.filter-tag').forEach(function(tag) {
+      document.querySelectorAll('.user-filter-tag').forEach(function(tag) {
         const text = tag.textContent.split(':')[1]?.trim().replace('×','').trim();
         if (text) {
-          document.querySelectorAll('.pill-btn').forEach(function(btn) {
+          document.querySelectorAll('.user-pill-btn').forEach(function(btn) {
             if (btn.textContent.trim() === text) {
               btn.classList.remove('selected');
             }
@@ -401,16 +425,16 @@
     };
     
     // 드롭다운 하단 화살표 클릭 시 닫기
-    document.querySelectorAll('.dropdown-arrow').forEach(function(arrow) {
+    document.querySelectorAll('.user-dropdown-arrow').forEach(function(arrow) {
       arrow.onclick = function() {
-        arrow.closest('.filter-select').classList.remove('open');
+        arrow.closest('.user-filter-select').classList.remove('open');
       };
     });
     
     // 필터 버튼 스타일 동적 적용
     function updateFilterBtnStyle() {
-      document.querySelectorAll('.filter-select').forEach(function(select) {
-        const btn = select.querySelector('.filtering-btn');
+      document.querySelectorAll('.user-filter-select').forEach(function(select) {
+        const btn = select.querySelector('.user-filtering-btn');
         const selectId = select.id;
         if (selectedFilters[selectId] && selectedFilters[selectId].length > 0) {
           btn.classList.add('selected');
@@ -422,8 +446,8 @@
     
     // 필터 버튼 옆에 선택 개수 표시
     function updateFilterBtnCount() {
-      document.querySelectorAll('.filter-select').forEach(function(select) {
-        const btn = select.querySelector('.filtering-btn');
+      document.querySelectorAll('.user-filter-select').forEach(function(select) {
+        const btn = select.querySelector('.user-filtering-btn');
         const selectId = select.id;
         const countSpan = btn.querySelector('.count');
         if (selectedFilters[selectId] && selectedFilters[selectId].length > 0) {
