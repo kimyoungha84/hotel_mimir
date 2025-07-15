@@ -1,9 +1,11 @@
 // FAQ toggle 개선
-$(".faq-item").click(function() {
-	const content = $(this).next(".faq-answer");
-	// 모든 답변 닫고, 선택한 항목만 toggle
-	$(".faq-answer").not(content).slideUp();
-	content.slideToggle();
+$(document).ready(function() {
+  $(".faq-item").click(function() {
+    const content = $(this).next(".faq-answer");
+    // 모든 답변 닫고, 선택한 항목만 toggle
+    $(".faq-answer").not(content).slideUp();
+    content.slideToggle();
+  });
 });
 
 // 채팅 관련 변수
@@ -17,7 +19,6 @@ let userNum = null;
 function getCurrentUser() {
 	const token = localStorage.getItem('jwt_token');
 	if (!token) return null;
-	
 	try {
 		const payload = JSON.parse(atob(token.split('.')[1]));
 		return payload;

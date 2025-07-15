@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import jakarta.servlet.http.HttpServletRequest;
 import kr.co.sist.chat.ChatMessageDTO;
 import kr.co.sist.chat.ChatRoomDTO;
 import kr.co.sist.chat.ChatService;
@@ -26,7 +27,11 @@ public class AdminChatController {
      * 관리자의 담당 채팅방 목록 조회
      */
     @GetMapping("/rooms")
-    public ResponseEntity<?> getAdminChatRooms(@RequestParam String staff_id) {
+    public ResponseEntity<?> getAdminChatRooms(HttpServletRequest request) {
+        String staff_id = (String)request.getSession().getAttribute("session_id");
+        if (staff_id == null) {
+            return ResponseEntity.status(401).body(Map.of("error", "로그인이 필요합니다."));
+        }
         try {
             List<ChatRoomDTO> rooms = chatService.getRoomsByStaffId(staff_id);
             return ResponseEntity.ok(rooms);
@@ -52,7 +57,11 @@ public class AdminChatController {
      * 메시지 읽음 처리
      */
     @PostMapping("/read")
-    public ResponseEntity<?> markMessagesAsRead(@RequestParam int room_id, @RequestParam String staff_id) {
+    public ResponseEntity<?> markMessagesAsRead(@RequestParam int room_id, HttpServletRequest request) {
+        String staff_id = (String)request.getSession().getAttribute("session_id");
+        if (staff_id == null) {
+            return ResponseEntity.status(401).body(Map.of("error", "로그인이 필요합니다."));
+        }
         try {
             chatService.markMessagesAsRead(room_id, staff_id);
             return ResponseEntity.ok(Map.of("message", "읽음 처리 완료"));
@@ -65,7 +74,11 @@ public class AdminChatController {
      * 안읽은 메시지 개수 조회
      */
     @GetMapping("/unread-count")
-    public ResponseEntity<?> getUnreadCount(@RequestParam int room_id, @RequestParam String staff_id) {
+    public ResponseEntity<?> getUnreadCount(@RequestParam int room_id, HttpServletRequest request) {
+        String staff_id = (String)request.getSession().getAttribute("session_id");
+        if (staff_id == null) {
+            return ResponseEntity.status(401).body(Map.of("error", "로그인이 필요합니다."));
+        }
         try {
             int count = chatService.countUnreadByRoomAndStaff(room_id, staff_id);
             return ResponseEntity.ok(Map.of("count", count));

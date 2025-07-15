@@ -9,6 +9,8 @@ import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+
 import kr.co.sist.chat.ChatRoomMapper;
 import kr.co.sist.chat.ChatMessageMapper;
 import kr.co.sist.chat.ChatRoomDTO;

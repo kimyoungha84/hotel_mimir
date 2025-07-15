@@ -1,5 +1,7 @@
 package kr.co.sist.chat;
 
+import java.util.List;
+
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -28,10 +30,20 @@ public interface ChatRoomMapper {
     /**
      * staff_id로 담당 채팅방 리스트 조회
      */
-    java.util.List<ChatRoomDTO> findRoomsByStaffId(@Param("staff_id") String staff_id);
+    List<ChatRoomDTO> findRoomsByStaffId(@Param("staff_id") String staff_id);
     
     /**
      * user_num으로 사용자의 채팅방 리스트 조회
      */
-    java.util.List<ChatRoomDTO> findRoomsByUserId(@Param("user_num") int user_num);
+    List<ChatRoomDTO> findRoomsByUserId(@Param("user_num") int user_num);
+
+    /**
+     * 권한 2개(room, inquiry 또는 dinning, inquiry) 모두 가진 ACTIVE 관리자 중 랜덤 1명
+     */
+    String findRandomStaffWithPermissions(@Param("perm1") String perm1, @Param("perm2") String perm2);
+
+    /**
+     * 권한이 inquiry만 있는 ACTIVE 관리자 중 랜덤 1명
+     */
+    String findRandomStaffWithOnlyInquiry();
 } 

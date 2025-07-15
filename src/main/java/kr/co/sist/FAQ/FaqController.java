@@ -1,9 +1,9 @@
 package kr.co.sist.FAQ;
 
+import java.security.Principal;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.util.List;
-import java.security.Principal;
 
 import org.jsoup.Jsoup;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,12 +14,14 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 
+import kr.co.sist.member.MemberDTO;
+import kr.co.sist.member.MemberMapper;
 import kr.co.sist.util.FilterConfig;
 import kr.co.sist.util.ModelUtils;
 import kr.co.sist.util.controller.SearchController;
-import kr.co.sist.member.MemberMapper;
-import kr.co.sist.member.MemberDTO;
+import kr.co.sist.member.CustomUserDetails;
 
 @Controller
 public class FaqController {
@@ -64,25 +66,17 @@ public class FaqController {
 	}//faqRegisterForm
 
 	@GetMapping("/inquiry")
-	public String inquiryPage(Model model, Principal principal) {
-		
+	public String inquiryPage(Model model, @AuthenticationPrincipal CustomUserDetails userDetails) {
 		List<FAQDTO> faqList = service.selectAllFAQ(); // DB에서 FAQ 불러오기
-		
 		model.addAttribute("faqList", faqList);
-		model.addAttribute("isLogin", principal != null);
-
+		boolean isLogin = (userDetails != null);
+		model.addAttribute("isLogin", isLogin);
 		int userNum = 0;
-		if (principal != null) {
-			String email = principal.getName();
-			MemberDTO member = memberMapper.selectMemberByEmail(email);
-			if (member != null) {
-				userNum = member.getUser_num();
-			}
+		if (userDetails != null) {
+			userNum = userDetails.getUserNum();
 		}
 		model.addAttribute("userNum", userNum);
-		
 		return "inquiry/inquiry"; // => templates/inquiry.html
-		
 	}//inquiryPage
 
 	// faq 등록

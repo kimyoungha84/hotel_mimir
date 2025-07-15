@@ -15,13 +15,28 @@ public class ChatServiceImpl implements ChatService {
     @Override
     public ChatRoomDTO getOrCreateChatRoom(int user_num, String chat_type) {
         // staff_id를 무조건 mimir_267801로 고정
-        String staff_id = "mimir_267801";
+        // String staff_id = "mimir_267801";
+        String staff_id = null;
+        // chat_type에 따라 권한 조건 다르게 적용
+        if ("0".equals(chat_type)) {
+            // 객실 문의: room, inquiry 모두 있는 ACTIVE 관리자 중 랜덤 1명
+            staff_id = chatRoomMapper.findRandomStaffWithPermissions("room", "inquiry");
+        } else if ("1".equals(chat_type)) {
+            // 다이닝 문의: dinning, inquiry 모두 있는 ACTIVE 관리자 중 랜덤 1명
+            staff_id = chatRoomMapper.findRandomStaffWithPermissions("dinning", "inquiry");
+        } else if ("2".equals(chat_type)) {
+            // 일반 문의: inquiry만 있는 ACTIVE 관리자 중 랜덤 1명
+            staff_id = chatRoomMapper.findRandomStaffWithOnlyInquiry();
+        }
+        if (staff_id == null) {
+            // fallback: 기존 관리자
+            staff_id = "mimir_267801";
+        }
         ChatRoomDTO room = chatRoomMapper.findByUserAndStaffAndType(user_num, staff_id, chat_type);
         if (room == null) {
             room = new ChatRoomDTO();
             room.setUser_num(user_num);
             room.setStaff_id(staff_id);
-            
             // chat_type에 따라 dept_iden 설정
             switch (chat_type) {
                 case "0":
@@ -36,7 +51,6 @@ public class ChatServiceImpl implements ChatService {
                 default:
                     room.setDept_iden("inquiry");
             }
-            
             room.setChat_type(chat_type);
             chatRoomMapper.insert(room);
         }
