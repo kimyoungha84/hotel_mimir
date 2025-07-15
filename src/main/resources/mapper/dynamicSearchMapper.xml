@@ -194,7 +194,8 @@ WHERE rnum BETWEEN #{offset} AND #{end}
   r.RESERVATION_NAME AS reservation_name,
   d.DINING_NAME AS dining_name,
   r.RESERVATION_DATE AS reservation_date,
-  r.RESERVATION_STATUS AS reservation_status
+  r.RESERVATION_STATUS AS reservation_status,
+  r.RESERVATION_TYPE AS reservation_type
 </sql>
 
 <sql id="diningResvSelectColumns">
@@ -202,7 +203,8 @@ WHERE rnum BETWEEN #{offset} AND #{end}
   reservation_name,
   dining_name,
   reservation_date,
-  reservation_status
+  reservation_status,
+  reservation_type
 </sql>
 
 <select id="searchDiningResv" resultType="kr.co.sist.util.domain.SearchDataDomain">

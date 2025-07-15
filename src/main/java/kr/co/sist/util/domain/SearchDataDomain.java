@@ -43,6 +43,7 @@ public class SearchDataDomain {
 	private String reservation_name;
 	private Date reservation_date;
 	private String reservation_status;
+	private String reservation_type;
 	
 	
 }//class

@@ -5,18 +5,22 @@
       --mimir-brown-light: #f7f3ef;
     }
     .user-filtering-area {
-      height: 60px;
-      display: flex;
-      margin-bottom: 30px;
-      flex-direction: row;
-      align-items: center;
-      justify-content: flex-start;
-      gap: 12px;
+      display: flex !important;
+      flex-direction: row !important;
+      align-items: flex-start !important;
+      gap: 16px !important;
+      width: 100% !important;
     }
     .user-fi-btn-area {
-      display: flex;
-      gap: 4px;
-      flex-grow: 1;
+      display: flex !important;
+      flex-direction: row !important;
+      gap: 6px !important;
+      flex-wrap: wrap !important;
+      flex-grow: 1 !important;
+      align-items: flex-start !important;
+      width: auto !important;
+      min-width: 0 !important;
+      flex-shrink: 1 !important;
     }
     .user-filtering-btn {
       width: auto;
@@ -64,6 +68,12 @@
     .user-filter-select {
       position: relative;
       /* min-width: 140px; */
+      margin-bottom: 0 !important;
+      display: flex !important;
+      flex-direction: row !important;
+      width: auto !important;
+      min-width: 0 !important;
+      max-width: none !important;
     }
     .user-arrow-img {
       width: 18px;
@@ -188,8 +198,9 @@
       padding: 0 12px;
       height: 50px;
       transition: border 0.18s;
-      margin-left: auto;
-      flex-shrink: 0;
+      margin-left: auto !important;
+      flex-shrink: 0 !important;
+      min-width: 260px !important;
     }
     .user-input-search-area:focus-within {
       border: 1.5px solid #333;
@@ -239,7 +250,7 @@
     <div class="user-filtering-area">
       <div class="user-fi-btn-area">
         <!-- FilterConfig의 labelSelectorOptions 기반 동적 필터 생성 -->
-        <div th:if="${filter.labelSelectorOptions != null and #lists.size(filter.labelSelectorOptions) > 0}">
+        <th:block th:if="${filter.labelSelectorOptions != null and #lists.size(filter.labelSelectorOptions) > 0}">
           <div th:each="selector : ${filter.labelSelectorOptions}" class="user-filter-select" th:id="${selector.selectorName + 'Select'}">
             <button class="user-filtering-btn" type="button">
               <span th:text="${selector.label}"></span>
@@ -264,7 +275,7 @@
               </div>
             </div>
           </div>
-        </div>
+        </th:block>
         <button class="user-filtering-btn user-reset" type="button" id="resetBtn"><img src="/filter/images/ico_btn_refresh_small.png" alt="초기화">초기화</button>
       </div>
       <!-- 텍스트 검색 옵션 -->
@@ -312,18 +323,20 @@
     // 검색 함수: filter.html 구조와 완전 호환
     function search() {
       const form = document.getElementById('userSearchForm');
-      const formData = new FormData(form);
-      // filterType이 form에 있으면 자동 포함됨
-      // selectedFilters → MultiValueMap 형태로 변환
+      const params = new URLSearchParams(new FormData(form));
+      // selectedFilters 값도 추가
       Object.keys(selectedFilters).forEach(key => {
         const paramKey = key.replace('Select', '');
         selectedFilters[key].forEach(val => {
-          formData.append(paramKey, val);
+          params.append(paramKey, val);
         });
       });
       fetch('/search', {
         method: 'POST',
-        body: formData
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded'
+        },
+        body: params
       })
       .then(res => res.text())
       .then(html => {
