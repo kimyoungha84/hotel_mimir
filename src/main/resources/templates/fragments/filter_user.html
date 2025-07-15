@@ -280,6 +280,14 @@
       </div>
       <!-- 텍스트 검색 옵션 -->
       <div class="user-input-search-area" th:if="${filter.showSearchText}">
+        <!-- searchType 셀렉터 추가 (filter.html과 동일 구조) -->
+        <th:block th:if="${filter.showSelector}">
+          <input type="hidden" name="searchType" th:value="${filter.selectOptions[0].value}" />
+          <span th:if="${#lists.size(filter.selectOptions) == 1}" th:text="${filter.selectOptions[0].label}"></span>
+          <select th:if="${#lists.size(filter.selectOptions) > 1}" name="searchType" class="user-filter-select-box">
+            <option th:each="opt : ${filter.selectOptions}" th:value="${opt.value}" th:text="${opt.label}">검색</option>
+          </select>
+        </th:block>
         <input type="text" class="user-filter-input" name="searchKeyword" placeholder="검색어를 입력하세요">
         <button class="user-search-btn" type="button" id="userSearchBtn">
           <img src="/filter/images/searchbtn.svg" alt="검색">
@@ -501,5 +509,47 @@
     // 최초 로딩 시 스타일/카운트 적용
     updateFilterBtnStyle();
     updateFilterBtnCount();
+
+    // 검색 버튼 클릭 시 search() 호출
+    const userSearchBtn = document.getElementById('userSearchBtn');
+    if (userSearchBtn) {
+      userSearchBtn.addEventListener('click', function() {
+        search();
+      });
+    }
+
+    // 검색어 입력창에서 Enter 키 누르면 검색 버튼과 동일하게 동작
+    const userSearchInput = document.querySelector('.user-filter-input');
+    if (userSearchInput) {
+      userSearchInput.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter') {
+          e.preventDefault();
+          search();
+        }
+      });
+    }
+  </script>
+  <script>
+    // 페이지 최초 로딩 시 파라미터 없이 /search 호출
+    window.addEventListener('DOMContentLoaded', function() {
+      // filterType 값을 form에서 읽어서 전송
+      const form = document.getElementById('userSearchForm');
+      let params = new URLSearchParams();
+      if (form) {
+        const filterTypeInput = form.querySelector('input[name="filterType"]');
+        if (filterTypeInput && filterTypeInput.value) {
+          params.append('filterType', filterTypeInput.value);
+        }
+      }
+      fetch('/search', {
+        method: 'POST',
+        body: params
+      })
+      .then(res => res.text())
+      .then(html => {
+        const resultArea = document.getElementById('resultArea');
+        if (resultArea) resultArea.innerHTML = html;
+      });
+    });
   </script>
 </div> 
