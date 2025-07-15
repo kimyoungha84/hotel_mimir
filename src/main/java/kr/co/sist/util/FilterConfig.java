@@ -20,7 +20,7 @@ public enum FilterConfig {
     ),
     
     
-    DINING_USER("dining_user", false, false, true, true
+    DINING_USER("dining_user", false, true, true, true
     			, null
     			, null,
     			List.of(new Option("name", "", "dining_name")), 
