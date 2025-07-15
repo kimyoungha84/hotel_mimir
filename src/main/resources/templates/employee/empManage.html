@@ -8,7 +8,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <!-- jquery CDN -->
-
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
 
 <th:block th:replace="~{/administrator/fragments/admin_header :: admin_header}"></th:block>
 
@@ -29,7 +29,7 @@
     <hr/>
 
     <div>
-    <input type="button" class= "regEmpBtn" value="+ 직원 등록" onclick="location.href='/admin/employee/register'"/>
+    <input type="button" class= "regEmpBtn" value="+ 직원 등록" onclick="location.href='/admin/employee/register'" style="margin-left:3rem"/>
     </div>
 
     <div th:replace="fragments/filter :: filter(${filter})"></div>
@@ -69,12 +69,12 @@
 $(function(){
     //부서
     var deptMapping={
-        "room":"객실 관리",
-        "dinning":"다이닝 관리",
-        "inquiry":"문의 관리",
-        "person":"인사 관리",
-        "member":"회원 관리",
-        "manage":"경영지원실"
+        "room":"객실",
+        "dinning":"다이닝",
+        "inquiry":"문의",
+        "person":"인사",
+        "member":"고객",
+        "manage":"경영지원"
     };
     //직책
     var positionMapping={
@@ -109,6 +109,7 @@ $(function(){
                     if($(this).is('tr')) {
                         var trTag=$(node);//그럼 이게 tr인가? //jQuery 객체로 변환
                         
+                        
                         //.get(0)로 jQuery 객체를 원시 DOM 객체로 변환 후 querySelector
                         //부서
                         var deptVal=trTag.get(0).querySelector('td:nth-child(4)').innerText;
@@ -119,14 +120,33 @@ $(function(){
                         //상태
                         var statusVal=trTag.get(0).querySelector('td:nth-child(7)').innerText;
 
-                        console.log("authoritiesVal----------"+authoritiesVal);
+                        //console.log("authoritiesVal----------"+authoritiesVal);
+                        
+                        if(authoritiesVal.includes(",")){
+                            var authoritiesValList=authoritiesVal.split(",");
+                            //console.log("authoritiesValList--------"+authoritiesValList);
+                            
+                            var authorManyList=[];
+                            var listStr="";
+
+                            for(var i=0; i<authoritiesValList.length;i++){
+                                authorManyList.push(permissionMapping[authoritiesValList[i]]);
+                                
+                            }//end for
+
+                            listStr=authorManyList.join();
+                            console.log("listStr======"+listStr);
+                            trTag.get(0).querySelector('td:nth-child(6)').innerText=listStr;
+                        }else{
+                            //권한
+                            trTag.get(0).querySelector('td:nth-child(6)').innerText=permissionMapping[authoritiesVal];
+                        }
                         
 
                         //부서
                         trTag.get(0).querySelector('td:nth-child(4)').innerText=deptMapping[deptVal];
                         //직책
                         trTag.get(0).querySelector('td:nth-child(5)').innerText=positionMapping[positionVal];
-                        //권한
                         //상태
                         trTag.get(0).querySelector('td:nth-child(7)').innerText=statusMapping[statusVal];
                     }
@@ -139,16 +159,7 @@ $(function(){
     observer.observe(document.getElementById('resultArea'), config);
 
 });    //ready
-function authorChk(authorStr){
-    var testStr="hello,nice,to,meet,you";
-    var seperator=",";
-    var index=0;
 
-    if(testStr.include(seperator)){
-        //권한 , 로 분리하고, 반환
-
-    }//end if
-}//authorChk
 
 </script>
 </body>

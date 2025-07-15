@@ -18,6 +18,12 @@
 
 
 <th:block th:replace="~{/administrator/fragments/admin_header :: admin_header}"></th:block>
+<style>
+.addAuthorityBtn{
+    margin-left:0.2rem,
+    /* //button radius 설정, 버튼 크기 설정 */
+}
+</style>
 
 </head>
 <body>
@@ -31,20 +37,20 @@
 <table class="vertical-table">
 <tr>
     <th>아이디</th>
-    <td th:text="${staff_id}"></td>
+    <td id="staffId" th:text="${staff_id}"></td>
 </tr>
 <tr>
     <th>이름</th>
-    <td><input type="text" /></td>
+    <td><input type="text" v-model="employRegisterObj.name"/></td>
 </tr>
 <tr>
     <th>이메일</th>
-    <td><input type="text" /></td>
+    <td><input type="text" v-model="employRegisterObj.email"/></td>
 </tr>
 <tr>
     <th>부서</th>
     <td>
-        <select id="dept">
+        <select id="dept" v-model="employRegisterObj.dept">
         <option th:value="disable" th:text="-----선택-----" disabled selected></option>
         <option v-for="dept in this.depts" :value="dept.dept_iden" :key="dept.dept_iden">{{dept.dept_name}}</option>
         </select>
@@ -53,7 +59,7 @@
 <tr>
     <th>직책</th>
     <td>
-        <select id="position">
+        <select id="position" v-model="employRegisterObj.position">
         <option th:value="disable" th:text="---선택---" disabled selected></option>
         <option v-for="position in this.positions" :value="position.position_iden_code" :key="position.position_iden_code">{{position.position_name}}</option>
         </select>
@@ -62,23 +68,26 @@
 <tr>
     <th>권한</th>
     <td>
-    <select id="authority">
+    <span v-for="(auth,index) in selectedAuthorities" :key="index">
+    <select id="authority" v-model="selectedAuthorities[index]">
     <option th:value="disable" th:text="---선택---" disabled selected></option>
     <option v-for="authority in this.authorities" :value="authority.permission_id" :key="authority.permission_id">{{authority.permission_type}}</option>
     </select>
+    </span>
+    <input type="button" class="addAuthorityBtn" value="+ 추가" @click="addAuthoritySelector"/>
     </td>
 </tr>
 <tr>
     <th>입사일</th>
-    <td><input type="date"></td>
+    <td><input type="date" v-model="employRegisterObj.date"></td>
 </tr>
 </table>
-<div class="btnGroup">
+<div class="btnGroup" style="margin-left: 50rem;">
 <input type="button" class="darkBtn" value="등록"/>
 <input type="button" class="softBtn"value="취소"/>
 </div>
 </div>
-</div>
+</div><!-- app -->
 
 
 
@@ -89,6 +98,11 @@
 Vue.createApp({
     data(){
         return{
+            employRegisterObj :{
+                id:"",
+                name:"", email:"",dept:"",position:"",authority:"",date:""
+            },
+            selectedAuthorities : [''],
             depts :[
                 {dept_iden:"room", dept_name:"객실 관리"},
                 {dept_iden:"dinning", dept_name:"다이닝 관리"},
@@ -114,8 +128,17 @@ Vue.createApp({
             staffDTO : {},
         }
     },
+    mounted(){
+        this.employRegisterObj.id=document.getElementById('staffId').innerText;
+        
+    },
     methods:{
+        addAuthoritySelector(){
+            this.selectedAuthorities.push('');
+        },
+        addAuthoritytoList(){
 
+        },
         
     }
 }).mount("#app");
