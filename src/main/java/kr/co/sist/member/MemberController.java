@@ -126,10 +126,11 @@ public class MemberController {
         jwtCookie.setMaxAge(0); // 즉시 만료
         jwtCookie.setPath("/");
         response.addCookie(jwtCookie);
-
+        
+        
         // 2. Spring Security 컨텍스트 클리어
         SecurityContextHolder.clearContext();
-
+        
         // 3. 서버 측 Refresh Token 무효화 (DB에서 삭제 또는 NULL로 업데이트)
         if (userDetails != null) {
             memberService.invalidateRefreshToken(userDetails.getUsername()); // email_id로 Refresh Token 무효화
