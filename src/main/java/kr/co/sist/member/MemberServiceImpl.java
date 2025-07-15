@@ -97,5 +97,10 @@ public class MemberServiceImpl implements MemberService {
     public boolean verifyAuthCodeWithJwt(String token, String email, String code) {
         return jwtUtil.validateEmailAuth(token, email, code);
     }
+
+    @Override
+    public void invalidateRefreshToken(String emailId) {
+        memberMapper.invalidateRefreshToken(emailId);
+    }
 	
 }

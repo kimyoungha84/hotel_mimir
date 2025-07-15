@@ -4,6 +4,8 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -96,9 +98,6 @@ public class MemberController {
 
         try {
             LoginRequestDTO loginRequestDTO = new LoginRequestDTO(email_id, password);
-            loginRequestDTO.setEmail_id(email_id);
-            loginRequestDTO.setPassword(password);
-
             LoginResponseDTO loginResponseDTO = memberService.login(loginRequestDTO);
 
             String accessToken = loginResponseDTO.getAccessToken();
@@ -109,7 +108,7 @@ public class MemberController {
             Cookie jwtCookie = new Cookie("access_token", accessToken);
             jwtCookie.setHttpOnly(true);
             jwtCookie.setPath("/");
-            jwtCookie.setMaxAge(60 * 30); // 30분
+            jwtCookie.setMaxAge(-1); //종료시 삭제
             response.addCookie(jwtCookie);
 
             return "redirect:/";
@@ -118,6 +117,25 @@ public class MemberController {
             redirectAttrs.addFlashAttribute("loginError", e.getMessage());
             return "redirect:/member/loginFrm";
         }
+    }
+    
+    @GetMapping("/logout")
+    public String logout(HttpServletResponse response, @AuthenticationPrincipal CustomUserDetails userDetails) {
+        // 1. 클라이언트 측 Access Token 쿠키 삭제
+        Cookie jwtCookie = new Cookie("access_token", null); // 쿠키 값 null로 설정
+        jwtCookie.setMaxAge(0); // 즉시 만료
+        jwtCookie.setPath("/");
+        response.addCookie(jwtCookie);
+
+        // 2. Spring Security 컨텍스트 클리어
+        SecurityContextHolder.clearContext();
+
+        // 3. 서버 측 Refresh Token 무효화 (DB에서 삭제 또는 NULL로 업데이트)
+        if (userDetails != null) {
+            memberService.invalidateRefreshToken(userDetails.getUsername()); // email_id로 Refresh Token 무효화
+        }
+
+        return "redirect:/"; // 로그아웃 후 메인 페이지로 리다이렉트
     }
     
     

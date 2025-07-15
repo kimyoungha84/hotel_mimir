@@ -51,5 +51,12 @@
     WHERE EMAIL_ID = #{email_id}
   </select>
 
+  <!-- RefreshToken 무효화 -->
+  <update id="invalidateRefreshToken" parameterType="string">
+    UPDATE MIMIR_USER
+    SET EMAIL_REFRESH_TOKEN = NULL
+    WHERE EMAIL_ID = #{emailId}
+  </update>
+
 
 </mapper>

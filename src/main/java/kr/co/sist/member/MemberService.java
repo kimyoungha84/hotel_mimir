@@ -13,4 +13,6 @@ public interface MemberService {
     Map<String, String> sendAuthCodeWithJwt(String email);
     
     boolean verifyAuthCodeWithJwt(String token, String email, String code);
+
+    void invalidateRefreshToken(String emailId); // 로그아웃 시 Refresh Token 무효화
 }

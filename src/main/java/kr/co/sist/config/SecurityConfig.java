@@ -25,6 +25,13 @@ public class SecurityConfig {
                 .anyRequest().permitAll()
             )
             .formLogin(form -> form.disable()) // 기본 로그인 폼 비활성화
+            .logout(logout -> logout
+                .logoutUrl("/member/logout") // 로그아웃을 처리할 URL
+                .logoutSuccessUrl("/")       // 로그아웃 성공 후 리다이렉트할 URL
+                .invalidateHttpSession(false) // JWT는 세션 기반이 아니므로 세션 무효화는 false
+                .deleteCookies("access_token") // 로그아웃 시 access_token 쿠키 삭제
+                .permitAll() // 로그아웃 URL은 누구나 접근 가능하도록 허용
+            )
         	.addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }

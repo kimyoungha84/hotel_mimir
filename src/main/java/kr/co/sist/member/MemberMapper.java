@@ -14,4 +14,8 @@ public interface MemberMapper {
 		MemberDTO selectMemberByEmail(String email_id);
 		
 		void updateRefreshToken(Map<String, String> params);
+
+		MemberDTO selectMemberByUserNum(int userNum);
+
+    void invalidateRefreshToken(String emailId);
 }

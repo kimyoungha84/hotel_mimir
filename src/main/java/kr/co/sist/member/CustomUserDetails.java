@@ -8,8 +8,8 @@ import java.util.Collection;
 public class CustomUserDetails extends User {
     private int userNum;
 
-    public CustomUserDetails(String username, String password, Collection<? extends GrantedAuthority> authorities, int userNum) {
-        super(username, password, authorities);
+    public CustomUserDetails(String email_id, String password, Collection<? extends GrantedAuthority> authorities, int userNum) {
+        super(email_id, password, authorities);
         this.userNum = userNum;
     }
 
