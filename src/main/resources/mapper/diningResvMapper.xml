@@ -9,36 +9,45 @@
     SELECT 
       r.RESERVATION_ID AS reservationId,
       r.RESERVATION_NAME AS reservationName,
-      r.RESERVATION_TELL AS reservationTel,
-      r.RESERVATION_DATE AS reservationDate,
-      r.RESERVATION_TIME AS reservationTime,
-      r.RESERVATION_COUNT AS reservationCount,
-      r.RESERVATION_STATUS AS reservationStatus,
-      r.RESERVATION_REQUEST AS reservationRequest,
-      
-      r.DINING_ID AS diningId,
       d.DINING_NAME AS diningName,
-
-      u.USER_NUM AS userNum,
-      u.USER_NAME AS userName,
-      u.TEL AS userTel,
-      u.EMAIL_ID AS userEmail,
-
-      n.NON_MEM_ID AS nonMemId,
-      n.NON_MEM_NAME AS nonMemName,
-      n.NON_MEM_TEL AS nonMemTel,
-
-      p.PAYMENT_ID AS paymentId,
-      p.PAYMENT_PRICE AS paymentPrice
-
+      r.RESERVATION_DATE AS reservationDate,
+      r.RESERVATION_STATUS AS reservationStatus
     FROM 
       DINING_RESERVATION r
       LEFT JOIN DINING d ON r.DINING_ID = d.DINING_ID
-      LEFT JOIN MIMIR_USER u ON r.USER_NUM = u.USER_NUM
-      LEFT JOIN NON_MEMBER n ON r.NON_MEM_ID = n.NON_MEM_ID
-      LEFT JOIN PAYMENT p ON r.RESERVATION_ID = p.RESERVATION_ID
-
-    ORDER BY r.RESERVATION_DATE DESC, r.RESERVATION_TIME DESC
+    ORDER BY 
+      r.RESERVATION_DATE DESC, 
+      r.RESERVATION_TIME DESC
+  </select>
+  
+  <resultMap id="diningResvMap" type="kr.co.sist.diningresv.DiningResvDTO">
+    <id property="reservationId" column="RESERVATION_ID"/>
+    <result property="reservationName" column="RESERVATION_NAME"/>
+    <result property="reservationTell" column="RESERVATION_TELL"/>
+    <result property="reservationDate" column="RESERVATION_DATE"/>
+    <result property="reservationTime" column="RESERVATION_TIME"/>
+    <result property="reservationCount" column="RESERVATION_COUNT"/>
+    <result property="reservationStatus" column="RESERVATION_STATUS"/>
+    <result property="reservationRequest" column="RESERVATION_REQUEST"/>
+    <result property="diningId" column="DINING_ID"/>
+    <result property="diningName" column="DINING_NAME"/>
+  </resultMap>
+  
+  <select id="selectResvId" parameterType="int" resultMap="diningResvMap">
+    SELECT 
+      R.RESERVATION_ID,
+      R.RESERVATION_NAME,
+      R.RESERVATION_TELL,
+      R.RESERVATION_DATE,
+      R.RESERVATION_TIME,
+      R.RESERVATION_COUNT,
+      R.RESERVATION_STATUS,
+      R.RESERVATION_REQUEST,
+      R.DINING_ID,
+      D.DINING_NAME
+    FROM DINING_RESERVATION R
+    JOIN DINING D ON R.DINING_ID = D.DINING_ID
+    WHERE R.RESERVATION_ID = #{reservationId}
   </select>
 
 </mapper>

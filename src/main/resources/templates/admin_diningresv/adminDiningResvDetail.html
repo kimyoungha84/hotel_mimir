@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html xmlns="http://www.thymeleaf.org">
+<head>
+<!-- favicon 설정 -->
+<link rel="icon shortcut"  href="/admin_common_assets/common_img/mimir_favicon.ico"/>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<!-- jquery CDN -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+
+<th:block th:replace="~{/administrator/fragments/admin_header :: admin_header}"></th:block>
+
+</head>
+<body>
+<th:block th:replace="~{/administrator/fragments/admin_sidebar :: admin_sidebar}"></th:block>
+
+<div id="body-pd" class="body-pd">
+<h2 class="h2Title">다이닝 예약 상세정보</h2>
+<hr/>
+
+  <table class="reservation-detail-table" border="1" cellspacing="0" cellpadding="8" style="width: 100%; text-align: left;">
+    <thead>
+      <tr>
+        <th style="width: 20%;">항목</th>
+        <th>내용</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>예약번호</td>
+        <td th:text="${reservationDetail.reservationId}">RESERVATION_ID</td>
+      </tr>
+      <tr>
+        <td>예약자명</td>
+        <td th:text="${reservationDetail.reservationName}">예약자명</td>
+      </tr>
+      <tr>
+        <td>연락처</td>
+        <td th:text="${reservationDetail.reservationTell}">연락처</td>
+      </tr>
+      <tr>
+        <td>다이닝</td>
+        <td th:text="${reservationDetail.diningName}">다이닝</td>
+      </tr>
+      <tr>
+        <td>예약 날짜</td>
+        <td th:text="${#dates.format(reservationDetail.reservationDate, 'yyyy-MM-dd')}">예약 날짜</td>
+      </tr>
+      <tr>
+        <td>예약 시간</td>
+        <td th:text="${reservationDetail.reservationTime}">예약 시간</td>
+      </tr>
+      <tr>
+        <td>인원수</td>
+        <td th:text="${reservationDetail.reservationCount}">인원수</td>
+      </tr>
+      <tr>
+        <td>예약 상태</td>
+        <td th:text="${reservationDetail.reservationStatus}">예약 상태</td>
+      </tr>
+      <tr>
+        <td>요청 사항</td>
+        <td th:text="${reservationDetail.reservationRequest}">요청 사항</td>
+      </tr>
+    </tbody>
+  </table>
+
+</div>
+
+</body>
+</html>

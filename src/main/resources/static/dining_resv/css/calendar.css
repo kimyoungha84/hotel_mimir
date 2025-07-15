@@ -93,6 +93,30 @@ td.today {
     font-weight: bold;
 }
 
+.arrow-icon01 {
+  position: relative;
+  z-index: 2;
+  width: 1.2rem;
+  height: 1.2rem;
+  transform: rotate(180deg);
+  filter: brightness(0);
+  transition: filter 0.4s ease;
+}
+
+.arrow-icon02 {
+  position: relative;
+  z-index: 2;
+  width: 1.2rem;
+  height: 1.2rem;
+  filter: brightness(0);
+  transition: filter 0.4s ease;
+}
+
+.circle-button:hover .arrow-icon01,
+.circle-button:hover .arrow-icon02 {
+  filter: brightness(0) invert(1);
+}
+
 .circle-button {
     position: relative;
     display: flex;

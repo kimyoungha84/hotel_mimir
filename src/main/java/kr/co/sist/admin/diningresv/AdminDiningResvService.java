@@ -20,5 +20,11 @@ public class AdminDiningResvService {
 		
 	};
 	
+	public DiningResvDTO selectResvId(int reservationId) {
+		
+		return drm.selectResvId(reservationId);
+		
+	};
+	
 	
 }

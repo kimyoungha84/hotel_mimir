@@ -22,7 +22,7 @@
    th:href="@{'/calendar'(year=${prevYear}, month=${prevMonth})}"
    th:attr="data-year=${prevYear}, data-month=${prevMonth}"
    class="circle-button calendar-nav">
-  <span class="arrow">⮜</span>
+  <img th:src="@{/dining_resv/images/pageNext.svg}" alt="화살표" class="arrow-icon01" />
 </a>
 
         <strong th:text="${calYear} + '. ' + ${calMonth < 10 ? '0' + calMonth : calMonth}"></strong>
@@ -31,7 +31,7 @@
    th:href="@{'/calendar'(year=${nextYear}, month=${nextMonth})}"
    th:attr="data-year=${nextYear}, data-month=${nextMonth}"
    class="circle-button calendar-nav">
-  <span class="arrow rotated">⮜</span>
+  <img th:src="@{/dining_resv/images/pageNext.svg}" alt="화살표" class="arrow-icon02" />
 </a>
       </div>
 

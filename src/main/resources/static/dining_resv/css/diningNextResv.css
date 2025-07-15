@@ -510,3 +510,73 @@
   background-color: #fff;
   cursor: pointer;
 }
+
+input[type="checkbox"] {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  margin: 0;
+  outline: none;
+  cursor: pointer;
+  position: relative;
+}
+
+input[type="checkbox"] {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  margin: 0;
+  cursor: pointer;
+  position: relative;
+}
+
+#checkAll {
+  width: 1.2rem;
+  height: 1.2rem;
+  border: 2px solid #ddd;
+  border-radius: 50%;
+  background-color: #fff;
+  display: inline-block;
+  vertical-align: middle;
+  position: relative;
+  transition: background-color 0.3s ease;
+}
+
+#checkAll:checked {
+  background-color: #a38c67;
+  border-color: #a38c67;
+}
+
+#checkAll:checked::after {
+  content: "✔";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -55%);
+  font-size: 1rem;
+  color: #fff;
+}
+
+input[type="checkbox"]:not(#checkAll) {
+  width: 1.2rem;
+  height: 1.2rem;
+  background-color: transparent;
+  border: none;
+  position: relative;
+  vertical-align: middle;
+}
+
+input[type="checkbox"]:not(#checkAll)::after {
+  content: "✔";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -55%);
+  font-size: 1rem;
+  color: #ddd;
+  opacity: 1;
+}
+
+input[type="checkbox"]:not(#checkAll):checked::after {
+  color: #a38c67;
+}
