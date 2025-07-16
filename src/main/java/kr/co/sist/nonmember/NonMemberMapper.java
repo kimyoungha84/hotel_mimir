@@ -4,14 +4,18 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
 
+import kr.co.sist.resvroom.ReservationDTO;
+
 @Mapper
 public interface NonMemberMapper {
-    List<NonMemberDTO> selectAllNonMember();
+	public List<NonMemberDTO> selectAllNonMember();
     
-    NonMemberDTO selectOneNonMember(int nonMemNum);
+    public NonMemberDTO selectOneNonMember(int nonMemNum);
     
-    void insertNonMember(NonMemberDTO nonDTO);
+    public int selectNonMemberSeq();
     
-    void updateNonMember(NonMemberDTO nonDTO);
+    public void insertNonMember(ReservationDTO rDTO);
+    
+    public void updateNonMember(NonMemberDTO nonDTO);
    
 }

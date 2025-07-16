@@ -15,12 +15,15 @@
 	select faq_num, faq_title, faq_content
 	from faq
 	where faq_num = #{faq_num}
-
 	</select>
 	
-	<insert id="insertNonMember" parameterType="kr.co.sist.nonmember.NonMemberDTO">
-		INSERT INTO faq (faq_num, faq_title, faq_content, faq_date)
-		VALUES (faq_seq.NEXTVAL, #{faq_title}, #{faq_content}, #{faq_date})
+	<select id="selectNonMemberSeq" resultType="int">
+    SELECT SEQ_NONMEMBER.NEXTVAL FROM DUAL
+	</select>
+	
+	<insert id="insertNonMember" parameterType="kr.co.sist.resvroom.ReservationDTO">
+		INSERT INTO NON_MEMBER (NON_MEM_ID, NON_MEM_NAME, NON_MEM_TEL, NON_MEM_REG_DATE, NON_MEM_EMAIL)
+		VALUES (#{userNum}, #{userName}, #{userTel}, sysdate ,#{userEmail})
 	</insert>
 	
 

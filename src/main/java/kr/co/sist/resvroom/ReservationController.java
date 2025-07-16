@@ -1,13 +1,27 @@
 package kr.co.sist.resvroom;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+
+import kr.co.sist.nonmember.NonMemberService;
+import kr.co.sist.payment.PaymentService;
 
 @Controller
 public class ReservationController {
 
+	@Autowired
+	private NonMemberService nms;
+	
+	@Autowired
+	private PaymentService ps;
+	
+	@Autowired
+	private ReservationService rs;
+	
 	@GetMapping("/room_resv/resvRoom")
 	public String roomList(@RequestParam("roomId") int roomId,
 		    @RequestParam("checkIn") String checkIn,
@@ -33,10 +47,33 @@ public class ReservationController {
 
 	}//roomList
 	
-	@GetMapping("searchResv")
+	@GetMapping("/searchResv")
 	public String searchResv() {
 		return "room_resv/searchResv";
 	}//roomList
 	
+	@PostMapping("/room_resv/reservation")
+	public String reservation(ReservationDTO rDTO) {
+		//반환값 rDTO로 하고 나서 nonmemberId set하고 paymentID까지 set해야함
+		
+		int paySeq;
+		int nonMemSeq;
+		
+		System.out.println(rDTO);
+		
+		paySeq = ps.searchPaymentSeq();
+		nonMemSeq = nms.searchNonMemberSeq();
+		
+		rDTO.setUserNum(nonMemSeq);
+		rDTO.setPaymentId(paySeq);
+		rDTO.setStatus("예약완료");
+		
+		nms.addNonMember(rDTO);
+		ps.addPayment(rDTO);
+		rs.addReservation(rDTO);
+		
+		
+		return "room_resv/resultResv";
+	}//roomList
 	
 }//class

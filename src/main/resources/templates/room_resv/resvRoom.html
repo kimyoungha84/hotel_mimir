@@ -284,210 +284,231 @@
 
   </style>
   <script type="text/javascript">
-  function requestPay() {
-	  const amountText = document.getElementById("total-price-box").textContent;
-	  const amount = parseInt(amountText.replace(/[₩,]/g, ""));
-	  const roomType = document.getElementById("room-type-name").textContent.trim(); // 예: "디럭스룸"
-	  const nights = parseInt(document.getElementById("nights").value);
-	  const productName = `호텔 ${roomType} ${nights}박`;
-	  IMP.init("imp70261087"); // 가맹점 식별코드
+  function requestPay(method) {
+	    const amountText = document.getElementById("total-price-box").textContent;
+	    const amount = parseInt(amountText.replace(/[₩,]/g, ""));
+	    const roomType = document.getElementById("room-type-name").textContent.trim();
+	    const nights = parseInt(document.getElementById("nights").value);
+	    const productName = `호텔 ${roomType} ${nights}박`;
 
-	  const selectedText = document.querySelector('#online-payment-options .active')?.textContent.trim();
+	    IMP.init("imp14397622");
 
-	  let channelKey = "";
+	    let channelKey = "";
+	    if (method === "카카오페이") {
+	        channelKey = "channel-key-01764171-b249-4c16-9d18-e9174fa8e611";
+	    } else if (method === "토스페이") {
+	        channelKey = "channel-key-01aab9b9-828b-4913-9395-52f922e578f6";
+	    } else if (method === "카드결제") {
+	        channelKey = "channel-key-bf43e218-5567-4875-96da-3270e1fba054";
+	    } else {
+	        alert("결제 수단을 선택해주세요.");
+	        return;
+	    }
 
-	  if (selectedText === "카카오페이") {
-	    channelKey = "channel-key-71e0ad4c-5aec-4412-9993-b3a11e28b148";
-	  }  else if (selectedText === "카드결제") {
-	    channelKey = "channel-key-b4dbbe82-aa85-4521-96e3-6d775318d420";
-	  } else {
-	    alert("결제 수단을 선택해주세요.");
-	    return;
-	  }
-
-	  IMP.request_pay({
-		  channelKey: channelKey,
-		  pay_method: "card",
-		  merchant_uid: "order_" + new Date().getTime(),
-
-		  // ✅ 실시간 값 적용
-		  name: productName,
-		  amount: amount,
-
-		  // ✅ 고객 정보
-		  buyer_name: document.getElementById("name").value.trim(),
-		  buyer_tel: document.getElementById("phone").value.trim(),
-
-		}, function (rsp) {
-		  if (rsp.success) {
-		    alert("결제가 완료되었습니다.");
-		    // → 서버에 결제 검증 요청 or 예약 완료 페이지 이동
-		  } else {
-		    alert("결제에 실패했습니다: " + rsp.error_msg);
-		  }
-	  });
+	    IMP.request_pay({
+	        channelKey: channelKey,
+	        pay_method: "card",
+	        merchant_uid: "order_" + new Date().getTime(),
+	        name: productName,
+	        amount: 100,
+	        buyer_name: document.getElementById("name").value.trim(),
+	        buyer_tel: document.getElementById("phone").value.trim(),
+	    }, function (rsp) {
+	        if (rsp.success) {
+	            alert("결제가 완료되었습니다.");
+	            proceedPayment(method);
+	        } else {
+	            alert("결제에 실패했습니다: " + rsp.error_msg);
+	        }
+	    });
 	}
-
   </script>
   
 </head>
 
 <body>
-  <div class="container my-4">
-  
-     <div class="step-indicator">
-      <span class="step" data-tooltip="객실 선택">1</span>  
-      <span class="step current">2</span><span class="step-title">옵션 및 예약정보 입력</span> 
-      <span class="step" data-tooltip="예약 완료">3</span>
-   </div>
-
-    <div class="row">
-      <div class="col-md-8">
-        <div class="border-title" id="reservation-title" onclick="toggleSection('reservation-info', 'toggle-icon')">
-          예약자 정보
-          <img style="float: right;" id="toggle-icon" th:src="@{/images/room/RM/minus.svg}" alt="toggle icon" width="20" height="20">
-        </div>
-        <div id="reservation-info" class="collapse-transition">
-          <div class="mb-3">
-  <br>
-  <label for="name" class="form-label">이름</label>
-  <input type="text" id="name" class="form-control">
-</div>
-
-<div class="row g-3 mb-3">
-  <div class="col-md-6">
-    <label for="email" class="form-label">이메일</label>
-    <input type="text" id="email" class="form-control">
+<!-- 예약 폼 추가 및 name 속성 반영 -->
+<form id="reservation-form" method="post" action="/room_resv/reservation">
+<div class="container my-4">
+  <div class="step-indicator">
+    <span class="step" data-tooltip="객실 선택">1</span>  
+    <span class="step current">2</span><span class="step-title">옵션 및 예약정보 입력</span> 
+    <span class="step" data-tooltip="예약 완료">3</span>
   </div>
-  <div class="col-md-6">
-    <label for="domain" class="form-label">도메인</label>
-    <select id="domain" class="form-select">
-      <option value="">도메인 선택</option>
-      <option value="naver.com">@naver.com</option>
-      <option value="gmail.com">@gmail.com</option>
-      <option value="hanmail.net">@hanmail.net</option>
-      <option value="custom">직접 입력</option>
-    </select>
-    <input type="text" id="custom-domain" class="form-control mt-2 d-none" placeholder="도메인을 입력하세요">
-  </div>
-</div>
 
-<div class="row g-3 mb-4">
-  <div class="mb-3">
-    <label for="phone" class="form-label">연락처</label>
-    <input type="text" id="phone" class="form-control" placeholder="010-1234-5678" maxlength="13">
-  </div>
-</div>
-        </div>
-
-        <div class="border-title" onclick="toggleSection('option-info', 'toggle-icon-option')">
-          옵션 선택
-          <img style="float: right;" id="toggle-icon-option" th:src="@{/images/room/RM/minus.svg}" alt="toggle icon" width="20" height="20">
-        </div>
-        <div id="option-info" class="collapse-transition mb-3">
-          <div class="mb-2">
+  <div class="row">
+    <div class="col-md-8">
+      <div class="border-title" id="reservation-title" onclick="toggleSection('reservation-info', 'toggle-icon')">
+        예약자 정보
+        <img style="float: right;" id="toggle-icon" th:src="@{/images/room/RM/minus.svg}" alt="toggle icon" width="20" height="20">
+      </div>
+      <div id="reservation-info" class="collapse-transition">
+        <div class="mb-3">
           <br>
-            <strong>조식</strong>
-            <p class="text-muted mb-1">조식은 모든 투숙일에 적용됩니다.<br>
-              장소: STAY (81층)<br>
-              운영시간: 6:30 ~ 10:00 <br>
-              아동은 무료</p>
+          <label for="name" class="form-label">이름</label>
+          <input type="text" id="name" name="userName" class="form-control">
+        </div>
+
+        <div class="row g-3 mb-3">
+          <div class="col-md-6">
+            <label for="email" class="form-label">이메일</label>
+            <input type="text" id="email" name="userEmail" class="form-control">
           </div>
+          <div class="col-md-6">
+		    <label for="domain" class="form-label">도메인</label>
+		    <select id="domain" class="form-select" name="userDomain">
+			    <option value="">도메인 선택</option>
+			    <option value="@naver.com">@naver.com</option>
+			    <option value="@gmail.com">@gmail.com</option>
+			    <option value="@hanmail.net">@hanmail.net</option>
+			    <option value="custom" id="customOption">직접 입력</option>
+			</select>
+		    <input type="text" id="custom-domain" class="form-control mt-2 d-none" placeholder="도메인을 입력하세요">
+		</div>
+        </div>
+
+        <div class="row g-3 mb-4">
           <div class="mb-3">
-            <div class="quantity-selector" >
-            <label for="breakfast" class="form-label">성인 조식  ₩50,000</label>
-              <div class="stepper" style="display: inline; float: right;">
-                <button type="button" class="stepper-btn up" onclick="changeBreakfast(1)">▲</button>
-  <span id="breakfast-count" class="stepper-count">0</span>
-  <button type="button" class="stepper-btn down" onclick="changeBreakfast(-1)">▼</button>
-              </div>
-            </div>
+            <label for="phone" class="form-label">연락처</label>
+            <input type="text" id="phone" name="userTel" class="form-control" placeholder="010-1234-5678" maxlength="13">
           </div>
         </div>
-
-        <div class="border-title">
-  결제 정보
-</div>
-
-<div id="payment-info" class="mb-3">
-  <!-- 결제 방식 선택 버튼 -->
-  <div class="d-flex justify-content-between mb-3">
-    <button class="btn btn-payment w-50 me-2" onclick="selectPayment(this)">현장 결제</button>
-    <button class="btn btn-payment w-50" onclick="selectPayment(this)">온라인 결제</button>
-  </div>
-
-  <!-- ⬇ 온라인 결제 수단 버튼은 여기에 위치해야 함 -->
-  <div id="online-payment-options" class="d-none">
-  <button class="btn btn-outline-warning w-100 mb-2" onclick="selectOnlineMethod(this)">카카오페이</button>
-  <button class="btn btn-outline-secondary w-100" onclick="selectOnlineMethod(this)">카드결제</button>
-</div>
-
-
-          <div>
-            <strong>요금 및 취소 규정</strong>
-            <div class="mt-2">
-              <p class="mb-1"><strong class="text-muted">요금 규정</strong></p>
-              <p class="small">Guarantee by Credit Card</p>
-              <p class="mb-1"><strong class="text-muted">취소 규정</strong></p>
-              <p class="small text-danger">무료 취소 가능일(2025.06.17 00:00(한국시/서울 기준))이 지나면 위약금 발생 및 예약 취소가 불가합니다.</p>
-            </div>
-          </div>
-        </div>
-
-<div class="border-box">
-  <div class="border-title">이용 약관</div>
-
-  <label class="checkbox-wrapper">
-    <input type="checkbox" id="checkAll" />
-    <span><strong>전체동의</strong></span>
-  </label>
-  <label class="checkbox-wrapper">
-    <input type="checkbox" class="sub-check" />
-    <span>(필수) 호텔 이용약관 동의</span>
-  </label>
-  <label class="checkbox-wrapper">
-    <input type="checkbox" class="sub-check" />
-    <span>(필수) 필수적 개인정보의 수집 이용에 대한 동의(객실예약)</span>
-  </label>
-  <label class="checkbox-wrapper">
-    <input type="checkbox" class="sub-check" />
-    <span>(필수) 취소규정 동의</span>
-  </label>
-</div>
-
-<div class="border-box">
-  <div class="border-title">예약 전 확인사항</div>
-  <div class="sub-title">예약을 완료하기 전에 아래 내용을 꼭 확인해 주세요.</div>
-
-  <label class="checkbox-wrapper">
-    <input type="checkbox" />
-    <span>온라인 결제 진행 후, 프런트에서 결제 수단 변경이 불가하오니 유의하시기 바랍니다.</span>
-  </label>
-  <label class="checkbox-wrapper">
-    <input type="checkbox" />
-    <span>만 19세 미만 미성년자는 법적 보호자를 동반할 경우에만 투숙이 가능합니다.</span>
-  </label>
-</div>
-
       </div>
 
-      <div class="col-md-4">
-        <div class="reservation-summary mb-3">
-          <strong>체크인 / 아웃</strong><br>
-          <span th:text="|${checkIn} ~ ${checkOut}|">06월 17일(화) ~ 06월 18일(수)</span> / 
-          <span th:text="${nights}">1박</span>박<br><br>
-          <strong>객실 / 인원</strong><br>
-          <span id="room-type-name" th:text="${typeName}">디럭스룸</span>/
-성인 <span id="adult-count" th:text="${adult}">2</span>,
-아동 <span id="child-count" th:text="${child}">0</span>
+      <div class="border-title" id="reservation-title" onclick="toggleSection('request-msg', 'toggle-icon-request-msg')">
+        요청사항
+        <img style="float: right;" id="toggle-icon-request-msg" th:src="@{/images/room/RM/minus.svg}" alt="toggle icon" width="20" height="20">
+      </div>
+      <div id="request-msg" class="collapse-transition">
+        <div class="mb-3">
+          <br>
+          <textarea id="requestMsg" name="requestMsg" class="form-control" style="height: 300px;"></textarea>
         </div>
-<input type="hidden" id="breakfast-hidden" name="breakfastCount" value="0">
-		<input type="hidden" id="pricePerNight" th:value="${pricePerNight}" />
-		<input type="hidden" id="nights" th:value="${nights}" />
-        <div id="total-price-box" class="price-box mb-3" th:text="|₩${#numbers.formatInteger(pricePerNight * nights, 3, 'COMMA')}|"></div>
-         
+      </div>
+
+      <div class="border-title" onclick="toggleSection('option-info', 'toggle-icon-option')">
+        옵션 선택
+        <img style="float: right;" id="toggle-icon-option" th:src="@{/images/room/RM/minus.svg}" alt="toggle icon" width="20" height="20">
+      </div>
+      <div id="option-info" class="collapse-transition mb-3">
+        <div class="mb-2">
+          <br>
+          <strong>조식</strong>
+          <p class="text-muted mb-1">조식은 모든 투숙일에 적용됩니다.<br>장소: STAY (81층)<br>운영시간: 6:30 ~ 10:00 <br>아동은 무료</p>
+        </div>
+        <div class="mb-3">
+          <div class="quantity-selector">
+            <label for="breakfast" class="form-label">성인 조식 ₩50,000</label>
+            <div class="stepper" style="display: inline; float: right;">
+              <button type="button" class="stepper-btn up" onclick="changeBreakfast(1)">▲</button>
+              <span id="breakfast-count" class="stepper-count">0</span>
+              <button type="button" class="stepper-btn down" onclick="changeBreakfast(-1)">▼</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="border-title">결제 정보</div>
+
+      <div id="payment-info" class="mb-3">
+        <div class="d-flex justify-content-between mb-3">
+          <button type="button" class="btn btn-payment w-50 me-2" onclick="selectPayment(this)">현장 결제</button>
+          <button type="button" class="btn btn-payment w-50" onclick="selectPayment(this)">온라인 결제</button>
+        </div>
+        <div id="online-payment-options" class="d-none">
+          <button type="button" class="btn btn-outline-warning w-100 mb-2" onclick="selectOnlineMethod(this)">카카오페이</button>
+          <button type="button" class="btn btn-outline-info w-100 mb-2" onclick="selectOnlineMethod(this)">토스페이</button>
+          <button type="button" class="btn btn-outline-secondary w-100" onclick="selectOnlineMethod(this)">카드결제</button>
+        </div>
+        <div>
+          <strong>요금 및 취소 규정</strong>
+          <div class="mt-2">
+            <p class="mb-1"><strong class="text-muted">요금 규정</strong></p>
+            <p class="small">Guarantee by Credit Card</p>
+            <p class="mb-1"><strong class="text-muted">취소 규정</strong></p>
+            <span class="small text-danger">무료 취소 가능일(</span>
+            <span th:text="${checkIn}">2025.06.17</span>
+            <span>00:00(한국시/서울 기준))이 지나면 위약금 발생 및 예약 취소가 불가합니다.</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="border-box">
+        <div class="border-title">이용 약관</div>
+        <label class="checkbox-wrapper">
+          <input type="checkbox" id="checkAll" />
+          <span><strong>전체동의</strong></span>
+        </label>
+        <label class="checkbox-wrapper">
+          <input type="checkbox" class="sub-check" />
+          <span>(필수) 호텔 이용약관 동의</span>
+        </label>
+        <label class="checkbox-wrapper">
+          <input type="checkbox" class="sub-check" />
+          <span>(필수) 필수적 개인정보의 수집 이용에 대한 동의(객실예약)</span>
+        </label>
+        <label class="checkbox-wrapper">
+          <input type="checkbox" class="sub-check" />
+          <span>(필수) 취소규정 동의</span>
+        </label>
+      </div>
+
+      <div class="border-box">
+        <div class="border-title">예약 전 확인사항</div>
+        <div class="sub-title">예약을 완료하기 전에 아래 내용을 꼭 확인해 주세요.</div>
+        <label class="checkbox-wrapper">
+          <input type="checkbox" />
+          <span>온라인 결제 진행 후, 프런트에서 결제 수단 변경이 불가하오니 유의하시기 바랍니다.</span>
+        </label>
+        <label class="checkbox-wrapper">
+          <input type="checkbox" />
+          <span>만 19세 미만 미성년자는 법적 보호자를 동반할 경우에만 투숙이 가능합니다.</span>
+        </label>
+      </div>
+    </div>
+
+    <div class="col-md-4">
+      <div class="reservation-summary mb-3">
+        <strong>체크인 / 아웃</strong><br>
+        <span th:text="|${checkIn} ~ ${checkOut}|">06월 17일(화) ~ 06월 18일(수)</span> / 
+        <span th:text="${nights}">1박</span>박<br><br>
+        <strong>객실 / 인원</strong><br>
+        <span id="room-type-name" th:text="${typeName}">디럭스룸</span>/
+        성인 <span id="adult-count" th:text="${adult}">2</span>,
+        아동 <span id="child-count" th:text="${child}">0</span>
+      </div>
+      <input type="hidden" id="breakfast-hidden" name="breakfast" value="0">
+      <input type="hidden" id="pricePerNight" name="pricePerNight" th:value="${pricePerNight}" />
+      <input type="hidden" id="nights" name="nights" th:value="${nights}" />
+      <input type="hidden" id="checkinDate" name="checkinDate" th:value="${checkIn}" />
+      <input type="hidden" id="checkoutDate" name="checkoutDate" th:value="${checkOut}" />
+      <input type="hidden" id="numGuestsChild" name="numGuestsChild" th:value="${child}" />
+      <input type="hidden" id="numGuestsAdult" name="numGuestsAdult" th:value="${adult}" />
+      <input type="hidden" id="roomId" name="roomId" th:value="${roomId}" />
+      <input type="hidden" id="typeName" name="typeName" th:value="${typeName}" />
+      <div id="total-price-box" class="price-box mb-3" th:text="|₩${#numbers.formatInteger(pricePerNight * nights, 3, 'COMMA')}|"></div>
+      <input type="hidden" name="paymentPrice" id="paymentPrice" value="">
+      <input type="hidden" name="paymentType" id="paymentType" value="">
+      <input type="hidden" name="paymentStatus" id="paymentStatus" value="">
+      <button type="button" class="btn btn-reserve w-100" onclick="submitForm()">예약 하기</button>
+    </div>
+  </div>
+</div>
+</form>
+
         
 <script>
+
+const select = document.getElementById('domain');
+const input = document.getElementById('custom-domain');
+
+select.addEventListener('change', () => {
+    if (select.value === 'custom') {
+        input.classList.remove('d-none');
+    } else {
+        input.classList.add('d-none');
+    }
+});
 
 function updateTotalPrice() {
 	  const nights = parseInt(document.getElementById("nights").value);
@@ -550,7 +571,6 @@ function changeBreakfast(amount) {
 
   // ✅ 통합 유효성 검사 함수
   function submitForm() {
-    // 1. 입력값 수집
     const name = document.getElementById('name').value.trim();
     const email = document.getElementById('email').value.trim();
     const domain = document.getElementById('domain').value;
@@ -560,82 +580,83 @@ function changeBreakfast(amount) {
     const emailRegex = /^[a-zA-Z0-9._%+-]+$/;
     const phoneRegex = /^010-\d{4}-\d{4}$/;
 
-    // 2. 입력 유효성 검사
+
+   
+
+    
+    
     if (!name) {
-      alert('이름을 입력하세요.');
-      return;
+        alert('이름을 입력하세요.');
+        return;
     }
 
     if (!email || !emailRegex.test(email)) {
-      alert('이메일을 올바르게 입력하세요 (예: example).');
-      return;
+        alert('이메일을 올바르게 입력하세요 (예: example).');
+        return;
     }
 
     if (!domain) {
-      alert('도메인을 선택하세요.');
-      return;
+        alert('도메인을 선택하세요.');
+        return;
     }
 
     if (domain === 'custom' && !customDomain) {
-      alert('도메인을 입력하세요.');
-      return;
+        alert('도메인을 입력하세요.');
+        return;
     }
 
     if (!phoneRegex.test(phone)) {
-      alert('연락처는 010-1234-5678 형식으로 입력하세요.');
-      return;
-    }
-
-
-    // 3. 결제 방식 선택 확인
-    const selectedPayment = document.querySelector('.btn-payment.active');
-    if (!selectedPayment) {
-      alert('결제 방식을 선택해주세요.');
-      return;
-    }
-
-    // 4. 온라인 결제 수단 선택 확인
-    if (selectedPayment.textContent.trim() === '온라인 결제') {
-      const selectedMethod = document.querySelector('#online-payment-options .active');
-      if (!selectedMethod) {
-        alert('온라인 결제 수단을 선택해주세요.');
+        alert('연락처는 010-1234-5678 형식으로 입력하세요.');
         return;
-      }
     }
-    // 5. 약관 동의 검사 (필수 3개)
+
     const termsBox = document.querySelectorAll('.border-box')[0];
     const requiredChecks = termsBox.querySelectorAll('.sub-check');
     const allTermsChecked = Array.from(requiredChecks).every(cb => cb.checked);
     if (!allTermsChecked) {
-      alert('필수 약관에 모두 동의하셔야 합니다.');
-      return;
+        alert('필수 약관에 모두 동의하셔야 합니다.');
+        return;
     }
 
-    // 6. 예약 전 확인사항 검사 (2개)
     const noticeBox = document.querySelectorAll('.border-box')[1];
-    const noticeChecks = noticeBox.querySelectorAll('input[type="checkbox"]');
+    const noticeChecks = noticeBox.querySelectorAll('input[type=\"checkbox\"]');
     const allNoticesChecked = Array.from(noticeChecks).every(cb => cb.checked);
     if (!allNoticesChecked) {
-      alert('예약 전 확인사항에 모두 동의하셔야 합니다.');
-      return;
+        alert('예약 전 확인사항에 모두 동의하셔야 합니다.');
+        return;
     }
 
-    // ✅ 통과
-    alert('모든 정보가 올바르게 입력되었습니다! 예약을 진행합니다.');
-    requestPay();
-    // → 실제 예약 처리 ex) document.querySelector('form').submit();
-  }
+    if (select.value === 'custom') {
+        // 여기서 select에서 'custom' 옵션의 값을 input 값으로 덮어씀
+        const customOption = document.querySelector('#customOption');
+        customOption.value = input.value;
+        select.value = input.value; // 최종 value를 input 값으로 바꿈
+    }
+    const selectedPayment = document.querySelector('.btn-payment.active');
+    if (!selectedPayment) {
+        alert('결제 방식을 선택해주세요.');
+        return;
+    }
+
+    if (selectedPayment.textContent.trim() === '현장 결제') {
+        proceedPayment('현장 결제');
+        
+        return;
+    }
+
+    if (selectedPayment.textContent.trim() === '온라인 결제') {
+        const selectedMethod = document.querySelector('#online-payment-options .active');
+        if (!selectedMethod) {
+            alert('온라인 결제 수단을 선택해주세요.');
+            return;
+        }
+
+        requestPay(selectedMethod.textContent.trim());
+        return;
+    }
+}
 </script>
 
-
-
-
-        <button class="btn btn-reserve w-100" onclick="submitForm()">예약 하기</button>
-
-      </div>
-    </div>
-  </div>
-  
 
   <script>
     function toggleSection(sectionId, iconId) {
@@ -696,7 +717,29 @@ function changeBreakfast(amount) {
     	  updateTotalPrice(); // ✅ 페이지 로딩 시 가격 계산 실행
     	});
     
+    function proceedPayment(method) {
+        let paymentType = '';
+        if (method === '카카오페이') paymentType = 'kakao';
+        else if (method === '토스페이') paymentType = 'toss';
+        else if (method === '카드결제') paymentType = 'card';
+        else paymentType = '현장결제';
+
+        document.getElementById('paymentType').value = paymentType;
+
+        if (paymentType === '현장결제') {
+            document.getElementById('paymentStatus').value = '결제대기';
+        } else {
+            document.getElementById('paymentStatus').value = '결제완료';
+        }
+
+        const totalPriceText = document.getElementById('total-price-box').textContent;
+        const totalPrice = parseInt(totalPriceText.replace(/[₩,]/g, ''));
+        document.getElementById('paymentPrice').value = totalPrice;
+
+        document.querySelector('#reservation-form').submit();
+    }
+
+    
   </script>
 </body>
-
 </html>

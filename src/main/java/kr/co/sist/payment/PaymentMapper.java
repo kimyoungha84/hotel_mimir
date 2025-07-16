@@ -4,14 +4,18 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
 
+import kr.co.sist.resvroom.ReservationDTO;
+
 @Mapper
 public interface PaymentMapper {
-    List<PaymentDTO> selectAllPayment();
+    public List<PaymentDTO> selectAllPayment();
 
-    PaymentDTO selectOnePayment(int paymentNum);
+    public PaymentDTO selectOnePayment(int paymentNum);
     
-    void insertPayment(PaymentDTO pDTO);
+    public int selectPaymentSeq();
     
-    void updatePayment(PaymentDTO pDTO);
+    public void insertPayment(ReservationDTO rDTO);
+    
+    public void updatePayment(PaymentDTO pDTO);
    
 }

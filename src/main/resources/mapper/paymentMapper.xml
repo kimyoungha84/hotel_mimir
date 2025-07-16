@@ -3,7 +3,7 @@
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="kr.co.sist.payment.PatmentMapper">
+<mapper namespace="kr.co.sist.payment.PaymentMapper">
 
 	<select id="selectAllPayment" resultType="kr.co.sist.payment.PaymentDomain">
 		SELECT faq_num, faq_title, faq_content, faq_date
@@ -17,12 +17,16 @@
 	where faq_num = #{faq_num}
 
 	</select>
-		
-	<insert id="insertPayment" parameterType="kr.co.sist.payment.PaymentDTO">
-		INSERT INTO payment (PAYMENT_ID, RESERVATION_ID, PAYMENT_PRICE,
-		 PAYMENT_TYPE, PAYMENT_STATUS, PAYMENT_TIME)
-		VALUES (SEQ_NONMEMBER.NEXTVAL, #{reservationId}, #{paymentPrice}, 
-		#{paymentType}, #{paymentStatus}, #{paymentTime});
+
+	<select id="selectPaymentSeq" resultType="int">
+    SELECT SEQ_PAYMENT.NEXTVAL FROM DUAL
+	</select>
+
+	<insert id="insertPayment" parameterType="kr.co.sist.resvroom.ReservationDTO">
+		INSERT INTO payment (PAYMENT_ID, PAYMENT_PRICE,
+		 PAYMENT_TYPE, PAYMENT_STATUS)
+		VALUES (#{paymentId}, #{paymentPrice}, 
+		#{paymentType}, #{paymentStatus})
 	</insert>
 	
 	<update id="updatePayment" parameterType="kr.co.sist.payment.PaymentDTO">

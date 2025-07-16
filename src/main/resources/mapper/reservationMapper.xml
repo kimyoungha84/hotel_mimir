@@ -47,8 +47,10 @@
 	</select>
 	
 	<insert id="insertReservation" parameterType="kr.co.sist.resvroom.ReservationDTO">
-		INSERT INTO faq (faq_num, faq_title, faq_content, faq_date)
-		VALUES (faq_seq.NEXTVAL, #{faq_title}, #{faq_content}, #{faq_date})
+		INSERT INTO RESERVATION (RESV_ID, ROOM_ID, NON_MEM_ID, PAYMENT_ID, CHECKIN_DATE, CHECKOUT_DATE, 
+		NUM_GUESTS_CHILD, NUM_GUESTS_ADULT, STATUS, REQUEST_MSG, BREAKFAST)
+		VALUES (SEQ_RESERVATION.NEXTVAL, #{roomId}, #{userNum}, #{paymentId}, #{checkinDate}, #{checkoutDate},
+		 #{numGuestsChild}, #{numGuestsAdult}, #{status}, #{requestMsg}, #{breakfast})
 	</insert>
 
 	<update id="updateReservation" parameterType="kr.co.sist.resvroom.ReservationDTO">

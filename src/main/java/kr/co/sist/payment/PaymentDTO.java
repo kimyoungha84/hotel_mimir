@@ -14,7 +14,6 @@ import lombok.ToString;
 public class PaymentDTO {
 
 	private int paymentId;
-	private String reservationId;
 	private int paymentPrice;
 	private String paymentType;
 	private String paymentStatus;
