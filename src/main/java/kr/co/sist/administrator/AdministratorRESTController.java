@@ -64,6 +64,15 @@ public class AdministratorRESTController {
 		return returnVal;
 	}//loginChk
 	
-	
+	/*직원 등록*/
+	@PostMapping("/admin/registerStaff")
+	public void registerStaff(@RequestBody StaffDTO staffDTO){
+		
+		int resultCnt=as.registerStaff(staffDTO);
+		System.out.println("resultCnt======="+resultCnt);
+		System.out.println("registerStaff의 staffDTO ----"+staffDTO);
+		
+		//return res;
+	}//registerStaff
 
 }//class

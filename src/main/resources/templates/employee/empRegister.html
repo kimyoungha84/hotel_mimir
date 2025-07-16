@@ -68,8 +68,8 @@
 <tr>
     <th>권한</th>
     <td>
-    <span v-for="(auth,index) in selectedAuthorities" :key="index">
-    <select id="authority" v-model="selectedAuthorities[index]" style="margin-right:0.5rem">
+    <span v-for="(auth,index) in employRegisterObj.authority" :key="index">
+    <select :id="'authority'+index" v-model="employRegisterObj.authority[index]" style="margin-right:0.5rem" @change="chkDuplicateValue(index)">
     <option :value="''" th:text="---선택---" disabled selected></option>
     <option v-for="authority in this.authorities" :value="authority.permission_id" :key="authority.permission_id">{{authority.permission_type}}</option>
     </select>
@@ -83,7 +83,7 @@
 </tr>
 </table>
 <div class="btnGroup" style="margin-left: 50rem;">
-<input type="button" class="darkBtn" value="등록"/>
+<input type="button" class="darkBtn" value="등록" @click="registerBtn"/>
 <input type="button" class="softBtn"value="취소"/>
 </div>
 </div>
@@ -100,9 +100,9 @@ Vue.createApp({
         return{
             employRegisterObj :{
                 id:"",
-                name:"", email:"",dept:"",position:"",authority:"",date:""
+                name:"", email:"",dept:"",position:"",authority:[''],date:""
             },
-            selectedAuthorities : [''],
+            flag : "",
             depts :[
                 {dept_iden:"room", dept_name:"객실 관리"},
                 {dept_iden:"dinning", dept_name:"다이닝 관리"},
@@ -124,8 +124,7 @@ Vue.createApp({
                 {permission_id:"member", permission_type:"회원"},
                 {permission_id:"employee", permission_type:"직원"}
 
-            ],
-            staffDTO : {},
+            ]
         }
     },
     mounted(){
@@ -134,11 +133,67 @@ Vue.createApp({
     },
     methods:{
         addAuthoritySelector(){
-            this.selectedAuthorities.push('');
+            //이게 클릭했을 때, <selector>가 추가되어야함.
+
+            //마지막에 추가된 값
+            var lastSelected=this.employRegisterObj.authority[this.employRegisterObj.authority.length-1];
+
+            //이번에 추가된 값.
+            //console.log("이번에 추가된 값"+this.employRegisterObj.authority);
+            //console.log("마지막 값 -----------"+lastSelected);
+            //console.log(this.employRegisterObj.authority);
+            //console.log("마지막꺼 값이 입력됐는지 여부  ------"+this.employRegisterObj.authority.includes(lastSelected));
+            if(!this.employRegisterObj.authority.includes('')){
+                //select의 값을 선택했으면 들어오기.!
+                
+                if(this.flag){
+                    this.employRegisterObj.authority.push('');
+                }//end if
+            }else{
+                alert("권한을 선택해 주세요.");
+            }//end if~else
         },
         addAuthoritytoList(){
 
         },
+        chkDuplicateValue(index){
+            this.flag=true;
+            //중복값 체크
+            //index가 들어가야하는지 생각 필요!!
+            var selectVal=this.employRegisterObj.authority[index];
+            
+            //debugger;
+            //console.log("중복값 체크크크크 -----"+selectVal);
+            
+            
+            var isDuplicate=this.employRegisterObj.authority.some((eleVal,i)=>{
+                return i != index && eleVal === selectVal;
+            });
+
+            //console.log("isduplicate--------"+isDuplicate)
+
+            if(isDuplicate){
+                //만약에 배열 안에 지금 선택한 값이 들어가 있으면
+                alert("이미 선택된 값입니다. 다시 선택해주세요.");
+                //해당 selector를 초기화 시켜줍시다아.
+                this.employRegisterObj.authority[index]='';
+                this.flag=false;
+            }//end if
+
+            //console.log("chkDuplicateValueFlag============"+this.flag);
+            return this.flag;
+        },
+        registerBtn(){
+            console.log(this.employRegisterObj);
+            
+            axios.post("/admin/registerStaff",this.employRegisterObj)
+            .then(res=>{
+
+            })
+            .catch(err=>{
+
+            });
+        }
         
     }
 }).mount("#app");

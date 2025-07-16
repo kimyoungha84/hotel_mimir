@@ -35,7 +35,7 @@ public class AdminInterceptor implements HandlerInterceptor{
 	public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) throws Exception {
 		HttpSession session=request.getSession(false);
 		
-		if(session !=null) {
+		if(modelAndView != null && session !=null) {
 			modelAndView.addObject("session_id",request.getSession().getAttribute("session_id"));
 			modelAndView.addObject("session_name",request.getSession().getAttribute("session_name"));			
 		}//end if

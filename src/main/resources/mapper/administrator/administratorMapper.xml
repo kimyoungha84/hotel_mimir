@@ -22,4 +22,15 @@ select listagg(permission_id_code,',') as permission  from staff_permission wher
 select count(staff_id) from staff where staff_id=#{staff_id}
 </select>
 
+<!-- 로그파일 등록 -->
+<!-- 직원 등록을 하기 위해 먼저 선행되어야 한다. 무결성 제약조건으로 인해  -->
+<insert id="insertLogInfo" parameterType="staffDTO">
+insert into log_record(log_iden,log_file_name) values(#{log_iden},#{log_file_name})
+</insert>
+<!-- 직원 등록 -->
+<insert id="insertStaff" parameterType="staffDTO">
+insert into staff(staff_id,position_identified_code,dept_iden,log_iden,staff_pass,staff_name,staff_email,date_of_employment,staff_status)
+values(#{staff_id},#{position_identified_code},#{dept_iden},#{log_iden},#{staff_pass},#{staff_name},#{staff_email},#{date_of_employment},#{staff_status})
+</insert>
+
 </mapper>

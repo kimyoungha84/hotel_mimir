@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class AdminService {
@@ -113,6 +114,67 @@ public class AdminService {
 		
 		return id;
 	}//makeAdminId
+	
+	/*직원 등록시 초기값 설정*/
+	public StaffDTO registerStaffInitSetting(StaffDTO staffDTO) {
+		//1. 직원 ID, 2.직책식별 코드, 3.부서 식별 코드, 4.권한 식별 코드 리스트, 5.직원 이름, 6.직원 이메일, 7.입사일
+		StaffDTO sDTO=staffDTO;
+		
+		//직원 상태
+		sDTO.setStaff_status("ACTIVE");
+		//로그파일 식별 번호
+		sDTO.setLog_iden(createLogIden(staffDTO));
+		//로그파일명
+		sDTO.setLog_file_name(createLogFileName(staffDTO));
+		//초기 비밀번호
+		sDTO.setStaff_pass(createInitialPass(staffDTO));
+		
+		return sDTO;
+	}//registerStaffInitSetting
+	
+	
+	/*id의 randNum을 분리!*/
+	public String seperateIdtoRandnum(StaffDTO staffDTO) {
+		
+		return staffDTO.getStaff_id().split("_")[1];
+	}//seperateIdtoRandnum
+	
+	
+	/*직원 등록*/
+	@Transactional
+	public int registerStaff(StaffDTO staffDTO){
+		StaffDTO sDTO=registerStaffInitSetting(staffDTO);
+		int resultCnt1=0;
+		int resultCnt2=0;
+		//여기서 DB에 insert하는 부분이 나와야지.
+		//여기서 DB 연결!!!!!!!!!
+		resultCnt1=am.insertLogInfo(sDTO);
+		resultCnt2=am.insertStaff(sDTO);
+		
+		return resultCnt1+resultCnt2;
+	}//registerStaff
+	
+	
+	
+	/*로그 번호 생성*/
+	public String createLogIden(StaffDTO staffDTO) {
+		
+		return "LOG"+seperateIdtoRandnum(staffDTO);
+	}//createLogIden
+	
+	
+	/*로그 파일명 생성*/
+	public String createLogFileName(StaffDTO staffDTO) {
+		
+		return "LOG"+seperateIdtoRandnum(staffDTO)+".txt";
+	}//createLogFileName
+	
+	
+	/*staff의 초기 비밀번호*/
+	public String createInitialPass(StaffDTO staffDTO) {
+		
+		return "pass"+seperateIdtoRandnum(staffDTO);
+	}//createInitialPass
 
 	
 }//class

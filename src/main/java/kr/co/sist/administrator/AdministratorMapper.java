@@ -14,6 +14,12 @@ public interface AdministratorMapper {
 	
 	/*아이디가 이미 있는 아이디인지 확인*/
 	public Integer selectCheckExistId(String employee_id);
+	
+	
+	/*직원등록*/
+	//log_record 테이블 등록 후 > staff 테이블을 등록해야 한다.
+	public int insertLogInfo(StaffDTO staffDTO);
+	public int insertStaff(StaffDTO staffDTO);
 }//interface
 
 
