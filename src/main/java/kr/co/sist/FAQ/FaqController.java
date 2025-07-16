@@ -23,6 +23,7 @@ import kr.co.sist.util.ModelUtils;
 import kr.co.sist.util.controller.SearchController;
 import kr.co.sist.member.CustomUserDetails;
 
+// FAQ 컨트롤러: FAQ 및 문의(채팅) 관련 기능 제공
 @Controller
 public class FaqController {
 
@@ -36,12 +37,14 @@ public class FaqController {
 	private MemberMapper memberMapper;
 
 	@GetMapping("/admin/chat")
+	// 관리자 채팅 페이지 진입 (admin_chat.html 반환)
 	public String adminChatPage() {
 		
 		return "inquiry/admin_chat"; // templates/admin_chat.html
 	}
 
 	@GetMapping("/admin/faq")
+	// 관리자 FAQ 목록 페이지 진입 (admin_faq.html 반환)
 	public String adminFAQPage(Model model) {
 		
 		int pageSize = 10;
@@ -60,12 +63,14 @@ public class FaqController {
 	}//adminFAQPage
 
 	@GetMapping("/admin/faq/register")
+	// 관리자 FAQ 등록 폼 페이지 진입
 	public String faqRegisterForm() {
 		
 		return "inquiry/admin_faq_register"; // templates/admin_chat.html
 	}//faqRegisterForm
 
 	@GetMapping("/inquiry")
+	// 사용자 문의(FAQ+채팅) 페이지 진입, 로그인 여부/사용자번호 전달
 	public String inquiryPage(Model model, @AuthenticationPrincipal CustomUserDetails userDetails) {
 		List<FAQDTO> faqList = service.selectAllFAQ(); // DB에서 FAQ 불러오기
 		model.addAttribute("faqList", faqList);
@@ -81,6 +86,7 @@ public class FaqController {
 
 	// faq 등록
 	@PostMapping("/admin/faq/register")
+	// FAQ 등록 처리
 	public String registerFaq(@RequestParam String title, @RequestParam String content) {
 		
 		FAQDTO faq = new FAQDTO();
@@ -97,6 +103,7 @@ public class FaqController {
 	}//registerFaq
 
 	@PostMapping("/admin/faq/delete")
+	// FAQ 다중 삭제 처리 (AJAX)
 	@ResponseBody
 	public String deleteFaq(@RequestBody List<Integer> faqNums) {
 		
@@ -107,6 +114,7 @@ public class FaqController {
 	}//deleteFaq
 
 	@GetMapping("/admin/faq/modify")
+	// FAQ 수정 폼 페이지 진입
 	public String showModifyForm(@RequestParam("faq_num") int faqNum, Model model) {
 		
 		FAQDTO faq = service.selectOneFaq(faqNum); // DB에서 FAQ 가져오기
@@ -117,6 +125,7 @@ public class FaqController {
 	}//showModifyForm
 
 	@PostMapping("/admin/faq/modify")
+	// FAQ 수정 처리
 	public String modifyFaq(@RequestParam("faq_num") int faqNum, @RequestParam("faq_title") String title,
 			@RequestParam("faq_content") String content) {
 

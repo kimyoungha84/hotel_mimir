@@ -42,4 +42,34 @@
         SELECT * FROM chat_room WHERE user_num = #{user_num} ORDER BY room_id ASC
     </select>
 
+    <!-- 권한 2개 모두 가진 ACTIVE 관리자 중 랜덤 1명 -->
+    <select id="findRandomStaffWithPermissions" resultType="String">
+      SELECT staff_id
+      FROM staff
+      WHERE staff_status = 'ACTIVE'
+        AND staff_id IN (
+          SELECT staff_id FROM staff_permission WHERE permission_id_code LIKE '%' || #{perm1} || '%'
+        )
+        AND staff_id IN (
+          SELECT staff_id FROM staff_permission WHERE permission_id_code LIKE '%' || #{perm2} || '%'
+        )
+      ORDER BY DBMS_RANDOM.VALUE
+      FETCH FIRST 1 ROWS ONLY
+    </select>
+
+    <!-- 권한이 inquiry만 있는 ACTIVE 관리자 중 랜덤 1명 -->
+    <select id="findRandomStaffWithOnlyInquiry" resultType="String">
+      SELECT staff_id
+      FROM staff
+      WHERE staff_status = 'ACTIVE'
+        AND staff_id IN (
+          SELECT staff_id FROM staff_permission WHERE permission_id_code LIKE '%' || 'inquiry' || '%'
+        )
+        AND staff_id NOT IN (
+          SELECT staff_id FROM staff_permission WHERE permission_id_code LIKE '%' || 'room' || '%' OR permission_id_code LIKE '%' || 'dinning' || '%'
+        )
+      ORDER BY DBMS_RANDOM.VALUE
+      FETCH FIRST 1 ROWS ONLY
+    </select>
+
 </mapper> 

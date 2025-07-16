@@ -13,25 +13,29 @@ public class ChatServiceImpl implements ChatService {
     private ChatMessageMapper chatMessageMapper; // 가정: ChatMessageMapper가 존재
 
     @Override
+    // 채팅방 생성 또는 기존 방 조회 (user_num, chat_type, staff 매칭)
     public ChatRoomDTO getOrCreateChatRoom(int user_num, String chat_type) {
-        // staff_id를 무조건 mimir_267801로 고정
-        // String staff_id = "mimir_267801";
         String staff_id = null;
         // chat_type에 따라 권한 조건 다르게 적용
         if ("0".equals(chat_type)) {
             // 객실 문의: room, inquiry 모두 있는 ACTIVE 관리자 중 랜덤 1명
             staff_id = chatRoomMapper.findRandomStaffWithPermissions("room", "inquiry");
         } else if ("1".equals(chat_type)) {
-            // 다이닝 문의: dinning, inquiry 모두 있는 ACTIVE 관리자 중 랜덤 1명
+            // 다이닝 문의: dining, inquiry 모두 있는 ACTIVE 관리자 중 랜덤 1명
             staff_id = chatRoomMapper.findRandomStaffWithPermissions("dinning", "inquiry");
         } else if ("2".equals(chat_type)) {
             // 일반 문의: inquiry만 있는 ACTIVE 관리자 중 랜덤 1명
             staff_id = chatRoomMapper.findRandomStaffWithOnlyInquiry();
         }
-        if (staff_id == null) {
-            // fallback: 기존 관리자
-            staff_id = "mimir_267801";
+        // staff_id, user_num, chat_type 로그 출력
+        System.out.println("[채팅방 생성] user_num=" + user_num + ", chat_type=" + chat_type + ", staff_id=" + staff_id);
+
+        // 필수값 null 체크
+        if (staff_id == null || user_num == 0 || chat_type == null) {
+            System.out.println("[채팅방 생성 실패] 필수값 누락: user_num=" + user_num + ", staff_id=" + staff_id + ", chat_type=" + chat_type);
+            return null;
         }
+
         ChatRoomDTO room = chatRoomMapper.findByUserAndStaffAndType(user_num, staff_id, chat_type);
         if (room == null) {
             room = new ChatRoomDTO();
@@ -43,7 +47,7 @@ public class ChatServiceImpl implements ChatService {
                     room.setDept_iden("room");
                     break;
                 case "1":
-                    room.setDept_iden("dining");
+                    room.setDept_iden("dinning");
                     break;
                 case "2":
                     room.setDept_iden("inquiry");
@@ -52,37 +56,59 @@ public class ChatServiceImpl implements ChatService {
                     room.setDept_iden("inquiry");
             }
             room.setChat_type(chat_type);
+
+            // insert 직전 null 체크
+            if (room.getUser_num() == 0 || room.getStaff_id() == null || room.getDept_iden() == null || room.getChat_type() == null) {
+                System.out.println("[채팅방 INSERT 실패] 파라미터 null: " + room);
+                return null;
+            }
+            System.out.println("[채팅방 INSERT 직전] " + room);
             chatRoomMapper.insert(room);
+
+            // insert 후 DB 저장 확인
+            ChatRoomDTO inserted = chatRoomMapper.findByUserAndStaffAndType(user_num, staff_id, chat_type);
+            System.out.println("[채팅방 DB 저장 확인] " + inserted);
+            if (inserted == null) {
+                System.out.println("[채팅방 생성 실패] DB insert 후 조회 결과 null");
+                return null;
+            }
+            return inserted;
         }
         return room;
     }
 
     @Override
+    // 채팅방의 모든 메시지 조회
     public List<ChatMessageDTO> getMessagesByRoomId(int room_id) {
         return chatMessageMapper.findByRoomId(room_id);
     }
 
     @Override
+    // 메시지 저장
     public void saveMessage(ChatMessageDTO message) {
         chatMessageMapper.insert(message);
     }
 
     @Override
+    // 메시지 읽음 처리
     public void markMessagesAsRead(int room_id, String staff_id) {
         chatMessageMapper.markAsRead(room_id, staff_id);
     }
 
     @Override
+    // staff_id로 담당 채팅방 리스트 조회
     public List<ChatRoomDTO> getRoomsByStaffId(String staff_id) {
         return chatRoomMapper.findRoomsByStaffId(staff_id);
     }
 
     @Override
+    // user_num으로 사용자의 채팅방 리스트 조회
     public List<ChatRoomDTO> getRoomsByUserId(int user_num) {
         return chatRoomMapper.findRoomsByUserId(user_num);
     }
 
     @Override
+    // 안읽은 메시지 개수 반환
     public int countUnreadByRoomAndStaff(int room_id, String staff_id) {
         // 특정 방, 특정 staff_id 기준 안읽은 메시지 개수 반환
         return chatMessageMapper.countUnreadByRoomAndStaff(room_id, staff_id);
