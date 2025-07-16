@@ -32,5 +32,9 @@ insert into log_record(log_iden,log_file_name) values(#{log_iden},#{log_file_nam
 insert into staff(staff_id,position_identified_code,dept_iden,log_iden,staff_pass,staff_name,staff_email,date_of_employment,staff_status)
 values(#{staff_id},#{position_identified_code},#{dept_iden},#{log_iden},#{staff_pass},#{staff_name},#{staff_email},#{date_of_employment},#{staff_status})
 </insert>
+<insert id="insertStaffPermission" parameterType="staffDTO">
+insert into staff_permission(staff_id,permission_id_code)
+values(#{staff_id},#{permission_id_code})
+</insert>
 
 </mapper>

@@ -51,7 +51,7 @@ public class AdministratorRESTController {
 				String session_id=(String)request.getSession().getAttribute("session_id");
 				String session_name=(String)request.getSession().getAttribute("session_name");
 				
-				System.out.println("RestController-------"+session_id +" / "+ session_name);
+				//System.out.println("RestController-------"+session_id +" / "+ session_name);
 				
 	
 			}else {
@@ -66,13 +66,16 @@ public class AdministratorRESTController {
 	
 	/*직원 등록*/
 	@PostMapping("/admin/registerStaff")
-	public void registerStaff(@RequestBody StaffDTO staffDTO){
+	public int registerStaff(@RequestBody StaffDTO staffDTO) throws Exception{
 		
 		int resultCnt=as.registerStaff(staffDTO);
-		System.out.println("resultCnt======="+resultCnt);
-		System.out.println("registerStaff의 staffDTO ----"+staffDTO);
+		//System.out.println("resultCnt======="+resultCnt);
+		//System.out.println("registerStaff의 staffDTO ----"+staffDTO);
+		if(resultCnt!=3) {
+			throw new Exception();
+		}//end if
 		
-		//return res;
+		return resultCnt;
 	}//registerStaff
 
 }//class

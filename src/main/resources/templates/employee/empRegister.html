@@ -84,7 +84,7 @@
 </table>
 <div class="btnGroup" style="margin-left: 50rem;">
 <input type="button" class="darkBtn" value="등록" @click="registerBtn"/>
-<input type="button" class="softBtn"value="취소"/>
+<input type="button" class="softBtn"value="취소" @click="cancelBtn"/>
 </div>
 </div>
 </div><!-- app -->
@@ -188,11 +188,15 @@ Vue.createApp({
             
             axios.post("/admin/registerStaff",this.employRegisterObj)
             .then(res=>{
-
+                alert("직원 등록에 성공했습니다.");
+                location.href="/admin/employee";
             })
             .catch(err=>{
-
+                alert("등록에 실패했습니다.\n값들을 다시 확인해 주세요.");
             });
+        },
+        cancelBtn(){
+            location.href="/admin/employee";
         }
         
     }

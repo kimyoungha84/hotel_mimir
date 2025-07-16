@@ -146,35 +146,89 @@ public class AdminService {
 		StaffDTO sDTO=registerStaffInitSetting(staffDTO);
 		int resultCnt1=0;
 		int resultCnt2=0;
+		int resultCnt3=0;
+		
+
+		if(chkEmptyData(staffDTO)) {
+			//값 중 하나라도 empty가 있으면
+			return 0;
+		}//end if
+		
+		
 		//여기서 DB에 insert하는 부분이 나와야지.
 		//여기서 DB 연결!!!!!!!!!
 		resultCnt1=am.insertLogInfo(sDTO);
 		resultCnt2=am.insertStaff(sDTO);
 		
-		return resultCnt1+resultCnt2;
+		//permission_id_code는 기본적으로 List 형태니까.
+		//이걸 한 개씩 보내주도록 해야겠지.
+		resultCnt3=processPermissionList(sDTO);
+		
+		return resultCnt1+resultCnt2+resultCnt3;
 	}//registerStaff
 	
 	
 	
 	/*로그 번호 생성*/
-	public String createLogIden(StaffDTO staffDTO) {
+	private String createLogIden(StaffDTO staffDTO) {
 		
 		return "LOG"+seperateIdtoRandnum(staffDTO);
 	}//createLogIden
 	
 	
 	/*로그 파일명 생성*/
-	public String createLogFileName(StaffDTO staffDTO) {
+	private String createLogFileName(StaffDTO staffDTO) {
 		
 		return "LOG"+seperateIdtoRandnum(staffDTO)+".txt";
 	}//createLogFileName
 	
 	
 	/*staff의 초기 비밀번호*/
-	public String createInitialPass(StaffDTO staffDTO) {
+	private String createInitialPass(StaffDTO staffDTO) {
 		
 		return "pass"+seperateIdtoRandnum(staffDTO);
 	}//createInitialPass
 
 	
+	/*현재 값에 데이터 들어있는지 확인*/
+	private boolean chkEmptyData(StaffDTO sDTO) {
+		boolean resultVal=false;
+		
+		//만약에 들어와야 할 값들이 즐어오지 않았다면, 여기서 return 0;
+		//staff_id, postision_identified_code, dept_iden, permission_id_code_list, staff_name, staff_email, date_of_employment
+		resultVal=sDTO.getStaff_id().isEmpty();
+		resultVal=sDTO.getPosition_identified_code().isEmpty();
+		resultVal=sDTO.getDept_iden().isEmpty();
+		resultVal=sDTO.getPermission_id_code_list().isEmpty();
+		resultVal=sDTO.getStaff_name().isEmpty();
+		resultVal=sDTO.getStaff_email().isEmpty();
+		resultVal=sDTO.getDate_of_employment().isEmpty();
+		
+		
+		return resultVal;
+	}//chkEmptyData
+	
+	
+	/*permission_id_code list 처리*/
+	private int processPermissionList(StaffDTO sDTO) {
+		int returnVal=0;
+		
+		int permissionListSize=sDTO.getPermission_id_code_list().size();
+		
+		//System.out.println("listSize-------------------"+permissionListSize);
+		
+		for(int i=0; i<permissionListSize; i++) {
+			//System.out.println("listValue------------"+sDTO.getPermission_id_code_list().get(i));
+			sDTO.setPermission_id_code(sDTO.getPermission_id_code_list().get(i));
+			returnVal+=am.insertStaffPermission(sDTO);
+			
+			//System.out.println("returnVal--------------------"+returnVal);
+		}//end for
+		
+		if(returnVal == 0) {
+			return 0;
+		}//end if
+		
+		return 1;
+	}//processPermissionList
 }//class

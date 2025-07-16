@@ -28,6 +28,7 @@ public class StaffDTO {
 
 	@JsonAlias({"authority"})
 	private List<String> permission_id_code_list;//권한 식별 코드 리스트
+	private String permission_id_code;//권한 식별 코드
 	
 	private String log_iden;//로그식별번호
 	private String log_file_name;//로그 파일 명

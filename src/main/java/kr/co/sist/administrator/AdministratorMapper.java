@@ -19,6 +19,7 @@ public interface AdministratorMapper {
 	/*직원등록*/
 	//log_record 테이블 등록 후 > staff 테이블을 등록해야 한다.
 	public int insertLogInfo(StaffDTO staffDTO);
+	public int insertStaffPermission(StaffDTO staffDTO);
 	public int insertStaff(StaffDTO staffDTO);
 }//interface
 
