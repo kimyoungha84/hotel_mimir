@@ -68,12 +68,14 @@ public class ChatWebSocketHandler extends TextWebSocketHandler {
             
             if (isUser) {
                 // 사용자가 보낸 메시지
-                chatMsg.setUser_num(Integer.parseInt(sender));
-                chatMsg.setStaff_id(room.getStaff_id());
+                chatMsg.setUser_num(Integer.parseInt(sender)); // sender(사용자 번호)
+                chatMsg.setStaff_id(room.getStaff_id());       // 방의 staff_id
+                chatMsg.setIs_from_user("Y"); // 사용자 메시지
             } else {
                 // 관리자가 보낸 메시지
-                chatMsg.setStaff_id(sender);
-                chatMsg.setUser_num(room.getUser_num());
+                chatMsg.setUser_num(room.getUser_num());       // 방의 user_num
+                chatMsg.setStaff_id(sender);                   // sender(관리자 ID)
+                chatMsg.setIs_from_user("N"); // 관리자 메시지
             }
             
             chatMsg.setDept_iden(room.getDept_iden());

@@ -152,10 +152,11 @@ $(document).ready(function() {
       data: { room_id: roomId },
       xhrFields: { withCredentials: true }, // JWT 쿠키 자동 전송
       success: function(messages) {
-        $("#chatMessages").empty();
+        $("#chatBody").empty();
         messages.forEach(function(msg) {
-          // 사용자가 보낸 메시지는 오른쪽, 관리자가 보낸 메시지는 왼쪽
-          const isMine = msg.user_num == userNum;
+          // is_from_user가 'Y'면 오른쪽(사용자), 'N'이면 왼쪽(관리자)
+          const isMine = msg.is_from_user === 'Y';
+          console.log('[사용자 채팅] userNum:', userNum, 'msg.user_num:', msg.user_num, 'is_from_user:', msg.is_from_user, 'isMine:', isMine, 'content:', msg.content);
           const alignClass = isMine ? "right" : "left";
           const messageBlock = $("<div>").addClass("message-block " + alignClass);
           const formattedMsg = msg.content.replace(/\n/g, "<br>");
@@ -166,9 +167,9 @@ $(document).ready(function() {
           } else {
             messageBlock.append(message);
           }
-          $("#chatMessages").append(messageBlock);
+          $("#chatBody").append(messageBlock);
         });
-        $("#chatMessages").scrollTop($("#chatMessages")[0].scrollHeight);
+        $("#chatBody").scrollTop($("#chatBody")[0].scrollHeight);
       },
       error: function(xhr) {
         if (xhr.status === 401) {
@@ -203,7 +204,7 @@ $(document).ready(function() {
       const message = $("<div>").addClass("chat-message right").html(formattedMsg);
       const timeElem = $("<div>").addClass("message-time").text(getCurrentTime());
       msgElem.append(message, timeElem);
-      $("#chatMessages").append(msgElem).scrollTop($("#chatMessages")[0].scrollHeight);
+      $("#chatBody").append(msgElem).scrollTop($("#chatBody")[0].scrollHeight);
       ws.send(currentRoomId + ':' + msg);
       $("#messageInput").val("");
       messageTimestamps.push(now);
@@ -301,11 +302,13 @@ $(document).ready(function() {
     // 뒤로가기 버튼 클릭 시 채팅방 나가기
     $("#backBtn").off('click').on('click', function() {
       $("#inputArea").hide();
-      $("#chatMessages").hide();
+      $("#chatBody").hide().empty();
       $("#chatOptions").show();
       $("#chatTitle").text("1:1 채팅");
       currentRoomId = null;
       currentChatType = null;
+      // 문의 유형 선택 후 채팅방 입장 시 메시지 영역이 정상적으로 보이도록 복구
+      setTimeout(function() { $("#chatBody").show(); }, 100);
     });
   });
 });

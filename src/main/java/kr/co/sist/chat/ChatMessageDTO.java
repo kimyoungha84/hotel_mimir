@@ -20,5 +20,6 @@ public class ChatMessageDTO {
 	private String content;
 	private Timestamp send_time;
 	private String is_read;
+	private String is_from_user; // 'Y' = 사용자, 'N' = 관리자
 
 }

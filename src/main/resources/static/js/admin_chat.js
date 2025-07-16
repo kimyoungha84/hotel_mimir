@@ -72,6 +72,9 @@ function loadUserList() {
 $(document).ready(function() {
     connectWebSocket();
     loadUserList();
+    currentRoomId = null; // 반드시 null로 초기화
+    $("#chatBody").html(""); // 채팅창 비우기
+    $("#chatWith").text("선택된 유저 없음");
 });
 
 // 유저 목록 추가 또는 메시지 갱신
@@ -124,8 +127,9 @@ $(document).on("click", ".user-item", function() {
         data: { room_id: currentRoomId },
         success: function(messages) {
             messages.forEach(function(msg) {
-                // 관리자가 보낸 메시지는 오른쪽, 사용자가 보낸 메시지는 왼쪽
-                const isMine = msg.staff_id === staffId;
+                // is_from_user가 'N'이면 오른쪽(관리자), 'Y'이면 왼쪽(사용자)
+                const isMine = msg.is_from_user === 'N';
+                console.log('[관리자 채팅] staffId:', staffId, 'msg.staff_id:', msg.staff_id, 'is_from_user:', msg.is_from_user, 'isMine:', isMine, 'content:', msg.content);
                 appendChat(isMine ? staffId : msg.user_num, msg.content, isMine, msg.send_time);
             });
             
