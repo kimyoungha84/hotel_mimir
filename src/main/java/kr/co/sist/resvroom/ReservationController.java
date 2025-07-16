@@ -1,12 +1,14 @@
 package kr.co.sist.resvroom;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import jakarta.servlet.http.HttpSession;
 import kr.co.sist.nonmember.NonMemberService;
 import kr.co.sist.payment.PaymentService;
 
@@ -53,25 +55,28 @@ public class ReservationController {
 	}//roomList
 	
 	@PostMapping("/room_resv/reservation")
-	public String reservation(ReservationDTO rDTO) {
+	public String reservation(ReservationDTO rDTO, Model model) {
 		//반환값 rDTO로 하고 나서 nonmemberId set하고 paymentID까지 set해야함
 		
 		int paySeq;
 		int nonMemSeq;
+		int resvSeq;
 		
 		System.out.println(rDTO);
 		
 		paySeq = ps.searchPaymentSeq();
 		nonMemSeq = nms.searchNonMemberSeq();
+		resvSeq = rs.searchReservationSeq();
 		
 		rDTO.setUserNum(nonMemSeq);
 		rDTO.setPaymentId(paySeq);
+		rDTO.setResvId(resvSeq);
 		rDTO.setStatus("예약완료");
 		
 		nms.addNonMember(rDTO);
 		ps.addPayment(rDTO);
 		rs.addReservation(rDTO);
-		
+		model.addAttribute("resCon", rDTO);
 		
 		return "room_resv/resultResv";
 	}//roomList

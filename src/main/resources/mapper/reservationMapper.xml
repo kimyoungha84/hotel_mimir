@@ -33,6 +33,12 @@
   LEFT JOIN NON_MEMBER nm ON r.NON_MEM_ID = nm.NON_MEM_ID
   LEFT JOIN PAYMENT p ON r.PAYMENT_ID = p.PAYMENT_ID
   </select>
+  
+  
+  <select id="selectReservationSeq" resultType="int">
+    SELECT SEQ_RESERVATION.NEXTVAL FROM DUAL
+	</select>
+  
 
 	<select id="selectAllReservation" resultType="kr.co.sist.resvroom.ReservationDomain">
 		SELECT faq_num, faq_title, faq_content, faq_date
@@ -50,7 +56,7 @@
 	<insert id="insertReservation" parameterType="kr.co.sist.resvroom.ReservationDTO">
 		INSERT INTO RESERVATION (RESV_ID, ROOM_ID, NON_MEM_ID, PAYMENT_ID, CHECKIN_DATE, CHECKOUT_DATE, 
 		NUM_GUESTS_CHILD, NUM_GUESTS_ADULT, STATUS, REQUEST_MSG, BREAKFAST)
-		VALUES (SEQ_RESERVATION.NEXTVAL, #{roomId}, #{userNum}, #{paymentId}, #{checkinDate}, #{checkoutDate},
+		VALUES (#{resvId}, #{roomId}, #{userNum}, #{paymentId}, #{checkinDate}, #{checkoutDate},
 		 #{numGuestsChild}, #{numGuestsAdult}, #{status}, #{requestMsg}, #{breakfast})
 	</insert>
 

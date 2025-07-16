@@ -14,4 +14,9 @@ public class ReservationService {
 	public void addReservation(ReservationDTO rDTO){
 		rm.insertReservation(rDTO);
 	}//addReservation
+	
+	public int searchReservationSeq() {
+		return rm.selectReservationSeq();
+	}
+	
 }//class

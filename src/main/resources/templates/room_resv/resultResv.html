@@ -6,6 +6,7 @@
 <!-- bootstrap CDN -->
 <link rel="stylesheet" type="text/css"
 	href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css">
+ <link rel="stylesheet" th:href="@{/css/header.css}" />
 	
 <style type="text/css">
  .reservation-complete {
@@ -15,6 +16,13 @@
   color: #111;
 }
 
+
+.toolbar{
+color: black;
+}
+ .navbar-link {
+    color: black;
+}
 /* 스텝 표시 */
 .step-indicator {
   display: flex;
@@ -97,9 +105,6 @@
   margin: 0 8px;
 }
 
-.info-value {
-  flex: 1;
-}
 
 .italic {
   font-style: italic;
@@ -191,6 +196,7 @@ $(function(){
 
 </head>
 <body>
+<div th:replace="~{fragments/header.html :: header}"></div>
 <div class="step-indicator">
   <span class="step" data-tooltip="객실 선택">1</span>  
   <span class="step" data-tooltip="옵션 및 예약정보 입력">2</span> 
@@ -216,32 +222,36 @@ $(function(){
     <div class="info-row">
       <span>예약번호</span>
       <span class="info-colon">:</span>
-      <span class="info-value italic">20250617</span>
+      <span class="info-value italic" th:text="${ resCon.resvId }">20250617</span>
     </div>
     <div class="info-row">
       <span>예약자</span>
       <span class="info-colon">:</span>
-      <span class="info-value">김재인</span>
+      <span class="info-value italic" th:text="${ resCon.userName }">김재인</span>
     </div>
     <div class="info-row">
       <span>휴대전화</span>
       <span class="info-colon">:</span>
-      <span class="info-value italic">010-1234-5678</span>
+      <span class="info-value italic" th:text="${ resCon.userTel }">010-1234-5678</span>
     </div>
     <div class="info-row">
       <span>객실</span>
       <span class="info-colon">:</span>
-      <span class="info-value">로얄 스위트룸</span>
+      <span class="info-value italic" th:text="${ resCon.typeName }">로얄 스위트룸</span>
     </div>
     <div class="info-row">
       <span>인원</span>
       <span class="info-colon">:</span>
-      <span class="info-value">3명</span>
+      <span class="info-value italic">성인 : </span>&nbsp;&nbsp;&nbsp;
+      <span class="info-value italic" th:text="${ resCon.numGuestsAdult }">3명</span>&nbsp;&nbsp;&nbsp;
+      <span class="info-value italic">아동 : </span>&nbsp;&nbsp;&nbsp;
+      <span class="info-value italic" th:text="${ resCon.numGuestsChild }">3명</span>
     </div>
     <div class="info-row">
       <span>체크인 /아웃</span>
       <span class="info-colon">:</span>
-      <span class="info-value italic">2025.06.17 15:00 &nbsp; - &nbsp; 2025.06.20 11:00</span>
+      <span class="info-value italic" th:text="${ resCon.checkinDate }">2025.06.17 15:00</span> &nbsp; - &nbsp;
+      <span class="info-value italic" th:text="${ resCon.checkoutDate }"> 2025.06.20 11:00</span>
     </div>
   </div>
 
@@ -249,7 +259,9 @@ $(function(){
 
   <!-- 확인 버튼 -->
   <div class="button-wrapper">
+   <a th:href="@{/roomlist}">
     <button class="confirm-btn">확 인</button>
+</a>
   </div>
 </div>
 

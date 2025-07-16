@@ -11,6 +11,8 @@ public interface ReservationMapper {
     
     public ReservationDTO selectOneReservation(int ReservationNum);
     
+    public int selectReservationSeq();
+    
     public void insertReservation(ReservationDTO rDTO);
     
     public void updateReservation(ReservationDTO rDTO);
