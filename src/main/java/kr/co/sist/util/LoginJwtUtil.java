@@ -26,12 +26,13 @@ public class LoginJwtUtil {
 		return Keys.hmacShaKeyFor(keyBytes);
 	}
 	
-	public String generateAccessToken(int userNum, String emailId) {
+	public String generateAccessToken(int userNum, String emailId, String name) {
 		
 		return Jwts.builder()
 				.setSubject("AccessToken") //토큰 주제
 				.claim("user_num", userNum)
 				.claim("email_id", emailId)
+				.claim("name", name)
 				.setIssuedAt(new Date()) //토큰 발급 시각
 				.setExpiration(new Date(System.currentTimeMillis() + accessTokenValidity))//토큰 만료시간
 				.signWith(getSigningKey(), SignatureAlgorithm.HS256)//서명 알고리즘

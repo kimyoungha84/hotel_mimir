@@ -119,6 +119,7 @@ public class MemberController {
         }
     }
     
+    //로그아웃
     @GetMapping("/logout")
     public String logout(HttpServletResponse response, @AuthenticationPrincipal CustomUserDetails userDetails) {
         // 1. 클라이언트 측 Access Token 쿠키 삭제
@@ -127,7 +128,6 @@ public class MemberController {
         jwtCookie.setPath("/");
         response.addCookie(jwtCookie);
         
-        
         // 2. Spring Security 컨텍스트 클리어
         SecurityContextHolder.clearContext();
         
@@ -135,6 +135,7 @@ public class MemberController {
         if (userDetails != null) {
             memberService.invalidateRefreshToken(userDetails.getUsername()); // email_id로 Refresh Token 무효화
         }
+        
 
         return "redirect:/"; // 로그아웃 후 메인 페이지로 리다이렉트
     }

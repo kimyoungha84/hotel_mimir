@@ -11,4 +11,5 @@ public class LoginResponseDTO {
 	private String refreshToken;
 	private int userNum;
 	private String emailId;
+	private String userName;
 }

@@ -45,10 +45,11 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         if (token != null && loginJwtUtil.validateToken(token)) {
             Claims claims = loginJwtUtil.getClaims(token);
             String email = claims.get("email_id", String.class);
-            Integer userNum = claims.get("user_num", Integer.class); // user_num 클레임 가져오기
+            Integer userNum = claims.get("user_num", Integer.class);
+            String name = claims.get("name", String.class);
 
             // CustomUserDetails 객체 생성
-            CustomUserDetails userDetails = new CustomUserDetails(email, "", new ArrayList<>(), userNum);
+            CustomUserDetails userDetails = new CustomUserDetails(email, "", new ArrayList<>(), userNum, name);
 
             UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
                     userDetails, null, userDetails.getAuthorities());

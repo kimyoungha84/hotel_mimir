@@ -48,11 +48,11 @@ public class MemberServiceImpl implements MemberService {
     	}
     	
     	// 토큰발급
-    	String accessToken = loginJwtUtil.generateAccessToken(mDTO.getUser_num(), mDTO.getEmail_id());
+    	String accessToken = loginJwtUtil.generateAccessToken(mDTO.getUser_num(), mDTO.getEmail_id(), mDTO.getUser_name());
     	String refreshToken = loginJwtUtil.generateRefreshToken(mDTO.getUser_num());
     	
     	// 응답 반환
-    	return new LoginResponseDTO(accessToken, refreshToken, mDTO.getUser_num(), mDTO.getEmail_id());
+    	return new LoginResponseDTO(accessToken, refreshToken, mDTO.getUser_num(), mDTO.getEmail_id(), mDTO.getUser_name());
     }
 
     @Override
