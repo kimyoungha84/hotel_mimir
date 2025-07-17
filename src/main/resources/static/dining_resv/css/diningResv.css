@@ -236,7 +236,7 @@
 }
 
 .dining-info-inner {
-  border-bottom: 2px solid #111111;
+  border-bottom: 2px solid #ddd;
   border-top: 2px solid #111111;
   width: 100%;
   max-width: 800px;
@@ -247,9 +247,12 @@
 }
 
 .btn-info02 {
-	border: none;
-	background: none;
-	border-bottom: 2px solid #111111;
+  border: none;
+  background: none;
+}
+
+.btn-info02 span {
+  text-decoration: underline;
 }
 
 .dining-info-item:first-child {

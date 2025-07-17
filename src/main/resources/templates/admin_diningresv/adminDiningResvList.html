@@ -25,7 +25,7 @@
   <table class="reservation-table" border="1" cellspacing="0" cellpadding="8" style="width:100%; text-align:center;">
     <thead>
       <tr>
-        <th>예약번호</th>
+        <th>예약 번호</th>
         <th>예약자명</th>
         <th>다이닝</th>
         <th>예약 날짜</th>
@@ -35,8 +35,10 @@
   <tbody id="resultArea" th:fragment="diningResv">
     <tr th:each="resv : ${reservationList}" th:attr="data-id=${resv.reservation_id}" class="reservation-row" style="cursor:pointer;"
         th:onclick="'location.href=\'/adminDiningResvDetail/' + ${resv.reservation_id} + '\''">
-      <td th:text="${resv.reservation_id}">예약번호</td>
-      <td th:text="${resv.reservation_name}">예약자명</td>
+      <td th:text="${resv.reservation_id}">예약 번호</td>
+      <td th:text="${resv.reservation_name + (resv.reservation_type == 'member' ? ' (회원)' : ' (비회원)')}">
+        예약자명
+      </td>
       <td th:text="${resv.dining_name}">다이닝</td>
       <td th:text="${#dates.format(resv.reservation_date, 'yyyy-MM-dd')}">예약 날짜</td>
       <td th:text="${resv.reservation_status}">예약 상태</td>

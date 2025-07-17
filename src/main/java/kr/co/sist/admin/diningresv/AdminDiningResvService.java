@@ -26,5 +26,16 @@ public class AdminDiningResvService {
 		
 	};
 	
+    public DiningResvDTO resvDetail(int reservationId) {
+    	
+        return drm.selectResvId(reservationId);
+        
+    }
+
+    public void updateResv(DiningResvDTO dto) {
+    	
+        drm.updateResvInfo(dto);
+        
+    }
 	
 }

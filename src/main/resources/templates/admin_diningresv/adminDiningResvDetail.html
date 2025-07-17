@@ -3,7 +3,7 @@
 <head>
 <!-- favicon 설정 -->
 <link rel="icon shortcut"  href="/admin_common_assets/common_img/mimir_favicon.ico"/>
-
+<link rel="stylesheet" th:href="@{/dining_resv/css/adminDiningResvDetail.css}" />
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -29,12 +29,14 @@
     </thead>
     <tbody>
       <tr>
-        <td>예약번호</td>
-        <td th:text="${reservationDetail.reservationId}">RESERVATION_ID</td>
+        <td>예약 번호</td>
+        <td th:text="${reservationDetail.reservationId}">예약 번호</td>
       </tr>
       <tr>
         <td>예약자명</td>
-        <td th:text="${reservationDetail.reservationName}">예약자명</td>
+        <td th:text="${reservationDetail.reservationName + (reservationDetail.reservationType == 'member' ? ' (회원)' : ' (비회원)')}">
+          예약자명
+        </td>
       </tr>
       <tr>
         <td>연락처</td>
@@ -50,7 +52,10 @@
       </tr>
       <tr>
         <td>예약 시간</td>
-        <td th:text="${reservationDetail.reservationTime}">예약 시간</td>
+        <td>
+          <span th:text="${reservationDetail.mealType}">런치/디너</span>
+          <span th:text="${#dates.format(reservationDetail.reservationTime, 'a hh:mm')}">예약 시간</span>
+        </td>
       </tr>
       <tr>
         <td>인원수</td>
@@ -66,6 +71,12 @@
       </tr>
     </tbody>
   </table>
+  
+  <div class="btnGroup">
+    <input type="button" class="darkBtn"
+      th:onclick="'location.href=\'/adminDiningResvEdit/' + ${reservationDetail.reservationId} + '\''" value="수정"/>
+    <input type="button" class="softBtn" onclick="location.href='/adminDiningResvList'" value="확인"/>
+  </div>
 
 </div>
 

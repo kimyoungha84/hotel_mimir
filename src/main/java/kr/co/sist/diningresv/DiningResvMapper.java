@@ -12,4 +12,6 @@ public interface DiningResvMapper {
 	
 	DiningResvDTO selectResvId(@Param("reservationId") int reservationId);
 	
+	int updateResvInfo(DiningResvDTO dto);
+	
 }

@@ -16,10 +16,12 @@ public class DiningResvDTO {
 	private String reservationName;
 	private String reservationTell;
 	private Date reservationDate;
+	private String mealType;
 	private Time reservationTime;
 	private int reservationCount;
 	private String reservationStatus;
 	private String reservationRequest;
+	private String reservationType;
 	
 	private int diningId;
 	private String diningName;

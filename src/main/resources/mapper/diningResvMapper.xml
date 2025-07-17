@@ -11,7 +11,8 @@
       r.RESERVATION_NAME AS reservationName,
       d.DINING_NAME AS diningName,
       r.RESERVATION_DATE AS reservationDate,
-      r.RESERVATION_STATUS AS reservationStatus
+      r.RESERVATION_STATUS AS reservationStatus,
+      r.RESERVATION_TYPE AS reservationType
     FROM 
       DINING_RESERVATION r
       LEFT JOIN DINING d ON r.DINING_ID = d.DINING_ID
@@ -29,6 +30,7 @@
     <result property="reservationCount" column="RESERVATION_COUNT"/>
     <result property="reservationStatus" column="RESERVATION_STATUS"/>
     <result property="reservationRequest" column="RESERVATION_REQUEST"/>
+    <result property="reservationType" column="RESERVATION_TYPE"/>
     <result property="diningId" column="DINING_ID"/>
     <result property="diningName" column="DINING_NAME"/>
   </resultMap>
@@ -43,11 +45,23 @@
       R.RESERVATION_COUNT,
       R.RESERVATION_STATUS,
       R.RESERVATION_REQUEST,
+      R.RESERVATION_TYPE,
       R.DINING_ID,
       D.DINING_NAME
     FROM DINING_RESERVATION R
     JOIN DINING D ON R.DINING_ID = D.DINING_ID
     WHERE R.RESERVATION_ID = #{reservationId}
   </select>
+  
+  <update id="updateResvInfo" parameterType="kr.co.sist.diningresv.DiningResvDTO">
+    UPDATE DINING_RESERVATION
+    SET
+      RESERVATION_DATE = #{reservationDate},
+      RESERVATION_TIME = #{reservationTime},
+      RESERVATION_COUNT = #{reservationCount},
+      RESERVATION_STATUS = #{reservationStatus},
+      RESERVATION_REQUEST = #{reservationRequest}
+    WHERE RESERVATION_ID = #{reservationId}
+  </update>
 
 </mapper>
