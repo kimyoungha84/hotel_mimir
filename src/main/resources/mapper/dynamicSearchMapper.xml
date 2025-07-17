@@ -276,8 +276,8 @@ WHERE rnum BETWEEN #{offset} AND #{end}
             (nm.non_mem_name IS NOT NULL AND nm.non_mem_name LIKE '%' || #{filter.value} || '%')
           )
         </when>
-        <!-- isMember(회원/비회원) 전용 처리 -->
-        <when test="filter.column == 'isMember'">
+        <!-- ismember(회원/비회원) 전용 처리 -->
+        <when test="filter.column == 'ismember'">
           <choose>
             <when test="filter.value == '회원'">
               AND r.user_num IS NOT NULL
@@ -288,25 +288,25 @@ WHERE rnum BETWEEN #{offset} AND #{end}
           </choose>
         </when>
         <!-- 날짜: BETWEEN (start + end) -->
-        <when test="filter.operator.name() == 'TRUNC_BETWEEN' and filter.column != 'isMember' and filter.column != 'user_name'">
+        <when test="filter.operator.name() == 'TRUNC_BETWEEN' and filter.column != 'ismember' and filter.column != 'user_name'">
           AND TRUNC(${filter.column}) BETWEEN #{filter.value[0]} AND #{filter.value[1]}
         </when>
         <!-- 날짜: startDate만 있을 경우 -->
-        <when test="filter.operator.name() == 'TRUNC_GREATER_EQUAL' and filter.column != 'isMember' and filter.column != 'user_name'">
+        <when test="filter.operator.name() == 'TRUNC_GREATER_EQUAL' and filter.column != 'ismember' and filter.column != 'user_name'">
           AND TRUNC(${filter.column}) &gt;= #{filter.value}
         </when>
         <!-- 날짜: endDate만 있을 경우 -->
-        <when test="filter.operator.name() == 'TRUNC_LESS_EQUAL' and filter.column != 'isMember' and filter.column != 'user_name'">
+        <when test="filter.operator.name() == 'TRUNC_LESS_EQUAL' and filter.column != 'ismember' and filter.column != 'user_name'">
           AND TRUNC(${filter.column}) &lt;= #{filter.value}
         </when>
         <!-- 그 외 EQ, LIKE, IN 등 기존 처리 -->
-        <when test="filter.operator.name() == 'EQ' and filter.column != 'isMember' and filter.column != 'user_name'">
+        <when test="filter.operator.name() == 'EQ' and filter.column != 'ismember' and filter.column != 'user_name'">
           AND ${filter.column} = #{filter.value}
         </when>
-        <when test="filter.operator.name() == 'LIKE' and filter.column != 'isMember' and filter.column != 'user_name'">
+        <when test="filter.operator.name() == 'LIKE' and filter.column != 'ismember' and filter.column != 'user_name'">
           AND ${filter.column} LIKE '%' || #{filter.value} || '%'
         </when>
-        <when test="filter.operator.name() == 'IN' and filter.column != 'isMember' and filter.column != 'user_name'">
+        <when test="filter.operator.name() == 'IN' and filter.column != 'ismember' and filter.column != 'user_name'">
           <if test="filter.value != null and filter.value.size() > 1">
             AND ${filter.column} IN
             <foreach collection="filter.value" item="v" open="(" separator="," close=")">

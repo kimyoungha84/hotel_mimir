@@ -31,7 +31,7 @@ public class FilterConditionBuilder {
         "s.staff_id", "staff_name", "dept_iden", "position_identified_code", 
         "permission_id_code", "staff_status",
         // Room 예약 관련 컬럼
-        "user_name","type_name","isMember","status","resv_reg_date"
+        "user_name","type_name","ismember","status","resv_reg_date"
         
     );
 

@@ -139,7 +139,7 @@ public enum FilterConfig {
     		        			new LabelSelectorItem("프리미어룸", "프리미어룸"),
     		        			new LabelSelectorItem("스탠다드룸", "스탠다드룸"))
     		        			),
-    		        new LabelSelectorOption("회원", "memberType", "isMember",
+    		        new LabelSelectorOption("회원", "memberType", "ismember",
     		        		List.of(
     		        			new LabelSelectorItem("전체", null), 
     		        			new LabelSelectorItem("회원", "회원"), 
