@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.co.sist.dining.user.DiningMapper">
+
+  <select id="selectDiningInfo" parameterType="int" resultType="kr.co.sist.dining.user.DiningDomain">
+    SELECT 
+      DINING_ID,
+      DINING_NAME,
+      TYPE,
+      LOCATION,
+      DINING_INTRODUCTION,
+      DINING_RESV_AVAILABILITY
+    FROM 
+      DINING
+    WHERE DINING_ID = #{diningID}
+  </select>
+
+</mapper>

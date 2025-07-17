@@ -202,7 +202,179 @@ width: 100%;         /* 이미지가 부모 카드의 너비에 맞게 크기 �
   transform-origin: center center;
 }
 
-
+.gallery-carousel {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.gallery-image-area {
+  width: 900px;
+  height: 500px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+.gallery-image-area img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 1rem;
+}
+.gallery-controls {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+.gallery-progress-bar {
+  width: 120px;
+  height: 2px;
+  background: #ddd;
+  margin-right: 1rem;
+  position: relative;
+}
+.gallery-progress {
+  height: 100%;
+  background: #222;
+  width: 0%;
+  position: absolute;
+  left: 0; top: 0;
+  transition: width 0.3s;
+}
+.gallery-btn {
+  width: 40px; height: 40px;
+  border: 1px solid #222;
+  border-radius: 50%;
+  background: #fff;
+  font-size: 1.5rem;
+  cursor: pointer;
+}
+.gallery-btn:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+.gallery-flex-row {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  width: 100%;
+  gap: 2rem;
+}
+.gallery-title {
+  margin: 0 2rem 0 0;
+  font-size: 2.2rem;
+  font-weight: bold;
+  align-self: flex-start;
+  min-width: 120px;
+}
+.additional-info-wrap {
+  width: 70%;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 130px;
+  display: flex;
+  flex-direction: column;
+}
+.additional-info-wrap h2 {
+  font-size: 2rem;
+  font-weight: bold;
+  margin-bottom: 1.5rem;
+}
+.additional-info-content {
+  font-size: 1.1rem;
+  line-height: 2;
+  color: #222;
+  white-space: pre-line;
+  background: none;
+  padding: 0;
+  border-radius: 0;
+}
+.additional-info-wrap .gallery-flex-row {
+  margin-top: 0;
+}
+.additional-info-wrap .gallery-title {
+  font-size: 2.2rem;
+  font-weight: bold;
+  min-width: 120px;
+  margin: 0 0 1.5rem 0;
+}
+.additional-info-content-bg {
+  background: #f7f7f7;
+  border-radius: 8px;
+  padding: 2.5rem 3rem 2.5rem 3rem;
+}
+.additional-info-content {
+  font-size: 1.1rem;
+  line-height: 2;
+  color: #222;
+  white-space: pre-line;
+  background: none;
+  padding: 0;
+  border-radius: 0;
+}
+.section-divider {
+  width: 100%;
+  border: none;
+  border-top: 1px solid #ddd;
+  margin: 40px 0 32px 0;
+}
+.btn-area {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 60px;
+}
+.list-btn {
+  background: #111;
+  color: #fff;
+  font-size: 1.1rem;
+  font-weight: 500;
+  border: none;
+  border-radius: 6px;
+  padding: 0.9rem 3.5rem;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.list-btn:hover {
+  background: #333;
+}
+.floating-reserve-btn {
+  position: fixed;
+  right: 40px;
+  bottom: 40px;
+  width: 110px;
+  height: 110px;
+  background: #856956;
+  border-radius: 50%;
+  box-shadow: 0 4px 24px 0 rgba(0,0,0,0.13);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  text-decoration: none;
+  transition: box-shadow 0.2s, background 0.2s;
+}
+.floating-reserve-btn:hover {
+  box-shadow: 0 8px 32px 0 rgba(0,0,0,0.18);
+  background: #6d5747;
+}
+.reserve-icon {
+  width: 38px;
+  height: 38px;
+  margin-bottom: 7px;
+  display: block;
+}
+.reserve-text {
+  color: #fff;
+  font-size: 1.25rem;
+  font-weight: 500;
+  letter-spacing: -0.5px;
+  text-align: center;
+  line-height: 1.1;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.10);
+}
 </style>
 </head>
 <body>
@@ -213,12 +385,10 @@ width: 100%;         /* 이미지가 부모 카드의 너비에 맞게 크기 �
 <span>  >  다이닝  > <span>스테이,모던 레스토랑</span></span> 
 </div>
 
-
-
 <div class="main-img">
 <img alt="시그니엘 서울 - 다이닝 - 시그니엘 서울, 스테이, 모던 레스토랑 - 스테이, 모던 레스토랑" aria-label="시그니엘 서울, 스테이, 모던 레스토랑" src="https://img.lottehotel.com/cms/asset/2025/01/31/430/180708-40-2000-din-seoul-signiel.webp" loading="lazy">
 </div>
-<div class="main-img-txt-area">
+<div class="main-img-txt-area" th:text="${diningInfo.dining_name}">
 스테이, 모던 레스토랑
 </div>
 <div class="content">
@@ -242,38 +412,43 @@ width: 100%;         /* 이미지가 부모 카드의 너비에 맞게 크기 �
         <div class="list-col-1">
         타입
         </div>
-        <div class="list-col-2">
-        프렌치
+        <div class="list-col-2" th:text="${diningInfo.type}">
+        타입내용
         </div>
         </div>
         </div>
         <div class="info-list">
         <div class="info-row">
         <div class="list-col-1">
-        타입
+        위치
         </div>
-        <div class="list-col-2">
-        프렌치
-        </div>
-        </div>
-        </div>
-        <div class="info-list">
-        <div class="info-row">
-        <div class="list-col-1">
-        타입
-        </div>
-        <div class="list-col-2">
-        프렌치
+        <div class="list-col-2" th:text="${diningInfo.location}">
+        위치내용
         </div>
         </div>
         </div>
         <div class="info-list">
         <div class="info-row">
         <div class="list-col-1">
-        타입
+        영업시간
         </div>
         <div class="list-col-2">
-        프렌치
+        넣을예정
+        </div>
+        </div>
+        </div>
+        <div class="info-list">
+        <div class="info-row">
+        <div class="list-col-1">
+        문의 및 예약
+        </div>
+        <div class="list-col-2" style="display: flex; align-items: center;">
+          <span th:text="${diningInfo.phone_number}">프렌치</span>
+          <th:block th:if="${#strings.equalsIgnoreCase(#strings.trim(diningInfo.dining_resv_availability), 'Y')}">
+            <a th:href="@{/diningResv(diningId=${diningInfo.dining_id})}" style="margin-left: 16px;">
+              <button type="button" class="list-btn">예약하기</button>
+            </a>
+          </th:block>
         </div>
         </div>
         </div>
@@ -331,20 +506,92 @@ width: 100%;         /* 이미지가 부모 카드의 너비에 맞게 크기 �
     </div>
     
     <div class="gallery-wrap">
-    <h1>갤러리</h1>
-    
-    
-    <div class="gallery-con">
-    <img alt="시그니엘 서울 - 다이닝 - 시그니엘 서울, 스테이, 모던 레스토랑 - 스테이, 모던 레스토랑" aria-label="시그니엘 서울, 스테이, 모던 레스토랑" src="https://img.lottehotel.com/cms/asset/2025/01/31/433/180708-43-2000-din-seoul-signiel.webp" loading="lazy">
-    
+      <div class="gallery-flex-row">
+        <h1 class="gallery-title">갤러리</h1>
+        <div class="gallery-carousel">
+        <!-- 이미지가 있을 때 -->
+        <div class="gallery-image-area" th:if="${galleryImages != null and #lists.size(galleryImages) > 0}">
+          <img th:src="@{${galleryImages[0].url}}" alt="갤러리 이미지" id="gallery-main-img">
+        </div>
+        <!-- 이미지가 없을 때 -->
+        <div class="gallery-image-area" th:if="${galleryImages == null or #lists.size(galleryImages) == 0}">
+          <img src="https://img.lottehotel.com/cms/asset/2025/01/31/433/180708-43-2000-din-seoul-signiel.webp" alt="이미지 없음" id="gallery-main-img">
+        </div>
+        <div class="gallery-controls">
+          <div class="gallery-progress-bar">
+            <div class="gallery-progress" id="gallery-progress"></div>
+          </div>
+          <span id="gallery-index">
+            <span id="gallery-current">1</span>/<span id="gallery-total">1</span>
+          </span>
+          <button class="gallery-btn" id="gallery-prev" disabled>&#8592;</button>
+          <button class="gallery-btn" id="gallery-next">&#8594;</button>
+        </div>
+        </div>
+        </div>
+      <!-- 갤러리 이미지 리스트(숨김, JS에서 사용) -->
+      <div id="gallery-image-list" style="display:none;">
+        <span th:each="img : ${galleryImages}" th:text="${img.url}"></span>
+      </div>
     </div>
-    
-    
-    </div>
+
+      <!-- 추가 정보 섹션 -->
+      <div class="additional-info-wrap">
+        <h1 class="gallery-title">추가 정보</h1>
+        <div class="additional-info-content-bg">
+          <div class="additional-info-content" th:utext="${additionalInfo}"></div>
+        </div>
+      </div>
+      <hr class="section-divider">
+      <div class="btn-area">
+        <button type="button" class="list-btn" onclick="window.history.back()">목록</button>
+      </div>
 </div> 
 
+<!-- 화면 우측 하단 예약하기 플로팅 버튼 -->
+<a href="#" class="floating-reserve-btn">
+  <img src="/dining/images/reservation_calender.svg" alt="예약 아이콘" class="reserve-icon">
+  <span class="reserve-text">예약하기</span>
+</a>
 
 </main>
 </div>
+<script>
+window.addEventListener('DOMContentLoaded', function() {
+  // galleryImages를 Thymeleaf에서 span으로 렌더링한 것을 JS 배열로 변환
+  const galleryImageList = Array.from(document.querySelectorAll('#gallery-image-list span')).map(span => span.textContent);
+  let activeIndex = 0;
+  const mainImg = document.getElementById('gallery-main-img');
+  const currentSpan = document.getElementById('gallery-current');
+  const totalSpan = document.getElementById('gallery-total');
+  const prevBtn = document.getElementById('gallery-prev');
+  const nextBtn = document.getElementById('gallery-next');
+  const progress = document.getElementById('gallery-progress');
+
+  function updateGallery() {
+    mainImg.src = galleryImageList[activeIndex];
+    currentSpan.innerText = activeIndex + 1;
+    totalSpan.innerText = galleryImageList.length;
+    prevBtn.disabled = activeIndex === 0;
+    nextBtn.disabled = activeIndex === galleryImageList.length - 1;
+    progress.style.width = ((activeIndex + 1) / galleryImageList.length * 100) + '%';
+  }
+  prevBtn.onclick = function() {
+    if (activeIndex > 0) { activeIndex--; updateGallery(); }
+  };
+  nextBtn.onclick = function() {
+    if (activeIndex < galleryImageList.length - 1) { activeIndex++; updateGallery(); }
+  };
+  if(galleryImageList.length > 0) updateGallery();
+  else {
+    mainImg.src = 'https://img.lottehotel.com/cms/asset/2025/01/31/433/180708-43-2000-din-seoul-signiel.webp';
+    currentSpan.innerText = 0;
+    totalSpan.innerText = 0;
+    prevBtn.disabled = true;
+    nextBtn.disabled = true;
+    progress.style.width = '0%';
+  }
+});
+</script>
 </body>
 </html>

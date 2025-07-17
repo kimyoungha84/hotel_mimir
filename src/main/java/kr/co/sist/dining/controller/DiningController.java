@@ -4,7 +4,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
+import kr.co.sist.dining.user.DiningDomain;
+import kr.co.sist.dining.user.DiningService;
 import kr.co.sist.util.FilterConfig;
 import kr.co.sist.util.ModelUtils;
 import kr.co.sist.util.controller.SearchController;
@@ -13,6 +16,8 @@ import kr.co.sist.util.controller.SearchController;
 public class DiningController {
 	@Autowired
 	ModelUtils modelUtils;
+	@Autowired
+	DiningService ds;
 	
 	@GetMapping("/admin/dining")
 	public String adminDining( Model model ) {
@@ -63,7 +68,14 @@ public class DiningController {
 	}
 	
 	@GetMapping("/user/dining_detail")
-	public String diningDetail(Model model) {
+	public String diningDetail(@RequestParam("diningId") int diningId, Model model) {
+		// 1. 다이닝 정보 조회 (서비스/매퍼 필요)
+		DiningDomain diningInfo = ds.searchOneDining(diningId); // 예시
+
+		// 2. 모델에 담기
+		model.addAttribute("diningInfo", diningInfo);
+
+		// 3. 뷰 반환
 		return "dining/dining_detail";
 	}
 	
@@ -71,5 +83,13 @@ public class DiningController {
 	public String userFilter(Model model) {
 		return "room/user_room_search_prototype";
 	}
+
+	@GetMapping("/admin/admin_dining_detail")
+	public String adminDiningDetail(Model model) {
+		
+		return "dining/admin_dining_detail_editor";
+	}
+	
+
 	
 }

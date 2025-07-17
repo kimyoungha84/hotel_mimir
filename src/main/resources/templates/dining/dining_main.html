@@ -233,7 +233,7 @@ margin-bottom: 3.0rem;
 
 .di-type-wrap {
     display: inline-block;
-    color: #675b57;
+    color: #675b57; 
     border: 1px solid #675b57;
     min-width: 3.5rem;
     max-width: 100%;
@@ -359,36 +359,38 @@ $(function(){
   <div th:if="${#lists.isEmpty(diningList)}" style="width:100%;text-align:center;padding:60px 0;color:#888;font-size:1.2rem;">
     검색결과가 존재하지 않습니다.
   </div>
-  <div class="card" th:each="dining : ${diningList}">
-    <div class="card-top">
-      <div class="card-img motion-scale">
-        <img th:src="'https://img.lottehotel.com/cms/asset/2025/01/31/424/180708-39-2000-din-seoul-signiel.webp'" alt="다이닝 이미지" loading="lazy">
+  <a th:each="dining : ${diningList}" th:href="@{'/user/dining_detail'(diningId=${dining.dining_id})}" style="text-decoration:none; color:inherit;">
+    <div class="card">
+      <div class="card-top">
+        <div class="card-img motion-scale">
+          <img th:src="'https://img.lottehotel.com/cms/asset/2025/01/31/424/180708-39-2000-din-seoul-signiel.webp'" alt="다이닝 이미지" loading="lazy">
+        </div>
+      </div>
+      <div class="card-info">
+        <div class="card-di-type">
+          <span class="di-type-wrap">
+            <span class="di-type-txt" th:text="${dining.dining_classification}">분류</span>
+          </span>
+        </div>
+        <div class="di-name-wrap">
+          <div class="di-name-txt-area" th:text="${dining.dining_name}">다이닝명</div>
+        </div>
+        <div class="di-card-info-wrap">
+          <div class="di-info-row">타입 | <span th:text="${dining.type}">타입</span></div>
+          <div class="di-info-row">위치 | <span th:text="${dining.location}">위치</span></div>
+          <div class="di-info-row">문의 | <span th:text="${dining.phone_number}">문의</span></div>
+        </div>
       </div>
     </div>
-    <div class="card-info">
-      <div class="card-di-type">
-        <span class="di-type-wrap">
-          <span class="di-type-txt" th:text="${dining.dining_classification}">분류</span>
-        </span>
-      </div>
-      <div class="di-name-wrap">
-        <div class="di-name-txt-area" th:text="${dining.dining_name}">다이닝명</div>
-      </div>
-      <div class="di-card-info-wrap">
-        <div class="di-info-row">타입 | <span th:text="${dining.type}">타입</span></div>
-        <div class="di-info-row">위치 | <span th:text="${dining.location}">위치</span></div>
-        <div class="di-info-row">문의 | <span th:text="${dining.phone_number}">문의</span></div>
-      </div>
-    </div>
-  </div>
+  </a>
 </th:block>
 <!-- dining_list_fm fragment 끝 -->
  
 
 
-
-
-</div>
+ 
+ 
+ </div>
 
 
 
