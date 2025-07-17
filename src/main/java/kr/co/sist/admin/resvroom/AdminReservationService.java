@@ -18,6 +18,10 @@ public class AdminReservationService {
 		return rm.selectAllResv();
 	}//searchAllResv
 	
+	public ReservationDTO searchOneResv(int resvId) {
+		return rm.selectOneResv(resvId);
+	}//searchOneResv
+	
 	
 	
 }//class

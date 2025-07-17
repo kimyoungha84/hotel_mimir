@@ -2,8 +2,6 @@ package kr.co.sist.resvroom;
 
 import java.sql.Date;
 
-import org.apache.ibatis.type.Alias;
-
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -21,7 +19,7 @@ public class ReservationDTO {
 	private String userName; //o
 	private String userTel;//o
 	private String userEmail; //o
-	private String userDomain;//o
+	private Boolean isMember;
 	private int paymentId;  
 	private Date checkinDate;  
 	private Date checkoutDate;  

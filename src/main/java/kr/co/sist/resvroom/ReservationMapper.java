@@ -9,7 +9,7 @@ public interface ReservationMapper {
 	
 	public List<ReservationDTO> selectAllResv();
     
-    public ReservationDTO selectOneReservation(int ReservationNum);
+    public ReservationDTO selectOneResv(int resvId);
     
     public int selectReservationSeq();
     

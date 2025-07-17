@@ -16,7 +16,7 @@
 <div class="table-section">
   <h2 class="h2Title">
     객실 예약 현황 상세
-    <a class="edit-btn"  title="수정"><!-- th:href="@{/reservation/edit(reserveNo=${reservation.reserveNo})}" -->
+    <a class="edit-btn"  title="수정" th:href="@{admin/resvroommodify(resvId=${resv.resvId})}">
       ✏️
     </a>
   </h2>
@@ -25,43 +25,55 @@
     <table class="detail-table">
       <tr>
         <td>예약번호</td>
-        <td ><!-- th:text="${reservation.reserveNo}"> -->20250617</td>
+        <td  th:text="${resv.resvId}">20250617</td>
       </tr>
       <tr>
         <td>고객명</td>
-        <td ><!-- th:text="${reservation.customerName}"> -->김영하</td>
+        <td th:text="${resv.userName}">김영하</td>
       </tr>
       <tr>
         <td>연락처</td>
-        <td><!-- th:text="${reservation.contact}"> -->010-1234-5678</td>
+        <td th:text="${resv.userTel}">010-1234-5678</td>
+      </tr>
+      <tr>
+        <td>E-Mail</td>
+        <td th:text="${resv.userEmail}"></td>
       </tr>
       <tr>
         <td>룸 종류(호실)</td>
-        <td><!--  th:text="${reservation.roomInfo}"> -->프리미어룸(708)</td>
+        <td  th:text="|${resv.typeName}(${resv.roomId})|">프리미어룸(708)</td>
+      </tr>
+      <tr>
+        <td>결제 금액</td>
+        <td  th:text="'₩' + ${#numbers.formatInteger(resv.paymentPrice, 3, 'COMMA')}"></td>
+      </tr>
+      <tr>
+        <td>결제 수단(결제 상태)</td>
+        <td  th:text="|${resv.paymentType}(${resv.paymentStatus})|"></td>
       </tr>
       <tr>
         <td>체크인</td>
-        <td><!--  th:text="${reservation.checkIn}"> -->2025.08.27(수)</td>
+        <td  th:text="${resv.checkinDate}">2025.08.27(수)</td>
       </tr>
       <tr>
         <td>체크아웃</td>
-        <td><!--  th:text="${reservation.checkOut}"> -->2025.08.29(금)</td>
+        <td  th:text="${resv.checkoutDate}">2025.08.29(금)</td>
       </tr>
       <tr>
         <td>인원 수</td>
-        <td><!--  th:text="${reservation.peopleCount}"> -->3명</td>
+        <td  th:text="|성인: ${resv.numGuestsAdult}, 아동: ${resv.numGuestsChild}|"></td>
       </tr>
       <tr>
         <td>예약상태</td>
-        <td><!-- th:text="${reservation.status}"> -->예약완료</td>
+        <td th:text="${resv.status}">예약완료</td>
       </tr>
       <tr>
         <td>회원/비회원</td>
-        <td><!-- th:text="${reservation.memberType}"> -->비회원</td>
+        <td th:text="${resv.userName != null} ? (${resv.isMember != null and resv.isMember} ? '회원' : '비회원') : 'N/A'"></td>
       </tr>
       <tr>
         <td>요청사항</td>
-        <td><!--  th:text="${reservation.memo}"> -->없음</td>
+        <td  th:text="${resv.requestMsg}">없음</td>
       </tr>
     </table>
   </div>

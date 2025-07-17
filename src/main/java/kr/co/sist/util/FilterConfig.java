@@ -89,6 +89,92 @@ public enum FilterConfig {
             ),
             null
         ),
+    
+    ROOM_LIST(
+            "room_list", true, true, true, true,
+            "",
+            "",
+            List.of(
+                new Option("", "", "")
+            ),
+            List.of(  // 라벨 + 셀렉터 필터링 항목
+    		        new LabelSelectorOption("", "정렬기준", "낮은요금&높은요금",
+    		        		List.of(
+    		        			new LabelSelectorItem("낮은 요금순", "asc"), 
+    		        			new LabelSelectorItem("높은 요금순", "desc")) 
+    		        			),
+    		        new LabelSelectorOption("", "침대 타입", "bed_name",
+    		        		List.of(
+    		        			new LabelSelectorItem("슈퍼 킹 베드", "슈퍼 킹 베드"), 
+    		        			new LabelSelectorItem("킹 베드", "킹 베드"), 
+    		        			new LabelSelectorItem("트윈", "트윈"), 
+    		        			new LabelSelectorItem("더블", "더블"))
+    		        			),
+    		        new LabelSelectorOption("", "전망타입", "view_name",
+    		        		List.of(
+    		        			new LabelSelectorItem("시티(전망욕실)", "예약 완료"), 
+    		        			new LabelSelectorItem("시티뷰", "시티뷰"),
+    		        			new LabelSelectorItem("리버뷰", "리버뷰"))
+    		        			)
+    		        
+    		    )
+        ),
+    
+    
+    ROOM_RESV(
+            "admin_room_resv", true, true, true, true,
+            "resvRegDate",
+            "resv_reg_date",
+            List.of(
+                new Option("searchUser", "", "user_num&non_mem_num부탁..")
+            ),
+            List.of(  // 라벨 + 셀렉터 필터링 항목
+    		        new LabelSelectorOption("룸 종류", "roomType", "type_name",
+    		        		List.of(
+    		        			new LabelSelectorItem("로얄 스위트룸", "로얄 스위트룸"), 
+    		        			new LabelSelectorItem("프레지덴셜 스위트룸", "프레지덴셜 스위트룸"), 
+    		        			new LabelSelectorItem("스위트룸", "스위트룸"), 
+    		        			new LabelSelectorItem("프리미어룸", "프리미어룸"),
+    		        			new LabelSelectorItem("스탠다드룸", "스탠다드룸"))
+    		        			),
+    		        new LabelSelectorOption("회원", "memberType", "user_num&non_mem_num부탁..",
+    		        		List.of(
+    		        			new LabelSelectorItem("회원", "회원"), 
+    		        			new LabelSelectorItem("비회원", "비회원"))
+    		        			),
+    		        new LabelSelectorOption("예약 상태", "resvStatus", "status",
+    		        		List.of(
+    		        			new LabelSelectorItem("예약 완료", "예약 완료"), 
+    	    		        	new LabelSelectorItem("예약 취소", "예약 취소"),
+    		        			new LabelSelectorItem("체크인 완료", "체크인 완료"),
+    		        			new LabelSelectorItem("체크아웃 완료", "체크아웃 완료"))
+    		        			)
+    		        
+    		    )
+        ),
+    
+    
+    ROOM_SALES(
+            "admin_room_sales", true, true, true, true,
+            "resvRegDate",
+            "resv_reg_date",
+            List.of(
+                new Option("", "", "")
+            ),
+            List.of(
+            		new LabelSelectorOption("룸 종류", "roomType", "type_name",
+    		        		List.of(
+    		        			new LabelSelectorItem("로얄 스위트룸", "로얄 스위트룸"), 
+    		        			new LabelSelectorItem("프레지덴셜 스위트룸", "프레지덴셜 스위트룸"), 
+    		        			new LabelSelectorItem("스위트룸", "스위트룸"), 
+    		        			new LabelSelectorItem("프리미어룸", "프리미어룸"),
+    		        			new LabelSelectorItem("스탠다드룸", "스탠다드룸"))
+    		        			)
+            		)
+        ),
+    
+    
+    
 	
 	 STAFF(
 	            "staff", false, true, true, true,

@@ -6,17 +6,30 @@
 <mapper namespace="kr.co.sist.resvroom.ReservationMapper">
 
   <select id="selectAllResv" resultType="reservationDTO">
- SELECT 
+  SELECT 
     r.RESV_ID          AS resvId,
     r.ROOM_ID          AS roomId,
     rt.TYPE_NAME       AS typeName,
-    r.USER_NUM         AS userNum,
-    u.USER_NAME        AS userName,
-    u.TEL              AS userTel,
-    u.EMAIL_ID         AS userEmail,
-    r.NON_MEM_ID       AS nonMemId,
-    nm.NON_MEM_NAME    AS nonMemName,
-    nm.NON_MEM_TEL     AS nonMemTel,
+    CASE 
+      WHEN r.NON_MEM_ID IS NULL AND r.USER_NUM IS NOT NULL THEN r.USER_NUM
+      WHEN r.USER_NUM IS NULL AND r.NON_MEM_ID IS NOT NULL THEN r.NON_MEM_ID
+    END AS userNum,
+    CASE 
+      WHEN r.NON_MEM_ID IS NULL AND r.USER_NUM IS NOT NULL THEN u.USER_NAME
+      WHEN r.USER_NUM IS NULL AND r.NON_MEM_ID IS NOT NULL THEN nm.NON_MEM_NAME
+    END AS userName,
+    CASE 
+      WHEN r.NON_MEM_ID IS NULL AND r.USER_NUM IS NOT NULL THEN u.TEL
+      WHEN r.USER_NUM IS NULL AND r.NON_MEM_ID IS NOT NULL THEN nm.NON_MEM_TEL
+    END AS userTel,
+    CASE 
+      WHEN r.NON_MEM_ID IS NULL AND r.USER_NUM IS NOT NULL THEN u.EMAIL_ID
+      WHEN r.USER_NUM IS NULL AND r.NON_MEM_ID IS NOT NULL THEN nm.NON_MEM_EMAIL
+    END AS userEmail,
+    CASE 
+      WHEN r.NON_MEM_ID IS NULL AND r.USER_NUM IS NOT NULL THEN 'true'
+      WHEN r.USER_NUM IS NULL AND r.NON_MEM_ID IS NOT NULL THEN 'false'
+    END AS isMember,
     r.PAYMENT_ID       AS paymentId,
     r.CHECKIN_DATE     AS checkinDate,
     r.CHECKOUT_DATE    AS checkoutDate,
@@ -32,26 +45,58 @@
   LEFT JOIN MIMIR_USER u ON r.USER_NUM = u.USER_NUM
   LEFT JOIN NON_MEMBER nm ON r.NON_MEM_ID = nm.NON_MEM_ID
   LEFT JOIN PAYMENT p ON r.PAYMENT_ID = p.PAYMENT_ID
+  ORDER BY r.RESV_ID ASC
   </select>
-  
-  
+	
   <select id="selectReservationSeq" resultType="int">
     SELECT SEQ_RESERVATION.NEXTVAL FROM DUAL
 	</select>
   
-
-	<select id="selectAllReservation" resultType="kr.co.sist.resvroom.ReservationDomain">
-		SELECT faq_num, faq_title, faq_content, faq_date
-		FROM faq
-		ORDER BY faq_date DESC
-	</select>
-	
-	<select id="selectOneReservation" parameterType="int" resultType="kr.co.sist.resvroom.ReservationDomain">
-	select faq_num, faq_title, faq_content
-	from faq
-	where faq_num = #{faq_num}
-
-	</select>
+	<select id="selectOneResv" parameterType="int" resultType="reservationDTO">
+	  SELECT 
+    r.RESV_ID          AS resvId,
+    r.ROOM_ID          AS roomId,
+    rt.TYPE_NAME       AS typeName,
+    CASE 
+      WHEN r.NON_MEM_ID IS NULL AND r.USER_NUM IS NOT NULL THEN r.USER_NUM
+      WHEN r.USER_NUM IS NULL AND r.NON_MEM_ID IS NOT NULL THEN r.NON_MEM_ID
+    END AS userNum,
+    CASE 
+      WHEN r.NON_MEM_ID IS NULL AND r.USER_NUM IS NOT NULL THEN u.USER_NAME
+      WHEN r.USER_NUM IS NULL AND r.NON_MEM_ID IS NOT NULL THEN nm.NON_MEM_NAME
+    END AS userName,
+    CASE 
+      WHEN r.NON_MEM_ID IS NULL AND r.USER_NUM IS NOT NULL THEN u.TEL
+      WHEN r.USER_NUM IS NULL AND r.NON_MEM_ID IS NOT NULL THEN nm.NON_MEM_TEL
+    END AS userTel,
+    CASE 
+      WHEN r.NON_MEM_ID IS NULL AND r.USER_NUM IS NOT NULL THEN u.EMAIL_ID
+      WHEN r.USER_NUM IS NULL AND r.NON_MEM_ID IS NOT NULL THEN nm.NON_MEM_EMAIL
+    END AS userEmail,
+    CASE 
+      WHEN r.NON_MEM_ID IS NULL AND r.USER_NUM IS NOT NULL THEN 'true'
+      WHEN r.USER_NUM IS NULL AND r.NON_MEM_ID IS NOT NULL THEN 'false'
+    END AS isMember,
+    r.PAYMENT_ID       AS paymentId,
+    r.CHECKIN_DATE     AS checkinDate,
+    r.CHECKOUT_DATE    AS checkoutDate,
+    r.num_Guests_Child AS numGuestsChild,
+    r.num_Guests_Adult AS numGuestsAdult,
+    r.STATUS           AS status,
+    r.RESV_REG_DATE    AS resvRegDate,
+    r.REQUEST_MSG      AS requestMsg,
+    p.PAYMENT_PRICE    AS paymentPrice,
+    p.PAYMENT_STATUS    AS paymentStatus,
+    p.PAYMENT_TYPE    AS paymentType
+  FROM RESERVATION r
+  LEFT JOIN ROOM rm ON r.ROOM_ID = rm.ROOM_ID
+  LEFT JOIN ROOM_TYPE rt ON rm.TYPE_ID = rt.TYPE_ID
+  LEFT JOIN MIMIR_USER u ON r.USER_NUM = u.USER_NUM
+  LEFT JOIN NON_MEMBER nm ON r.NON_MEM_ID = nm.NON_MEM_ID
+  LEFT JOIN PAYMENT p ON r.PAYMENT_ID = p.PAYMENT_ID
+  WHERE r.resv_id = #{resvId}
+  ORDER BY r.RESV_ID ASC
+  </select>
 	
 	<insert id="insertReservation" parameterType="kr.co.sist.resvroom.ReservationDTO">
 		INSERT INTO RESERVATION (RESV_ID, ROOM_ID, NON_MEM_ID, PAYMENT_ID, CHECKIN_DATE, CHECKOUT_DATE, 
