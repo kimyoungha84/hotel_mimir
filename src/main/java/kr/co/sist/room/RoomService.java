@@ -18,4 +18,9 @@ public class RoomService {
 		return rm.selectAllRoom();
 	}//searchAllDept
 
+	public int countAvailableRooms(RoomSearchDTO rsDTO) {
+		
+		return rm.countAvailableRooms(rsDTO);
+	}//countAvailableRooms
+	
 }//class

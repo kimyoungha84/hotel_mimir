@@ -11,6 +11,8 @@ public interface RoomMapper {
 	public List<RoomDTO> selectAllRoom();
 	public RoomDTO selectOneRoom(int roomId);
 	
+	public int countAvailableRooms(RoomSearchDTO rsDTO);
+	
 	
     public void updateRoom(@Param("typeName") String typeName,
             @Param("bedName") String bedName,

@@ -112,11 +112,13 @@ function confirmGuestSelection() {
 }
 
 function confirmDateSelection() {
-  const selectedDates = datePickerInstance.selectedDates;
-  if (selectedDates.length === 2) {
-    updateDateSummary(selectedDates[0], selectedDates[1]);
-  }
-  closeModal();
+    const selectedDates = datePickerInstance.selectedDates;
+    if (selectedDates.length === 2) {
+        const checkIn = selectedDates[0].toISOString().slice(0, 10);
+        const checkOut = selectedDates[1].toISOString().slice(0, 10);
+        location.href = "/roomlist?checkIn=" + checkIn + "&checkOut=" + checkOut;
+    }
+    closeModal();
 }
 
 // DOMContentLoaded 이벤트 중복 최소화해서 한 번에 처리

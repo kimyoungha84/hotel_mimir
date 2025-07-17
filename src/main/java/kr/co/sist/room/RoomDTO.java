@@ -22,6 +22,7 @@ public class RoomDTO {
 	private double pricePerNight;
 	private double area_Sqm;
 	private int roomFloor; 
+	private int countAvailableRooms; 
 	private String description; 
 	private String imagePath;
 	private String status;
