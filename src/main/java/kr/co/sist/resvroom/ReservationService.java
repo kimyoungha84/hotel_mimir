@@ -19,4 +19,8 @@ public class ReservationService {
 		return rm.selectReservationSeq();
 	}
 	
+	public int checkRoomAvailability(ReservationDTO rDTO) {
+		return rm.checkRoomAvailability(rDTO);
+	}
+	
 }//class

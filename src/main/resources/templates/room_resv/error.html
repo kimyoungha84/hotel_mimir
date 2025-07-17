@@ -1,0 +1,91 @@
+<!DOCTYPE html >
+<html xmlns:th="http://thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>웹페이지를 찾을 수 없습니다.</title>
+
+<style>
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.error-page {
+    text-align: center;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+    padding: 40px;
+    width: 60%;
+    max-width: 600px;
+    margin-top: -200px; 
+}
+
+.error-image img {
+    width: 150px;
+    height: auto;
+}
+
+.error-message h1 {
+    font-size: 32px;
+    color: #333;
+    margin: 20px 0;
+}
+
+.back-btn .btn-link {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: white;
+    font-size: 18px;
+    text-decoration: none;
+    border-radius: 5px;
+    text-align: center;
+    transition: background-color 0.3s ease;
+}
+
+.back-btn .btn-link:hover {
+    background-color: #0056b3;
+}
+
+</style>
+
+<script type="text/javascript">
+
+
+
+
+$(function(){
+
+});//ready
+
+
+</script>
+</head>
+<body>
+
+ <div class="error-page">
+        <!-- 상단 이미지 -->
+        <div class="error-image">
+            <img th:src="@{/images/RM/error.png}">  <!-- 이미지 경로 수정 -->
+        </div>
+        
+        <!-- 오류 메시지 -->
+        <div class="error-message">
+            <h1>웹페이지를 찾을 수 없습니다</h1>
+        </div>
+
+        <!-- 이전 페이지로 돌아가기 버튼 -->
+        <div class="back-btn">
+    <a href="이전페이지주소" class="btn-link">이전 페이지</a>
+</div>
+    </div>
+
+</body>
+</html>

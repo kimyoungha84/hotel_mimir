@@ -19,6 +19,7 @@ public class ReservationDTO {
 	private String userName; //o
 	private String userTel;//o
 	private String userEmail; //o
+	private String userDomain; //o
 	private Boolean isMember;
 	private int paymentId;  
 	private Date checkinDate;  

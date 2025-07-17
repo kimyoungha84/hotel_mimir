@@ -13,8 +13,11 @@ public interface ReservationMapper {
     
     public int selectReservationSeq();
     
+    public int checkRoomAvailability(ReservationDTO rDTO);   
+    
     public void insertReservation(ReservationDTO rDTO);
     
     public void updateReservation(ReservationDTO rDTO);
-   
+    
 }
+
