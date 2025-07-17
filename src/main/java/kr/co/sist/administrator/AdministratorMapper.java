@@ -21,6 +21,10 @@ public interface AdministratorMapper {
 	public int insertLogInfo(StaffDTO staffDTO);
 	public int insertStaffPermission(StaffDTO staffDTO);
 	public int insertStaff(StaffDTO staffDTO);
+	
+	
+	/*초기 비밀번호 수정*/
+	public int updateStaffInitPassword(LoginDTO lDTO);
 }//interface
 
 

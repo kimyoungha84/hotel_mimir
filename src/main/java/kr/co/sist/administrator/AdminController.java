@@ -15,6 +15,7 @@ import jakarta.servlet.http.HttpSession;
 
 @Controller
 public class AdminController {
+	
 	@Autowired(required = false)
 	AdminService as;
 	
@@ -67,21 +68,28 @@ public class AdminController {
 		return "";
 	} //checkPermission
 	
+	@GetMapping("/admin/resetPassword")
+	public String adminResetPassword() {
+		return "administrator_email_template/reset_password";
+	}//adminResetPassword
+	
+	
+	
 	
 	/******************************************************************************/
 	
 	/*이건 test용*/
-	@GetMapping("/admin/test")
+	@GetMapping("/test")
 	public String adminTest() {
-		return "administrator/reset_password";
+		return "administrator_email_template/reset_password";
 	}//adminTest
 	
 	
 	/*test용*/
-	@GetMapping("/admin/login2")
+	@GetMapping("/test2")
 	public String adminTest2() {
 		//testtest
-		return "administrator/login";
+		return "administrator_email_template/reset_password_info";
 	}//adminTest
 	
 

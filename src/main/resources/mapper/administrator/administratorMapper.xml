@@ -37,4 +37,11 @@ insert into staff_permission(staff_id,permission_id_code)
 values(#{staff_id},#{permission_id_code})
 </insert>
 
+
+<!-- 초기 비밀번호 수정 -->
+<update id="updateStaffInitPassword" parameterType="loginDTO">
+update staff
+set staff_pass=#{pass}
+where staff_id=#{id}
+</update>
 </mapper>

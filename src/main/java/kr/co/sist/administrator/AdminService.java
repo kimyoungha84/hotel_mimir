@@ -7,11 +7,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import jakarta.mail.MessagingException;
+
 @Service
 public class AdminService {
 	
 	@Autowired(required = false)
 	AdministratorMapper am;
+	
+	@Autowired(required = false)
+	CryptographicDecryption cd;
 	
 
 	
@@ -168,6 +173,62 @@ public class AdminService {
 	}//registerStaff
 	
 	
+	/* URL 생성 */
+	//해당 URL은 직원에게 URL을 보낼 때, 링크로 사용
+//	public String passwordResetURL() {
+//		String url="";
+//		
+//		url="http://192.168.10.71:8080/admin/resetPassword";
+//			
+//		return url;
+//	}//makeURL
+	
+	@Autowired
+	AdministratorSendMail sendMail;
+	
+	/*이메일 보내기*/
+	public void sendMail(String employeeEmail) {
+	
+		try {
+			sendMail.sendMail("hyeon931023@gmail.com", "MIMIR 비밀번호 재설정");
+			//sendMail.sendMail(employeeEmail, "MIMIR 비밀번호 재설정");
+		} catch (MessagingException e) {
+			e.printStackTrace();
+		}//try~catch
+		
+	}//sendMail
+	
+	
+	/*일방향 암호화*/
+	public String encryptStr(String plainText) {
+		String cipherStr="";
+		
+		cipherStr=cd.useBcryptEncryption(plainText);
+		
+		return cipherStr;
+	}//encryptStr
+	
+	
+	
+	/*현재 아이디가 있는 아이디인가?*/
+	public int chkExistID(String id) {
+		int chkExistid=0;
+		chkExistid=am.selectCheckExistId(id);
+		
+		return chkExistid;
+	}//chkExistID
+	
+	
+	
+	/*staff 초기 비밀번호 업데이트*/
+	public int changeInitPassword(LoginDTO lDTO) {
+		int changeInt=am.updateStaffInitPassword(lDTO);
+		
+		return changeInt;
+	}//changeInitPassword
+	
+	
+	/***********************************************************************/
 	
 	/*로그 번호 생성*/
 	private String createLogIden(StaffDTO staffDTO) {
@@ -231,4 +292,6 @@ public class AdminService {
 		
 		return 1;
 	}//processPermissionList
+	
+
 }//class

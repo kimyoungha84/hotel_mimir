@@ -1,6 +1,4 @@
 package kr.co.sist.administrator;
-import kr.co.sist.util.ModelUtils;
-
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 
@@ -13,11 +11,13 @@ import org.springframework.util.StreamUtils;
 
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
+import kr.co.sist.util.ModelUtils;
 
 @Component
 public class AdministratorSendMail {
 
-    private final ModelUtils modelUtils;
+	@Autowired
+	private final ModelUtils modelUtils;
 
 	@Autowired
 	private JavaMailSender mailSender;
@@ -26,13 +26,13 @@ public class AdministratorSendMail {
         this.modelUtils = modelUtils;
     }
 	
-	public void sendHtmlMail(String to, String subject, String htmlContent) throws MessagingException{
+	public void sendMail(String to, String subject) throws MessagingException{
 		MimeMessage message=mailSender.createMimeMessage();
 		
 		MimeMessageHelper helper=new MimeMessageHelper(message, true, "UTF-8");
 		helper.setTo(to);
 		helper.setSubject(subject);
-		helper.setText(htmlContent, true);
+		helper.setText(loadHtmlMailTemplate(), true);
 		
 		helper.setFrom("hyeon931023@gmail.com");//보내는 사람 설정
 		
@@ -43,14 +43,22 @@ public class AdministratorSendMail {
 	
 	
 	/**
-	 * html 템플릿 호출 및 반환
+	 * html 템플릿 호출 및 반환<br>
+	 * 아니야 ... html 템플릿 보낼거야....
 	 * @return
 	 * @throws IOException
 	 */
-	public String loadHtmlMailTemplate() throws IOException{
-		ClassPathResource resource =new ClassPathResource("templates/administrator_email_template/reset_password.html");
+	public String loadHtmlMailTemplate(){
+		ClassPathResource resource =new ClassPathResource("templates/administrator_email_template/reset_password_info.html");
+		String StreamUtilStr="";
 		
-		return StreamUtils.copyToString(resource.getInputStream(), StandardCharsets.UTF_8);
+		try {
+			StreamUtilStr=StreamUtils.copyToString(resource.getInputStream(), StandardCharsets.UTF_8);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}//try~catch
+		
+		return StreamUtilStr;
 	}//loadHtmlMailTemplate
 	
 	

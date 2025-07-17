@@ -73,9 +73,40 @@ public class AdministratorRESTController {
 		//System.out.println("registerStaff의 staffDTO ----"+staffDTO);
 		if(resultCnt!=3) {
 			throw new Exception();
-		}//end if
+		}else {
+			//직원 등록이 완료되었을 때 실행됨.
+			//직원 등록이 완료되면, password를 초기화할 수 있는 이메일 전송해야 함!
+			as.sendMail(null);
+		}//if~else
+		
+
 		
 		return resultCnt;
 	}//registerStaff
+	
+	/*초기 비밀번호 등록*/
+	@PostMapping("/admin/initialPassword")
+	public void initialPassword(@RequestBody LoginDTO lDTO) throws Exception{
+		int chkIdExist=0;
+		String encrpyPassStr="";
+		int chkValue=0;
+		
+		//여기서 우선 id가 db에 있는 아이디인지 확인해야함.
+		chkIdExist =as.chkExistID(lDTO.getId());
+		//만약 db에 존재하는 아이디라면, password 변경! (이때, 암호화를 해서 집어넣어야 한다.)
+		if(chkIdExist != 0) {
+			encrpyPassStr=as.encryptStr(lDTO.getPass());
+			lDTO.setPass(encrpyPassStr);
+			//여기서 DB로 보내야지 (암호화한 password를 변경)
+			//여기서 접근하면 staff DB의 pass를 업데이트 하기
+			chkValue=as.changeInitPassword(lDTO);
+			if(chkValue == 0 ) {
+				throw new Exception();
+			}//end if
+		}else {
+			throw new Exception();
+		}
+		
+	}//initialPassword
 
 }//class

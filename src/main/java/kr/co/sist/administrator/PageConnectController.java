@@ -39,7 +39,7 @@ public class PageConnectController {
 				"staffList"
 				);
 		
-		System.out.println("-----------------------FilterConfigstaff --------"+FilterConfig.STAFF);
+		//System.out.println("-----------------------FilterConfigstaff --------"+FilterConfig.STAFF);
 		
 		modelUtils.setFilteringInfo(model, FilterConfig.STAFF);
 		modelUtils.setPaginationAttributes(model, pageSize, FilterConfig.STAFF);
