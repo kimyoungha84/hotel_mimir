@@ -1,6 +1,6 @@
 /* 본문과 겹치지 않도록 여백 확보 */
 body {
-  padding-top: 130px;
+ /* padding-top: 130px; */
   font-family: 'Noto Sans KR', sans-serif;
 }
 
