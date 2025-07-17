@@ -51,10 +51,13 @@
   </main>
 
 </div>
-<script>
-  // 서버에서 staff_id를 모델에 넣어줘야 함!
-  var staffId = /*[[${staff_id}]]*/ "mimir_267801";
-  console.log("[admin_chat] staffId:", staffId);
+<script th:inline="javascript">
+  var staffId = /*[[${staff_id}]]*/ null;
+  if (typeof staffId === 'string' && staffId.startsWith('"') && staffId.endsWith('"')) {
+    staffId = staffId.substring(1, staffId.length - 1);
+  }
+  if (staffId !== null) staffId = String(staffId);
+  console.log("[admin_chat] staffId:", staffId, typeof staffId);
 </script>
 <script src="/js/admin_chat.js"></script>
 </body>

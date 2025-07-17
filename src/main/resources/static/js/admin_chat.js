@@ -17,15 +17,18 @@ function connectWebSocket() {
     };
     
     ws.onmessage = function(event) {
-        const [sender, msg] = event.data.split(":", 2);
-        // sender가 staffId(문자열)이면 오른쪽(관리자), 아니면 왼쪽(사용자)
-        const isMine = sender === staffId;
-        appendChat(sender, msg, isMine);
-        if (!isMine) {
-            // 사용자로부터 메시지를 받았을 때 해당 사용자 목록 갱신
+        // roomId:sender:msg 형태로 분리
+        const [roomId, sender, msg] = event.data.split(":", 3);
+        // 현재 선택된 방과 일치할 때만 appendChat
+        if (roomId == currentRoomId) {
+            const isMine = sender === staffId;
+            appendChat(sender, msg, isMine);
+        }
+        // 유저 목록 갱신 등은 기존대로
+        if (sender !== staffId) {
             addUserToList(sender, msg);
         }
-        loadUserList(); // 메시지 수신 시 리스트 갱신
+        loadUserList();
     };
     
     ws.onclose = function() {

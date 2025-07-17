@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import jakarta.servlet.http.HttpSession;
 
 import kr.co.sist.member.MemberDTO;
 import kr.co.sist.member.MemberMapper;
@@ -38,8 +39,11 @@ public class FaqController {
 
 	@GetMapping("/admin/chat")
 	// 관리자 채팅 페이지 진입 (admin_chat.html 반환)
-	public String adminChatPage() {
-		
+	public String adminChatPage(Model model, HttpSession session) {
+		String staffId = (String) session.getAttribute("session_id");
+		if (staffId != null) {
+			model.addAttribute("staff_id", staffId);
+		}
 		return "inquiry/admin_chat"; // templates/admin_chat.html
 	}
 

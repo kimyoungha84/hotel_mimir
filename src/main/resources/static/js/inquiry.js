@@ -88,21 +88,23 @@ $(document).ready(function() {
       console.log('WebSocket 연결됨');
     };
     ws.onmessage = function(event) {
-      // 메시지 수신 시 화면에 출력
-      const [sender, msg] = event.data.split(":", 2);
-      const isMine = sender == userNum;
-      const alignClass = isMine ? "right" : "left";
-      const formattedMsg = msg.replace(/\n/g, "<br>");
-      const messageBlock = $("<div>").addClass("message-block " + alignClass);
-      if (!isMine) {
-        const timeElem = $("<div>").addClass("message-time").text(getCurrentTime());
-        const msgElem = $("<div>").addClass("chat-message left").html(formattedMsg);
-        messageBlock.append(msgElem, timeElem);
-      } else {
-        const msgElem = $("<div>").addClass("chat-message right").html(formattedMsg);
-        messageBlock.append(msgElem);
+      // roomId:sender:msg 포맷에 맞게 파싱
+      const [roomId, sender, msg] = event.data.split(":", 3);
+      if (roomId == currentRoomId) {
+        const isMine = sender == userNum;
+        const alignClass = isMine ? "right" : "left";
+        const formattedMsg = msg.replace(/\n/g, "<br>");
+        const messageBlock = $("<div>").addClass("message-block " + alignClass);
+        if (!isMine) {
+          const timeElem = $("<div>").addClass("message-time").text(getCurrentTime());
+          const msgElem = $("<div>").addClass("chat-message left").html(formattedMsg);
+          messageBlock.append(msgElem, timeElem);
+        } else {
+          const msgElem = $("<div>").addClass("chat-message right").html(formattedMsg);
+          messageBlock.append(msgElem);
+        }
+        $("#chatBody").append(messageBlock).scrollTop($("#chatBody")[0].scrollHeight);
       }
-      $("#chatBody").append(messageBlock).scrollTop($("#chatBody")[0].scrollHeight);
     };
     ws.onclose = function() {
       console.log('WebSocket 연결 종료');
@@ -302,10 +304,25 @@ $(document).ready(function() {
     // 뒤로가기 버튼 클릭 시 채팅방 나가기
     $("#backBtn").off('click').on('click', function() {
       $("#inputArea").hide();
-      // 메시지 영역 비우기
       $("#chatBody").empty();
-      // 문의 유형 선택 다시 보이기
-      $("#chatOptions").show();
+      // 문의 유형 버튼 HTML을 강제로 다시 넣어줌
+      $("#chatOptions").html(`
+        <p style="text-align: center; color: #0000FF;">상담 시간 10:00 ~17:00</p>
+        <p style="text-align: center; font-size: 13px; color: #FF0000;">※욕설금지 = 관리자도 누군가의 자녀이자 부모님이다.※</p>
+        <p style="text-align: center; color: #aaa;">문의 유형을 선택해주세요</p>
+        <div class="chat-options">
+          <button class="chat-option" data-type="0">객실 문의</button>
+          <button class="chat-option" data-type="1">다이닝 문의</button>
+          <button class="chat-option" data-type="2">일반 문의</button>
+        </div>
+      `).show();
+      if (!userNum) {
+        $("#loginCheck").show();
+        $("#chatOptions").hide();
+      } else {
+        $("#loginCheck").hide();
+        $("#chatOptions").show();
+      }
       $("#chatTitle").text("1:1 채팅");
       currentRoomId = null;
       currentChatType = null;

@@ -35,6 +35,8 @@ public class ChatWebSocketHandler extends TextWebSocketHandler {
             userSessions.put(userId, session);
             sessionUserMap.put(session, userId);
             System.out.println("접속: " + userId);
+            System.out.println("[DEBUG] userSessions: " + userSessions.keySet());
+            System.out.println("[DEBUG] sessionUserMap: " + sessionUserMap.values());
         }
     }
 
@@ -42,6 +44,8 @@ public class ChatWebSocketHandler extends TextWebSocketHandler {
     protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
         String sender = sessionUserMap.get(session);
         String payload = message.getPayload();
+        System.out.println("[DEBUG] handleTextMessage sender=" + sender + ", payload=" + payload);
+        System.out.println("[DEBUG] userSessions: " + userSessions.keySet());
 
         // payload: "room_id:content"
         if (payload.contains(":")) {
@@ -100,7 +104,8 @@ public class ChatWebSocketHandler extends TextWebSocketHandler {
             
             WebSocketSession targetSession = userSessions.get(targetId);
             if (targetSession != null && targetSession.isOpen()) {
-                targetSession.sendMessage(new TextMessage(sender + ":" + msg));
+                // 메시지 포맷: roomId:sender:msg
+                targetSession.sendMessage(new TextMessage(roomId + ":" + sender + ":" + msg));
             }
         }
     }
@@ -117,7 +122,12 @@ public class ChatWebSocketHandler extends TextWebSocketHandler {
     private String getUserId(WebSocketSession session) {
         String query = session.getUri().getQuery();
         if (query != null && query.startsWith("userId=")) {
-            return query.split("=")[1];
+            String id = query.split("=")[1];
+            // 쌍따옴표가 있으면 제거
+            if (id.startsWith("\"") && id.endsWith("\"")) {
+                id = id.substring(1, id.length() - 1);
+            }
+            return id;
         }
         return null;
     }
