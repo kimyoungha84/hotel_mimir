@@ -67,14 +67,21 @@
 </tr>
 <tr>
     <th>권한</th>
-    <td>
+    <td style="display: flex; align-items: center;">
+    <div style="flex: 1;">
     <span v-for="(auth,index) in employRegisterObj.authority" :key="index">
     <select :id="'authority'+index" v-model="employRegisterObj.authority[index]" style="margin-right:0.5rem" @change="chkDuplicateValue(index)">
     <option :value="''" th:text="---선택---" disabled selected></option>
     <option v-for="authority in this.authorities" :value="authority.permission_id" :key="authority.permission_id">{{authority.permission_type}}</option>
     </select>
     </span>
+    </div>
+    <div style="margin-left: 1rem; display: flex; flex-direction: column; gap: 0.5rem;">
+    
     <input type="button" class="addAuthorityBtn" value="+ 추가" @click="addAuthoritySelector"/>
+    <input type="button" class="removeAuthorityBtn" value="- 삭제" @click="removeAuthoritySelector"/>
+    
+    </div>
     </td>
 </tr>
 <tr>
@@ -153,6 +160,15 @@ Vue.createApp({
                 alert("권한을 선택해 주세요.");
             }//end if~else
         },
+        removeAuthoritySelector(){
+            // 권한 select가 1개 초과일 때만 제거
+            if(this.employRegisterObj.authority.length > 1){
+                this.employRegisterObj.authority.pop();
+            } else {
+                alert("최소 권한 한 개는 선택해야 합니다.");
+            }//end if~else
+        },
+        
         addAuthoritytoList(){
 
         },
@@ -197,8 +213,8 @@ Vue.createApp({
         },
         cancelBtn(){
             location.href="/admin/employee";
-        }
-        
+        },
+
     }
 }).mount("#app");
 </script>

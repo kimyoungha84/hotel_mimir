@@ -42,7 +42,12 @@ public class AdministratorRESTController {
 			if(statusId != 0) {
 				passStr=as.getPassById(lDTO.getId());
 				if(passStr.contains("pass")) {
-					returnVal="initialIssue";
+					if(as.getPassById(lDTO.getId()).equals(lDTO.getPass())) {
+						returnVal="initialIssue";
+					}else {
+						//애초에 비밀번호가 틀린거
+						throw new Exception();
+					}//end if~else
 				}else {
 			
 					//아이디가 존재 //그러면 flag값이 true겠지.
