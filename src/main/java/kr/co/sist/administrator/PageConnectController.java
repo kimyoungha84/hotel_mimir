@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 
 import jakarta.servlet.http.HttpServletRequest;
 import kr.co.sist.util.FilterConfig;
@@ -53,9 +54,18 @@ public class PageConnectController {
 		//여기서 아이디를 만들어서 줘야 함.
 		model.addAttribute("staff_id",as.makeAdminId());
 		
-		System.out.println("여기는 /admin/employee/register");
+		//System.out.println("여기는 /admin/employee/register");
 		return "employee/empRegister";
 	}//employeeRegister
+	
+	
+	
+	/*직원 상세*/
+	@PostMapping("/admin/employee/detail")
+	public String employeeDetail() {
+		
+		return "employee/empDetail";
+	}//employeeDetail
 	
 	/*************************************/
 	/*회원 관리*/

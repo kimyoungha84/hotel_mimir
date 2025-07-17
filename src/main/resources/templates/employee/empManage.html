@@ -31,7 +31,7 @@
     <div>
     <input type="button" class= "regEmpBtn" value="+ 직원 등록" onclick="location.href='/admin/employee/register'" style="margin-left:3rem"/>
     </div>
-
+    
     <div th:replace="fragments/filter :: filter(${filter})"></div>
     
     <div class="table-wrapper" id="app">    
@@ -48,20 +48,22 @@
         </tr>
     </thead>
     <tbody th:fragment="staff_list_fm" id="resultArea" >
+    <form id="frm" method="post" th:action="@{/admin/employee/detail}">
         <tr th:each="staff, stat : ${staffList}">
             <td th:text="${stat.count}"></td>
-            <td th:text="${staff.staff_id}"></td>
+            <td th:text="${staff.staff_id}" name="staff_id"></td>
             <td th:text="${staff.staff_name}"></td>
-            <td th:id="'dept-'+${stat.count}" th:text="${staff.dept_iden}"></td> <!-- 부서 -->
+            <td th:id="'dept-'+${stat.count}" th:text="${staff.dept_iden}" ></td> <!-- 부서 -->
             <td th:id="'position-'+${stat.count}" th:text="${staff.position_identified_code}"></td> <!-- 직책 -->
             <td th:id="'permission-'+${stat.count}" th:text="${staff.permission_ids}"></td> <!-- 권한 -->
             <td th:id="'status-'+${stat.count}" th:text="${staff.staff_status}"></td> <!-- 상태 -->
         </tr>
+    </form> 
     </tbody>
     </table>
     <div th:replace="fragments/pagination :: pagination"></div>
     </div>
-    
+  
 </div>
 
 
@@ -158,7 +160,11 @@ $(function(){
     var config = { childList: true, subtree: true };
     observer.observe(document.getElementById('resultArea'), config);
 
-});    //ready
+
+    $("#resultArea").click(function(){
+        $("#frm").submit();
+    });//click
+});//ready
 
 
 </script>
