@@ -124,8 +124,10 @@
       <p th:text="'침대타입: ' + ${room.bedName}">침대타입: 더블</p>
       <p th:text="'전망: ' + ${room.viewName}">전망: 시티뷰, 리버뷰</p>
     </div>
-    <a th:href="@{/room_resv/resvRoom(roomId=${room.roomId})}" class="price-btn" 
-       th:text="'₩' + ${#numbers.formatInteger(room.pricePerNight, 3, 'COMMA')}">₩700,000</a>
+    <a th:href="${room.countAvailableRooms > 0} ? @{/room_resv/resvRoom(roomId=${room.roomId})} : '#'"
+   th:classappend="${room.countAvailableRooms == 0} ? ' disabled' : ''"
+   class="price-btn"
+   th:text="'₩' + ${#numbers.formatInteger(room.pricePerNight, 3, 'COMMA')}">₩700,000</a>
   </div>
 </th:block>     
 	</div>

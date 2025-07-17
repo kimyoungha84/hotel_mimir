@@ -618,3 +618,9 @@ body {
   width: 100%; /* 버튼 너비와 같게 */
   z-index: 10;
 }
+
+.price-btn.disabled {
+    pointer-events: none;
+    opacity: 0.5;
+    cursor: not-allowed;
+}
