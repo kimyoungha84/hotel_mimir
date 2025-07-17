@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html xmlns:th="http://thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<!-- bootstrap CDN -->
+<link rel="stylesheet" type="text/css"
+href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css">
+<link rel="stylesheet" th:href="@{/css/footer.css}">
+<style type="text/css">
+
+</style>
+
+<!-- jquery CDN -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+
+<script type="text/javascript">
+$(function(){
+	
+});
+
+</script>
+</head>
+
+<!-- templates/fragments/footer.html -->
+<div th:fragment="footerFragment" class="footer">
+  <div class="footer-container">
+    <div class="footer-logo">
+      <h2>MIMIR HOTELS</h2>
+    </div>
+
+    <div class="footer-menu">
+      <div class="footer-col">
+        <h4>객실</h4>
+        <ul>
+          <li><a th:href="@{/roomhome}">객실소개</a></li>
+          <li><a th:href="@{/roomlist}">객실예약</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>다이닝</h4>
+        <ul>
+          <li><a th:href="@{/user/dining_main}">다이닝정보</a></li>
+          <li><a th:href="@{/diningResv}">다이닝예약</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>고객센터</h4>
+        <ul>
+          <li><a th:href="@{/inquiry}">FAQ</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>TERMS & POLICY</h4>
+        <ul>
+          <li><a href="/terms">약관 및 정책</a></li>
+          <li><a href="/terms/site">사이트 이용약관</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>CONTACT</h4>
+        <address>
+          서울시 강남구 역삼동 한중교육센터<br>
+          111-1111-1111
+        </address>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <a href="/privacy">개인정보처리방침 ↑</a>
+    </div>
+  </div>
+</div>
+
+
+</html>

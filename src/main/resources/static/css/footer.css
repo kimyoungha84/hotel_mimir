@@ -1,0 +1,70 @@
+@charset "UTF-8";
+/* static/css/footer.css */
+.footer {
+  background-color: #111;
+  color: #fff;
+  padding: 40px 0;
+  font-family: 'Noto Sans KR', sans-serif;
+  border-top: 2px solid #0af; /* 이미지 외곽 파란색 라인 */
+}
+
+.footer-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+.footer-logo h2 {
+  font-family: 'Georgia', serif;
+  font-size: 24px;
+  margin-bottom: 30px;
+}
+
+.footer-menu {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+.footer-col {
+  flex: 1 1 150px;
+  margin-bottom: 20px;
+}
+
+.footer-col h4 {
+  font-size: 14px;
+  margin-bottom: 10px;
+  color: #fff;
+}
+
+.footer-col ul,
+.footer-col address {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  font-size: 13px;
+  color: #aaa;
+}
+
+.footer-col ul li {
+  margin-bottom: 5px;
+}
+
+.footer-col ul li a {
+  color: #aaa;
+  text-decoration: none;
+}
+
+.footer-col ul li a:hover {
+  text-decoration: underline;
+}
+
+.footer-bottom {
+  margin-top: 30px;
+  font-size: 12px;
+}
+
+.footer-bottom a {
+  color: #aaa;
+  text-decoration: none;
+}

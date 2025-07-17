@@ -6,6 +6,7 @@
 <title>문의관리</title>
 <link rel="stylesheet" href="/css/inquiry.css">
 <link rel="stylesheet" th:href="@{/css/header.css}" />
+<link rel="stylesheet" th:href="@{/css/footer.css}" />
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 
@@ -72,6 +73,8 @@
 		</div>
 	</div>
 
+	<div th:replace="fragments/footer :: footerFragment"></div>
+	
 	<script src="https://cdn.jsdelivr.net/npm/bad-word-filtering@1.0.4/dist/bad-word-filtering.min.js"></script>
 	<script src="/js/inquiry.js"></script>
 </body>
