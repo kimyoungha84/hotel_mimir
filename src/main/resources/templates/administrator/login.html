@@ -148,8 +148,11 @@ Vue.createApp({
             axios.post(`${preUrl}/admin/loginChk`,this.jsonLoginObj) 
             .then(res=>{
                 console.log(res.data);
-                if(res.data == "success"){
+                if(res.data === "success"){
                     window.location.href="/admin";
+                }else if(res.data === "initialIssue"){
+                    alert("초기 비밀번호를 변경해주세요.");
+                    location.href="/admin/resetPassword";
                 }
             })
             .catch(err=>{

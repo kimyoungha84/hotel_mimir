@@ -74,8 +74,7 @@ public class AdminController {
 	}//adminResetPassword
 	
 	
-	
-	
+
 	/******************************************************************************/
 	
 	/*이건 test용*/

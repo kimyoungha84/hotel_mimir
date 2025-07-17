@@ -33,14 +33,16 @@ public class AdminService {
 		String resultPass=am.selectEmployeeLogin(id);
 		//System.out.println("resultPass------------"+resultPass);
 		
-		
-		if(pass.equals(resultPass)) {
+	
+		if(cd.useBcryptMatches(pass, resultPass)) {
 			//비밀번호 일치
 			flag=true;
 		}//end if	
 		
 		return flag;
 	}//chkLogin
+	
+	
 	
 	/*해당 id에 mapping되는 name 가져오기*/
 	public String getNameById(String id) {
@@ -226,6 +228,13 @@ public class AdminService {
 		
 		return changeInt;
 	}//changeInitPassword
+	
+	
+	/*아이디를 주면 비밀번호를 내보낸다.*/
+	public String getPassById(String id) {
+		String password=am.selectEmployeeLogin(id);
+		return password;
+	}//getPassById
 	
 	
 	/***********************************************************************/

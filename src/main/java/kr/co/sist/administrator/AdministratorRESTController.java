@@ -27,6 +27,8 @@ public class AdministratorRESTController {
 	public String loginChk(@RequestBody LoginDTO lDTO, HttpSession httpSession, HttpServletRequest request)throws Exception{
 		boolean flag=false;
 		String returnVal="fail";
+		int statusId=0;
+		String passStr="";
 		
 		httpSession=request.getSession(false);
 		
@@ -35,30 +37,39 @@ public class AdministratorRESTController {
 			System.out.println("id---------------"+lDTO.getId());
 			System.out.println("pass---------------"+lDTO.getPass());
 			
+			//아이디가 존재하면, 그러면, password를 가져오자.
+			statusId=as.chkExistID(lDTO.getId());
+			if(statusId != 0) {
+				passStr=as.getPassById(lDTO.getId());
+				if(passStr.contains("pass")) {
+					returnVal="initialIssue";
+				}else {
 			
-			//아이디가 존재 //그러면 flag값이 true겠지.
-			flag=as.chkLogin(lDTO.getId(),lDTO.getPass());
+					//아이디가 존재 //그러면 flag값이 true겠지.
+					flag=as.chkLogin(lDTO.getId(),lDTO.getPass());
+					
+					//System.out.println("flag----------------"+flag);
+					
+					if(flag) {
+						//로그인 성공
+						returnVal="success";
+						//그럼 여기서 id, name을 session을 추가
+						httpSession.setAttribute("session_id", lDTO.getId());
+						httpSession.setAttribute("session_name", as.getNameById(lDTO.getId()));
+				
+						String session_id=(String)request.getSession().getAttribute("session_id");
+						String session_name=(String)request.getSession().getAttribute("session_name");
+						
+						//System.out.println("RestController-------"+session_id +" / "+ session_name);
+						
 			
-			//System.out.println("flag----------------"+flag);
-			
-			if(flag) {
-				//로그인 성공
-				returnVal="success";
-				//그럼 여기서 id, name을 session을 추가
-				httpSession.setAttribute("session_id", lDTO.getId());
-				httpSession.setAttribute("session_name", as.getNameById(lDTO.getId()));
-		
-				String session_id=(String)request.getSession().getAttribute("session_id");
-				String session_name=(String)request.getSession().getAttribute("session_name");
-				
-				//System.out.println("RestController-------"+session_id +" / "+ session_name);
-				
-	
-			}else {
-				//System.out.println("exception 발생!!!");
-				throw new Exception();
-				
-			}
+					}else {
+						//System.out.println("exception 발생!!!");
+						throw new Exception();
+						
+					}//end if~else
+				}//end if~else
+			}//end if
 		}//end if
 		//System.out.println("여기는 restController");
 		return returnVal;
@@ -86,27 +97,43 @@ public class AdministratorRESTController {
 	
 	/*초기 비밀번호 등록*/
 	@PostMapping("/admin/initialPassword")
-	public void initialPassword(@RequestBody LoginDTO lDTO) throws Exception{
+	public int initialPassword(@RequestBody LoginDTO lDTO) throws Exception{
 		int chkIdExist=0;
+		int resultStatus=0;
 		String encrpyPassStr="";
 		int chkValue=0;
+		String passStr="";
 		
 		//여기서 우선 id가 db에 있는 아이디인지 확인해야함.
 		chkIdExist =as.chkExistID(lDTO.getId());
-		//만약 db에 존재하는 아이디라면, password 변경! (이때, 암호화를 해서 집어넣어야 한다.)
-		if(chkIdExist != 0) {
-			encrpyPassStr=as.encryptStr(lDTO.getPass());
-			lDTO.setPass(encrpyPassStr);
-			//여기서 DB로 보내야지 (암호화한 password를 변경)
-			//여기서 접근하면 staff DB의 pass를 업데이트 하기
-			chkValue=as.changeInitPassword(lDTO);
-			if(chkValue == 0 ) {
-				throw new Exception();
-			}//end if
-		}else {
-			throw new Exception();
-		}
 		
+		//그리고 이 아이디의 password 형태가 pass6자리인지 확인
+		passStr=as.getPassById(lDTO.getId());
+		//만약 아닐 경우에는 이게 초기 비밀번호 변경 대상이 아님.!
+		if(passStr.contains("pass")) {
+
+			//만약 db에 존재하는 아이디라면, password 변경! (이때, 암호화를 해서 집어넣어야 한다.)
+			//System.out.println("------------------아이디가 존재하는가?!?!?!?!?!?=--------"+chkIdExist);
+			if(chkIdExist != 0) {
+				encrpyPassStr=as.encryptStr(lDTO.getPass());
+				lDTO.setPass(encrpyPassStr);
+				//여기서 DB로 보내야지 (암호화한 password를 변경)
+				//여기서 접근하면 staff DB의 pass를 업데이트 하기
+				chkValue=as.changeInitPassword(lDTO);
+				if(chkValue != 0 ) {
+					resultStatus=1;
+				}else {
+					resultStatus=0;
+				}
+			}else {
+				//db에 존재하지 않는 아이디라면, exception 발생시키기
+				throw new Exception();
+			}//end if~else
+		}else {
+			//아이디의 형태가 초기 비밀번호 대상이 아님
+			resultStatus=2;
+		}
+		return resultStatus;
 	}//initialPassword
 
 }//class

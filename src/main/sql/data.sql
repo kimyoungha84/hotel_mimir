@@ -3,17 +3,20 @@
 
 -- 1단계: staff_permission 은 staff, permission 참조
 TRUNCATE TABLE staff_permission;
-
+select * from staff_permission;
 -- 2단계: staff 는 position, department, log_record 참조
-TRUNCATE TABLE staff;
-
+TRUNCATE TABLE STAFF;
+select * from staff;
 -- 3단계: permission 은 참조되지 않음 (독립적)
 TRUNCATE TABLE permission;
-
+select * from permission;
 -- 4단계: log_record, department, position 은 staff에게 참조됨
 TRUNCATE TABLE log_record;
+select * from log_record;
 TRUNCATE TABLE department;
+select * from department;
 TRUNCATE TABLE position;
+select * from position;
 
 
 /*department - 부서*/
@@ -51,10 +54,10 @@ INSERT INTO LOG_RECORD VALUES ('LOG012', 'logfile12.log');
 INSERT INTO LOG_RECORD VALUES ('LOG013', 'logfile13.log');
 INSERT INTO LOG_RECORD VALUES ('LOG014', 'logfile14.log');
 INSERT INTO LOG_RECORD VALUES ('LOG015', 'logfile15.log');
-INSERT INTO LOG_RECORD VALUES ('LOG016', 'logfile16.log');
+
 INSERT INTO LOG_RECORD VALUES ('LOG017', 'logfile17.log');
-INSERT INTO LOG_RECORD VALUES ('LOG018', 'logfile18.log');
-INSERT INTO LOG_RECORD VALUES ('LOG019', 'logfile19.log');
+
+
 INSERT INTO LOG_RECORD VALUES ('LOG020', 'logfile20.log');
 
 /*staff - 직원*/
@@ -74,10 +77,10 @@ INSERT INTO STAFF VALUES ('mimir_623451', 'C', 'member',   'LOG012', 'pass12', '
 INSERT INTO STAFF VALUES ('mimir_534126', 'D', 'person',   'LOG013', 'pass13', '윤도현', 'ACTIVE', 'yoon@hotel.com', '2019-11-01', NULL);
 INSERT INTO STAFF VALUES ('mimir_445623', 'E', 'dinning',  'LOG014', 'pass14', '하정우', 'ACTIVE', 'ha@hotel.com',   '2023-05-01', NULL);
 INSERT INTO STAFF VALUES ('mimir_356712', 'C', 'member',  'LOG015', 'pass15', '이하늬', 'ACTIVE', 'leeh@hotel.com', '2022-02-14', NULL);
-INSERT INTO STAFF VALUES ('mimir_267801', 'D', 'room',     'LOG016', 'pass16', '김수현', 'ACTIVE', 'soo@hotel.com',  '2020-12-31', NULL);
+
 INSERT INTO STAFF VALUES ('mimir_178902', 'E', 'member',   'LOG017', 'pass17', '임수정', 'ACTIVE', 'lim@hotel.com',  '2021-06-30', NULL);
-INSERT INTO STAFF VALUES ('mimir_089123', 'C', 'dinning',  'LOG018', 'pass18', '정해인', 'ACTIVE', 'jung@hotel.com', '2024-01-10', NULL);
-INSERT INTO STAFF VALUES ('mimir_954321', 'B', 'inquiry',  'LOG019', 'pass19', '김유정', 'ACTIVE', 'kimy@hotel.com', '2022-08-05', NULL);
+
+
 INSERT INTO STAFF VALUES ('mimir_843210', 'D', 'person',   'LOG020', 'pass20', '조인성', 'ACTIVE', 'cho@hotel.com',  '2023-09-15', NULL);
 
 
@@ -101,15 +104,14 @@ INSERT INTO staff_permission VALUES ('room', 'mimir_438219');
 INSERT INTO staff_permission VALUES ('room', 'mimir_874360');
 INSERT INTO staff_permission VALUES ('room', 'mimir_132784');
 INSERT INTO staff_permission VALUES ('room', 'mimir_712345');
-INSERT INTO staff_permission VALUES ('room', 'mimir_267801');
-INSERT INTO staff_permission VALUES ('inquiry', 'mimir_267801');
+
+
 
 -- dinning 부서 → dinning 권한
 INSERT INTO staff_permission VALUES ('dinning', 'mimir_927364');
 INSERT INTO staff_permission VALUES ('dinning', 'mimir_605417');
 INSERT INTO staff_permission VALUES ('dinning', 'mimir_445623');
-INSERT INTO staff_permission VALUES ('dinning', 'mimir_089123');
-INSERT INTO staff_permission VALUES ('inquiry', 'mimir_089123');
+
 
 -- person 부서 → employee 권한
 INSERT INTO staff_permission VALUES ('employee', 'mimir_318046');
@@ -131,7 +133,7 @@ INSERT INTO staff_permission VALUES ('admin', 'mimir_501276');
 
 -- inquiry 부서 → 제외 (이번 조건에 명시되지 않음)
 -- → 예: 'mimir_954321' 등은 권한 미할당
-INSERT INTO staff_permission VALUES ('inquiry', 'mimir_954321');
+
 
 
 /*
@@ -143,5 +145,25 @@ select * from position;
 select * from staff_permission;
 
 */
+
+INSERT INTO staff_permission VALUES ('room', 'mimir_111111');
+INSERT INTO staff_permission VALUES ('inquiry', 'mimir_111111');
+
+INSERT INTO staff_permission VALUES ('dinning', 'mimir_222222');
+INSERT INTO staff_permission VALUES ('inquiry', 'mimir_222222');
+
+INSERT INTO staff_permission VALUES ('inquiry', 'mimir_333333');
+
+
+INSERT INTO LOG_RECORD VALUES ('LOG123', 'logfile123.log');
+INSERT INTO LOG_RECORD VALUES ('LOG432', 'logfile432.log');
+INSERT INTO LOG_RECORD VALUES ('LOG333', 'logfile333.log');
+
+
+INSERT INTO STAFF VALUES ('mimir_111111', 'E', 'room', 'LOG123', '123', '노진구', 'ACTIVE', 'no@hotel.com', '2024-07-01', NULL);
+INSERT INTO STAFF VALUES ('mimir_222222', 'D', 'dinning', 'LOG432', '123', '신짱구', 'ACTIVE', 'shin@hotel.com', '2024-07-02', NULL);
+INSERT INTO STAFF VALUES ('mimir_333333', 'C', 'inquiry', 'LOG333', '123', '도라에몽', 'ACTIVE', 'dora@hotel.com', '2024-07-03', NULL);
+
+
 
 commit;
