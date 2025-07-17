@@ -1,5 +1,10 @@
 @charset "UTF-8";
 
+body {
+  padding: 0;
+  margin: 0;
+}
+
 .banner-container-wrap {
   position: relative;
   width: 100%;
@@ -96,9 +101,10 @@
 }
 
 .next-btn.disabled {
-  background-color: #111;
-  pointer-events: none;
+  background-color: #ccc;
+  pointer-events: auto;
   opacity: 0.5;
+  color: #888;
   cursor: not-allowed;
   text-decoration: none;
 }

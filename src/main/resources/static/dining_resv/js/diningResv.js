@@ -18,6 +18,12 @@ document.addEventListener("DOMContentLoaded", function () {
   const inputTime = document.getElementById("inputTime");
   const nextBtn = document.querySelector(".next-btn");
   
+  document.querySelector(".next-btn").addEventListener("click", function(e) {
+    if (this.classList.contains("disabled")) {
+      e.preventDefault();
+    }
+  });
+  
   // 탭 전환 이벤트
   btnScheduler.addEventListener("click", () => {
     btnScheduler.classList.add("active");

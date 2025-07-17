@@ -1,5 +1,10 @@
 @charset "UTF-8";
 
+body {
+  padding: 0;
+  margin: 0;
+}
+
 .layout {
   display: flex;
   justify-content: center;
@@ -23,10 +28,6 @@
   background-color: #ffffff;
 }
 
-.reservation-next {
-  border-bottom: 2px solid #dddddd;
-}
-
 .reservation-info01 {
   padding: 1.4rem;
   border-bottom: 2px solid #dddddd;
@@ -44,7 +45,6 @@
 
 .reservation-info04 {
   padding: 1.4rem;
-  border-bottom: 2px solid #dddddd;
 }
 
 .hotel-name {
@@ -124,14 +124,6 @@
   text-decoration: none;
 }
 
-.next-btn.disabled {
-  background-color: #111;
-  pointer-events: none;
-  opacity: 0.5;
-  cursor: not-allowed;
-  text-decoration: none;
-}
-
 .next-btn:not(.disabled) {
   background-color: #111;
   color: white;
@@ -141,8 +133,11 @@
 
 .next-btn.disabled {
   background-color: #ccc;
-  pointer-events: none;
+  pointer-events: auto;
+  opacity: 0.5;
   color: #888;
+  cursor: not-allowed;
+  text-decoration: none;
 }
 
 .online-btn.selected,
@@ -435,7 +430,7 @@
   background-color: #eeeeee;
   border-radius: 0.5rem;
   padding: 2rem;
-  margin: 3rem auto 6rem auto;
+  margin: 3rem auto 5rem auto;
 }
 
 .note-txt {
@@ -463,7 +458,7 @@
   justify-content: flex-start;
   flex-direction: column;
   width: 90%;
-  margin: 3rem auto 8rem auto;
+  margin: 2rem auto 8rem auto;
   max-width: 800px;
 }
 
@@ -552,7 +547,7 @@ input[type="checkbox"] {
   position: absolute;
   top: 50%;
   left: 50%;
-  transform: translate(-50%, -55%);
+  transform: translate(-50%, -50%);
   font-size: 1rem;
   color: #fff;
 }
@@ -571,7 +566,7 @@ input[type="checkbox"]:not(#checkAll)::after {
   position: absolute;
   top: 50%;
   left: 50%;
-  transform: translate(-50%, -55%);
+  transform: translate(-50%, -50%);
   font-size: 1rem;
   color: #ddd;
   opacity: 1;

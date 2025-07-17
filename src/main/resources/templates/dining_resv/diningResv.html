@@ -1,11 +1,14 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" th:class="'sub-page'">
 <head>
   <meta charset="UTF-8">
   <title>다이닝 예약</title>
   <link rel="stylesheet" th:href="@{/dining_resv/css/diningResv.css}" />
+  <link rel="stylesheet" th:href="@{/css/header.css}" />
 </head>
 <body>
+
+  <div th:replace="~{fragments/header.html :: header}"></div>
 
   <div class="banner-container-wrap">
     <img th:src="@{/dining_resv/images/diningResv.png}" alt="다이닝 예약 메인이미지" />
@@ -212,32 +215,9 @@
   <div th:replace="~{/dining_resv/popup/diningPopup4}"></div>
 
   <script th:src="@{/dining_resv/js/diningResv.js}"></script>
-  
+  <script th:src="@{/dining_resv/js/calendar.js}"></script>
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   
-  <script th:inline="javascript">
-  	/*<![CDATA[*/
-  	const calendarUrl = /*[[@{/calendar}]]*/ '';
-  	/*]]>*/
-  
-    function loadCalendar(year, month) {
-      document.querySelector('.scheduler-content-wrap').style.display = 'none';
-
-      $.ajax({
-        url: calendarUrl,
-        data: { year, month },
-        success: data => $('#scheduler').html(data),
-        error: () => alert('달력을 불러오는 데 실패했습니다.')
-      });
-    }
-
-    $(document).on('click', '.calendar-nav', function (e) {
-      e.preventDefault();
-      const year = $(this).data('year');
-      const month = $(this).data('month');
-      loadCalendar(year, month);
-    });
-  </script>
   
 </body>
 

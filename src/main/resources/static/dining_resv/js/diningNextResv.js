@@ -67,9 +67,7 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   reselectBtn.addEventListener("click", () => {
-    /*<![CDATA[*/
-    window.location.href = /*[[@{/diningResv}]]*/ '';
-    /*]]>*/
+    window.location.href = "/diningResv";
   });
   
   let isPaymentSelected = false;
@@ -136,9 +134,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   payBtn.addEventListener("click", (e) => {
     if (!payBtn.classList.contains("disabled")) {
-      /*<![CDATA[*/
-      window.location.href = /*[[@{/diningResvComplete}]]*/ '';
-      /*]]>*/
+      window.location.href = "/diningResvComplete";
     } else {
       e.preventDefault();
     }

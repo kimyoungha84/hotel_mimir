@@ -97,9 +97,10 @@
 }
 
 .hotel-btn {
+  line-height: 1rem;
   width: 12rem;
   height: 2rem;
-  border: 1px solid #ccc;
+  border: 1px solid #111;
   background-color: #ffffff;
   border-radius: 0.5rem;
   font-size: 0.8rem;
@@ -144,7 +145,7 @@
   color: white;
   position: absolute;
   top: -30%;
-  left: 20%;
+  left: 10%;
   font-size: 1rem;
 }
 
