@@ -258,4 +258,111 @@ WHERE rnum BETWEEN #{offset} AND #{end}
 
 <!--///////////////////////////////// FAQ-END /////////////////////////////////-->
 
+<!--///////////////////////////////// ROOM-RESV /////////////////////////////////-->
+
+<sql id="roomResvFilter">
+  <if test="filters != null and filters.size() > 0">
+    <foreach collection="filters" item="filter">
+      <choose>
+        <!-- type_name 필터 -->
+        <when test="filter.column == 'type_name'">
+          AND rt.type_name = #{filter.value}
+        </when>
+        <!-- user_name 필터 (회원/비회원 모두 대응) -->
+        <when test="filter.column == 'user_name'">
+          AND (
+            (u.user_name IS NOT NULL AND u.user_name LIKE '%' || #{filter.value} || '%')
+            OR
+            (nm.non_mem_name IS NOT NULL AND nm.non_mem_name LIKE '%' || #{filter.value} || '%')
+          )
+        </when>
+        <!-- isMember(회원/비회원) 전용 처리 -->
+        <when test="filter.column == 'isMember'">
+          <choose>
+            <when test="filter.value == '회원'">
+              AND r.user_num IS NOT NULL
+            </when>
+            <when test="filter.value == '비회원'">
+              AND r.user_num IS NULL
+            </when>
+          </choose>
+        </when>
+        <!-- 날짜: BETWEEN (start + end) -->
+        <when test="filter.operator.name() == 'TRUNC_BETWEEN' and filter.column != 'isMember' and filter.column != 'user_name'">
+          AND TRUNC(${filter.column}) BETWEEN #{filter.value[0]} AND #{filter.value[1]}
+        </when>
+        <!-- 날짜: startDate만 있을 경우 -->
+        <when test="filter.operator.name() == 'TRUNC_GREATER_EQUAL' and filter.column != 'isMember' and filter.column != 'user_name'">
+          AND TRUNC(${filter.column}) &gt;= #{filter.value}
+        </when>
+        <!-- 날짜: endDate만 있을 경우 -->
+        <when test="filter.operator.name() == 'TRUNC_LESS_EQUAL' and filter.column != 'isMember' and filter.column != 'user_name'">
+          AND TRUNC(${filter.column}) &lt;= #{filter.value}
+        </when>
+        <!-- 그 외 EQ, LIKE, IN 등 기존 처리 -->
+        <when test="filter.operator.name() == 'EQ' and filter.column != 'isMember' and filter.column != 'user_name'">
+          AND ${filter.column} = #{filter.value}
+        </when>
+        <when test="filter.operator.name() == 'LIKE' and filter.column != 'isMember' and filter.column != 'user_name'">
+          AND ${filter.column} LIKE '%' || #{filter.value} || '%'
+        </when>
+        <when test="filter.operator.name() == 'IN' and filter.column != 'isMember' and filter.column != 'user_name'">
+          <if test="filter.value != null and filter.value.size() > 1">
+            AND ${filter.column} IN
+            <foreach collection="filter.value" item="v" open="(" separator="," close=")">
+              #{v}
+            </foreach>
+          </if>
+          <if test="filter.value != null and filter.value.size() == 1">
+            AND ${filter.column} = #{filter.value[0]}
+          </if>
+        </when>
+        <!-- ...다른 연산자도 동일하게 처리 필요 -->
+      </choose>
+    </foreach>
+  </if>
+</sql>
+
+
+<select id="searchRoomResv" resultType="kr.co.sist.util.domain.SearchDataDomain">
+  SELECT *
+  FROM (
+    SELECT
+      r.resv_id AS resvId,
+      r.room_id AS roomId,
+      rt.type_name AS typeName,
+      CASE WHEN r.user_num IS NOT NULL THEN 1 ELSE 0 END AS isMember,
+      COALESCE(u.user_name, nm.non_mem_name) AS userName,
+      r.status AS status,
+      ROW_NUMBER() OVER (ORDER BY r.resv_id DESC) rnum
+    FROM
+      reservation r
+    LEFT JOIN
+      room rm ON r.room_id = rm.room_id
+    LEFT JOIN
+      room_type rt ON rm.type_id = rt.type_id
+    LEFT JOIN
+      mimir_user u ON r.user_num = u.user_num
+    LEFT JOIN
+      non_member nm ON r.non_mem_id = nm.non_mem_id
+    WHERE 1=1
+      <include refid="roomResvFilter"/>
+  )
+  WHERE rnum BETWEEN #{offset} AND #{end}
+</select>
+
+<select id="countRoomResv" resultType="int">
+  SELECT COUNT(*)
+  FROM reservation r
+  LEFT JOIN room rm ON r.room_id = rm.room_id
+  LEFT JOIN room_type rt ON rm.type_id = rt.type_id
+  LEFT JOIN mimir_user u ON r.user_num = u.user_num
+  LEFT JOIN non_member nm ON r.non_mem_id = nm.non_mem_id
+  WHERE 1=1
+  <include refid="filter"/>
+</select>
+
+<!--///////////////////////////////// ROOM-RESV-END /////////////////////////////////-->
+
+
 </mapper>

@@ -19,8 +19,9 @@
 
 <div class="table-section">
   <h2 class="h2Title">예약 현황</h2>
+  
 
-  <div class="filters">
+<!--   <div class="filters">
     <div class="date-range">
       <label>시작일</label>
       <input type="date" name="startDate" />
@@ -64,7 +65,9 @@
     <div style="margin-left: auto;">
       <input type="text" name="searchUser" placeholder="예약자 검색" />
     </div>
-  </div>
+  </div> -->
+  
+  <div th:replace="~{fragments/filter :: filter(${filter})}"></div>
 
   <table>
     <thead>
@@ -75,7 +78,7 @@
         <th>예약 상태</th>
       </tr>
     </thead>
-    <tbody>
+    <tbody th:fragment="resvroom_list_fm" id="resultArea">
       <tr th:each="resv : ${resvList}"  th:onclick="|location.href='@{/admin/resvroomdetail(resvId=${resv.resvId})}'|">
         <td th:text="${resv.resvId}">20250123</td>
         <td th:text="|${resv.typeName}(${resv.roomId})|">스탠다드룸(601)</td>

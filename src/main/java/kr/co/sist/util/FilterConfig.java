@@ -126,26 +126,31 @@ public enum FilterConfig {
             "resvRegDate",
             "resv_reg_date",
             List.of(
-                new Option("searchUser", "", "user_num&non_mem_num부탁..")
+                new Option("searchUser", "", "user_name")
             ),
             List.of(  // 라벨 + 셀렉터 필터링 항목
     		        new LabelSelectorOption("룸 종류", "roomType", "type_name",
     		        		List.of(
+    		        			
+    		        		    new LabelSelectorItem("전체", null), 
     		        			new LabelSelectorItem("로얄 스위트룸", "로얄 스위트룸"), 
     		        			new LabelSelectorItem("프레지덴셜 스위트룸", "프레지덴셜 스위트룸"), 
     		        			new LabelSelectorItem("스위트룸", "스위트룸"), 
     		        			new LabelSelectorItem("프리미어룸", "프리미어룸"),
     		        			new LabelSelectorItem("스탠다드룸", "스탠다드룸"))
     		        			),
-    		        new LabelSelectorOption("회원", "memberType", "user_num&non_mem_num부탁..",
+    		        new LabelSelectorOption("회원", "memberType", "isMember",
     		        		List.of(
+    		        			new LabelSelectorItem("전체", null), 
     		        			new LabelSelectorItem("회원", "회원"), 
     		        			new LabelSelectorItem("비회원", "비회원"))
     		        			),
     		        new LabelSelectorOption("예약 상태", "resvStatus", "status",
     		        		List.of(
-    		        			new LabelSelectorItem("예약 완료", "예약 완료"), 
-    	    		        	new LabelSelectorItem("예약 취소", "예약 취소"),
+    		        				
+    		        			new LabelSelectorItem("전체", null), 
+    		        			new LabelSelectorItem("예약 완료", "예약완료"), 
+    	    		        	new LabelSelectorItem("예약 취소", "예약취소"),
     		        			new LabelSelectorItem("체크인 완료", "체크인 완료"),
     		        			new LabelSelectorItem("체크아웃 완료", "체크아웃 완료"))
     		        			)

@@ -45,5 +45,13 @@ public class SearchDataDomain {
 	private String reservation_status;
 	private String reservation_type;
 	
+	//ROOM_RESV
+	private int resvId;
+	private int roomId;
+	private String typeName;
+	private Boolean isMember;
+	private String userName;
+	private String status; 
+	
 	
 }//class

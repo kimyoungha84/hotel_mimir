@@ -21,11 +21,15 @@ public interface DynamicSearchMapper {
     
     List<SearchDataDomain> searchUserDining( @Param("filters") List<FilterCondition> filters, int offset, int end, int pageSize);
     
+    List<SearchDataDomain> searchRoomResv( @Param("filters") List<FilterCondition> filters, int offset, int end, int pageSize);
+    
+    
     
     
     int countFaq(@Param("filters") List<FilterCondition> filters);
     int countDining(@Param("filters") List<FilterCondition> filters);
     int countStaff(@Param("filters") List<FilterCondition> filters);
     int countDiningResv(@Param("filters") List<FilterCondition> filters);
+    int countRoomResv(@Param("filters") List<FilterCondition> filters);
 
 }

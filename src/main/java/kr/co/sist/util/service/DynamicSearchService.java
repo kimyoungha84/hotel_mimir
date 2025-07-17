@@ -35,6 +35,7 @@ public class DynamicSearchService {
                 case STAFF -> searchStaff(filters, offset, end, pageSize);
                 case DINING_RESV -> searchDiningResv(filters, offset, end, pageSize);
                 case DINING_USER -> searchUserDining(filters, offset, end, pageSize);
+                case ROOM_RESV -> searchRoomResv(filters, offset, end, pageSize);
                 default -> {
                     logger.warn("지원하지 않는 FilterConfig: {}", config);
                     yield List.of();
@@ -98,6 +99,18 @@ public class DynamicSearchService {
             return List.of();
         }
     }
+    public List<SearchDataDomain> searchRoomResv(List<FilterCondition> filters, int offset, int end, int pageSize) {
+    	try {
+    		logger.debug("직원 검색 - filters: {}, offset: {}, end: {}", filters.size(), offset, end);
+    		for(FilterCondition filter : filters) {
+    			System.out.println(filter);
+    		}
+    		return mapper.searchRoomResv(filters, offset, end, pageSize);
+    	} catch (Exception e) {
+    		logger.error("직원 검색 중 오류 발생", e);
+    		return List.of();
+    	}
+    }
 
     /**
      * FilterConfig에 따른 통합 카운트 메서드
@@ -109,6 +122,7 @@ public class DynamicSearchService {
                 case FAQ -> countFaq(filters);
                 case STAFF -> countStaff(filters);
                 case DINING_RESV -> countDiningResv(filters);
+                case ROOM_RESV -> countRoomResv(filters);
                 default -> {
                     logger.warn("지원하지 않는 FilterConfig: {}", config);
                     yield 0;
@@ -150,6 +164,14 @@ public class DynamicSearchService {
     public int countDiningResv(List<FilterCondition> filters) {
     	try {
     		return mapper.countDiningResv(filters);
+    	} catch (Exception e) {
+    		logger.error("다이닝예약 카운트 조회 중 오류 발생", e);
+    		return 0;
+    	}
+    }
+    public int countRoomResv(List<FilterCondition> filters) {
+    	try {
+    		return mapper.countRoomResv(filters);
     	} catch (Exception e) {
     		logger.error("다이닝예약 카운트 조회 중 오류 발생", e);
     		return 0;
