@@ -302,13 +302,13 @@ $(document).ready(function() {
     // 뒤로가기 버튼 클릭 시 채팅방 나가기
     $("#backBtn").off('click').on('click', function() {
       $("#inputArea").hide();
-      $("#chatBody").hide().empty();
+      // 메시지 영역 비우기
+      $("#chatBody").empty();
+      // 문의 유형 선택 다시 보이기
       $("#chatOptions").show();
       $("#chatTitle").text("1:1 채팅");
       currentRoomId = null;
       currentChatType = null;
-      // 문의 유형 선택 후 채팅방 입장 시 메시지 영역이 정상적으로 보이도록 복구
-      setTimeout(function() { $("#chatBody").show(); }, 100);
     });
   });
 });
