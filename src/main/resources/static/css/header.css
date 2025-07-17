@@ -1,5 +1,12 @@
+/* 본문과 겹치지 않도록 여백 확보 */
+body {
+  padding-top: 130px;
+  font-family: 'Noto Sans KR', sans-serif;
+}
+
 /* 툴바 */
 .toolbar {
+  box-sizing: border-box;
   position: fixed;
   top: 0;
   left: 0;
@@ -23,6 +30,17 @@
 }
 
 .toolbar-right a:hover {
+  color: #f2c94c !important;
+}
+
+.toolbar-left a {
+  color: #fff !important;
+  text-decoration: none;
+  margin-left: 1rem;
+  transition: color 0.2s ease;
+}
+
+.toolbar-left a:hover {
   color: #f2c94c !important;
 }
 
@@ -106,10 +124,6 @@
   color: #f2c94c;
 }
 
-/* 본문과 겹치지 않도록 여백 확보 */
-body {
-  padding-top: 130px;
-}
 
 /* 서브페이지: 스크롤 시 툴바 스타일 */
 .sub-page .toolbar.scrolled {

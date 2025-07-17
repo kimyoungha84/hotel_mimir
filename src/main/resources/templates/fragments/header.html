@@ -9,7 +9,7 @@
 	<div th:fragment="header">
 		<!-- 상단 툴바 -->
 		<div class="toolbar">
-			<div class="toolbar-left">HOTEL MIMIR</div>
+			<div class="toolbar-left"><a th:href="@{/}">HOTEL MIMIR</a></div>
 			<div class="toolbar-right">
     <div sec:authorize="isAuthenticated()">
         <span style="color: white; margin-right: 15px;"><span sec:authentication="principal.name"></span>님</span>
