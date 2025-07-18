@@ -1,14 +1,12 @@
 package kr.co.sist.resvroom;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import jakarta.servlet.http.HttpSession;
 import kr.co.sist.nonmember.NonMemberService;
 import kr.co.sist.payment.PaymentService;
 
@@ -28,8 +26,6 @@ public class ReservationController {
    public String roomList(@RequestParam("roomId") int roomId,
           @RequestParam("checkIn") String checkIn,
           @RequestParam("checkOut") String checkOut,
-          @RequestParam("adult") int adult,
-          @RequestParam("child") int child,
           @RequestParam("typeName") String typeName,
           @RequestParam("nights") int nights,
           @RequestParam("capacity") int capacity,
@@ -39,8 +35,6 @@ public class ReservationController {
        model.addAttribute("roomId", roomId);
           model.addAttribute("checkIn", checkIn);
           model.addAttribute("checkOut", checkOut);
-          model.addAttribute("adult", adult);
-          model.addAttribute("child", child);
           model.addAttribute("nights", nights);
           model.addAttribute("capacity", capacity);
           model.addAttribute("typeName", typeName);

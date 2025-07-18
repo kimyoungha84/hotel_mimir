@@ -7,6 +7,7 @@
   <script src="https://cdn.iamport.kr/v1/iamport.js"></script> <!-- ✅ 최신 버전 -->
  <link rel="stylesheet" th:href="@{/css/header.css}" />
   <link rel="stylesheet" th:href="@{/css/footer.css}" />
+  <link rel="stylesheet" th:href="@{/css/resv_room/resvRoom.css}" />
 
   <title>호텔 예약</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -285,6 +286,7 @@
 
 
   </style>
+  <script th:src="@{/js/resv_room/resvRoom.js}"></script>
   <script type="text/javascript">
   function requestPay(method) {
 	    const amountText = document.getElementById("total-price-box").textContent;
@@ -475,11 +477,19 @@
         <strong>체크인 / 아웃</strong><br>
         <span th:text="|${checkIn} ~ ${checkOut}|">06월 17일(화) ~ 06월 18일(수)</span> / 
         <span th:text="${nights}">1박</span>박<br><br>
-        <strong>객실 / 인원</strong><br>
-        <span id="room-type-name" th:text="${typeName}">디럭스룸</span>/
-        성인 <span id="adult-count" th:text="${adult}">2</span>,
-        아동 <span id="child-count" th:text="${child}">0</span>
+        <strong>객실</strong><br>
+        <span id="room-type-name" th:text="${typeName}">디럭스룸</span>
+        <br><br>
+        <p onclick="openModal('guestModal')" role="button" tabindex="0">
+				<strong>인원</strong><br />
+				<span class="guest-placeholder">성인 2, 아동 0</span>
+				<span class="arrow">▸</span>
+		</p>
       </div>
+      
+      
+      <div class="modal-overlay" id="overlay" onclick="closeModal()"></div>
+      
       <input type="hidden" id="breakfast-hidden" name="breakfast" value="0">
       <input type="hidden" id="pricePerNight" name="pricePerNight" th:value="${pricePerNight}" />
       <input type="hidden" id="nights" name="nights" th:value="${nights}" />
@@ -498,6 +508,26 @@
   </div>
 </div>
 </form>
+
+	<!-- 인원 선택 모달 -->
+	<div class="modal" id="guestModal" role="dialog" aria-modal="true" aria-labelledby="guestModalTitle">
+  <h3 id="guestModalTitle">인원 선택</h3>
+  <div class="guest-form">
+    <div class="field">
+      <label for="adultCount">성인 인원</label>
+      <input id="adultCount" type="number" value="2" min="1" />
+    </div>
+    <div class="field">
+      <label for="childCount">아동 인원</label>
+      <input id="childCount" type="number" value="0" min="0" />
+    </div>
+    <div class="modal-footer right-align">
+      <button onclick="confirmGuestSelection()" style="margin-right: 10px;">확인</button>
+      <button onclick="cancelGuestSelection()">취소</button>
+    </div>
+  </div>
+</div>
+
 
  <div th:replace="~{fragments/footer.html :: footerFragment}"></div>
 <script>

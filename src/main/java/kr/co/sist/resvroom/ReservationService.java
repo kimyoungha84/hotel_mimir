@@ -3,7 +3,6 @@ package kr.co.sist.resvroom;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import kr.co.sist.resvroom.ReservationDTO;
 
 @Service
 public class ReservationService {

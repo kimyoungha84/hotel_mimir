@@ -15,15 +15,6 @@ function openModal(id) {
   const modal = document.getElementById(id);
   modal.style.display = 'flex';
   
-  if (id === 'guestModal') {
-    const selectedCard = document.querySelector('.room-card.selected');
-    if (selectedCard) {
-      const capacity = parseInt(selectedCard.dataset.capacity);
-      document.getElementById('adultCount').setAttribute('max', capacity);
-    }
-  }
-  
-
   if (id === 'dateModal') {
     setTimeout(() => {
       if (datePickerInstance) datePickerInstance.destroy();
@@ -34,10 +25,9 @@ function openModal(id) {
         showMonths: 2,
         inline: true,
         locale: "ko",
-        defaultDate: [today, tomorrow],  // 초기 날짜 설정
+        defaultDate: [today, tomorrow],
         onDayCreate: function(dObj, dStr, fp, dayElem) {
           const date = dayElem.dateObj;
-
           const y = date.getFullYear();
           const m = (date.getMonth() + 1).toString().padStart(2, '0');
           const d = date.getDate().toString().padStart(2, '0');
@@ -76,11 +66,6 @@ function updateDateSummary(startDate, endDate) {
   }
 }
 
-function updateGuestSummary(roomType) {
-  const summary = document.querySelector('.reservation-summary p:nth-child(3)');
-  summary.innerHTML = `<strong>객실 / 인원</strong><br /> ${roomType} / 성인 2 <span class="arrow">▸</span>`;
-}
-
 function changeGuestCount(delta) {
   const input = document.getElementById("adultCount");
   let value = parseInt(input.value) + delta;
@@ -95,49 +80,27 @@ function closeModal() {
   });
 }
 
-function confirmGuestSelection() {
-  const adults = parseInt(document.getElementById('adultCount').value);
-  const children = parseInt(document.getElementById('childCount').value);
 
-  if (adults < 1) {
-    alert("성인 인원은 최소 1명 이상이어야 합니다.");
-    return;
+function confirmDateSelection() {
+  const selectedDates = datePickerInstance.selectedDates;
+  if (selectedDates.length === 2) {
+    const checkIn = selectedDates[0].toISOString().slice(0, 10);
+    const checkOut = selectedDates[1].toISOString().slice(0, 10);
+    location.href = "/roomlist?checkIn=" + checkIn + "&checkOut=" + checkOut;
   }
-
-
-  const summary = document.querySelector('.reservation-summary p:nth-child(2)');
-  summary.innerHTML = `<strong>인원</strong><br /> 성인 ${adults}, 아동 ${children} <span class="arrow">▸</span>`;
-
   closeModal();
 }
 
-function confirmDateSelection() {
-    const selectedDates = datePickerInstance.selectedDates;
-    if (selectedDates.length === 2) {
-        const checkIn = selectedDates[0].toISOString().slice(0, 10);
-        const checkOut = selectedDates[1].toISOString().slice(0, 10);
-        location.href = "/roomlist?checkIn=" + checkIn + "&checkOut=" + checkOut;
-    }
-    closeModal();
-}
-
-// DOMContentLoaded 이벤트 중복 최소화해서 한 번에 처리
 document.addEventListener('DOMContentLoaded', () => {
-  // 초기 날짜 요약 표시
   updateDateSummary(today, tomorrow);
 
-  // 룸 카드 클릭 시 객실명 갱신
   document.querySelectorAll('.room-card').forEach(card => {
     card.addEventListener('click', () => {
-		document.querySelectorAll('.room-card').forEach(c => c.classList.remove('selected'));
-		    card.classList.add('selected');	
-	
-      const roomType = card.querySelector('h3')?.textContent || '';
-      updateGuestSummary(roomType);
+      document.querySelectorAll('.room-card').forEach(c => c.classList.remove('selected'));
+      card.classList.add('selected');	
     });
   });
 
-  // 아코디언 버튼 클릭 토글
   document.querySelectorAll('.accordion-btn').forEach((btn) => {
     btn.addEventListener('click', () => {
       document.querySelectorAll('.accordion').forEach(acc => {
@@ -149,7 +112,6 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  // 정렬 옵션 클릭
   document.querySelectorAll('.sort-option').forEach(option => {
     option.addEventListener('click', () => {
       document.querySelectorAll('.sort-option').forEach(opt => opt.classList.remove('selected'));
@@ -158,14 +120,12 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  // 태그 버튼 선택/해제
   document.querySelectorAll('.tag-btn').forEach(btn => {
     btn.addEventListener('click', () => {
       btn.classList.toggle('selected');
     });
   });
 
-  // 선택해제 버튼 동작
   document.querySelectorAll('.reset-btn').forEach(btn => {
     btn.addEventListener('click', () => {
       btn.closest('.accordion-content').querySelectorAll('.tag-btn').forEach(tag => {
@@ -174,13 +134,11 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  // 기본 정렬 옵션 표시 업데이트
   const defaultOption = document.querySelector('.sort-option.selected');
   if (defaultOption) {
     document.querySelector('.sort-accordion .accordion-btn').textContent = `정렬 기준 ▾ (${defaultOption.textContent})`;
   }
 
-  // 예약 버튼 클릭 이벤트 (날짜/인원/객실명 전달)
   document.querySelectorAll('.price-btn').forEach(btn => {
     btn.addEventListener('click', function(event) {
       event.preventDefault();
@@ -198,32 +156,26 @@ document.addEventListener('DOMContentLoaded', () => {
         checkOut = toISO(datePickerInstance.selectedDates[1]);
         nights = calcNights(datePickerInstance.selectedDates[0], datePickerInstance.selectedDates[1]);
       } else {
-        // 만약 선택 안 됐으면 기본값으로 today~tomorrow 강제 지정
         checkIn = today.toISOString().slice(0, 10);
         checkOut = tomorrow.toISOString().slice(0, 10);
         nights = calcNights(today, tomorrow);
       }
 
       const typeName = card.querySelector('h3')?.textContent.trim() || '';
-      const adult = document.getElementById('adultCount')?.value || "2";
-      const child = document.getElementById('childCount')?.value || "0";
-	  const capacity = card.dataset.capacity || '';
-	  
-	  const priceText = this.textContent.trim();
-	  const priceNumber = priceText.replace(/[₩,]/g, '');
-	  
+      const capacity = card.dataset.capacity || '';
+      const priceText = this.textContent.trim();
+      const priceNumber = priceText.replace(/[₩,]/g, '');
 
       const url = new URL(this.href, window.location.origin);
       url.searchParams.set('checkIn', checkIn);
       url.searchParams.set('checkOut', checkOut);
       url.searchParams.set('nights', nights);
-      url.searchParams.set('adult', adult);
-      url.searchParams.set('child', child);
       url.searchParams.set('typeName', typeName);
-	  url.searchParams.set('pricePerNight', priceNumber);
-	  url.searchParams.set('capacity', capacity);
+      url.searchParams.set('pricePerNight', priceNumber);
+      url.searchParams.set('capacity', capacity);
 
       window.location.href = url.toString();
     });
   });
 });
+

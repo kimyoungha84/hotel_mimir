@@ -1,0 +1,216 @@
+@charset "UTF-8";
+
+
+.step:not(.current):hover::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  background: #333;
+  color: #fff;
+  font-size: 12px;
+  padding: 4px 8px;
+  border-radius: 4px;
+  top: 40px; /* step 아래에 표시되도록 조정 */
+  left: 50%;
+  transform: translateX(-50%);
+  white-space: nowrap;
+  z-index: 10;
+}
+
+.room-section {
+  display: flex;
+  flex-direction: row;  /* 가로 정렬 */
+  gap: 40px;
+  padding: 0 5% 40px;
+}
+
+
+
+
+.reservation-summary .arrow {
+	margin-left: auto;
+	font-size: 1.4rem;
+	color: #333;
+	user-select: none;
+	padding-left: 10px;
+}
+
+/* 공통 모달 스타일 */
+.modal {
+	display: none;
+	position: fixed;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	background: white;
+	box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+	border-radius: 8px;
+	z-index: 1000;
+	padding: 20px;
+	box-sizing: border-box;
+}
+
+.modal-overlay {
+	display: none;
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100vw;
+	height: 100vh;
+	background: rgba(0, 0, 0, 0.5);
+	z-index: 999;
+}
+
+
+.dropdown {
+	position: relative;
+}
+
+.dropdown-btn {
+	background: #fff;
+	border: 1px solid #ccc;
+	padding: 8px 16px;
+	border-radius: 4px;
+	cursor: pointer;
+	height: 45px;
+}
+
+.dropdown-btn.active {
+	background: #8a6d3b;
+	color: white;
+	border-color: #8a6d3b;
+}
+
+.dropdown-content {
+	display: none;
+	position: absolute;
+	top: 100%;
+	left: 0;
+	background: white;
+	border: 1px solid #333;
+	width: max-content;
+	z-index: 10;
+}
+
+.dropdown:hover .dropdown-content {
+	display: block;
+}
+
+.dropdown-item {
+	padding: 8px 12px;
+	cursor: pointer;
+}
+
+.dropdown-item:hover {
+	background: #eee;
+}
+
+.dropdown-item.selected {
+	font-weight: bold;
+	color: #555;
+}
+
+.reset-btn {
+	background: white;
+	border: 1px solid #ccc;
+	padding: 8px 16px;
+	border-radius: 4px;
+	cursor: pointer;
+}
+
+
+  #guestModal {
+  width: 400px;
+  height: 370px;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  flex-direction: column;
+  padding: 30px;
+  gap: 15px;
+}
+
+#guestModal h3 {
+  font-size: 1.4rem;
+  font-weight: bold;
+  margin-bottom: 10px;
+  text-align: center;
+}
+
+.guest-form .field {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 15px;
+}
+
+.guest-form label {
+  font-weight: bold;
+  margin-bottom: 6px;
+}
+
+.guest-form select,
+.guest-form input[type="number"] {
+  padding: 8px 12px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 1rem;
+}
+
+.modal-footer.right-align {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.modal-footer.right-align button {
+  padding: 10px 20px;
+  background-color: #c2a164;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+.modal-footer.right-align button:hover {
+  background-color: #a6873f;
+}
+
+.tag-btn {
+  background-color: #fff;
+  border: 1.5px solid #c2a164;
+  border-radius: 6px;
+  padding: 8px 14px;
+  font-size: 0.95rem;
+  color: #333;
+  margin: 4px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+.accordion {
+  position: relative;
+  width: max-content;
+  margin-right: 15px;
+}
+
+
+/* 필터 태그 버튼 */
+.tag-btn {
+  background-color: #fff;
+  border: 1.5px solid #c2a164;
+  border-radius: 6px;
+  padding: 8px 14px;
+  font-size: 0.95rem;
+  color: #333;
+  margin: 4px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-decoration: none; /* 밑줄 제거 */
+}
+
+.tag-btn:hover,
+.tag-btn.selected {
+  background-color: #c2a164;
+  color: white;
+  font-weight: bold;
+  text-decoration: none; /* hover 시에도 밑줄 제거 */
+}
+
