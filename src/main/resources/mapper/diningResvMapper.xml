@@ -21,6 +21,32 @@
       r.RESERVATION_TIME DESC
   </select>
   
+  <select id="selectDiningId" parameterType="int" resultType="kr.co.sist.dining.user.DiningDomain">
+    SELECT 
+      DINING_ID,
+      DINING_NAME,
+      TYPE,
+      PHONE_NUMBER,
+      LOCATION,
+      DINING_INTRODUCTION,
+	  DINING_CLASSIFICATION
+    FROM 
+      DINING
+    WHERE DINING_ID = #{diningID}
+  </select>
+  
+  <select id="selectAllDining" resultType="kr.co.sist.dining.user.DiningDomain">
+    SELECT
+      DINING_ID,
+      DINING_NAME,
+      TYPE,
+      LOCATION,
+      DINING_RESV_AVAILABILITY
+    FROM DINING
+    WHERE DINING_RESV_AVAILABILITY = 'Y'
+    ORDER BY DINING_ID
+  </select>
+  
   <resultMap id="diningResvMap" type="kr.co.sist.diningresv.DiningResvDTO">
     <id property="reservationId" column="RESERVATION_ID"/>
     <result property="reservationName" column="RESERVATION_NAME"/>

@@ -25,14 +25,14 @@
             <div class="hotel-title">
               <span>미미르 호텔</span>
             </div>
-            <span class="dining-title">스테이, 모던 레스토랑</span>
+            <span class="dining-title" th:text="${diningInfo.dining_name}">다이닝</span>
           </div>
 
           <div class="detail-wrap">
-            <a class="btn btn-detail-txt" href="">
+            <a class="btn btn-detail-txt" th:href="@{/user/dining_detail(diningId=${diningInfo.dining_id})}">
               <span class="btn-txt">자세히 보기</span>
             </a>
-            <a class="btn btn-detail" href="">
+            <a class="btn btn-detail" th:href="@{/user/dining_detail(diningId=${diningInfo.dining_id})}">
               <img th:src="@{/dining_resv/images/pageNext.svg}" alt="화살표" class="arrow-icon" />
             </a>
           </div>
@@ -46,30 +46,26 @@
 
             <div class="dining-info-item">
               <div class="info01"><span>타입</span></div>
-              <div class="info02"><span>프렌치</span></div>
+              <div class="info02"><span th:text="${diningInfo.type}">타입</span></div>
             </div>
 
             <div class="dining-info-item">
               <div class="info01"><span>위치</span></div>
               <div class="info02">
-                <span>
-                  서울특별시 강남구 테헤란로 132 미미르타워 735
-                  미미르 서울
-                  81층
-                </span>
+                <span th:text="${diningInfo.location}">주소</span>
                 <button class="btn btn-info02" type="button" onclick="openMapPopup()"><span>지도보기</span></button>
               </div>
             </div>
 
             <div class="dining-info-item">
               <div class="info01"><span>문의</span></div>
-              <div class="info02"><span>82-2-3213-1230-1</span></div>
+              <div class="info02"><span th:text="${diningInfo.phone_number}">전화(문의)번호</span></div>
             </div>
 
             <div class="dining-info-item">
               <div class="info01"><span>소개</span></div>
               <div class="info02">
-                <span>미미르 호텔에서 미쉐린 3스타 셰프 야닉 알레노의 특별한 프랑스 요리를 경험해봐라.</span>
+                <span th:text="${diningInfo.dining_introduction}">다이닝 소개</span>
               </div>
             </div>
 
@@ -178,8 +174,8 @@
 
         <div class="reservation-info01">
           <div class="hotel-name"><span>미미르 호텔</span></div>
-          <button class="dining-name-btn" type="button">
-            <span class="dining-name-txt">스테이, 모던 레스토랑</span>
+          <button class="dining-name-btn" type="button" id="openDiningPopup">
+            <span class="dining-name-txt" th:text="${diningInfo.dining_name}">다이닝</span>
             <span class="arrow">➤</span>
           </button>
         </div>
@@ -217,7 +213,6 @@
   <script th:src="@{/dining_resv/js/diningResv.js}"></script>
   <script th:src="@{/dining_resv/js/calendar.js}"></script>
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-  
   
 </body>
 
