@@ -104,7 +104,7 @@
 		VALUES (#{resvId}, #{roomId}, #{userNum}, #{paymentId}, #{checkinDate}, #{checkoutDate},
 		 #{numGuestsChild}, #{numGuestsAdult}, #{status}, #{requestMsg}, #{breakfast})
 	</insert>
-	
+	<!-- 
 	   <select id="checkRoomAvailability" parameterType="kr.co.sist.resvroom.ReservationDTO" resultType="int">
    SELECT COUNT(*) as cnt
    FROM reservation
@@ -112,7 +112,7 @@
    AND checkin_date &lt; #{checkIn}
    AND checkout_date &gt; #{checkOut}
    </select>
-	
+	 -->
 
 	<update id="updateReservation" parameterType="kr.co.sist.resvroom.ReservationDTO">
 	  UPDATE faq

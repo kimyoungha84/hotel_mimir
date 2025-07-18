@@ -60,17 +60,10 @@ function calcNights(start, end) {
 
 function updateDateSummary(startDate, endDate) {
   const summary = document.querySelector('.reservation-summary p:nth-child(1)');
-  if (startDate && endDate) {
+  if (startDate && endDate && summary) {
     const formatted = `${formatDate(startDate)} - ${formatDate(endDate)} / ${calcNights(startDate, endDate)}박`;
     summary.innerHTML = `<strong>체크인 / 아웃</strong><br /> ${formatted} <span class="arrow">▸</span>`;
   }
-}
-
-function changeGuestCount(delta) {
-  const input = document.getElementById("adultCount");
-  let value = parseInt(input.value) + delta;
-  if (value < 1) value = 1;
-  input.value = value;
 }
 
 function closeModal() {
@@ -80,15 +73,21 @@ function closeModal() {
   });
 }
 
-
 function confirmDateSelection() {
   const selectedDates = datePickerInstance.selectedDates;
   if (selectedDates.length === 2) {
-    const checkIn = selectedDates[0].toISOString().slice(0, 10);
-    const checkOut = selectedDates[1].toISOString().slice(0, 10);
-    location.href = "/roomlist?checkIn=" + checkIn + "&checkOut=" + checkOut;
+    updateDateSummary(selectedDates[0], selectedDates[1]);
+  } else {
+    updateDateSummary(today, tomorrow);
   }
   closeModal();
+}
+
+
+function toLocalDateString(date) {
+  return date.getFullYear() + '-' +
+    (date.getMonth() + 1).toString().padStart(2, '0') + '-' +
+    date.getDate().toString().padStart(2, '0');
 }
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -97,7 +96,7 @@ document.addEventListener('DOMContentLoaded', () => {
   document.querySelectorAll('.room-card').forEach(card => {
     card.addEventListener('click', () => {
       document.querySelectorAll('.room-card').forEach(c => c.classList.remove('selected'));
-      card.classList.add('selected');	
+      card.classList.add('selected');
     });
   });
 
@@ -151,13 +150,12 @@ document.addEventListener('DOMContentLoaded', () => {
       let nights = 0;
 
       if (datePickerInstance && datePickerInstance.selectedDates.length === 2) {
-        const toISO = date => date.toISOString().slice(0, 10);
-        checkIn = toISO(datePickerInstance.selectedDates[0]);
-        checkOut = toISO(datePickerInstance.selectedDates[1]);
+        checkIn = toLocalDateString(datePickerInstance.selectedDates[0]);
+        checkOut = toLocalDateString(datePickerInstance.selectedDates[1]);
         nights = calcNights(datePickerInstance.selectedDates[0], datePickerInstance.selectedDates[1]);
       } else {
-        checkIn = today.toISOString().slice(0, 10);
-        checkOut = tomorrow.toISOString().slice(0, 10);
+        checkIn = toLocalDateString(today);
+        checkOut = toLocalDateString(tomorrow);
         nights = calcNights(today, tomorrow);
       }
 
@@ -178,4 +176,3 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 });
-

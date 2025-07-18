@@ -50,11 +50,12 @@ public class ReservationController {
    
    @PostMapping("/room_resv/reservation")
    public String reservation(ReservationDTO rDTO, Model model) {
+	   System.out.println(rDTO);
       //반환값 rDTO로 하고 나서 nonmemberId set하고 paymentID까지 set해야함
       
-      if(rs.checkRoomAvailability(rDTO) > 0) {
-         return "redirect:room_resv/error";
-      }
+		/*
+		 * if(rs.checkRoomAvailability(rDTO) > 0) { return "redirect:room_resv/error"; }
+		 */
       
       int paySeq;
       int nonMemSeq;

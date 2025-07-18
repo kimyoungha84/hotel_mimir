@@ -495,8 +495,8 @@
       <input type="hidden" id="nights" name="nights" th:value="${nights}" />
       <input type="hidden" id="checkinDate" name="checkinDate" th:value="${checkIn}" />
       <input type="hidden" id="checkoutDate" name="checkoutDate" th:value="${checkOut}" />
-      <input type="hidden" id="numGuestsChild" name="numGuestsChild" th:value="${child}" />
-      <input type="hidden" id="numGuestsAdult" name="numGuestsAdult" th:value="${adult}" />
+      <input type="hidden" id="numGuestsAdult" name="numGuestsAdult" value="2" />
+	  <input type="hidden" id="numGuestsChild" name="numGuestsChild" value="0" />
       <input type="hidden" id="roomId" name="roomId" th:value="${roomId}" />
       <input type="hidden" id="typeName" name="typeName" th:value="${typeName}" />
       <div id="total-price-box" class="price-box mb-3" th:text="|₩${#numbers.formatInteger(pricePerNight * nights, 3, 'COMMA')}|"></div>

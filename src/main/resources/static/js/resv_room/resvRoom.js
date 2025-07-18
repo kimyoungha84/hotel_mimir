@@ -1,5 +1,17 @@
 let confirmedAdults = 2; // 초기 확인된 성인 수
 let confirmedChildren = 0; // 초기 확인된 아동 수
+let isConfirmed = false; // 사용자가 확인 버튼을 눌렀는지 여부
+
+// URL에서 파라미터 값을 읽는 함수
+function getParameterByName(name) {
+  const url = window.location.href;
+  name = name.replace(/[\\[\\]]/g, '\\$&');
+  const regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)');
+  const results = regex.exec(url);
+  if (!results) return null;
+  if (!results[2]) return '';
+  return decodeURIComponent(results[2].replace(/\+/g, ' '));
+}
 
 function openModal(id) {
   document.getElementById('overlay').style.display = 'block';
@@ -7,29 +19,31 @@ function openModal(id) {
   modal.style.display = 'flex';
 
   if (id === 'guestModal') {
-    const selectedCard = document.querySelector('.room-card.selected');
-    if (selectedCard) {
-      const capacity = parseInt(selectedCard.dataset.capacity);
-      document.getElementById('adultCount').setAttribute('max', capacity);
-      // 모달 열 때 확인된 값으로 입력 필드 초기화
-      document.getElementById('adultCount').value = confirmedAdults;
-      document.getElementById('childCount').value = confirmedChildren;
-    }
+    // URL에서 capacity 읽기, 없으면 기본 10
+    const capacity = parseInt(getParameterByName('capacity')) || 10;
+
+    const adultInput = document.getElementById('adultCount');
+    adultInput.setAttribute('max', capacity);
+
+    // 입력 필드 초기값 세팅
+    adultInput.value = confirmedAdults;
+    document.getElementById('childCount').value = confirmedChildren;
+
+    isConfirmed = false;
   }
 }
 
-function changeGuestCount(delta) {
-  const input = document.getElementById("adultCount");
+function changeGuestCount(type, delta) {
+  const input = document.getElementById(type === 'adult' ? 'adultCount' : 'childCount');
   let value = parseInt(input.value) + delta;
-  if (value < 1) value = 1;
-  input.value = value;
-}
 
-function closeModal() {
-  document.getElementById('overlay').style.display = 'none';
-  document.querySelectorAll('.modal').forEach(modal => {
-    modal.style.display = 'none';
-  });
+  const max = parseInt(input.getAttribute('max')) || 10;
+  const min = type === 'adult' ? 1 : 0;
+
+  if (value < min) value = min;
+  if (value > max) value = max;
+
+  input.value = value;
 }
 
 function confirmGuestSelection() {
@@ -43,20 +57,35 @@ function confirmGuestSelection() {
 
   confirmedAdults = adults;
   confirmedChildren = children;
+  isConfirmed = true;
+
+  document.getElementById('numGuestsAdult').value = confirmedAdults;
+  document.getElementById('numGuestsChild').value = confirmedChildren;
 
   const placeholder = document.querySelector('.guest-placeholder');
   if (placeholder) {
     placeholder.textContent = `성인 ${confirmedAdults}, 아동 ${confirmedChildren}`;
-  } else {
-    console.error('.guest-placeholder 요소를 찾을 수 없습니다.');
   }
 
   closeModal();
 }
 
-
 function cancelGuestSelection() {
-  document.getElementById('adultCount').value = confirmedAdults;
-  document.getElementById('childCount').value = confirmedChildren;
+  isConfirmed = false;
   closeModal();
+}
+
+function closeModal() {
+  if (!isConfirmed) {
+    // 확인하지 않고 닫으면 이전 값 복원
+    document.getElementById('adultCount').value = confirmedAdults;
+    document.getElementById('childCount').value = confirmedChildren;
+  }
+
+  document.getElementById('overlay').style.display = 'none';
+  document.querySelectorAll('.modal').forEach(modal => {
+    modal.style.display = 'none';
+  });
+
+  isConfirmed = false;
 }
