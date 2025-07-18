@@ -557,22 +557,6 @@ function updateTotalPrice() {
 	  document.getElementById("total-price-box").textContent = `₩${total.toLocaleString()}`;
 	}
 
-function changeBreakfast(amount) {
-	  const countEl = document.getElementById("breakfast-count");
-	  let count = parseInt(countEl.innerText);
-	  const maxPeople = parseInt(document.getElementById("adult-count").innerText);
-
-	  count += amount;
-	  if (count < 0) count = 0;
-	  if (count > maxPeople) {
-	    count = maxPeople;
-	    alert(`조식 인원은 성인 수(${maxPeople}명)를 초과할 수 없습니다.`);
-	  }
-
-	  countEl.innerText = count;
-	  document.getElementById("breakfast-hidden").value = count; // ✅ 조식 수를 서버에도 넘기기 위해 저장
-	  updateTotalPrice();
-	}
 
   // ✅ 연락처: 숫자만 허용 + 자동 하이픈
   const phoneInput = document.getElementById('phone');

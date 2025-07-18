@@ -89,3 +89,27 @@ function closeModal() {
 
   isConfirmed = false;
 }
+
+
+function changeBreakfast(amount) {
+  const countEl = document.getElementById("breakfast-count");
+  let count = parseInt(countEl.innerText);
+
+  // 현재 성인 + 아동 인원 가져오기 (확인된 값 기준)
+  const adults = parseInt(document.getElementById('numGuestsAdult').value) || 0;
+  const children = parseInt(document.getElementById('numGuestsChild').value) || 0;
+  const maxPeople = adults + children;
+
+  count += amount;
+  if (count < 0) count = 0;
+
+  if (count > maxPeople) {
+    count = maxPeople;
+    alert(`조식 인원은 성인 + 아동 수(${maxPeople}명)를 초과할 수 없습니다.`);
+  }
+
+  countEl.innerText = count;
+  document.getElementById("breakfast-hidden").value = count; // 서버에 조식 수 전달
+  updateTotalPrice();
+}
+
