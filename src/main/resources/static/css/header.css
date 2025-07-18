@@ -4,6 +4,10 @@ body {
   font-family: 'Noto Sans KR', sans-serif;
 }
 
+.user-status {
+    color: white;
+}
+
 /* 툴바 */
 .toolbar {
   box-sizing: border-box;
@@ -147,4 +151,9 @@ body {
 }
 .sub-page .navbar-wrapper.scrolled .navbar-link:hover {
   color: #f2c94c !important;
+}
+
+
+.sub-page .user-status {
+    color: black;
 }

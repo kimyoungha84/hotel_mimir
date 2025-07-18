@@ -7,15 +7,17 @@ import org.apache.ibatis.annotations.Mapper;
 @Mapper
 public interface MemberMapper {
 		
-		int insertMember(MemberDTO mDTO);
+	int insertMember(MemberDTO mDTO);
 		
-		int countByEmail(String email_id);
+	int countByEmail(String email_id);
 		
-		MemberDTO selectMemberByEmail(String email_id);
+	MemberDTO selectMemberByEmail(String email_id);
 		
-		void updateRefreshToken(Map<String, String> params);
+	void updateRefreshToken(Map<String, String> params);
 
-		MemberDTO selectMemberByUserNum(int userNum);
+	MemberDTO selectMemberByUserNum(int userNum);
 
-    void invalidateRefreshToken(String emailId);
+	void invalidateRefreshToken(String emailId);
+
+	void updateLastLoginTime(String emailId);
 }

@@ -12,6 +12,7 @@
     <!-- Custom CSS -->
     <link rel="stylesheet" th:href="@{/css/header.css}" />
     <link rel="stylesheet" th:href="@{/css/main.css}" />
+    <link rel="stylesheet" th:href="@{/css/footer.css}" />
 </head>
 <body>
     <!-- 헤더 삽입 -->
@@ -63,5 +64,8 @@
             }
         });
     </script>
+    
+    <!-- 푸터 삽입 -->
+    <div th:replace="fragments/footer :: footerFragment"></div>
 </body>
 </html>

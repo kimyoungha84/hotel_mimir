@@ -15,6 +15,7 @@ import io.jsonwebtoken.security.Keys;
 @Component
 public class LoginJwtUtil {
 	
+	//로그인용
 	@Value("${jwt.secret}")
 	private String secretKey;
 	
@@ -68,5 +69,34 @@ public class LoginJwtUtil {
 					.parseClaimsJws(token)
 					.getBody();
 	}
-	
+
+    //메일 인증용
+    public String generateEmailAuthToken(String email, String authCode, long expirationMillis) {
+        return Jwts.builder()
+                .setSubject("email-auth")
+                .claim("email", email)
+                .claim("authCode", authCode)
+                .setIssuedAt(new Date())
+                .setExpiration(new Date(System.currentTimeMillis() + expirationMillis))
+                .signWith(getSigningKey(), SignatureAlgorithm.HS256)
+                .compact();
+    }
+
+    public boolean validateEmailAuth(String token, String email, String code) {
+        try {
+            Claims claims = Jwts.parserBuilder()
+                    .setSigningKey(getSigningKey())
+                    .build()
+                    .parseClaimsJws(token)
+                    .getBody();
+
+            String tokenEmail = claims.get("email", String.class);
+            String tokenCode = claims.get("authCode", String.class);
+
+            return email.equals(tokenEmail) && code.equals(tokenCode);
+        } catch (Exception e) {
+            return false;
+        }
+    }
+    
 }

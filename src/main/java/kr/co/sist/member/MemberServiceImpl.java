@@ -10,7 +10,6 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import kr.co.sist.util.JwtUtil;
 import kr.co.sist.util.LoginJwtUtil;
 
 @Service
@@ -22,14 +21,14 @@ public class MemberServiceImpl implements MemberService {
 	@Autowired
 	private MemberMapper memberMapper;
 	
-    @Autowired
-    private JwtUtil jwtUtil;
     
     @Autowired
     private LoginJwtUtil loginJwtUtil;
     
     @Autowired
     BCryptPasswordEncoder passwordEncoder;
+    
+   
    
     
     public LoginResponseDTO login(LoginRequestDTO loginDTO) {
@@ -89,18 +88,23 @@ public class MemberServiceImpl implements MemberService {
         mailSender.send(msg);
 
         // JWT 생성
-        String token = jwtUtil.generateEmailAuthToken(email, authCode, 300000); // 5분
+        String token = loginJwtUtil.generateEmailAuthToken(email, authCode, 300000); // 5분
         return Map.of("token", token);
     }
 
     @Override
     public boolean verifyAuthCodeWithJwt(String token, String email, String code) {
-        return jwtUtil.validateEmailAuth(token, email, code);
+        return loginJwtUtil.validateEmailAuth(token, email, code);
     }
 
     @Override
     public void invalidateRefreshToken(String emailId) {
         memberMapper.invalidateRefreshToken(emailId);
     }
-	
+
+    @Override
+    public void updateLastLoginTime(String emailId) {
+        memberMapper.updateLastLoginTime(emailId);
+    }
+    
 }

@@ -58,5 +58,12 @@
     WHERE EMAIL_ID = #{emailId}
   </update>
 
+  <!-- 마지막 로그인 시간 갱신 -->
+  <update id="updateLastLoginTime" parameterType="string">
+    UPDATE MIMIR_USER
+    SET LAST_LOGIN_TIME = SYSDATE
+    WHERE EMAIL_ID = #{emailId}
+  </update>
+
 
 </mapper>
