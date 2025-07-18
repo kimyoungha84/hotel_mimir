@@ -62,6 +62,14 @@ document.addEventListener("DOMContentLoaded", function () {
     document.querySelectorAll(".dining-popup .dining-item.selected").forEach(item => {
       item.classList.remove("selected");
 	});
+	
+	if (selectDiningId) {
+	  const selectedItemElem = document.querySelector(`.dining-popup .dining-item[data-id='${selectDiningId}']`);
+	  if (selectedItemElem) {
+	    selectedItemElem.classList.add("selected");
+	    selectedItem = selectedItemElem;
+	  }
+	}
 	  
     document.querySelector(".popup-overlay01").style.display = "block";
     document.querySelector(".dining-popup").style.display = "block";
@@ -124,6 +132,9 @@ document.addEventListener("DOMContentLoaded", function () {
       const timeText = btn.textContent.trim();
       const isLunch = btn.closest(".time-lunch") !== null;
       const mealType = isLunch ? "Lunch" : "Dinner";
+	  
+	  if (!inputAdult.value) inputAdult.value = "1";
+	  if (!inputChild.value) inputChild.value = "0";
       
       // form 데이터 저장
       document.getElementById("inputTime").value = `${selectedDateStr} ${timeText}`;
@@ -187,7 +198,7 @@ window.addEventListener("message", function(event) {
 window.addEventListener("pageshow", function (event) {
   if (event.persisted) {
     // 뒤로가기로 돌아온 경우: 초기화
-	document.getElementById("inputDining").value = "";
+	document.getElementById("inputDining").value = selectDiningId;
 	document.getElementById("inputAdult").value = "";
 	document.getElementById("inputChild").value = "";
 	document.getElementById("inputTime").value = "";

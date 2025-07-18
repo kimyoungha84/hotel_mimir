@@ -37,7 +37,11 @@
 
         <div class="dining-list">
           <div class="dining-info01">
-            <div class="dining-item" th:each="dining : ${diningList}" th:attr="data-id=${dining.dining_id}">
+            <div class="dining-item"
+              th:each="dining : ${diningList}"
+              th:attr="data-id=${dining.dining_id}"
+              th:classappend="${dining.dining_id == selectDiningId} ? ' selected' : ''">
+              
               <img th:src="@{/dining_resv/images/modern.png}" alt="모던 레스토랑 이미지" class="dining-img" />
               <div class="dining-info-txt">
                 <span class="title-txt" th:text="${dining.dining_name}">다이닝</span>
@@ -65,13 +69,12 @@
 </div>
 </div>
 
-<script>
-  document.addEventListener('DOMContentLoaded', function () {
-    document.querySelector('.popup-close01').addEventListener('click', function () {
-      document.querySelector('.dining-popup').style.display = 'none';
-      document.querySelector('.popup-overlay01').style.display = 'none';
-    });
-  });
+  <script th:src="@{/dining_resv/js/diningPopup1.js}"></script>
+
+<script th:inline="javascript">
+  /*<![CDATA[*/
+  var selectDiningId = '[[${selectDiningId}]]';
+  /*]]>*/
 </script>
 
 </body>

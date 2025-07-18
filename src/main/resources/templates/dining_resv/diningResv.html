@@ -194,7 +194,7 @@
 
       <div class="next-txt">
         <form id="reservationForm" method="get" th:action="@{/diningNextResv}">
-          <input type="hidden" name="dining" id="inputDining" />
+          <input type="hidden" name="dining" id="inputDining" th:value="${selectDiningId}" />
           <input type="hidden" name="adult" id="inputAdult" />
           <input type="hidden" name="child" id="inputChild" />
           <input type="hidden" name="date" id="inputDate" />
@@ -206,7 +206,7 @@
     </div>
   </div>
   
-  <div th:replace="~{/dining_resv/popup/diningPopup1}"></div>
+  <div th:replace="~{/dining_resv/popup/diningPopup1(diningList=${diningList}, selectDiningId=${selectDiningId})}"></div>
   <div th:replace="~{/dining_resv/popup/diningPopup2}"></div>
   <div th:replace="~{/dining_resv/popup/diningPopup4}"></div>
 

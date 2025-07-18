@@ -27,6 +27,8 @@ public class DiningResvController {
         List<DiningDomain> diningList = drs.searchALLDining();
 
         model.addAttribute("diningList", diningList);
+        
+        model.addAttribute("selectDiningId", diningId);
     	
         return "dining_resv/diningResv";
         
