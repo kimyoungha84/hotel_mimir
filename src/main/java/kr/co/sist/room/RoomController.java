@@ -65,13 +65,34 @@ public class RoomController {
 	
 	
 	@GetMapping("/roomdetail/프리미어룸")
-	public String roomDetail() {
+	public String roomDetailPremier() {
 		
 		return "room/roomDetail_premier";
 	}//roomList
 	
+	@GetMapping("/roomdetail/스탠다드룸")
+	public String roomDetailStandard() {
+		
+		return "room/roomDetail_standard";
+	}//roomList
 
+	@GetMapping("/roomdetail/스위트룸")
+	public String roomDetailSuite() {
+		
+		return "room/roomDetail_suite";
+	}//roomList
 	
+	@GetMapping("/roomdetail/프레지덴셜 스위트룸")
+	public String roomDetailPresidential() {
+		
+		return "room/roomDetail_presidential";
+	}//roomList
+	
+	@GetMapping("/roomdetail/로얄 스위트룸")
+	public String roomDetailRoyalSuite() {
+		
+		return "room/roomDetail_royalsuite";
+	}//roomList
 	
 	
 }//class
