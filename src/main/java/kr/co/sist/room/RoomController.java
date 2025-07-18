@@ -64,10 +64,14 @@ public class RoomController {
 	}
 	
 	
-	@GetMapping("roomdetail")
+	@GetMapping("/roomdetail/프리미어룸")
 	public String roomDetail() {
-		return "room/roomDetail";
+		
+		return "room/roomDetail_premier";
 	}//roomList
+	
+
+	
 	
 	
 }//class

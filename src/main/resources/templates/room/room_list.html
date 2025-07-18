@@ -100,6 +100,8 @@
 	<div class="room-section">
 	<div class="room-list">
 <th:block th:each="room : ${roomList}">
+
+
   <div class="room-card" style="position: relative;" th:attr="data-capacity=${room.capacity}">
     
     <!-- ✅ 잔여 객실 표시 추가 -->
@@ -120,7 +122,9 @@
     <img th:src="${room.imagePath}" alt="room" />
 
     <div class="room-info">
+<a th:href="@{|/roomdetail/${room.typeName}|}" style="text-decoration: none;cursor: pointer; color: inherit;"> 
       <h3 th:text="${room.typeName}">스탠다드룸</h3>
+      </a>
       <p th:text="'위치: ' + ${room.floorType}">위치: 저층</p>
       <p th:text="'침대타입: ' + ${room.bedName}">침대타입: 더블</p>
       <p th:text="'전망: ' + ${room.viewName}">전망: 시티뷰, 리버뷰</p>

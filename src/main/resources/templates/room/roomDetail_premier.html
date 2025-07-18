@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://thymeleaf.org">
+<head>
+  <meta charset="UTF-8" />
+  <title>프리미어 룸</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <link href="https://fonts.googleapis.com/css2?family=Pretendard&display=swap" rel="stylesheet" />
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Pretendard', sans-serif;
+      color: #111;
+      background: #fff;
+      line-height: 1.6;
+    }
+    .hero {
+      position: relative;
+      height: 100vh;
+      overflow: hidden;
+    }
+    .hero img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .hero-text {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      color: white;
+      text-align: center;
+    }
+    .hero-text p {
+      font-size: 14px;
+      opacity: 0.8;
+    }
+    .hero-text h1 {
+      font-size: 36px;
+      font-weight: bold;
+    }
+    .section {
+      padding: 60px 20px;
+      max-width: 1350px;
+      margin: 0 auto;
+    }
+    .section h2 {
+      font-size: 22px;
+      margin-bottom: 20px;
+    }
+    .overview-image {
+    position:relative;
+    top:200px;
+      background-color: #10231c;
+      padding: 0px 0;
+      text-align: center;
+    }
+    .overview-image img {
+    position:relative;
+      max-width: 70%;
+      height: auto;
+    }
+    .icons {
+      display: flex;
+      justify-content: space-around;
+      text-align: center;
+      padding: 40px 20px;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+    .icons div {
+      font-size: 13px;
+      color: #444;
+    }
+    .icons img {
+      width: 40px;
+      height: 40px;
+      margin-bottom: 8px;
+    }
+    .box {
+      border: 1px solid #eee;
+      padding: 20px;
+      margin: 40px auto;
+      background: #fff;
+    }
+    .box ul {
+      list-style: none;
+    }
+    .box ul li {
+      margin-bottom: 10px;
+      font-size: 14px;
+    }
+    .amenity-section {
+      margin-top: 40px;
+    }
+    .amenity-title {
+      font-size: 18px;
+      margin: 30px 0 10px;
+    }
+    .amenities {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 30px;
+      font-size: 14px;
+    }
+    .amenity-item {
+      width: 150px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+    .amenity-item img {
+      width: 40px;
+      height: 40px;
+      margin-bottom: 10px;
+    }
+    .btn-wrap {
+      text-align: center;
+      margin: 40px 0 60px;
+    }
+    .btn {
+      padding: 10px 20px;
+      background: #111;
+      color: #fff;
+      border: none;
+      cursor: pointer;
+    }
+    .btn-outline {
+      background: #fff;
+      border: 1px solid #ccc;
+      color: #111;
+      margin-left: 10px;
+    }
+    .footer {
+      background: #f9f9f9;
+      padding: 20px;
+      font-size: 13px;
+      color: #666;
+      text-align: center;
+    }
+    .wrapper{
+    position:relative;
+    top:50px;
+    }
+.split-scene {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+  background-color: #10231c;
+}
+
+/* 각 레이어는 전체 화면을 차지하며, 내부 이미지를 가로로 나눔 */
+.scene-layer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+}
+
+/* 왼쪽/오른쪽 half 공통 정렬 */
+.scene-layer .half {
+  width: 50%;
+  height: 100%;
+  overflow: hidden;
+}
+
+/* half 이미지 크기 줄이기 + 가운데 정렬 + 비율 유지 */
+.scene-layer .half img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center center;
+  display: block;
+}
+
+/* 마지막 full 이미지 영역 (가운데로 축소 표시) */
+.scene-layer .full {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  display: flex;                 /* 가운데 정렬 */
+  justify-content: center;
+  align-items: center;
+}
+
+.scene-layer .full img {
+  max-width: 100%;               /* ✅ full 이미지도 작게 */
+  height: auto;
+  object-fit: contain;
+  display: block;
+}
+
+/* 양쪽 이미지가 중앙에서 이어지도록 맞춤 */
+.left-half img {
+  object-position: right center;
+}
+.right-half img {
+  object-position: left center;
+}
+
+  </style>
+   <link rel="stylesheet" th:href="@{/css/header.css}" />
+    <link rel="stylesheet" th:href="@{/css/footer.css}" />
+</head>
+<body>
+	<div th:replace="~{fragments/header.html :: header}"></div>
+
+  <!-- Hero -->
+  <div class="hero">
+    <img th:src="@{/images/room/Premier/Premier1.jpg}" alt="프리미어 룸" />
+    <div class="hero-text">
+      <p>프리미어</p>
+      <h1>프리미어 룸</h1>
+    </div>
+  </div>
+
+  <!-- Overview -->
+  <div class="section">
+    <h2>Overview</h2>
+    <p>
+      시그니엘 서울의 프리미어 룸은 세련미와 우아함을 더한 고급스러운 인테리어로<br>
+      대형 창문을 통해 서울의 화려한 전경을 감상할 수 있습니다.<br>
+      또한 이태리산 벽 패브릭과 안락한 더블/트윈 베드 제공으로 쾌적한 휴식과 숙면을 즐기기에 충분합니다.
+    </p>
+  </div>
+
+
+    <!-- Room Image -->
+   <!--  <img src="http://localhost/jsp_prj/room/Premier/Premier1.jpg" alt="프리미어 룸 이미지2" /> -->
+ <!--  </div> -->
+	<div class="split-scene">
+	  <div class="scene-layer" id="layer1" style="z-index: 2;">
+	    <div class="half left-half"><img th:src="@{/images/room/Premier/Premier/premier1_1.jpg}" alt="1-1"></div>
+	    <div class="half right-half"><img th:src="@{/images/room/Premier/Premier/premier1_2.jpg}" alt="1-2"></div>
+	  </div>
+	  <div class="scene-layer" id="layer2" style="z-index: 1;">
+	    <div class="half left-half"><img th:src="@{/images/room/Premier/Premier/premier2_1.jpg}" alt="2-1"></div>
+	    <div class="half right-half"><img th:src="@{/images/room/Premier/Premier/premier2_2.jpg}" alt="2-2"></div>
+	  </div>
+	  <div class="scene-layer" id="layer3" style="z-index: 0;">
+  	<div class="full"><img th:src="@{/images/room/Premier/Premier3.jpg}" alt="3-full" /></div>
+	</div>
+	</div>
+
+  <!-- Icons -->
+  <div class="wrapper">
+  <div class="icons section">
+    <div><img th:src="@{/images/room/RM/bed.svg}" alt="침대"/><br>더블 / 트윈</div>
+    <div><img th:src="@{/images/room/RM/view.png}" alt="전망"/><br>시내/리버/시티<br>(전망유형 선택)</div>
+    <div><img th:src="@{/images/room/RM/accept.png}" alt="인원"/><br>2명</div>
+    <div><img th:src="@{/images/room/RM/space_size.png}" alt="면적"/><br>46~60㎡</div>
+    <div><img th:src="@{/images/room/RM/space_time.png}" alt="체크인"/><br>15:00 / 11:00</div>
+  </div>
+
+  <!-- 특별 서비스 -->
+  <div class="section box">
+    <h2>특별 서비스</h2>
+    <ul>
+      <li>초고층 타워의 전 객실에서 서울의 전경을 조망할 수 있는 파노라믹뷰</li>
+      <li>스마트폰으로 룸컨트롤이 가능한 최첨단 객실 시스템</li>
+      <li>프리미엄 침구류 및 오리털 이불</li>
+      <li>호텔 전용 HE:ON 침대</li>
+      <li>전 객실 금연</li>
+      <li>무료 고속 인터넷 서비스(유선, Wi-Fi)</li>
+      <li>컨시어지 서비스 제공</li>
+    </ul>
+  </div>
+
+  <!-- 어메니티 -->
+  <div class="section amenity-section">
+    <h2>어메니티</h2>
+
+    <div class="amenity-title">일반</div>
+    <div class="amenities">
+      <div class="amenity-item"><img th:src="@{/images/room/RM/tv.png}" alt=""><span>50" HD TV</span></div>
+      <div class="amenity-item"><img th:src="@{/images/room/RM/tv.png}" alt=""><span>60" HD TV</span></div>
+      <div class="amenity-item"><img th:src="@{/images/room/RM/minibar.png}" alt=""><span>미니바</span></div>
+      <div class="amenity-item"><img th:src="@{/images/room/RM/pot.png}" alt=""><span>티포트</span></div>
+      <div class="amenity-item"><img th:src="@{/images/room/RM/umbrella.png}" alt=""><span>우산</span></div>
+      <div class="amenity-item"><img th:src="@{/images/room/RM/desk.png}" alt=""><span>사무용 데스크</span></div>
+      <div class="amenity-item"><img th:src="@{/images/room/RM/tel.png}" alt=""><span>전화기</span></div>
+      <div class="amenity-item"><img th:src="@{/images/room/RM/shoes.png}" alt=""><span>구두주걱</span></div>
+    </div>
+
+    <div class="amenity-title">욕실</div>
+    <div class="amenities">
+      <div class="amenity-item"><img th:src="@{/images/room/RM/sink.png}" alt=""><span>세면대 2개</span></div>
+      <div class="amenity-item"><img th:src="@{/images/room/RM/bath.png}" alt=""><span>욕조</span></div>
+      <div class="amenity-item"><img th:src="@{/images/room/RM/toilet.png}" alt=""><span>비데</span></div>
+      <div class="amenity-item"><img th:src="@{/images/room/RM/dryer.png}" alt=""><span>드라이기</span></div>
+      <div class="amenity-item"><img th:src="@{/images/room/RM/gown.png}" alt=""><span>목욕 가운</span></div>
+      <div class="amenity-item"><img th:src="@{/images/room/RM/shower.png}" alt=""><span>화장실용품</span></div>
+    </div>
+  </div>
+
+  <!-- 추가 정보 -->
+  <div class="section box">
+    <h2>추가 정보</h2>
+    <ul>
+      <li>※ 프리미어 타입 안내</li>
+      <li>- 객실 구조와 전망타입은 객실 위치에 따라 이미지와 다를 수 있습니다.</li>
+      <li>- 사전 요청 시 트윈 베드로도 변경 가능합니다.</li>
+    </ul>
+    <ul>
+      <li>※ 이용 안내</li>
+      <li>- 체크인은 오후 3시, 체크아웃은 오전 11시입니다.</li>
+      <li>- 모든 투숙객은 투숙 당일 유효한 신분증 제시가 필요합니다.</li>
+      <li>- 자세한 사항은 유선으로 문의주시기 바랍니다.</li>
+    </ul>
+  </div>
+
+  <!-- 버튼 -->
+  <div class="btn-wrap">
+    <button class="btn btn-outline">목록</button>
+  </div>
+
+  <!-- Footer -->
+  <div th:replace="~{fragments/footer.html :: footerFragment}"></div>
+  </div>
+<script src="https://unpkg.com/gsap@3/dist/gsap.min.js"></script>
+<script src="https://unpkg.com/gsap@3/dist/ScrollTrigger.min.js"></script>
+<script>
+  gsap.registerPlugin(ScrollTrigger);
+
+  const tl = gsap.timeline({
+    scrollTrigger: {
+      trigger: ".split-scene",
+      start: "top top",
+      end: "+=300%", // 조정 가능
+      scrub: true,
+      pin: true,
+      anticipatePin: 1
+    }
+  });
+
+  tl.to("#layer1 .half:first-child", { x: "-100%", ease: "none" })
+    .to("#layer1 .half:last-child", { x: "100%", ease: "none" }, "<")
+    .to("#layer2 .half:first-child", { x: "-100%", ease: "none" })
+    .to("#layer2 .half:last-child", { x: "100%", ease: "none" }, "<")
+</script>
+
+</body>
+</html>

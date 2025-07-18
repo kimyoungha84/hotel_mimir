@@ -8,6 +8,7 @@
   <link rel="stylesheet" href="https://unpkg.com/aos@2.3.1/dist/aos.css" />
   <link rel="stylesheet" th:href="@{/css/room/roomhome.css}" />
    <link rel="stylesheet" th:href="@{/css/header.css}" />
+    <link rel="stylesheet" th:href="@{/css/footer.css}" />
 </head>
 <body>
   <div th:replace="~{fragments/header :: header}"></div>
@@ -98,7 +99,7 @@
   <div style="text-align:center">
     <a class="button-cta" th:href="@{roomlist}" style=" text-decoration: none;">객실 예약하기</a>
   </div>
-  
+    <div th:replace="~{fragments/footer.html :: footerFragment}"></div>
     </div>
 
 
@@ -115,6 +116,7 @@
 
     AOS.init({ duration: 1000 });
   </script>
+
 </body>
 </html>
     
