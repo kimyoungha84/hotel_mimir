@@ -15,6 +15,8 @@ public class ReservationDTO {
 	private int resvId;
 	private int roomId;
 	private String typeName;
+	private String bedName;
+	private String viewName;
 	private Integer userNum;
 	private String userName; //o
 	private String userTel;//o

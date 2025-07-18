@@ -13,7 +13,7 @@ public interface ReservationMapper {
     
     public int selectReservationSeq();
     
-    public int checkRoomAvailability(ReservationDTO rDTO);   
+    public Integer checkRoomAvailability(ReservationDTO rDTO);   
     
     public void insertReservation(ReservationDTO rDTO);
     

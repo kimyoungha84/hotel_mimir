@@ -16,8 +16,8 @@ public class SearchResvDTO {
 
 	private String typeName; 
 	private String userType;
-	private Date startDate;  
-	private Date endDate;
+	private Date checkinDate;  
+	private Date checkoutDate;  
 	private String status;  
 	private String resvName;
 

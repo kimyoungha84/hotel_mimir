@@ -27,6 +27,8 @@ public class ReservationController {
           @RequestParam("checkIn") String checkIn,
           @RequestParam("checkOut") String checkOut,
           @RequestParam("typeName") String typeName,
+          @RequestParam("bedName") String bedName,
+          @RequestParam("viewName") String viewName,
           @RequestParam("nights") int nights,
           @RequestParam("capacity") int capacity,
           @RequestParam("pricePerNight") int pricePerNight,
@@ -38,6 +40,8 @@ public class ReservationController {
           model.addAttribute("nights", nights);
           model.addAttribute("capacity", capacity);
           model.addAttribute("typeName", typeName);
+          model.addAttribute("bedName", bedName);
+          model.addAttribute("viewName", viewName);
           model.addAttribute("pricePerNight", pricePerNight);
           return "room_resv/resvRoom"; // 보여줄 페이지 경로
 
@@ -50,23 +54,22 @@ public class ReservationController {
    
    @PostMapping("/room_resv/reservation")
    public String reservation(ReservationDTO rDTO, Model model) {
-	   System.out.println(rDTO);
+	   Integer roomId;
       //반환값 rDTO로 하고 나서 nonmemberId set하고 paymentID까지 set해야함
-      
-		/*
-		 * if(rs.checkRoomAvailability(rDTO) > 0) { return "redirect:room_resv/error"; }
-		 */
+	   roomId=rs.checkRoomAvailability(rDTO);
+	   
+	   if(roomId == null  ) { return "redirect:room_resv/error"; }
       
       int paySeq;
       int nonMemSeq;
       int resvSeq;
       
-      System.out.println(rDTO);
       
       paySeq = ps.searchPaymentSeq();
       nonMemSeq = nms.searchNonMemberSeq();
       resvSeq = rs.searchReservationSeq();
       
+      rDTO.setRoomId(roomId);
       rDTO.setUserNum(nonMemSeq);
       rDTO.setPaymentId(paySeq);
       rDTO.setResvId(resvSeq);

@@ -221,11 +221,19 @@ document.addEventListener('DOMContentLoaded', () => {
       const capacity = card.dataset.capacity || '';
       const priceText = this.textContent.trim();
       const priceNumber = priceText.replace(/[₩,]/g, '');
+	  // bedName 가져오기
+	  const bedNameText = document.getElementById('bedName').textContent;
+	  const bedName = bedNameText.replace('침대타입: ', '').trim();
+	  // viewName 가져오기
+	  const viewNameText = document.getElementById('viewName').textContent;
+	  const viewName = viewNameText.replace('전망: ', '').trim();
 
       const url = new URL(this.href, window.location.origin);
       url.searchParams.set('checkIn', checkIn);
       url.searchParams.set('checkOut', checkOut);
       url.searchParams.set('nights', nights);
+      url.searchParams.set('bedName', bedName);
+      url.searchParams.set('viewName', viewName);
       url.searchParams.set('typeName', typeName);
       url.searchParams.set('pricePerNight', priceNumber);
       url.searchParams.set('capacity', capacity);

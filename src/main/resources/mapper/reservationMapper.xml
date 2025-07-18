@@ -104,15 +104,34 @@
 		VALUES (#{resvId}, #{roomId}, #{userNum}, #{paymentId}, #{checkinDate}, #{checkoutDate},
 		 #{numGuestsChild}, #{numGuestsAdult}, #{status}, #{requestMsg}, #{breakfast})
 	</insert>
-	<!-- 
-	   <select id="checkRoomAvailability" parameterType="kr.co.sist.resvroom.ReservationDTO" resultType="int">
-   SELECT COUNT(*) as cnt
-   FROM reservation
-   WHERE room_id = #{roomId}
-   AND checkin_date &lt; #{checkIn}
-   AND checkout_date &gt; #{checkOut}
+
+	   <select id="checkRoomAvailability" parameterType="kr.co.sist.resvroom.ReservationDTO" resultType="Integer">
+		SELECT room_id
+    FROM (
+        SELECT r.room_id
+        FROM room r
+        JOIN room_type rt ON r.type_id = rt.type_id
+        JOIN view_type vt ON r.view_id = vt.view_id
+        JOIN bed_type bt ON r.bed_id = bt.bed_id
+        WHERE rt.type_name =  #{typeName}
+          AND vt.view_name = #{viewName}
+          AND bt.bed_name = #{bedName}
+          AND NOT EXISTS (
+              SELECT 1
+              FROM reservation res
+              WHERE res.room_id = r.room_id
+                AND res.status IN ('예약완료', '체크인')
+                AND res.checkout_date &gt; TO_DATE(#{checkoutDate}, 'yyyy-MM-dd')
+                AND res.checkin_date &lt; TO_DATE(#{checkinDate}, 'yyyy-MM-dd')
+          )
+        ORDER BY DBMS_RANDOM.VALUE
+    )
+    WHERE ROWNUM = 1
    </select>
-	 -->
+
+
+
+
 
 	<update id="updateReservation" parameterType="kr.co.sist.resvroom.ReservationDTO">
 	  UPDATE faq

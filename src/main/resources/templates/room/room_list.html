@@ -126,8 +126,8 @@
       <h3 th:text="${room.typeName}">스탠다드룸</h3>
       </a>
       <p th:text="'위치: ' + ${room.floorType}">위치: 저층</p>
-      <p th:text="'침대타입: ' + ${room.bedName}">침대타입: 더블</p>
-      <p th:text="'전망: ' + ${room.viewName}">전망: 시티뷰, 리버뷰</p>
+      <p th:text="'침대타입: ' + ${room.bedName}" id="bedName">침대타입: 더블</p>
+      <p th:text="'전망: ' + ${room.viewName}"id="viewName">전망: 시티뷰, 리버뷰</p>
     </div>
     <a th:href="${room.countAvailableRooms > 0} ? @{/room_resv/resvRoom(roomId=${room.roomId})} : '#'"
    th:classappend="${room.countAvailableRooms == 0} ? ' disabled' : ''"
