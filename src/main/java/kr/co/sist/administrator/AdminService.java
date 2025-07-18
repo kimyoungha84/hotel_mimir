@@ -242,7 +242,11 @@ public class AdminService {
 		System.out.println("urlAuthoryStr-------"+urlAuthoryStr);
 		
 		//이 url에 이 id가 접근 가능해도 되는건지?! 확인
-		flag=idAuthoryStr.contains(urlAuthoryStr);
+		
+		if(idAuthoryStr.contains(urlAuthoryStr) || idAuthoryStr.equals("admin")) {
+			//이 url에 이 id가 접근 가능해도 되나? || 관리자 인가?
+			flag=true;
+		}//end if
 		System.out.println("falg--------"+flag);
 
 		return flag;
