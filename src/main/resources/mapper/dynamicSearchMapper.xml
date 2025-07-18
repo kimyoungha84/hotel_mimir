@@ -172,16 +172,33 @@ WHERE rnum BETWEEN #{offset} AND #{end}
 
 
 <select id="searchUserDining" resultType="kr.co.sist.util.domain.SearchDataDomain">
- SELECT<include refid="userDiningSelectColumns"/>
+SELECT
+  d.dining_id,
+  d.dining_name,
+  d.type,
+  d.location,
+  d.phone_number,
+  d.dining_classification,
+  di.image_url AS dining_main_image
 FROM (
-    SELECT <include refid="userDiningSelectColumns"/>,
-           ROW_NUMBER() OVER (ORDER BY dining_reg_date DESC) rnum
+    SELECT
+      dining_id, dining_name, type, location, phone_number, dining_classification, dining_reg_date,
+      ROW_NUMBER() OVER (ORDER BY dining_reg_date DESC) rnum
     FROM dining
     WHERE 1=1
-    <include refid="filter"/> <!-- 동적 필터 추가 -->
-) 
-WHERE rnum BETWEEN #{offset} AND #{end}
-</select>
+    <include refid="filter"/>
+) d
+LEFT JOIN dining_image di
+  ON d.dining_id = di.dining_id
+  AND di.image_type = 'MAIN'
+  AND di.display_order = (
+      SELECT MIN(display_order)
+      FROM dining_image
+      WHERE dining_id = d.dining_id
+        AND image_type = 'MAIN'
+  )
+WHERE d.rnum BETWEEN #{offset} AND #{end}
+  </select>
 
 
 <!--///////////////////////////////// USER-DINING-END /////////////////////////////////-->

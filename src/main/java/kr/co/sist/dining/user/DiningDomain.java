@@ -1,6 +1,8 @@
 package kr.co.sist.dining.user;
 
 
+import java.util.List;
+
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -16,5 +18,9 @@ public class DiningDomain {
 	private String phone_number;
 	private String dining_classification;
 	private char dining_resv_availability;
+	private String dining_detailinfo;
 	private String dining_introduction;
+	private String dining_main_image;
+	private String dining_logo_image;
+	private List<String> dining_carousel_images;
 }

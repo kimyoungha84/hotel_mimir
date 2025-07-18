@@ -23,6 +23,7 @@ public class SearchDataDomain {
 	private String location;
 	private String phone_number;
 	private String dining_classification;
+	private String dining_main_image;
 	
 	//FAQ
 	private int faq_num;

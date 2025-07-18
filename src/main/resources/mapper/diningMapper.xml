@@ -5,17 +5,33 @@
 
 <mapper namespace="kr.co.sist.dining.user.DiningMapper">
 
-  <select id="selectDiningInfo" parameterType="int" resultType="kr.co.sist.dining.user.DiningDomain">
-    SELECT 
-      DINING_ID,
-      DINING_NAME,
-      TYPE,
-      LOCATION,
-      DINING_INTRODUCTION,
-      DINING_RESV_AVAILABILITY
-    FROM 
-      DINING
-    WHERE DINING_ID = #{diningID}
+  <!-- 1. 다이닝 기본 정보 + 메인/로고 이미지만 가져오는 쿼리 -->
+  <select id="selectDiningInfoBase" parameterType="int" resultType="kr.co.sist.dining.user.DiningDomain">
+    SELECT
+      d.DINING_ID,
+      d.DINING_NAME,
+      d.TYPE,
+      d.LOCATION,
+      d.PHONE_NUMBER,
+      d.DINING_CLASSIFICATION,
+      d.DINING_RESV_AVAILABILITY,
+      d.DINING_INTRODUCTION,
+      d.DINING_DETAILINFO,
+      (SELECT IMAGE_URL FROM DINING_IMAGE WHERE DINING_ID = d.DINING_ID AND IMAGE_TYPE = 'MAIN' AND ROWNUM = 1) AS DINING_MAIN_IMAGE,
+      (SELECT IMAGE_URL FROM DINING_IMAGE WHERE DINING_ID = d.DINING_ID AND IMAGE_TYPE = 'LOGO' AND ROWNUM = 1) AS DINING_LOGO_IMAGE
+    FROM
+      DINING d
+    WHERE
+      d.DINING_ID = #{diningId}
+  </select>
+
+  <!-- 2. 케러셀 이미지만 따로 가져오는 쿼리 -->
+  <select id="selectDiningCarouselImages" parameterType="int" resultType="string">
+    SELECT IMAGE_URL
+    FROM DINING_IMAGE
+    WHERE DINING_ID = #{diningId}
+      AND IMAGE_TYPE = 'CAROUSEL'
+    ORDER BY DISPLAY_ORDER
   </select>
 
 </mapper>

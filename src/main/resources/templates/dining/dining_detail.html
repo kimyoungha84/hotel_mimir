@@ -3,9 +3,11 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
+<link rel="stylesheet" th:href="@{/css/header.css}" />
+<link rel="stylesheet" th:href="@{/css/footer.css}" />
 <style>
 body{
-margin: 0px;
+margin: 0px; 
 }
 
 
@@ -64,7 +66,7 @@ color: white;
     -webkit-align-items: center;
     align-items: center;
     max-width: 140rem;
-    margin-top: 150px;
+    margin-top: 300px;
     background-color: white;
     flex-direction: column; /* 수직으로 배치 */
     
@@ -124,7 +126,7 @@ text-align: start;
   width: 100%;
   margin-top: auto;
   margin-bottom: auto;
-  padding: 2rem 0rem;
+  padding: 3rem 0rem;
   border-bottom: 1px solid #333;
 
 }
@@ -147,6 +149,7 @@ border-top: 2px solid #333;
 
 .list-col-1{
 width: 30%;
+font-weight: bold;
 }
 
 .list-col-2{
@@ -175,7 +178,7 @@ border-top : 2px solid #333;
   width: 100%;
   margin-top: auto;
   margin-bottom: auto;
-  padding: 2rem 0rem;
+  padding: 3rem 0rem;
   border-bottom: 1px solid #333;
 
 }
@@ -205,11 +208,13 @@ width: 100%;         /* 이미지가 부모 카드의 너비에 맞게 크기 �
 .gallery-carousel {
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: flex-end; /* 오른쪽 정렬 */
+  margin-left: auto;  
+  /* width: auto;  // 필요시 조정 */
 }
 .gallery-image-area {
-  width: 900px;
-  height: 500px;
+  width: 1000px;   /* 더 크게 */
+  height: 600px;   /* 더 크게 */
   display: flex;
   justify-content: center;
   align-items: center;
@@ -225,6 +230,43 @@ width: 100%;         /* 이미지가 부모 카드의 너비에 맞게 크기 �
   display: flex;
   align-items: center;
   gap: 1.5rem;
+  margin-top: 1.5rem;
+}
+
+/* pagination.html에서 가져온 mimir-pg-btn 스타일 */
+.mimir-pg-btn {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 1.5px solid #222;
+  background: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background 0.18s, border 0.18s;
+  padding: 0;
+  position: relative;
+}
+.mimir-pg-btn:disabled,
+.mimir-pg-btn.mimir-pg-disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  background: #fff;
+}
+.mimir-pg-btn img {
+  width: 18px;
+  height: 18px;
+  transition: filter 0.18s;
+}
+.mimir-pg-btn:not(:disabled):not(.mimir-pg-disabled):hover {
+  background: #111;
+  border: 1.5px solid #111;
+  transition: background 0.18s, border 0.18s;
+}
+.mimir-pg-btn:not(:disabled):not(.mimir-pg-disabled):hover img {
+  filter: brightness(0) invert(1);
+  transition: filter 0.18s;
 }
 .gallery-progress-bar {
   width: 120px;
@@ -256,21 +298,23 @@ width: 100%;         /* 이미지가 부모 카드의 너비에 맞게 크기 �
 .gallery-flex-row {
   display: flex;
   flex-direction: row;
-  align-items: flex-start;
+  align-items: flex-start; /* 타이틀, 이미지 위쪽 정렬 */
   width: 100%;
   gap: 2rem;
+  /* flex-wrap: wrap;  // 필요시 추가 */
 }
 .gallery-title {
   margin: 0 2rem 0 0;
   font-size: 2.2rem;
   font-weight: bold;
-  align-self: flex-start;
   min-width: 120px;
+  align-self: flex-start;
+  /* 왼쪽 정렬 */
 }
 .additional-info-wrap {
-  width: 70%;
-  margin-left: auto;
-  margin-right: auto;
+  width: 100%;
+  /* margin-left: auto;
+  margin-right: auto; */
   margin-top: 130px;
   display: flex;
   flex-direction: column;
@@ -343,8 +387,8 @@ width: 100%;         /* 이미지가 부모 카드의 너비에 맞게 크기 �
   position: fixed;
   right: 40px;
   bottom: 40px;
-  width: 110px;
-  height: 110px;
+  width: 140px;
+  height: 140px;
   background: #856956;
   border-radius: 50%;
   box-shadow: 0 4px 24px 0 rgba(0,0,0,0.13);
@@ -378,15 +422,16 @@ width: 100%;         /* 이미지가 부모 카드의 너비에 맞게 크기 �
 </style>
 </head>
 <body>
+<div th:replace="~{fragments/header :: header}"></div>
 <div id="container">
 <main id="content">
-<div class="north-tab">
+<!-- <div class="north-tab">
 <i class="ico ico-breadcrumb-home" aria-hidden="true"></i>
 <span>  >  다이닝  > <span>스테이,모던 레스토랑</span></span> 
-</div>
+</div> -->
 
 <div class="main-img">
-<img alt="시그니엘 서울 - 다이닝 - 시그니엘 서울, 스테이, 모던 레스토랑 - 스테이, 모던 레스토랑" aria-label="시그니엘 서울, 스테이, 모던 레스토랑" src="https://img.lottehotel.com/cms/asset/2025/01/31/430/180708-40-2000-din-seoul-signiel.webp" loading="lazy">
+  <img th:src="@{${diningInfo.dining_main_image}}" alt="다이닝 메인 이미지" loading="lazy">
 </div>
 <div class="main-img-txt-area" th:text="${diningInfo.dining_name}">
 스테이, 모던 레스토랑
@@ -394,7 +439,7 @@ width: 100%;         /* 이미지가 부모 카드의 너비에 맞게 크기 �
 <div class="content">
     <div class="category-wrap">
         <div class="category-img">
-            <img alt="시그니엘 서울 - 다이닝" aria-hidden="true" src="https://img.lottehotel.com/cms/asset/2025/04/14/26017/img-logo-stay.png" loading="lazy">
+          <img th:src="@{${diningInfo.dining_logo_image}}" alt="다이닝 로고 이미지" loading="lazy">
         </div>
         <div class="category-copy">
             <p class="txt01">시그니엘 서울 STAY에서 미쉐린 3스타 셰프 야닉 알레노의 특별한 프랑스 요리를 경험해 보시기 바랍니다.</p>
@@ -509,29 +554,34 @@ width: 100%;         /* 이미지가 부모 카드의 너비에 맞게 크기 �
       <div class="gallery-flex-row">
         <h1 class="gallery-title">갤러리</h1>
         <div class="gallery-carousel">
-        <!-- 이미지가 있을 때 -->
-        <div class="gallery-image-area" th:if="${galleryImages != null and #lists.size(galleryImages) > 0}">
-          <img th:src="@{${galleryImages[0].url}}" alt="갤러리 이미지" id="gallery-main-img">
+        <!-- 이미지가 있을 때  여기가 dining_carousel_images들어갈 에정-->
+        <div class="gallery-image-area" th:if="${diningInfo.dining_carousel_images != null and #lists.size(diningInfo.dining_carousel_images) > 0}">
+          <img th:src="@{${diningInfo.dining_carousel_images[0]}}" alt="갤러리 이미지" id="gallery-main-img">
         </div>
         <!-- 이미지가 없을 때 -->
-        <div class="gallery-image-area" th:if="${galleryImages == null or #lists.size(galleryImages) == 0}">
-          <img src="https://img.lottehotel.com/cms/asset/2025/01/31/433/180708-43-2000-din-seoul-signiel.webp" alt="이미지 없음" id="gallery-main-img">
+        <div class="gallery-image-area" th:if="${diningInfo.dining_carousel_images == null or #lists.size(diningInfo.dining_carousel_images) == 0}">
+          <img src="/dining/images/no_image.png" alt="이미지 없음" id="gallery-main-img">
         </div>
         <div class="gallery-controls">
+          <!-- 프로그래스바 -->
           <div class="gallery-progress-bar">
             <div class="gallery-progress" id="gallery-progress"></div>
           </div>
           <span id="gallery-index">
             <span id="gallery-current">1</span>/<span id="gallery-total">1</span>
           </span>
-          <button class="gallery-btn" id="gallery-prev" disabled>&#8592;</button>
-          <button class="gallery-btn" id="gallery-next">&#8594;</button>
+          <!-- pagination 스타일 버튼 -->
+          <button class="mimir-pg-btn" id="gallery-prev" disabled>
+            <img src="/pagination/images/prevPage_enable.svg" alt="이전">
+          </button>
+          <button class="mimir-pg-btn" id="gallery-next">
+            <img src="/pagination/images/nextPage_enable.svg" alt="다음">
+          </button>
         </div>
-        </div>
-        </div>
+      </div>
       <!-- 갤러리 이미지 리스트(숨김, JS에서 사용) -->
       <div id="gallery-image-list" style="display:none;">
-        <span th:each="img : ${galleryImages}" th:text="${img.url}"></span>
+        <span th:each="img : ${diningInfo.dining_carousel_images}" th:text="${img}"></span>
       </div>
     </div>
 
@@ -554,11 +604,14 @@ width: 100%;         /* 이미지가 부모 카드의 너비에 맞게 크기 �
   <span class="reserve-text">예약하기</span>
 </a>
 
+
 </main>
+<!-- 푸터 삽입 -->
+    <div th:replace="fragments/footer :: footerFragment"></div>
 </div>
 <script>
 window.addEventListener('DOMContentLoaded', function() {
-  // galleryImages를 Thymeleaf에서 span으로 렌더링한 것을 JS 배열로 변환
+  // Thymeleaf에서 span으로 렌더링한 것을 JS 배열로 변환
   const galleryImageList = Array.from(document.querySelectorAll('#gallery-image-list span')).map(span => span.textContent);
   let activeIndex = 0;
   const mainImg = document.getElementById('gallery-main-img');
@@ -584,7 +637,7 @@ window.addEventListener('DOMContentLoaded', function() {
   };
   if(galleryImageList.length > 0) updateGallery();
   else {
-    mainImg.src = 'https://img.lottehotel.com/cms/asset/2025/01/31/433/180708-43-2000-din-seoul-signiel.webp';
+    mainImg.src = '/dining/images/no_image.png';
     currentSpan.innerText = 0;
     totalSpan.innerText = 0;
     prevBtn.disabled = true;

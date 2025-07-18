@@ -1,9 +1,11 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" th:class="sub-page">
 <head>
 <meta charset="UTF-8">
 <!-- favicon 설정 -->
 <link rel="shortcut icon" href="http://192.168.10.79/images/favicon.ico"/>
+<link rel="stylesheet" th:href="@{/css/header.css}" />
+<link rel="stylesheet" th:href="@{/css/footer.css}" />
 <title>Insert title here</title>
 <!--  bootstrap CDN -->
 <!-- <link rel="stylesheet" type="text/css"
@@ -11,6 +13,11 @@ href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css"> 
  
 <style>
 
+body{
+margin : 0px;
+padding : 0px;
+padding-top : 130px;
+}
 
 .north-tab{
 height : 32px;
@@ -169,7 +176,7 @@ input{
 
 border-top: 2px solid #333;
 border-bottom: 1px solid #DDDDDD;
-margin-bottom: 3.0rem;
+margin-bottom: 7.0rem;
 
 }
 
@@ -274,6 +281,7 @@ margin-bottom: 3.0rem;
 .di-info-row {
 	margin-right: auto;
 	margin-top: 0.5rem;
+	margin-bottom: 0.5rem;
 }
 
 button{
@@ -308,14 +316,15 @@ $(function(){
 </script>
 </head>
 <body>
+<div th:replace="~{fragments/header :: header}"></div>
 
 <div id="container">
 <main id="content">
 
-<div class="north-tab">
+<!-- <div class="north-tab">
 <i class="ico ico-breadcrumb-home" aria-hidden="true"></i>
 <span>  >  다이닝</span>
-</div>
+</div> -->
 
 <div class="category-title">
 다이닝
@@ -362,9 +371,18 @@ $(function(){
   <a th:each="dining : ${diningList}" th:href="@{'/user/dining_detail'(diningId=${dining.dining_id})}" style="text-decoration:none; color:inherit;">
     <div class="card">
       <div class="card-top">
-        <div class="card-img motion-scale">
-          <img th:src="'https://img.lottehotel.com/cms/asset/2025/01/31/424/180708-39-2000-din-seoul-signiel.webp'" alt="다이닝 이미지" loading="lazy">
-        </div>
+        <div class="card-img motion-scale" style="width:100%; aspect-ratio: 4/2.5; display: flex; align-items: center; justify-content: center; background: #f5f5f5;">
+  <!-- 이미지가 있을 때 -->
+  <img th:if="${dining.dining_main_image != null and !#strings.isEmpty(dining.dining_main_image)}"
+       th:src="${dining.dining_main_image}"
+       alt="다이닝 이미지" loading="lazy"
+       style="width:100%; height:100%; object-fit:cover;">
+  <!-- 이미지가 없을 때 -->
+  <div th:if="${dining.dining_main_image == null or #strings.isEmpty(dining.dining_main_image)}"
+       style="width:100%; height:100%; display:flex; align-items:center; justify-content:center; color:#aaa; font-size:1.1rem;">
+    이미지 준비중입니다
+  </div>
+</div>
       </div>
       <div class="card-info">
         <div class="card-di-type">
@@ -376,9 +394,9 @@ $(function(){
           <div class="di-name-txt-area" th:text="${dining.dining_name}">다이닝명</div>
         </div>
         <div class="di-card-info-wrap">
-          <div class="di-info-row">타입 | <span th:text="${dining.type}">타입</span></div>
-          <div class="di-info-row">위치 | <span th:text="${dining.location}">위치</span></div>
-          <div class="di-info-row">문의 | <span th:text="${dining.phone_number}">문의</span></div>
+          <div class="di-info-row"><span style="color:#404040;">타입</span>&nbsp;&nbsp;<span style="color:#bdbdbd">|</span>&nbsp;&nbsp;<span th:text="${dining.type}">타입</span></div>
+          <div class="di-info-row"><span style="color:#404040;">위치</span>&nbsp;&nbsp;<span style="color:#bdbdbd">|</span>&nbsp;&nbsp;<span th:text="${dining.location}">위치</span></div>
+          <div class="di-info-row"><span style="color:#404040;">문의</span>&nbsp;&nbsp;<span style="color:#bdbdbd">|</span>&nbsp;&nbsp;<span th:text="${dining.phone_number}">문의</span></div>
         </div>
       </div>
     </div>
@@ -400,5 +418,8 @@ $(function(){
 
 </main>
 </div>
+
+<!-- 푸터 삽입 -->
+    <div th:replace="fragments/footer :: footerFragment"></div>
 </body>
 </html>
