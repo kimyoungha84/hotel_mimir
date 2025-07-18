@@ -64,7 +64,7 @@ document.addEventListener("DOMContentLoaded", function () {
 	});
 	
 	if (selectDiningId) {
-	  const selectedItemElem = document.querySelector(`.dining-popup .dining-item[data-id='${selectDiningId}']`);
+	  const selectedItemElem = document.querySelector(`.dining-popup .dining-item[data-id='${selectDiningId.toString()}']`);
 	  if (selectedItemElem) {
 	    selectedItemElem.classList.add("selected");
 	    selectedItem = selectedItemElem;
