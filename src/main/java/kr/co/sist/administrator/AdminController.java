@@ -2,6 +2,8 @@ package kr.co.sist.administrator;
 
 import java.util.List;
 
+import javax.lang.model.element.ModuleElement;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -56,22 +58,25 @@ public class AdminController {
 		return "redirect:/admin/login";
 	}//logout
 	
-	
-	/*이거 권한 가져오는건데 ..... 흠......*/
-	@GetMapping("/admin/permissionChkProcess")
-	public String checkPermission(String id) {
-		boolean result=false;
-		List<String> permissionList=as.getPermissionById(id);
 		
-//		if() {}
-		
-		return "";
-	} //checkPermission
 	
+	/*비밀번호 초기화 페이지*/
 	@GetMapping("/admin/resetPassword")
 	public String adminResetPassword() {
 		return "administrator_email_template/reset_password";
 	}//adminResetPassword
+	
+	
+	/*권한 없을 때 나오는 페이지*/
+	@GetMapping("/admin/noAuthor")
+	public String noAuthory(HttpSession session, Model model) {
+		
+		
+		model.addAttribute("session_id",session.getAttribute("session_id"));
+		model.addAttribute("session_name",session.getAttribute("session_name"));
+		
+		return "administrator/noAutorityPage";
+	}//noAuthory
 	
 	
 

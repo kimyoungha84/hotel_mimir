@@ -7,31 +7,24 @@ import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
-public class InterceptorConfig implements WebMvcConfigurer{
+public class PageInterceptorConfig implements WebMvcConfigurer{
 
+	
 	@Autowired
-	private AdminInterceptor ai;
+	private PageAuthorityInterceptor pai;
+	
 
-	@Value("${admin.addPath}")
-	private String addPath;
-	@Value("${admin.excludePath}")
-	private String[] excludePath;
-	
-	
-	
-	
-	
+	@Value("${admin.page.addPath}")
+	private String[] addPagePath;
+
+
 	@Override
 	public void addInterceptors(InterceptorRegistry registry) {
-		//System.out.println(addPath);
-		//System.out.println(excludePath);
-		
-		registry.addInterceptor(ai)
-		.addPathPatterns(addPath)
-		.excludePathPatterns(excludePath)
-		.order(1);
-		
+		registry.addInterceptor(pai)
+		.addPathPatterns(addPagePath)
+		.order(2);
 	}//addInterceptors
+	
 	
 	
 }//class

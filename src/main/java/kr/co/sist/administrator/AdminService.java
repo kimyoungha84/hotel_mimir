@@ -1,7 +1,9 @@
 package kr.co.sist.administrator;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -174,17 +176,7 @@ public class AdminService {
 		return resultCnt1+resultCnt2+resultCnt3;
 	}//registerStaff
 	
-	
-	/* URL 생성 */
-	//해당 URL은 직원에게 URL을 보낼 때, 링크로 사용
-//	public String passwordResetURL() {
-//		String url="";
-//		
-//		url="http://192.168.10.71:8080/admin/resetPassword";
-//			
-//		return url;
-//	}//makeURL
-	
+
 	@Autowired
 	AdministratorSendMail sendMail;
 	
@@ -236,6 +228,25 @@ public class AdminService {
 		return password;
 	}//getPassById
 	
+	
+	/*해당 권한을 가지고 있는지 확인*/
+	public boolean chkHaveAuthority(String id, String uri) {
+		boolean flag=false;
+		
+		//id를 이용해서 해당 아이디가 가진 권한을 가져오기
+		//이거 mapper에 아마도 이 query가 있을 텐데....
+		String idAuthoryStr=am.selectPermissionById(id);
+		String urlAuthoryStr=mappingURLtoAthority(uri);
+		
+		System.out.println("idAuthoryStr------"+idAuthoryStr);
+		System.out.println("urlAuthoryStr-------"+urlAuthoryStr);
+		
+		//이 url에 이 id가 접근 가능해도 되는건지?! 확인
+		flag=idAuthoryStr.contains(urlAuthoryStr);
+		System.out.println("falg--------"+flag);
+
+		return flag;
+	}//chkHaveAuthority
 	
 	/***********************************************************************/
 	
@@ -302,5 +313,41 @@ public class AdminService {
 		return 1;
 	}//processPermissionList
 	
+	
+	/*mapping*/
+	private String mappingURLtoAthority(String uri) {
+		//페이지(URL, 권한)
+		Map<String, String> accessPage=new HashMap<String, String>();
+		
+		accessPage.put("/admin/employee", "employee");
+		accessPage.put("/admin/member","member");
+		
+		accessPage.put("/admin/roomlist","room");
+		accessPage.put("/admin/dining","dinning");
+		accessPage.put("/adminDiningResvList","dinning");
+		
+		accessPage.put("/admin/faq","inquiry");
+		accessPage.put("/admin/chat","inquiry");
+		
+		//uri가 들어오면, 권한을 반환해 주는거지
+		return accessPage.get(uri);
+		
+	}//mappingURLtoID
+	
 
+	/**
+	 *     var permissionMapping={
+        "room" : "객실",
+        "dinning" : "다이닝",
+        "inquiry" : "문의",
+        "member" : "회원",
+        "employee":"직원",
+        "admin":"관리자"
+    }
+	 * 
+	 * 
+	 */
+	
+	
+	
 }//class
