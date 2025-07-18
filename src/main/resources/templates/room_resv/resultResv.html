@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://thymeleaf.org">
+<html xmlns:th="http://thymeleaf.org" th:class="sub-page">
 <head>
 <meta charset="UTF-8">
 <title>예약 완료 | HOTEL MIMIR</title>
@@ -9,6 +9,9 @@
  <link rel="stylesheet" th:href="@{/css/header.css}" />
 	
 <style type="text/css">
+  body{
+	padding-top: 130px;
+  }
  .reservation-complete {
   max-width: 600px;
   margin: 0 auto;
@@ -17,12 +20,7 @@
 }
 
 
-.toolbar{
-color: black;
-}
- .navbar-link {
-    color: black;
-}
+
 /* 스텝 표시 */
 .step-indicator {
   display: flex;

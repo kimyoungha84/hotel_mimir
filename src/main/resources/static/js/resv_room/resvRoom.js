@@ -62,12 +62,25 @@ function confirmGuestSelection() {
   document.getElementById('numGuestsAdult').value = confirmedAdults;
   document.getElementById('numGuestsChild').value = confirmedChildren;
 
+  // 조식 인원도 현재 성인+아동 인원으로 체크 및 보정
+  const maxPeople = confirmedAdults;
+  const breakfastCountEl = document.getElementById("breakfast-count");
+  let breakfastCount = parseInt(breakfastCountEl.innerText) || 0;
+
+  if (breakfastCount > maxPeople) {
+    breakfastCount = maxPeople;
+    alert(`조식 인원은 성인 수(${maxPeople}명)를 초과할 수 없어 조식 인원을 조정합니다.`);
+    breakfastCountEl.innerText = breakfastCount;
+    document.getElementById("breakfast-hidden").value = breakfastCount;
+  }
+
   const placeholder = document.querySelector('.guest-placeholder');
   if (placeholder) {
     placeholder.textContent = `성인 ${confirmedAdults}, 아동 ${confirmedChildren}`;
   }
 
   closeModal();
+  if(typeof updateTotalPrice === 'function') updateTotalPrice();
 }
 
 function cancelGuestSelection() {
@@ -88,6 +101,7 @@ function closeModal() {
   });
 
   isConfirmed = false;
+  
 }
 
 
@@ -95,21 +109,23 @@ function changeBreakfast(amount) {
   const countEl = document.getElementById("breakfast-count");
   let count = parseInt(countEl.innerText);
 
-  // 현재 성인 + 아동 인원 가져오기 (확인된 값 기준)
   const adults = parseInt(document.getElementById('numGuestsAdult').value) || 0;
-  const children = parseInt(document.getElementById('numGuestsChild').value) || 0;
-  const maxPeople = adults + children;
+  const maxPeople = adults;
 
   count += amount;
   if (count < 0) count = 0;
 
   if (count > maxPeople) {
     count = maxPeople;
-    alert(`조식 인원은 성인 + 아동 수(${maxPeople}명)를 초과할 수 없습니다.`);
+    alert(`조식 인원은 성인 수(${maxPeople}명)를 초과할 수 없습니다.`);
   }
 
   countEl.innerText = count;
   document.getElementById("breakfast-hidden").value = count; // 서버에 조식 수 전달
   updateTotalPrice();
 }
+
+
+
+fu
 
