@@ -12,19 +12,139 @@
 
 <th:block th:replace="~{/administrator/fragments/admin_header :: admin_header}"></th:block>
 
+<!-- Vue CDN -->
+<script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+
+<!-- axios CDN -->
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+<style>
+    .regEmpBtn{
+    background-color: #eacdc1;
+    border: none;
+    padding: 0.5rem 1rem;
+    font-size: 0.95rem;
+    font-weight: 500;/*=400, normal*/
+    color: #000;
+    border-radius: 6px;
+    cursor: pointer;
+    margin-bottom: 1rem;
+    margin-right: 10rem;
+    float: right;
+
+
+}
+
+.regEmpBtn:hover{
+    background-color: #ddbfb3;
+}
+</style>
+
+<script th:inline="javascript">
+
+var sDomainJSONstr='[[${staffDomain}]]';
+var sDomainJSON=JSON.parse(sDomainJSONstr);
+console.log("여기여기---------"+sDomainJSON.staff_id);
+
+
+$(function(){
+
+    $("#modifyBtn").click(function(){
+        $("#staffVal").val(sDomainJSON.staff_id);
+        $("#frm").submit();
+    });//click
+
+});//ready
+
+</script>
+
 </head>
 <body>
 <th:block th:replace="~{/administrator/fragments/admin_sidebar :: admin_sidebar}"></th:block>
 
 <div id="body-pd" class="body-pd">
-<h2 class="h2Title">title 작성</h2>
+<h2 class="h2Title">직원 정보</h2>
 <hr/>
 
+<div id="app">
+<table class="vertical-table">
+<thead>
+<tr>
+    <th>아이디</td>
+    <td th:text="${staffDomain.staff_id}"></td>
+</tr>
+<tr>
+    <th>이름</td>
+    <td th:text="${staffDomain.staff_name}"></td>
+</tr>
+<tr>
+    <th>이메일</td>
+    <td th:text="${staffDomain.staff_email}" name=""></td>
+</tr>
+<tr>
+    <th>부서</td>
+    <td th:text=${staffDomain.dept_name}></td>
+</tr>
+<tr>
+    <th>직책</td>
+    <td th:text=${staffDomain.position_name}></td>
+</tr>
+<tr>
+    <th>권한</td>
+    <td></td>
+</tr>
+<tr>
+    <th>상태</td>
+    <td th:text="${staffDomain.staff_status_kor}"></td>
+</tr>
+<tr>
+    <th>입사일</td>
+    <td th:text="${staffDomain.date_of_employment}"></td>
+</tr>
+<tr>
+    <th>비밀번호 초기화</td>
+    <td><input type="button" value="비밀번호 초기화" class="radiusBtn" @click="clickResetPass"/></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div>
+<input type="button" value="로그 기록 보기" class="radiusBtn" style="background-color: #c1c1c1;  margin-top: 2rem; float:none;display: flex; justify-content: center;"/>
+</div>
+<div class="btnGroup" style="margin-left:50rem;">
+<input type="button" class="darkBtn" value="수정" id="modifyBtn"/>
+<input type="button" class="softBtn" value="취소" onclick="history.back()"/>
+</div>
 
-empDetail.html 페이지 입니다.
-이 안에 코드를 작성해 주세요.
+<form id="frm" action="/admin/employee/modify" method="post">
+<input type="hidden" id="staffVal" name="staff_id"/>
+</form>
 
 </div>
 
+
+
+<script>
+Vue.createApp({
+    data(){
+        return{
+            staffDTOJSON : sDomainJSON,
+        }
+    },
+    methods:{
+        clickResetPass(){
+            axios.put("/admin/empInitPassword",this.staffDTOJSON)
+            .then(res=>{
+                alert("비밀번호 초기화 성공\n사용자의 새비밀번호 : "+res.data);
+            })
+            .catch(err=>{
+                alert("비밀번호 초기화를 실패했습니다.");
+            })
+
+        },
+    }
+
+}).mount("#app"); 
+</script>
 </body>
 </html>

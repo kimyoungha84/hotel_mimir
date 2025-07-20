@@ -151,3 +151,33 @@ table tr:hover{
     background-color: #636363 ;  /* 클릭 시 배경색 변경 */
     transform: scale(0.98);      /* 클릭 시 살짝 눌린 느낌 */
 }
+
+.radiusBtn{
+    background-color: #eacdc1;
+    border: none;
+    padding: 0.5rem 1rem;
+    font-size: 0.95rem;
+    font-weight: 500;/*=400, normal*/
+    color: #000;
+    border-radius: 6px;
+    cursor: pointer;
+    margin-bottom: 1rem;
+    margin-right: 10rem;
+    float: right;
+
+    /* 클릭 느낌을 위한 그림자와 전환 효과 */
+    transition: all 0.15s ease-in-out;
+
+}
+
+.radiusBtn:hover{
+    background-color: #ddbfb3;
+    transform: translateY(-1px);
+    
+}
+
+.radiusBtn:active {
+    background-color: #cfaea2;
+    transform: translateY(1px);
+    
+}

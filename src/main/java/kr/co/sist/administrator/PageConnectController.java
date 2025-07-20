@@ -5,6 +5,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import jakarta.servlet.http.HttpServletRequest;
 import kr.co.sist.util.FilterConfig;
@@ -26,8 +27,12 @@ public class PageConnectController {
 		return "administrator/index";
 	}//examplePage
 	
-	/*************************************/
-	/*직원 관리 페이지*/
+	/**
+	 * 직원 관리
+	 * @param model
+	 * @param request
+	 * @return
+	 */
 	@GetMapping("/admin/employee")
 	public String employeeManagePage(Model model,HttpServletRequest request) {
 		int pageSize=5;//페이지당 항목수
@@ -48,7 +53,11 @@ public class PageConnectController {
 		return "employee/empManage";
 	}//employeeManagePage
 	
-	/*직원 등록 페이지*/
+	/**
+	 * 직원 등록
+	 * @param model
+	 * @return
+	 */
 	@GetMapping("/admin/employee/register")
 	public String employeeRegister(Model model) {
 		//여기서 아이디를 만들어서 줘야 함.
@@ -60,12 +69,50 @@ public class PageConnectController {
 	
 	
 	
-	/*직원 상세*/
+	
+	/**
+	 * 직원 상세
+	 * @param model
+	 * @param staff_id
+	 * @return
+	 */
 	@PostMapping("/admin/employee/detail")
-	public String employeeDetail() {
+	public String employeeDetail(Model model, @RequestParam String staff_id) {
+		
+		System.out.println("--------detail의 staff_id-------------:"+staff_id);
+		//정보 부려줄 것들을 Model에 저장
+		StaffDomain sd=as.getOneStaffInfo(staff_id);
+		
+		
+		StringBuilder sb=new StringBuilder();
+		sb.append(sd.getStaff_id()).append("")
+		.append(sd.getStaff_name()).append(" ")
+		.append(sd.getStaff_email()).append(" ")
+		.append(sd.getDept_iden()).append(" ")
+		.append(sd.getPosition_identified_code()).append(" ")
+		.append(sd.getPermission_id_code()).append(" ")
+		.append(sd.getStaff_status()).append(" ")
+		.append(sd.getDate_of_employment()).append(" ");
+		
+		System.out.println(sb.toString());
+		model.addAttribute("staffDomain",as.getOneStaffInfo(staff_id));
+		
 		
 		return "employee/empDetail";
 	}//employeeDetail
+	
+	
+	@PostMapping("/admin/employee/modify")
+	public String modifyEmployee(@RequestParam String staff_id, Model model) {
+		
+		StaffDomain sdomain=as.getOneStaffInfo(staff_id);
+		
+		model.addAttribute("staffDomain",sdomain);
+		
+		
+		return "employee/empModify";
+	}//modifyEmployee
+	
 	
 	/*************************************/
 	/*회원 관리*/
@@ -74,5 +121,6 @@ public class PageConnectController {
 		return "admin_member/memManage";
 	}//memberManage
 	
+
 		
 }//class

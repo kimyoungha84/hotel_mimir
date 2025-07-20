@@ -12,10 +12,36 @@
 
 <th:block th:replace="~{/administrator/fragments/admin_header :: admin_header}"></th:block>
 
-<script type="text/javascript">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-</script>
+<style>
+.dashboard {
+    display: flex;
+    gap: 2rem;
+    flex-wrap: wrap; /* 화면 작아지면 줄바꿈 */
+    justify-content: center;
+}
 
+.chart-card {
+    width: 300px;
+    padding: 1rem;
+    border-radius: 12px;
+    background-color: #ffffff;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    transition: box-shadow 0.3s;
+}
+
+.chart-card:hover {
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15); 
+}
+
+.card-title {
+    font-size: 1.1rem;
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+    text-align: center;
+}
+</style>
 
 </head>
 <body>
@@ -23,11 +49,180 @@
 <th:block th:replace="~{/administrator/fragments/admin_sidebar :: admin_sidebar}"></th:block>
 
 <div id="body-pd" class="body-pd">
-<h2 class="h2Title">index.html</h2>
+<h2 class="h2Title">대쉬보드</h2>
 <hr/>
 
-여기가 관리자 처음 페이지(indxe.html)
+<div class="dashboard">
+    <div class="chart-card">
+    <div class="card-title">월별 매출</div>
+    <canvas id="myChart" width="280" height="200"></canvas>
+    </div>
+
+    <div class="chart-card">
+    <div class="card-title">고객 방문 수</div>
+    <canvas id="myChart2" width="280" height="200"></canvas>
+    </div>
+
+    <div class="chart-card">
+    <div class="card-title">고객 방문 수</div>
+    <canvas id="myChart3" width="280" height="200"></canvas>
+    </div>
+    
+    <div class="chart-card">
+    <div class="card-title">고객 방문 수</div>
+    <canvas id="myChart4" width="280" height="200"></canvas>
+    </div>
+</div>
+
 
 </div>
+
+
+
+<script>
+const ctx = document.getElementById('myChart').getContext('2d');
+
+new Chart(ctx, {
+type: 'bar',
+data: {
+    labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+    datasets: [{
+    label: '# of Votes',
+    data: [12, 19, 3, 5, 2, 3],
+    borderWidth: 1
+    }]
+},
+options: {
+    scales: {
+    y: {
+        beginAtZero: true
+    }
+    }
+}
+});
+</script>
+<script>
+const ctx2 = document.getElementById('myChart2').getContext('2d');
+const myChart2 = new Chart(ctx2, {
+    type: 'bar',
+    data: {
+        labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+        datasets: [{
+            label: '# of Votes',
+            data: [12, 19, 3, 5, 2, 3],
+            backgroundColor: [
+                'rgba(255, 99, 132, 0.2)',
+                'rgba(54, 162, 235, 0.2)',
+                'rgba(255, 206, 86, 0.2)',
+                'rgba(75, 192, 192, 0.2)',
+                'rgba(153, 102, 255, 0.2)',
+                'rgba(255, 159, 64, 0.2)'
+            ],
+            borderColor: [
+                'rgba(255, 99, 132, 1)',
+                'rgba(54, 162, 235, 1)',
+                'rgba(255, 206, 86, 1)',
+                'rgba(75, 192, 192, 1)',
+                'rgba(153, 102, 255, 1)',
+                'rgba(255, 159, 64, 1)'
+            ],
+            borderWidth: 1
+        }]
+    },
+    options: {
+        scales: {
+            y: {
+                beginAtZero: true
+            }
+        }
+    }
+});
+</script>
+<script>
+const ctx3 = document.getElementById('myChart3').getContext('2d');
+
+const CHART_COLORS = {
+    red: 'rgb(255, 99, 132)',
+    blue: 'rgb(54, 162, 235)'
+};
+
+const labels = ['1월', '2월', '3월', '4월', '5월', '6월', '7월'];
+
+var data = {
+    labels: labels,
+    datasets: [
+    {
+        label: 'Dataset 1',
+        data: [10, 20, -10, 30, 40, -20, 10],
+        borderColor: CHART_COLORS.red,
+        backgroundColor: 'rgba(255, 99, 132, 0.5)',
+        fill: false
+    },
+    {
+        label: 'Dataset 2',
+        data: [5, -15, 25, 10, 35, -5, 20],
+        borderColor: CHART_COLORS.blue,
+        backgroundColor: 'rgba(54, 162, 235, 0.5)',
+        fill: false
+    }
+    ]
+};
+
+const myChart3 =new Chart(ctx3, {
+    type: 'line',
+    data: data,
+    options: {
+    responsive: true,
+    plugins: {
+        legend: {
+        position: 'top',
+        },
+        title: {
+        display: true,
+        text: 'Chart.js Line Chart'
+        }
+    }
+    },
+});
+</script>
+<script>
+const ctx4 = document.getElementById('myChart4').getContext('2d');
+
+var data = {
+    labels: [
+    'Red',
+    'Blue',
+    'Yellow'
+    ],
+    datasets: [{
+    label: 'My First Dataset',
+    data: [300, 50, 100],
+    backgroundColor: [
+        'rgb(255, 99, 132)',
+        'rgb(54, 162, 235)',
+        'rgb(255, 205, 86)'
+    ],
+    hoverOffset: 4
+    }]
+};
+
+
+const myChart4 =new Chart(ctx4, {
+    type: 'pie',
+    data: data,
+    options: {
+    responsive: true,
+    plugins: {
+        legend: {
+        position: 'top',
+        },
+        title: {
+        display: true,
+        text: 'Chart.js Line Chart'
+        }
+    }
+    },
+});
+</script>
 </body>
 </html>

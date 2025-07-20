@@ -72,6 +72,22 @@ public class AdminService {
 	}//getPermissionById
 	
 	
+	/*한 명의 직원 상세 정보 가져오기*/
+	public StaffDomain getOneStaffInfo(String staff_id) {
+		
+		StaffDomain sd=am.selectOneStaffDetail(staff_id);
+		
+		sd.setDept_name(departmentMapping(sd.getDept_iden()));
+		
+		sd.setPosition_name(positionMapping(sd.getPosition_identified_code()));
+		sd.setStaff_status_kor(statusMapping(sd.getStaff_status()));
+		
+		System.out.println("sd-------------------"+sd);
+		
+		
+		return sd;
+	}//end getOneStaffInfo
+	
 	
 	/*아이디 만들기 : 형태 mimir_6자리 랜덤숫자*/
 	public String makeAdminId() {
@@ -148,6 +164,17 @@ public class AdminService {
 		return staffDTO.getStaff_id().split("_")[1];
 	}//seperateIdtoRandnum
 	
+	/*6자리 randNum 만들기*/
+	public String sixRandNum() {
+		int randNum=0;
+		String randNumStr="";		
+		
+		randNum=(int)(Math.random()*1000000);
+		randNumStr=String.format("%06d", randNum); //randNum에서 앞에 0이 나왔더라도, 그걸 채워준다.
+		
+		return randNumStr;
+	}//end randNum
+	
 	
 	/*직원 등록*/
 	@Transactional
@@ -184,13 +211,34 @@ public class AdminService {
 	public void sendMail(String employeeEmail) {
 	
 		try {
-			sendMail.sendMail("hyeon931023@gmail.com", "MIMIR 비밀번호 재설정");
+			sendMail.sendMail("hyeon931023@gmail.com", "MIMIR 비밀번호 재설정","templates/administrator_email_template/reset_password_info.html");
 			//sendMail.sendMail(employeeEmail, "MIMIR 비밀번호 재설정");
 		} catch (MessagingException e) {
 			e.printStackTrace();
 		}//try~catch
 		
 	}//sendMail
+	
+	/*직원 비빌번호 초기화*/
+	public Map<String,String> empInitPass(StaffDTO sDTO) {
+		Map<String,String> passMap=new HashMap<String, String>();
+		
+		String passStr="pass"+sixRandNum();
+		
+		sDTO.setStaff_pass(passStr);//새로운 비밀번호 설정
+		
+		int resultVal=am.updateResetPass(sDTO);
+		sendMail(sDTO.getStaff_email());//이메일 보내기
+		
+		passMap.put("resultUpdate",resultVal+"");
+		passMap.put("newpassStr", passStr);
+		
+		return passMap;
+	}//empInitPass
+	
+
+	
+
 	
 	
 	/*일방향 암호화*/
@@ -253,6 +301,84 @@ public class AdminService {
 	}//chkHaveAuthority
 	
 	/***********************************************************************/
+	
+	/**
+	 * 해당 문자열과 maaping되는 문자열을 반환한다.
+	 * @param deptCode //부서코드
+	 * @return //부서코드명
+	 */
+	private String departmentMapping(String deptCode) {
+	  
+		Map<String, String> deptMap=new HashMap<String, String>();
+		deptMap.put("room", "객실");
+		deptMap.put("dinning", "다이닝");
+		deptMap.put("inquiry", "문의");
+		deptMap.put("person", "인사");
+		deptMap.put("member", "고객");
+		deptMap.put("manage", "경영지원");
+	    
+		return deptMap.get(deptCode);
+	}//departmentMapping
+	
+	
+	/** 
+	 * 직책코드에 mapping되는 문자열을 반환한다.
+	 * @param positionCode //직책코드
+	 * @return 직책명
+	 */
+	private String positionMapping(String positionCode) {
+		
+		Map<String, String> positionMap=new HashMap<String, String>();
+		positionMap.put("A", "대표");
+		positionMap.put("B", "팀장");
+		positionMap.put("C", "과장");
+		positionMap.put("D", "대리");
+		positionMap.put("E", "사원");
+		
+		return positionMap.get(positionCode);
+	}//positionMapping
+	
+	
+	/**
+	 * 권한코드에 mapping되는 문자열을 반환한다.
+	 * @param permissionCode //권한 코드
+	 * @return 권한명
+	 */
+	private String permissionMapping(String permissionCode) {
+	
+		StringBuilder sb=new StringBuilder();
+		String permissionStr="";
+		Map<String, String> permissionMap=new HashMap<String, String>();
+		permissionMap.put("room","객실");
+		permissionMap.put("dinning","다이닝");
+		permissionMap.put("inquiry","문의");
+		permissionMap.put("member","회원");
+		permissionMap.put("employee","직원");
+		permissionMap.put("admin","관리자");
+		
+		if(permissionCode.contains(",")) {
+			
+		}else {
+			permissionStr=permissionMap.get(permissionCode);
+		}//end if~else
+		
+		
+		
+		
+		
+		return permissionStr;
+	}//permissionMapping
+	
+	
+	private String statusMapping(String statusCode) {
+		
+		   Map<String, String> statusMap=new HashMap<String, String>();
+		   statusMap.put("ACTIVE", "재직");
+		   statusMap.put("DEACTIVE", "퇴사");
+		   
+		   return statusMap.get(statusCode);
+	}//statusMapping
+	
 	
 	/*로그 번호 생성*/
 	private String createLogIden(StaffDTO staffDTO) {
@@ -318,7 +444,7 @@ public class AdminService {
 	}//processPermissionList
 	
 	
-	/*mapping*/
+	/*mapping URL에 해당하는 권한을 반환해준다.*/
 	private String mappingURLtoAthority(String uri) {
 		//페이지(URL, 권한)
 		Map<String, String> accessPage=new HashMap<String, String>();
@@ -339,19 +465,7 @@ public class AdminService {
 	}//mappingURLtoID
 	
 
-	/**
-	 *     var permissionMapping={
-        "room" : "객실",
-        "dinning" : "다이닝",
-        "inquiry" : "문의",
-        "member" : "회원",
-        "employee":"직원",
-        "admin":"관리자"
-    }
-	 * 
-	 * 
-	 */
-	
+
 	
 	
 }//class

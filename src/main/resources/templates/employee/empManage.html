@@ -48,22 +48,23 @@
         </tr>
     </thead>
     <tbody th:fragment="staff_list_fm" id="resultArea" >
-    <form id="frm" method="post" th:action="@{/admin/employee/detail}">
-        <tr th:each="staff, stat : ${staffList}">
+        <tr th:each="staff, stat : ${staffList}" th:attr="data-staff-id=${staff.staff_id}" class="staffOneInfo">
             <td th:text="${stat.count}"></td>
-            <td th:text="${staff.staff_id}" name="staff_id"></td>
+            <td th:text="${staff.staff_id}"></td>
             <td th:text="${staff.staff_name}"></td>
             <td th:id="'dept-'+${stat.count}" th:text="${staff.dept_iden}" ></td> <!-- 부서 -->
             <td th:id="'position-'+${stat.count}" th:text="${staff.position_identified_code}"></td> <!-- 직책 -->
             <td th:id="'permission-'+${stat.count}" th:text="${staff.permission_ids}"></td> <!-- 권한 -->
             <td th:id="'status-'+${stat.count}" th:text="${staff.staff_status}"></td> <!-- 상태 -->
         </tr>
-    </form> 
     </tbody>
     </table>
+    <form id="frm" method="post" th:action=@{/admin/employee/detail}>
+        <input type="hidden" id="staffClickedId" name="staff_id"/>
+    </form>
     <div th:replace="fragments/pagination :: pagination"></div>
     </div>
-  
+
 </div>
 
 
@@ -161,9 +162,14 @@ $(function(){
     observer.observe(document.getElementById('resultArea'), config);
 
 
-    $("#resultArea").click(function(){
+    $("#resultArea").on("click",".staffOneInfo",function(){
+        var staffId=$(this).data("staff-id");
+        console.log(staffId);
+
+        $("#staffClickedId").val(staffId);
         $("#frm").submit();
-    });//click
+    });
+
 });//ready
 
 

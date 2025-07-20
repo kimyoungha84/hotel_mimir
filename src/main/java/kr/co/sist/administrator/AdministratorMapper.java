@@ -14,6 +14,8 @@ public interface AdministratorMapper {
 	
 	/*아이디가 이미 있는 아이디인지 확인*/
 	public Integer selectCheckExistId(String employee_id);
+	/*한 명의 직원정보*/
+	public StaffDomain selectOneStaffDetail(String employee_id);
 	
 	
 	/*직원등록*/
@@ -25,6 +27,8 @@ public interface AdministratorMapper {
 	
 	/*초기 비밀번호 수정*/
 	public int updateStaffInitPassword(LoginDTO lDTO);
+	/*관리자, 비밀번호 초기화 버튼 눌렀을 때*/
+	public int updateResetPass(StaffDTO staffDTO);
 }//interface
 
 

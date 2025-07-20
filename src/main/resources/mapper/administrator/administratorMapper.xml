@@ -22,6 +22,16 @@ select listagg(permission_id_code,',') as permission  from staff_permission wher
 select count(staff_id) from staff where staff_id=#{staff_id}
 </select>
 
+<!-- 한 명의 직원 정보 가져오기 -->
+<select id="selectOneStaffDetail" parameterType="String" resultType="staffDomain">
+select s.staff_id, s.staff_name, s.staff_email,s.dept_iden, s.position_identified_code, listagg(sp.permission_id_code,',') as permission_id_code, s.staff_status,s.date_of_employment
+from staff s
+left join staff_permission sp on s.staff_id=sp.staff_id
+where s.staff_id=#{staff_id}
+group by
+	s.staff_id, s.staff_name, s.staff_email,s.dept_iden, s.position_identified_code, s.staff_status,s.date_of_employment
+</select>
+
 <!-- 로그파일 등록 -->
 <!-- 직원 등록을 하기 위해 먼저 선행되어야 한다. 무결성 제약조건으로 인해  -->
 <insert id="insertLogInfo" parameterType="staffDTO">
@@ -44,4 +54,13 @@ update staff
 set staff_pass=#{pass}
 where staff_id=#{id}
 </update>
+
+<!-- 비밀번호 재설정 -->
+<!-- 비밀번호를 pass_어쩌구 형태로 변경! - 관리자가 비밀번호 번경을 눌렀을 떄 가능! -->
+<update id="updateResetPass" parameterType="staffDTO">
+update staff
+set staff_pass=#{staff_pass}
+where staff_id=#{staff_id}
+</update>
+
 </mapper>

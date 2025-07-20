@@ -1,18 +1,10 @@
 package kr.co.sist.administrator;
 
-import java.util.List;
-
-import javax.lang.model.element.ModuleElement;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.SessionAttributes;
 
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 
 @Controller
@@ -67,6 +59,7 @@ public class AdminController {
 	}//adminResetPassword
 	
 	
+	
 	/*권한 없을 때 나오는 페이지*/
 	@GetMapping("/admin/noAuthor")
 	public String noAuthory(HttpSession session, Model model) {
@@ -80,22 +73,6 @@ public class AdminController {
 	
 	
 
-	/******************************************************************************/
-	
-	/*이건 test용*/
-	@GetMapping("/test")
-	public String adminTest() {
-		return "administrator_email_template/reset_password";
-	}//adminTest
-	
-	
-	/*test용*/
-	@GetMapping("/test2")
-	public String adminTest2() {
-		//testtest
-		return "administrator_email_template/reset_password_info";
-	}//adminTest
-	
 
 	
 	

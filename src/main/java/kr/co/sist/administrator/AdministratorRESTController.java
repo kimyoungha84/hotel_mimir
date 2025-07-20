@@ -1,10 +1,10 @@
 package kr.co.sist.administrator;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -14,9 +14,10 @@ import jakarta.servlet.http.HttpSession;
 @RestController
 public class AdministratorRESTController {
 
+
 	@Autowired
 	AdminService as;
-	
+
 	/**
 	 * 아이디와 비밀번호 체크
 	 * @param id
@@ -59,8 +60,8 @@ public class AdministratorRESTController {
 						httpSession.setAttribute("session_id", lDTO.getId());
 						httpSession.setAttribute("session_name", as.getNameById(lDTO.getId()));
 				
-						String session_id=(String)request.getSession().getAttribute("session_id");
-						String session_name=(String)request.getSession().getAttribute("session_name");
+						//String session_id=(String)request.getSession().getAttribute("session_id");
+						//String session_name=(String)request.getSession().getAttribute("session_name");
 						
 						//System.out.println("RestController-------"+session_id +" / "+ session_name);
 						
@@ -96,7 +97,12 @@ public class AdministratorRESTController {
 		return resultCnt;
 	}//registerStaff
 	
-	/*초기 비밀번호 등록*/
+	/**
+	 * 초기 비밀번호 등록
+	 * @param lDTO
+	 * @return
+	 * @throws Exception
+	 */
 	@PostMapping("/admin/initialPassword")
 	public int initialPassword(@RequestBody LoginDTO lDTO) throws Exception{
 		int chkIdExist=0;
@@ -137,4 +143,29 @@ public class AdministratorRESTController {
 		return resultStatus;
 	}//initialPassword
 
+
+	/**************************************/
+	/**
+	 * 직원 상세 페이지에서
+	 * 직원 비밀번호 초기화 버튼 누를 때 작동
+	 * @param model
+	 * @param staffDomain
+	 */
+	@PutMapping("/admin/empInitPassword")
+	public String employeeInitPassword(Model model,@RequestBody StaffDTO staffDTO) {
+		
+		
+		model.addAttribute("staffDTO",staffDTO);
+		System.out.println("/admin/empInitPassword-------"+staffDTO);
+		//DB의 비밀번호 컬럼에 pass_어쩌구 형태로 주면 되겠지
+		Map<String,String> passMap=as.empInitPass(staffDTO);
+		
+		if(!passMap.get("resultUpdate").equals("1")) {
+			new Exception();
+		}//end if
+		
+		return passMap.get("newpassStr");
+	}//end employeeInitPassword
+	
+	
 }//class

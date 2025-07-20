@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html xmlns="http://www.thymeleaf.org">
+<head>
+<!-- favicon 설정 -->
+<link rel="icon shortcut"  href="/admin_common_assets/common_img/mimir_favicon.ico"/>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<!-- jquery CDN -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+
+<th:block th:replace="~{/administrator/fragments/admin_header :: admin_header}"></th:block>
+
+<!-- Vue CDN -->
+<script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+
+<!-- axios CDN -->
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+<style>
+    .regEmpBtn{
+    background-color: #eacdc1;
+    border: none;
+    padding: 0.5rem 1rem;
+    font-size: 0.95rem;
+    font-weight: 500;/*=400, normal*/
+    color: #000;
+    border-radius: 6px;
+    cursor: pointer;
+    margin-bottom: 1rem;
+    margin-right: 10rem;
+    float: right;
+
+
+}
+
+.regEmpBtn:hover{
+    background-color: #ddbfb3;
+}
+</style>
+
+<script th:inline="javascript">
+
+var sDomainJSONstr='[[${staffDomain}]]';
+var sDomainJSON=JSON.parse(sDomainJSONstr);
+
+console.log(sDomainJSON);
+</script>
+
+</head>
+<body>
+<th:block th:replace="~{/administrator/fragments/admin_sidebar :: admin_sidebar}"></th:block>
+
+<div id="body-pd" class="body-pd">
+<h2 class="h2Title">직원 수정</h2>
+<hr/>
+
+<div id="app">
+<table class="vertical-table">
+<thead>
+<tr>
+    <th>아이디</th>
+    <td id="staffId" th:text="${staff_id}"></td>
+</tr>
+<tr>
+    <th>이름</th>
+    <td><input type="text" v-model="employRegisterObj.name"/></td>
+</tr>
+<tr>
+    <th>이메일</th>
+    <td><input type="text" v-model="employRegisterObj.email"/></td>
+</tr>
+<tr>
+    <th>부서</th>
+    <td>
+        <select id="dept" v-model="employRegisterObj.dept">
+        <option  :value="''" th:text="-----선택-----" disabled selected></option>
+        <option v-for="dept in this.depts" :value="dept.dept_iden" :key="dept.dept_iden">{{dept.dept_name}}</option>
+        </select>
+    </td>
+</tr>
+<tr>
+    <th>직책</th>
+    <td>
+        <select id="position" v-model="employRegisterObj.position">
+        <option :value="''" th:text="---선택---" disabled selected></option>
+        <option v-for="position in this.positions" :value="position.position_iden_code" :key="position.position_iden_code">{{position.position_name}}</option>
+        </select>
+    </td>
+</tr>
+<tr>
+    <th>권한</th>
+    <td style="display: flex; align-items: center;">
+    <div style="flex: 1;">
+    <span v-for="(auth,index) in employRegisterObj.authority" :key="index">
+    <select :id="'authority'+index" v-model="employRegisterObj.authority[index]" style="margin-right:0.5rem" @change="chkDuplicateValue(index)">
+    <option :value="''" th:text="---선택---" disabled selected></option>
+    <option v-for="authority in this.authorities" :value="authority.permission_id" :key="authority.permission_id">{{authority.permission_type}}</option>
+    </select>
+    </span>
+    </div>
+    <div style="margin-left: 1rem; display: flex; flex-direction: column; gap: 0.5rem;">
+    
+    <input type="button" class="addAuthorityBtn" value="+ 추가" @click="addAuthoritySelector"/>
+    <input type="button" class="removeAuthorityBtn" value="- 삭제" @click="removeAuthoritySelector"/>
+    
+    </div>
+    </td>
+</tr>
+<tr>
+    <th>상태</td>
+    <td>
+        <select id="status" v-model="employRegisterObj.status">
+        <option :value="''" th:text="---선택---" disabled selected></option>
+        <option v-for="status in this.statuses" :value="status.staff_status" :key="status.staff_status">{{status.staff_status_kor}}</option>
+        </select>
+    </td>
+</tr>
+<tr>
+    <th>입사일</th>
+    <td><input type="date" v-model="employRegisterObj.date"></td>
+</tr>
+</tbody>
+</table>
+</div>
+
+<div class="btnGroup" style="margin-left:50rem;">
+<input type="button" class="darkBtn" value="확인"/>
+<input type="button" class="softBtn" value="취소" onclick="history.back()"/>
+</div>
+
+</div>
+
+
+
+<script>
+Vue.createApp({
+    data(){
+        return{
+            staffDomainJSON : {},
+            employRegisterObj :{
+                id:"",
+                name:"", email:"",dept:"",position:"",authority:[''], status:"",date:""
+            },
+            flag : "",
+            depts :[
+                {dept_iden:"room", dept_name:"객실 관리"},
+                {dept_iden:"dinning", dept_name:"다이닝 관리"},
+                {dept_iden:"inquiry", dept_name:"문의 관리"},
+                {dept_iden:"person", dept_name:"인사 관리"},
+                {dept_iden:"member", dept_name:"회원 관리"},
+                {dept_iden:"manage", dept_name:"경영지원"},
+            ],
+            positions:[
+                {position_iden_code:"B", position_name:"팀장"},
+                {position_iden_code:"C", position_name:"과장"},
+                {position_iden_code:"D", position_name:"대리"},
+                {position_iden_code:"E", position_name:"사원"}
+            ],
+            authorities:[
+                {permission_id:"room", permission_type:"객실"},
+                {permission_id:"dinning", permission_type:"다이닝"},
+                {permission_id:"inquiry", permission_type:"문의"},
+                {permission_id:"member", permission_type:"회원"},
+                {permission_id:"employee", permission_type:"직원"}
+
+            ],
+            statuses:[
+                {staff_status:"ACTIVE", staff_status_kor:"재직"},
+                {staff_status:"deactive", staff_status_kor:"퇴사"},
+            ]
+        }
+    },
+    mounted(){
+        this.employRegisterObj.id=document.getElementById('staffId').innerText;
+        this.staffDomainJSON = sDomainJSON;
+        
+        this.employRegisterObj.id = this.staffDomainJSON.staff_id;
+        this.employRegisterObj.name = this.staffDomainJSON.staff_name;
+        this.employRegisterObj.email = this.staffDomainJSON.staff_email;
+        this.employRegisterObj.dept = this.staffDomainJSON.dept_iden;
+        this.employRegisterObj.position = this.staffDomainJSON.position_identified_code;
+        this.employRegisterObj.status=this.staffDomainJSON.staff_status;
+        this.employRegisterObj.date = this.staffDomainJSON.date_of_employment;
+
+        //권한 리스트까지 넘어오면, 그때, 주석 풀기
+        //this.employRegisterObj.authority = [...this.staffDomainJSON.permission_id_code_list];
+    },
+    methods:{
+        addAuthoritySelector(){
+            //이게 클릭했을 때, <selector>가 추가되어야함.
+
+            //마지막에 추가된 값
+            var lastSelected=this.employRegisterObj.authority[this.employRegisterObj.authority.length-1];
+
+            //이번에 추가된 값.
+            if(!this.employRegisterObj.authority.includes('')){
+                //select의 값을 선택했으면 들어오기.!
+                
+                if(this.flag){
+                    this.employRegisterObj.authority.push('');
+                }//end if
+            }else{
+                alert("권한을 선택해 주세요.");
+            }//end if~else
+        },
+        removeAuthoritySelector(){
+            // 권한 select가 1개 초과일 때만 제거
+            if(this.employRegisterObj.authority.length > 1){
+                this.employRegisterObj.authority.pop();
+            } else {
+                alert("최소 권한 한 개는 선택해야 합니다.");
+            }//end if~else
+        },
+        
+        addAuthoritytoList(){
+
+        },
+        chkDuplicateValue(index){
+            this.flag=true;
+            //중복값 체크
+            //index가 들어가야하는지 생각 필요!!
+            var selectVal=this.employRegisterObj.authority[index];
+            
+            //debugger;
+            //console.log("중복값 체크크크크 -----"+selectVal);
+            
+            
+            var isDuplicate=this.employRegisterObj.authority.some((eleVal,i)=>{
+                return i != index && eleVal === selectVal;
+            });
+
+            //console.log("isduplicate--------"+isDuplicate)
+
+            if(isDuplicate){
+                //만약에 배열 안에 지금 선택한 값이 들어가 있으면
+                alert("이미 선택된 값입니다. 다시 선택해주세요.");
+                //해당 selector를 초기화 시켜줍시다아.
+                this.employRegisterObj.authority[index]='';
+                this.flag=false;
+            }//end if
+
+            //console.log("chkDuplicateValueFlag============"+this.flag);
+            return this.flag;
+        },
+        registerBtn(){
+            console.log(this.employRegisterObj);
+            
+            axios.post("/admin/registerStaff",this.employRegisterObj)
+            .then(res=>{
+                alert("직원 등록에 성공했습니다.");
+                location.href="/admin/employee";
+            })
+            .catch(err=>{
+                alert("등록에 실패했습니다.\n값들을 다시 확인해 주세요.");
+            });
+        },
+        cancelBtn(){
+            location.href="/admin/employee";
+        },
+
+    }
+}).mount("#app");
+</script>
+</body>
+</html>

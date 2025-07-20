@@ -1,6 +1,9 @@
 package kr.co.sist.administrator;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
@@ -26,13 +29,13 @@ public class AdministratorSendMail {
         this.modelUtils = modelUtils;
     }
 	
-	public void sendMail(String to, String subject) throws MessagingException{
+	public void sendMail(String to, String subject,String url) throws MessagingException{
 		MimeMessage message=mailSender.createMimeMessage();
 		
 		MimeMessageHelper helper=new MimeMessageHelper(message, true, "UTF-8");
 		helper.setTo(to);
 		helper.setSubject(subject);
-		helper.setText(loadHtmlMailTemplate(), true);
+		helper.setText(loadHtmlMailTemplate(url), true);
 		
 		helper.setFrom("hyeon931023@gmail.com");//보내는 사람 설정
 		
@@ -48,8 +51,8 @@ public class AdministratorSendMail {
 	 * @return
 	 * @throws IOException
 	 */
-	public String loadHtmlMailTemplate(){
-		ClassPathResource resource =new ClassPathResource("templates/administrator_email_template/reset_password_info.html");
+	public String loadHtmlMailTemplate(String url){
+		ClassPathResource resource =new ClassPathResource(url);
 		String StreamUtilStr="";
 		
 		try {
@@ -61,5 +64,7 @@ public class AdministratorSendMail {
 		return StreamUtilStr;
 	}//loadHtmlMailTemplate
 	
+	
+
 	
 }//class

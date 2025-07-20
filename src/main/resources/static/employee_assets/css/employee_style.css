@@ -13,9 +13,17 @@
     margin-right: 10rem;
     float: right;
 
+    /* 클릭 느낌을 위한 그림자와 전환 효과 */
+    transition: all 0.15s ease-in-out;
 
 }
 
 .regEmpBtn:hover{
     background-color: #ddbfb3;
+    transform: translateY(-1px);
+}
+
+.regEmpBtn:active {
+    background-color: #cfaea2;
+    transform: translateY(1px);
 }
