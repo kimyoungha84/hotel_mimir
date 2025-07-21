@@ -1,15 +1,18 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="ko" xmlns:th="http://thymeleaf.org" th:class="sub-page">
 <head>
   <meta charset="UTF-8">
   <title>예약조회</title>
   <link href="https://fonts.googleapis.com/css2?family=Pretendard&display=swap" rel="stylesheet">
+   <link rel="stylesheet" th:href="@{/css/header.css}" />
+  <link rel="stylesheet" th:href="@{/css/footer.css}" />
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
       font-family: 'Pretendard', sans-serif;
       background-color: #f9f8f6;
       color: #111;
+      	padding-top: 130px;
     }
     .container {
       max-width: 800px;
@@ -75,27 +78,31 @@
   </style>
 </head>
 <body>
+<div th:replace="~{fragments/header.html :: header}"></div>
   <div class="container">
-    <h1>예약조회</h1>
+    <h1>비회원 예약 조회</h1>
     <div class="tabs">
       <div class="tab active">객실 예약</div>
       <div class="tab">다이닝 예약</div>
     </div>
-    <form>
+    <form action="/searchResvDetail" method="POST">
       <label>예약번호 <span style="color: red">*</span></label>
-      <input type="text" placeholder="예약번호 입력">
+      <input type="text" placeholder="예약번호 입력" name="resvId">
       <div class="desc">예약번호를 분실하신 고객님께서는 미미르 객실예약과로 직접 문의해 주세요.</div>
 
       <label>이름 <span style="color: red">*</span></label>
-      <input type="text" placeholder="이름 입력">
+      <input type="text" placeholder="이름 입력" name="userName">
 
       <button type="submit" class="btn">예약 조회</button>
     </form>
 
     <div class="login-info">
+    <a th:href="@{/member/loginFrm}" style="text-decoration: none; color: inherit; font-size: 22px;">
       <strong>로그인</strong><br>
+    </a>
       회원으로 객실을 예약하신 경우 마이페이지 > 객실 예약 내역에서 조회하실 수 있습니다.
     </div>
   </div>
+   <div th:replace="~{fragments/footer.html :: footerFragment}"></div>
 </body>
 </html>

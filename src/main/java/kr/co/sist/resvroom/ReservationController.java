@@ -56,7 +56,17 @@ public class ReservationController {
    
    @GetMapping("/searchResv")
    public String searchResv() {
-      return "room_resv/searchResv";
+      return "room_resv/NonMemberSearch";
+   }//roomList
+   
+   @PostMapping("/searchResvDetail")
+   public String searchResvDetail(ReservationDTO rDTO, Model model) {
+	   System.out.println("테스트"+rDTO);
+	   rDTO=rs.searchReservationData(rDTO);
+	   
+	   model.addAttribute("resvData",rDTO);
+	   
+	   return "room_resv/searchResvDetail";
    }//roomList
    
    @GetMapping("/room_resv/error_page")

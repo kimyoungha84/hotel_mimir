@@ -51,7 +51,35 @@
   <select id="selectReservationSeq" resultType="int">
     SELECT SEQ_RESERVATION.NEXTVAL FROM DUAL
 	</select>
-  
+	
+<select id="selectReservationData" resultType="reservationDTO" parameterType="reservationDTO">
+   SELECT
+        r.ROOM_ID AS roomId,
+        t.TYPE_NAME AS typeName,
+        r.CHECKIN_DATE AS checkinDate,
+        r.CHECKOUT_DATE AS checkoutDate,
+        r.STATUS AS status,
+        f.PATH AS imgPath,
+        r.RESV_ID AS resvId,
+        r.NUM_GUESTS_CHILD AS numGuestsChild,
+        r.NUM_GUESTS_ADULT AS numGuestsAdult,
+        n.NON_MEM_NAME AS userName,
+        n.NON_MEM_TEL AS userTel,
+        r.REQUEST_MSG AS requestMsg
+    FROM RESERVATION r
+    LEFT JOIN ROOM ro ON r.ROOM_ID = ro.ROOM_ID
+    LEFT JOIN ROOM_TYPE t ON ro.TYPE_ID = t.TYPE_ID
+    LEFT JOIN (
+        SELECT TARGET_TYPE, MIN(PATH) AS PATH
+        FROM FILE_PATH
+        GROUP BY TARGET_TYPE
+    ) f ON f.TARGET_TYPE = t.TYPE_NAME
+    LEFT JOIN NON_MEMBER n ON r.NON_MEM_ID = n.NON_MEM_ID
+    WHERE r.RESV_ID = #{resvId}
+      AND n.NON_MEM_NAME = #{userName}
+</select>
+
+
 	<select id="selectOneResv" parameterType="int" resultType="reservationDTO">
 	  SELECT 
     r.RESV_ID          AS resvId,

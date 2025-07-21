@@ -17,6 +17,8 @@ public interface ReservationMapper {
     
     public ReservationDTO loginUserData(int userNum);   
     
+    public ReservationDTO selectReservationData(ReservationDTO rDTO);   
+    
     public void insertNonMemberReservation(ReservationDTO rDTO);
     
     public void insertMemberReservation(ReservationDTO rDTO);

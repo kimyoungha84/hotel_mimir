@@ -14,6 +14,10 @@ public class ReservationService {
 		rm.insertNonMemberReservation(rDTO);
 	}//addReservation
 	
+	public ReservationDTO searchReservationData(ReservationDTO rDTO){
+		return rm.selectReservationData(rDTO);
+	}//addReservation
+	
 	public void addMemberReservation(ReservationDTO rDTO){
 		rm.insertMemberReservation(rDTO);
 	}//addReservation
