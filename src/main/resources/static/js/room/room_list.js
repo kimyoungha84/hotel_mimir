@@ -197,48 +197,48 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   document.querySelectorAll('.price-btn').forEach(btn => {
-    btn.addEventListener('click', function(event) {
-      event.preventDefault();
+      btn.addEventListener('click', function(event) {
+          event.preventDefault();
 
-      const card = this.closest('.room-card');
-      const roomId = new URL(this.href).searchParams.get('roomId');
+          const card = this.closest('.room-card');
+          const roomId = new URL(this.href).searchParams.get('roomId');
 
-      let checkIn = "";
-      let checkOut = "";
-      let nights = 0;
+          let checkIn = "";
+          let checkOut = "";
+          let nights = 0;
 
-      if (datePickerInstance && datePickerInstance.selectedDates.length === 2) {
-        checkIn = toLocalDateString(datePickerInstance.selectedDates[0]);
-        checkOut = toLocalDateString(datePickerInstance.selectedDates[1]);
-        nights = calcNights(datePickerInstance.selectedDates[0], datePickerInstance.selectedDates[1]);
-      } else {
-        checkIn = toLocalDateString(today);
-        checkOut = toLocalDateString(tomorrow);
-        nights = calcNights(today, tomorrow);
-      }
+          if (datePickerInstance && datePickerInstance.selectedDates.length === 2) {
+              checkIn = toLocalDateString(datePickerInstance.selectedDates[0]);
+              checkOut = toLocalDateString(datePickerInstance.selectedDates[1]);
+              nights = calcNights(datePickerInstance.selectedDates[0], datePickerInstance.selectedDates[1]);
+          } else {
+              checkIn = toLocalDateString(today);
+              checkOut = toLocalDateString(tomorrow);
+              nights = calcNights(today, tomorrow);
+          }
 
-      const typeName = card.querySelector('h3')?.textContent.trim() || '';
-      const capacity = card.dataset.capacity || '';
-      const priceText = this.textContent.trim();
-      const priceNumber = priceText.replace(/[₩,]/g, '');
-	  // bedName 가져오기
-	  const bedNameText = document.getElementById('bedName').textContent;
-	  const bedName = bedNameText.replace('침대타입: ', '').trim();
-	  // viewName 가져오기
-	  const viewNameText = document.getElementById('viewName').textContent;
-	  const viewName = viewNameText.replace('전망: ', '').trim();
+          const typeName = card.querySelector('h3')?.textContent.trim() || '';
+          const capacity = card.dataset.capacity || '';
+          const priceText = this.textContent.trim();
+          const priceNumber = priceText.replace(/[₩,]/g, '');
 
-      const url = new URL(this.href, window.location.origin);
-      url.searchParams.set('checkIn', checkIn);
-      url.searchParams.set('checkOut', checkOut);
-      url.searchParams.set('nights', nights);
-      url.searchParams.set('bedName', bedName);
-      url.searchParams.set('viewName', viewName);
-      url.searchParams.set('typeName', typeName);
-      url.searchParams.set('pricePerNight', priceNumber);
-      url.searchParams.set('capacity', capacity);
+          const bedNameText = card.querySelector('.bedName').textContent;
+          const viewNameText = card.querySelector('.viewName').textContent;
+          const bedName = bedNameText.replace('침대타입: ', '').trim();
+          const viewName = viewNameText.replace('전망: ', '').trim();
 
-      window.location.href = url.toString();
-    });
+          const url = new URL(this.href, window.location.origin);
+          url.searchParams.set('checkIn', checkIn);
+          url.searchParams.set('checkOut', checkOut);
+          url.searchParams.set('nights', nights);
+          url.searchParams.set('bedName', bedName);
+          url.searchParams.set('viewName', viewName);
+          url.searchParams.set('typeName', typeName);
+          url.searchParams.set('pricePerNight', priceNumber);
+          url.searchParams.set('capacity', capacity);
+
+          window.location.href = url.toString();
+      });
   });
+
 });

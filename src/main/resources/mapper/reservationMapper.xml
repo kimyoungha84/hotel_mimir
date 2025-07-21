@@ -105,8 +105,8 @@
 		 #{numGuestsChild}, #{numGuestsAdult}, #{status}, #{requestMsg}, #{breakfast})
 	</insert>
 
-	   <select id="checkRoomAvailability" parameterType="kr.co.sist.resvroom.ReservationDTO" resultType="Integer">
-		SELECT room_id
+<select id="checkRoomAvailability" parameterType="kr.co.sist.resvroom.ReservationDTO" resultType="Integer">
+    SELECT room_id
     FROM (
         SELECT r.room_id
         FROM room r
@@ -121,14 +121,13 @@
               FROM reservation res
               WHERE res.room_id = r.room_id
                 AND res.status IN ('예약완료', '체크인')
-                AND res.checkout_date &gt; TO_DATE(#{checkoutDate}, 'yyyy-MM-dd')
-                AND res.checkin_date &lt; TO_DATE(#{checkinDate}, 'yyyy-MM-dd')
+                  AND res.checkin_date &lt; #{checkoutDate}
+                AND res.checkout_date &gt; #{checkinDate}
           )
         ORDER BY DBMS_RANDOM.VALUE
     )
     WHERE ROWNUM = 1
-   </select>
-
+</select>
 
 
 

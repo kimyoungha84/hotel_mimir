@@ -220,38 +220,39 @@ $(function(){
     <div class="info-row">
       <span>예약번호</span>
       <span class="info-colon">:</span>
-      <span class="info-value italic" th:text="${ resCon.resvId }">20250617</span>
+      <span class="info-value italic" th:text="${resCon != null ? resCon.resvId : '없음'}">20250617</span>
     </div>
     <div class="info-row">
       <span>예약자</span>
       <span class="info-colon">:</span>
-      <span class="info-value italic" th:text="${ resCon.userName }">김재인</span>
+      <span class="info-value italic" th:text="${resCon != null ? resCon.userName : '없음'}">김재인</span>
     </div>
     <div class="info-row">
       <span>휴대전화</span>
       <span class="info-colon">:</span>
-      <span class="info-value italic" th:text="${ resCon.userTel }">010-1234-5678</span>
+      <span class="info-value italic" th:text="${resCon != null ? resCon.userTel : '없음'}">010-1234-5678</span>
     </div>
     <div class="info-row">
       <span>객실</span>
       <span class="info-colon">:</span>
-      <span class="info-value italic" th:text="${ resCon.typeName }">로얄 스위트룸</span>
+      <span class="info-value italic" th:text="${resCon != null ? resCon.typeName : '없음'}">로얄 스위트룸</span>
     </div>
     <div class="info-row">
       <span>인원</span>
       <span class="info-colon">:</span>
       <span class="info-value italic">성인 : </span>&nbsp;&nbsp;&nbsp;
-      <span class="info-value italic" th:text="${ resCon.numGuestsAdult }">3명</span>&nbsp;&nbsp;&nbsp;
+      <span class="info-value italic" th:text="${resCon != null ? resCon.numGuestsAdult : '없음'}">3명</span>&nbsp;&nbsp;&nbsp;
       <span class="info-value italic">아동 : </span>&nbsp;&nbsp;&nbsp;
-      <span class="info-value italic" th:text="${ resCon.numGuestsChild }">3명</span>
+      <span class="info-value italic" th:text="${resCon != null ? resCon.numGuestsChild : '없음'}">3명</span>
     </div>
     <div class="info-row">
       <span>체크인 /아웃</span>
       <span class="info-colon">:</span>
-      <span class="info-value italic" th:text="${ resCon.checkinDate }">2025.06.17 15:00</span> &nbsp; - &nbsp;
-      <span class="info-value italic" th:text="${ resCon.checkoutDate }"> 2025.06.20 11:00</span>
+      <span class="info-value italic" th:text="${resCon != null ? resCon.checkinDate : '없음'}">2025.06.17 15:00</span> &nbsp; - &nbsp;
+      <span class="info-value italic" th:text="${resCon != null ? resCon.checkoutDate : '없음'}">2025.06.20 11:00</span>
     </div>
-  </div>
+</div>
+
 
   <!-- 구분선 -->
 

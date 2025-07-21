@@ -4,8 +4,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import kr.co.sist.nonmember.NonMemberService;
 import kr.co.sist.payment.PaymentService;
@@ -52,35 +54,48 @@ public class ReservationController {
       return "room_resv/searchResv";
    }//roomList
    
-   @PostMapping("/room_resv/reservation")
-   public String reservation(ReservationDTO rDTO, Model model) {
-	   Integer roomId;
-      //반환값 rDTO로 하고 나서 nonmemberId set하고 paymentID까지 set해야함
-	   roomId=rs.checkRoomAvailability(rDTO);
-	   
-	   if(roomId == null  ) { return "redirect:room_resv/error"; }
-      
-      int paySeq;
-      int nonMemSeq;
-      int resvSeq;
-      
-      
-      paySeq = ps.searchPaymentSeq();
-      nonMemSeq = nms.searchNonMemberSeq();
-      resvSeq = rs.searchReservationSeq();
-      
-      rDTO.setRoomId(roomId);
-      rDTO.setUserNum(nonMemSeq);
-      rDTO.setPaymentId(paySeq);
-      rDTO.setResvId(resvSeq);
-      rDTO.setStatus("예약완료");
-      
-      nms.addNonMember(rDTO);
-      ps.addPayment(rDTO);
-      rs.addReservation(rDTO);
-      model.addAttribute("resCon", rDTO);
-      
-      return "room_resv/resultResv";
+   @GetMapping("/room_resv/error")
+   public String errorPage() {
+	   return "room_resv/error";
    }//roomList
+   @GetMapping("/error")
+   public String globalErrorPage() {
+       return "room_resv/error";
+   }
+   
+   @PostMapping("/room_resv/reservation")
+   public String reservation(ReservationDTO rDTO, RedirectAttributes redirectAttributes) {
+       Integer roomId = rs.checkRoomAvailability(rDTO);
+       if (roomId == null) {
+           return "redirect:/room_resv/error";
+       }
+
+       int paySeq = ps.searchPaymentSeq();
+       int nonMemSeq = nms.searchNonMemberSeq();
+       int resvSeq = rs.searchReservationSeq();
+
+       rDTO.setRoomId(roomId);
+       rDTO.setUserNum(nonMemSeq);
+       rDTO.setPaymentId(paySeq);
+       rDTO.setResvId(resvSeq);
+       rDTO.setStatus("예약완료");
+
+       System.out.println("체크인"+rDTO.getCheckinDate());
+       System.out.println("체크아웃"+rDTO.getCheckoutDate());
+       nms.addNonMember(rDTO);
+       ps.addPayment(rDTO);
+       rs.addReservation(rDTO);
+
+       // GET으로 redirect 할 때 보여줄 데이터
+       redirectAttributes.addFlashAttribute("resCon", rDTO);
+       return "redirect:/room_resv/resultResv";
+   }
+
+   @GetMapping("/room_resv/resultResv")
+   public String resultResv() {
+       return "room_resv/resultResv";
+   }
+
+   
    
 }//class
