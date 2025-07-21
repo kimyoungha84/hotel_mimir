@@ -39,15 +39,13 @@
     background-color: #ddbfb3;
 }
 </style>
-
 <script th:inline="javascript">
 
-var sDomainJSONstr='[[${staffDomain}]]';
-var sDomainJSON=JSON.parse(sDomainJSONstr);
+const sDomainJSONstr='[[${staffDomain}]]';
+const sDomainJSON=JSON.parse(sDomainJSONstr);
 
 console.log(sDomainJSON);
 </script>
-
 </head>
 <body>
 <th:block th:replace="~{/administrator/fragments/admin_sidebar :: admin_sidebar}"></th:block>
@@ -61,7 +59,7 @@ console.log(sDomainJSON);
 <thead>
 <tr>
     <th>아이디</th>
-    <td id="staffId" th:text="${staff_id}"></td>
+    <td id="staffId" th:text="${staffDomain.staff_id}"></td>
 </tr>
 <tr>
     <th>이름</th>
@@ -123,13 +121,13 @@ console.log(sDomainJSON);
 </tr>
 </tbody>
 </table>
-</div>
+
 
 <div class="btnGroup" style="margin-left:50rem;">
 <input type="button" class="darkBtn" value="확인"/>
-<input type="button" class="softBtn" value="취소" onclick="history.back()"/>
+<input type="button" class="softBtn" value="취소" @click="cancelBtn"/>
 </div>
-
+</div>
 </div>
 
 
@@ -173,6 +171,10 @@ Vue.createApp({
         }
     },
     mounted(){
+        //뒤로가기를 위한 세션 저장
+        sessionStorage.setItem("staffModifyCache",sDomainJSONstr);
+
+
         this.employRegisterObj.id=document.getElementById('staffId').innerText;
         this.staffDomainJSON = sDomainJSON;
         
@@ -249,15 +251,16 @@ Vue.createApp({
             
             axios.post("/admin/registerStaff",this.employRegisterObj)
             .then(res=>{
-                alert("직원 등록에 성공했습니다.");
+                alert("수정을 완료했습니다.");
                 location.href="/admin/employee";
             })
             .catch(err=>{
-                alert("등록에 실패했습니다.\n값들을 다시 확인해 주세요.");
+                alert("수정에 실패했습니다.\n값들을 다시 확인해 주세요.");
             });
         },
         cancelBtn(){
-            location.href="/admin/employee";
+            location.href="/admin/employee/detail";
+            
         },
 
     }

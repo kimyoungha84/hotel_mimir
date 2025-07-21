@@ -39,22 +39,9 @@
     background-color: #ddbfb3;
 }
 </style>
-
 <script th:inline="javascript">
-
-var sDomainJSONstr='[[${staffDomain}]]';
-var sDomainJSON=JSON.parse(sDomainJSONstr);
-console.log("여기여기---------"+sDomainJSON.staff_id);
-
-
-$(function(){
-
-    $("#modifyBtn").click(function(){
-        $("#staffVal").val(sDomainJSON.staff_id);
-        $("#frm").submit();
-    });//click
-
-});//ready
+var jsonStr='[[${staffDomain}]]';
+const staffJson=JSON.parse(jsonStr);
 
 </script>
 
@@ -70,7 +57,7 @@ $(function(){
 <table class="vertical-table">
 <thead>
 <tr>
-    <th>아이디</td>
+    <th>아이디</th>
     <td th:text="${staffDomain.staff_id}"></td>
 </tr>
 <tr>
@@ -83,11 +70,11 @@ $(function(){
 </tr>
 <tr>
     <th>부서</td>
-    <td th:text=${staffDomain.dept_name}></td>
+    <td th:text="${staffDomain.dept_name}"></td>
 </tr>
 <tr>
     <th>직책</td>
-    <td th:text=${staffDomain.position_name}></td>
+    <td th:text="${staffDomain.position_name}"></td>
 </tr>
 <tr>
     <th>권한</td>
@@ -107,19 +94,19 @@ $(function(){
 </tr>
 </tbody>
 </table>
-</div>
+
 <div>
 <input type="button" value="로그 기록 보기" class="radiusBtn" style="background-color: #c1c1c1;  margin-top: 2rem; float:none;display: flex; justify-content: center;"/>
 </div>
 <div class="btnGroup" style="margin-left:50rem;">
-<input type="button" class="darkBtn" value="수정" id="modifyBtn"/>
+<input type="button" class="darkBtn" value="수정" id="modifyBtn" @click="modifyBtn"/>
 <input type="button" class="softBtn" value="취소" onclick="history.back()"/>
 </div>
 
-<form id="frm" action="/admin/employee/modify" method="post">
-<input type="hidden" id="staffVal" name="staff_id"/>
+<form id="frm" ref="frm" action="/admin/employee/modify" method="post">
+<input type="hidden" id="staffVal" name="staff_id" :value="staffDTOJSON.staff_id"/>
 </form>
-
+</div>
 </div>
 
 
@@ -128,7 +115,8 @@ $(function(){
 Vue.createApp({
     data(){
         return{
-            staffDTOJSON : sDomainJSON,
+            staffDTOJSON : {},
+            sDomainJSON:{}
         }
     },
     methods:{
@@ -142,6 +130,28 @@ Vue.createApp({
             })
 
         },
+        modifyBtn(){
+            // form submit
+            this.$refs.frm.elements['staff_id'].value = this.staffDTOJSON.staff_id;
+            console.log(this.staffDTOJSON.staff_id);
+            this.$refs.frm.submit();
+        }
+    },
+    mounted(){
+
+        if(sessionStorage.getItem("staffModifyCache")){
+            //sessionStorage에 값이 존재하면,
+            this.sDomainJSON=JSON.parse(sessionStorage.getItem("staffModifyCache"));
+            console.log("sessionStorage --sDomainJSON----------- "+this.sDomainJSON);
+            console.log("sessionStorage id ------------------"+this.sDomainJSON.staff_id);
+            //sessionStorage 다 썼으면 지우기
+            //sessionStorage.removeItem("staffModifyCache");
+        }else{
+            //서버값 사용
+            this.sDomainJSON=staffJson;
+        }//if~else
+
+        this.staffDTOJSON=this.sDomainJSON;
     }
 
 }).mount("#app"); 
