@@ -1,6 +1,7 @@
 package kr.co.sist.resvroom;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -9,6 +10,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import kr.co.sist.member.CustomUserDetails;
 import kr.co.sist.nonmember.NonMemberService;
 import kr.co.sist.payment.PaymentService;
 
@@ -25,7 +27,7 @@ public class ReservationController {
    private ReservationService rs;
    
    @GetMapping("/room_resv/resvRoom")
-   public String roomList(@RequestParam("roomId") int roomId,
+   public String roomList(@RequestParam("roomId") int roomId, @AuthenticationPrincipal CustomUserDetails detail,
           @RequestParam("checkIn") String checkIn,
           @RequestParam("checkOut") String checkOut,
           @RequestParam("typeName") String typeName,
@@ -36,6 +38,7 @@ public class ReservationController {
           @RequestParam("pricePerNight") int pricePerNight,
           Model model) {
       
+	   //detail.getUserNum();
        model.addAttribute("roomId", roomId);
           model.addAttribute("checkIn", checkIn);
           model.addAttribute("checkOut", checkOut);
@@ -54,20 +57,17 @@ public class ReservationController {
       return "room_resv/searchResv";
    }//roomList
    
-   @GetMapping("/room_resv/error")
+   @GetMapping("/room_resv/error_page")
    public String errorPage() {
-	   return "room_resv/error";
-   }//roomList
-   @GetMapping("/error")
-   public String globalErrorPage() {
        return "room_resv/error";
    }
+
    
    @PostMapping("/room_resv/reservation")
    public String reservation(ReservationDTO rDTO, RedirectAttributes redirectAttributes) {
        Integer roomId = rs.checkRoomAvailability(rDTO);
        if (roomId == null) {
-           return "redirect:/room_resv/error";
+    	   return "redirect:/room_resv/error_page";
        }
 
        int paySeq = ps.searchPaymentSeq();
