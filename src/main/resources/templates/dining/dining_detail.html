@@ -783,6 +783,12 @@ width: 100%;         /* 이미지가 부모 카드의 너비에 맞게 크기 �
   opacity: 1;
   visibility: visible;
 }
+
+.category-copy {
+  display: inline-block;
+  width: 800px;   /* 원하는 고정값(px, em, rem 등) */
+  /* 필요하다면 height, text-align 등도 추가 */
+}
 </style>
 </head>
 <body>
@@ -805,9 +811,7 @@ width: 100%;         /* 이미지가 부모 카드의 너비에 맞게 크기 �
         <div class="category-img">
           <img th:src="@{${diningInfo.dining_logo_image}}" alt="다이닝 로고 이미지" loading="lazy">
         </div>
-        <div class="category-copy" th:if="${diningInfo.dining_introduction != null and !#strings.isEmpty(diningInfo.dining_introduction)}">
-            <p class="txt01" style="font-size: 17px;" th:text="${diningInfo.dining_introduction}">소개내용</p>
-        </div>
+        <div class="category-copy" th:text="${diningInfo.dining_introduction}">소개내용</div>
     </div> 
 
     <div class="di-info-wrap">

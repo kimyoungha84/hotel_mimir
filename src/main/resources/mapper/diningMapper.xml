@@ -67,6 +67,18 @@
     VALUES (DINING_IMAGE_SEQ.NEXTVAL, #{diningId}, #{imageType}, #{imageUrl}, #{displayOrder}, SYSDATE)
   </insert>
 
+  <insert id="insertDining" parameterType="kr.co.sist.dining.user.DiningDTO">
+    INSERT INTO DINING (
+      DINING_ID, DINING_NAME, TYPE, LOCATION, PHONE_NUMBER, MANAGER_NAME,
+      DINING_OPERATION_HOURS, DINING_CLASSIFICATION, DINING_RESV_AVAILABILITY,
+      DINING_INTRODUCTION, DINING_DETAILINFO, DINING_REG_DATE
+    ) VALUES (
+      DINING_SEQ.NEXTVAL, #{dining_name}, #{type}, #{location}, #{phone_number}, #{manager_name},
+      #{dining_operation_hours}, #{dining_classification}, #{dining_resv_availability},
+      #{dining_introduction}, #{dining_detailinfo}, SYSDATE
+    )
+  </insert>
+
   <delete id="deleteDining" parameterType="int">
     DELETE FROM DINING WHERE DINING_ID = #{diningId}
   </delete>
@@ -85,5 +97,9 @@
       AND IMAGE_URL = #{imageUrl}
       AND IMAGE_TYPE = 'CAROUSEL'
   </update>
+
+  <select id="selectLastInsertedDiningId" resultType="int">
+    SELECT DINING_SEQ.CURRVAL FROM DUAL
+  </select>
 
 </mapper>

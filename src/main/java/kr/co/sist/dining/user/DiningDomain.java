@@ -21,7 +21,7 @@ public class DiningDomain {
 	private String dining_operation_hours;
 	private Date dining_reg_date;
 	private String dining_classification;
-	private char dining_resv_availability;
+	private String dining_resv_availability;
 	private String dining_detailinfo;
 	private String dining_introduction;
 	private String dining_main_image;

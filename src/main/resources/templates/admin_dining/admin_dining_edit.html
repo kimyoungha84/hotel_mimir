@@ -29,7 +29,7 @@
       </div>
 
       <!-- 일반 데이터 폼 -->
-      <form id="diningDataForm" th:action="@{/dining/edit}" method="post">
+      <form id="diningDataForm" th:action="@{/admin/dining/edit}" method="post">
         <input type="hidden" name="dining_id" th:value="${dining.dining_id}" />
 
         <div class="edit-form-section">
@@ -38,7 +38,15 @@
         </div>
         <div class="edit-form-section">
           <label class="edit-form-label">타입</label>
-          <input class="edit-form-input" type="text" name="type" th:value="${dining.type}" required />
+          <select class="edit-form-select" name="type" required>
+            <option value="한식" th:selected="${dining.type == '한식'}">한식</option>
+            <option value="프렌치" th:selected="${dining.type == '프렌치'}">프렌치</option>
+            <option value="회원제 레스토랑" th:selected="${dining.type == '회원제 레스토랑'}">회원제 레스토랑</option>
+            <option value="레스토랑 & 바" th:selected="${dining.type == '레스토랑 & 바'}">레스토랑 & 바</option>
+            <option value="스카이바" th:selected="${dining.type == '스카이바'}">스카이바</option>
+            <option value="프리미엄 베이커리 & 카페" th:selected="${dining.type == '프리미엄 베이커리 & 카페'}">프리미엄 베이커리 & 카페</option>
+            <option value="인룸 다이닝" th:selected="${dining.type == '인룸 다이닝'}">인룸 다이닝</option>
+          </select>
         </div>
         <div class="edit-form-section">
           <label class="edit-form-label">위치</label>
@@ -87,7 +95,7 @@
       </form>
 
       <!-- 파일 업로드 폼 -->
-      <form id="diningFileForm" th:action="@{/dining/editFiles}" method="post" enctype="multipart/form-data">
+      <form id="diningFileForm" th:action="@{/admin/dining/editFiles}" method="post" enctype="multipart/form-data">
         <input type="hidden" name="dining_id" th:value="${dining.dining_id}" />
 
         <div class="edit-form-section">
@@ -124,8 +132,8 @@
         </div>
 
         <div class="edit-form-btn-area" style="margin-bottom: 100px;">
-          <button type="button" class="list-btn" onclick="saveCarouselImages()">케러셀 저장</button>
-          <button type="button" class="list-btn" onclick="window.history.back()">취소</button>
+          <button type="button" class="list-btn" onclick="saveCarouselImages()">이미지수정</button>
+          <a th:href="@{/admin/dining}"><button type="button" class="list-btn">취소</button></a>
         </div>
       </form>
     </section>
@@ -247,7 +255,7 @@ function uploadSingleFile(diningId, file, type, idx) {
     formData.append('carousel_image_file', file);
     formData.append('carousel_index', idx);
   }
-  return fetch('/dining/editFiles', {
+  return fetch('/admin/dining/editFiles', {
     method: 'POST',
     body: formData
   })
@@ -290,7 +298,7 @@ function saveCarouselImages() {
     formData.append('dining_id', diningId);
     formData.append('main_image_file', mainImageFile);
     uploadPromises.push(
-      fetch('/dining/editFiles', {
+      fetch('/admin/dining/editFiles', {
         method: 'POST',
         body: formData
       })
@@ -307,7 +315,7 @@ function saveCarouselImages() {
     formData.append('dining_id', diningId);
     formData.append('logo_image_file', logoImageFile);
     uploadPromises.push(
-      fetch('/dining/editFiles', {
+      fetch('/admin/dining/editFiles', {
         method: 'POST',
         body: formData
       })
@@ -327,7 +335,7 @@ function saveCarouselImages() {
       formData.append('carousel_image_file', file);
       formData.append('carousel_index', idx + 1);
       uploadPromises.push(
-        fetch('/dining/editFiles', {
+        fetch('/admin/dining/editFiles', {
           method: 'POST',
           body: formData
         })
@@ -366,7 +374,7 @@ function updateCarouselOrderOnServer(diningId, imageUrls) {
     imageUrls.map(url => `image_urls=${encodeURIComponent(url)}`).join('&') +
     deletedCarouselUrls.map(url => `&deleted_image_urls=${encodeURIComponent(url)}`).join('');
   console.log('fetch body:', bodyData); // 실제 전송되는 데이터 확인
-  fetch('/dining/updateCarouselOrder', {
+  fetch('/admin/dining/updateCarouselOrder', {
     method: 'POST',
     headers: {'Content-Type': 'application/x-www-form-urlencoded'},
     body: bodyData
@@ -396,7 +404,7 @@ function uploadSingleFileAndUpdateHidden(diningId, file, idx, type, div) {
     formData.append('carousel_image_file', file);
     formData.append('carousel_index', idx + 1);
   }
-  fetch('/dining/editFiles', {
+  fetch('/admin/dining/editFiles', {
     method: 'POST',
     body: formData
   })

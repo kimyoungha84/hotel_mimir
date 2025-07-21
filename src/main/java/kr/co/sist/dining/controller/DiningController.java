@@ -33,7 +33,7 @@ public class DiningController {
 	@Autowired
 	DiningService ds;
 	
-	@GetMapping("/dining")
+	@GetMapping("/admin/dining")
 	public String adminDining( Model model ) {
 		int pageSize = 5; // 페이지당 항목 수
 
@@ -90,7 +90,7 @@ public class DiningController {
 		return "dining/admin_dining_detail_editor";
 	}
 
-    @DeleteMapping("/dining/{diningId}")
+    @DeleteMapping("/admin/dining/{diningId}")
     public ResponseEntity<Void> deleteDining(@PathVariable("diningId") int diningId) {
         try {
             ds.deleteDining(diningId);
@@ -100,24 +100,25 @@ public class DiningController {
         }
     }
 
-    @GetMapping("/dining/edit")
+    @GetMapping("/admin/dining/edit")
     public String editDiningForm(@RequestParam int diningId, 
                                  @RequestParam(value = "message", required = false) String message, 
                                  Model model) {
         DiningDomain dining = ds.searchOneDining(diningId);
+        System.out.println(dining);
         model.addAttribute("dining", dining);
         model.addAttribute("message", message);
         return "admin_dining/admin_dining_edit";
     }
 
-    @PostMapping("/dining/edit")
+    @PostMapping("/admin/dining/edit")
     public String editDiningSubmit(@ModelAttribute DiningDTO dto) {
         // 일반 데이터만 처리
         ds.updateDiningData(dto);
-        return "redirect:/dining/edit?diningId=" + dto.getDining_id() + "&message=dataUpdated";
+        return "redirect:/admin/dining/edit?diningId=" + dto.getDining_id() + "&message=dataUpdated";
     }
 
-    @PostMapping("/dining/editFiles")
+    @PostMapping("/admin/dining/editFiles")
     @ResponseBody // AJAX 업로드 시 필요
     public Map<String, Object> editDiningFiles(
         @RequestParam int dining_id,
@@ -133,7 +134,7 @@ public class DiningController {
         return result;
     }
 
-    @PostMapping("/dining/updateCarouselOrder")
+    @PostMapping("/admin/dining/updateCarouselOrder")
     @ResponseBody
     public ResponseEntity<?> updateCarouselOrder(
         @RequestParam("dining_id") int diningId,
@@ -150,4 +151,16 @@ public class DiningController {
         }
     }
 	
+    @GetMapping("/admin/dining/add")
+    public String addDiningForm(Model model) {
+        model.addAttribute("dining", new kr.co.sist.dining.user.DiningDTO());
+        return "admin_dining/admin_dining_add";
+    }
+
+    @PostMapping("/admin/dining/add")
+    @ResponseBody
+    public Map<String, Object> addDiningSubmit(@ModelAttribute kr.co.sist.dining.user.DiningDTO dto) {
+        int newId = ds.insertDiningAndReturnId(dto);
+        return Map.of("dining_id", newId);
+    }
 }

@@ -19,4 +19,6 @@ public interface DiningMapper {
     void insertDiningImage(@Param("diningId") int diningId, @Param("imageType") String imageType, @Param("imageUrl") String imageUrl, @Param("displayOrder") int displayOrder);
     void deleteDiningImageByUrl(@Param("diningId") int diningId, @Param("imageUrl") String imageUrl, @Param("imageType") String imageType);
     void updateDisplayOrder(@Param("diningId") int diningId, @Param("imageUrl") String imageUrl, @Param("displayOrder") int displayOrder);
+    void insertDining(DiningDTO dto);
+    int selectLastInsertedDiningId();
 }

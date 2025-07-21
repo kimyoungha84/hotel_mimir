@@ -57,7 +57,7 @@
     <td th:text="${#dates.format(dining.dining_reg_date, 'yyyy-MM-dd')}"></td>
     <td th:text="${dining.manager_name}"></td>
     <td>
-      <a th:href="@{/dining/edit(diningId=${dining.dining_id})}">
+      <a th:href="@{/admin/dining/edit(diningId=${dining.dining_id})}">
         <button type="button" style="background: #e0e0e0; border: none; border-radius: 6px; padding: 6px 16px; cursor: pointer;">수정</button>
       </a>
     </td>
@@ -111,7 +111,7 @@ document.addEventListener('DOMContentLoaded', function() {
     if (!confirm('정말 삭제하시겠습니까?')) {
       return;
     }
-    axios.delete('/dining/' + window.selectedDiningId)
+    axios.delete('/admin/dining/' + window.selectedDiningId)
       .then(function(response) {
         alert('삭제가 완료되었습니다.');
         // 테이블 갱신 (예: 검색 버튼 클릭 트리거)

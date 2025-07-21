@@ -166,4 +166,17 @@ public class DiningService {
         File file = new File(filePath);
         if (file.exists()) file.delete();
     }
+
+    @Transactional
+    public void insertDining(DiningDTO dto) {
+        diningMapper.insertDining(dto);
+        // 메인/로고/케러셀 이미지 업로드는 editFiles와 동일하게 처리 가능 (프론트에서 editFiles로 업로드)
+    }
+
+    @Transactional
+    public int insertDiningAndReturnId(DiningDTO dto) {
+        diningMapper.insertDining(dto);
+        // 시퀀스에서 방금 insert된 PK 반환 (Oracle 기준)
+        return diningMapper.selectLastInsertedDiningId();
+    }
 }

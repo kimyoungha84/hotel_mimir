@@ -24,7 +24,7 @@ public class DiningDTO {
 	private String dining_detailinfo;
 	
 	// Y / N으로 저장
-	private char dining_resv_availability;
+	private String dining_resv_availability;
 	private String dining_classification;
 
 	// 이미지 업로드용
