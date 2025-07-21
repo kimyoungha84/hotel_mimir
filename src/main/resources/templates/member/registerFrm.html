@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+"""<!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
@@ -24,7 +24,7 @@
     <div class="form-container shadow">
         <h3 class="form-title">회원가입</h3>
 
-        <form th:action="@{/member/register}" th:object="${memberDTO}" method="post">
+        <form th:action="@{/member/register}" th:object="${memberDTO}" method="post" onsubmit="return validateForm()">
 
             <!-- 이름 -->
             <div class="mb-3">
@@ -39,7 +39,7 @@
 				<div class="input-group">
 					<input type="email" th:field="*{email_id}" id="email_id"
 							class="form-control" placeholder="example@test.com" readonly />
-					<button class="btn btn-outline-secondary" type="button"
+					<button class="btn btn-outline-secondary" type="button" id="email_check_btn"
 							onclick="openEmailPopup()">중복확인</button>
 				</div>
 					<div class="text-danger" th:errors="*{email_id}"></div>
@@ -48,19 +48,13 @@
 				<!-- 이메일 인증 관련 히든 필드 -->
 				<input type="hidden" name="token" id="auth_token" />
 				<input type="hidden" th:field="*{email_auth}" />
-
-				<script type="text/javascript">
-					function openEmailPopup() {
-						window.open('/member/email-popup', 'emailPopup',
-								'width=500,height=450,left=200,top=150');
-					}
-				</script>
+                <input type="hidden" id="email_verified" value="false" />
 
 
 				<!-- 비밀번호 -->
             <div class="mb-3">
                 <label for="password" class="form-label">비밀번호</label>
-                <input type="password" th:field="*{password}" class="form-control" placeholder="비밀번호 입력" />
+                <input type="password" th:field="*{password}" id="password" class="form-control" placeholder="비밀번호 입력" />
                 <div class="text-danger" th:errors="*{password}"></div>
             </div>
 
@@ -104,6 +98,60 @@
     </div>
 </div>
 
+<script type="text/javascript">
+    function openEmailPopup() {
+        window.open('/member/email-popup', 'emailPopup', 'width=500,height=450,left=200,top=150');
+    }
 
+    // 이메일 인증 완료 시 팝업창에서 호출할 함수
+    function onEmailVerified(email, token, authCode) {
+        document.getElementById("email_id").value = email;
+        document.getElementById("auth_token").value = token;
+        document.getElementsByName("email_auth")[0].value = authCode;
+        document.getElementById("email_verified").value = "true";
+
+        const emailCheckBtn = document.getElementById("email_check_btn");
+        emailCheckBtn.textContent = "인증 완료";
+        emailCheckBtn.disabled = true;
+    }
+
+    // 비밀번호 일치 확인
+    const password = document.getElementById("password");
+    const confirmPassword = document.getElementById("confirmPassword");
+    const pwCheckMessage = document.getElementById("pwCheckMessage");
+
+    function checkPasswordMatch() {
+        if (password.value !== "" && confirmPassword.value !== "") {
+            if (password.value === confirmPassword.value) {
+                pwCheckMessage.textContent = "비밀번호가 일치합니다.";
+                pwCheckMessage.className = "text-success";
+            } else {
+                pwCheckMessage.textContent = "비밀번호가 일치하지 않습니다.";
+                pwCheckMessage.className = "text-danger";
+            }
+        } else {
+            pwCheckMessage.textContent = "";
+        }
+    }
+
+    password.addEventListener("keyup", checkPasswordMatch);
+    confirmPassword.addEventListener("keyup", checkPasswordMatch);
+
+    // 폼 제출 전 유효성 검증
+    function validateForm() {
+        const isEmailVerified = document.getElementById("email_verified").value === "true";
+        if (!isEmailVerified) {
+            alert("이메일 인증을 완료해주세요.");
+            return false;
+        }
+
+        if (password.value !== confirmPassword.value) {
+            alert("비밀번호가 일치하지 않습니다.");
+            return false;
+        }
+        
+        return true;
+    }
+</script>
 </body>
-</html>
+</html>""

@@ -106,5 +106,10 @@ public class MemberServiceImpl implements MemberService {
     public void updateLastLoginTime(String emailId) {
         memberMapper.updateLastLoginTime(emailId);
     }
+
+	@Override
+	public boolean isEmailDuplicated(String email) {
+		return memberMapper.selectMemberByEmail(email) != null;
+	}
     
 }

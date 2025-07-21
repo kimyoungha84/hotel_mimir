@@ -42,13 +42,13 @@
   <select id="countByEmail" parameterType="string" resultType="int">
     SELECT COUNT(*) 
     FROM MIMIR_USER 
-    WHERE EMAIL_ID = #{email_id}
+    WHERE EMAIL_ID = #{emailId}
   </select>
   
   <select id="selectMemberByEmail" parameterType="string" resultType="kr.co.sist.member.MemberDTO">
     SELECT *
     FROM MIMIR_USER 
-    WHERE EMAIL_ID = #{email_id}
+    WHERE EMAIL_ID = #{emailId}
   </select>
 
   <!-- RefreshToken 무효화 -->

@@ -17,5 +17,7 @@ public interface MemberService {
     void invalidateRefreshToken(String emailId); // 로그아웃 시 Refresh Token 무효화
 
     void updateLastLoginTime(String emailId);
+
+    boolean isEmailDuplicated(String email);
     
 }

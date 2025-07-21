@@ -46,7 +46,7 @@ public class MemberController {
     @PostMapping("/register")
     public String registerMember(@ModelAttribute @Valid MemberDTO mDTO,
     							@RequestParam("token") String token,
-    							BindingResult result, Model model) {
+    							BindingResult result, RedirectAttributes redirectAttrs) {
     	
     	//유효성 검사 실패 시 폼 재호출
     	if(result.hasErrors()) {
@@ -58,9 +58,9 @@ public class MemberController {
     				token, mDTO.getEmail_id(), mDTO.getEmail_auth());
     	
     	if(!isVerified) {
-    		model.addAttribute("emailError", "이메일 인증이 완료되지 않았습니다.");
+    		redirectAttrs.addFlashAttribute("error", "이메일 인증이 유효하지 않습니다. 다시 시도해주세요.");
     		
-    		return "member/registerFrm";
+    		return "redirect:/member/registerFrm";
     	}
     	
     	
@@ -69,9 +69,9 @@ public class MemberController {
     	if(success) {
     		return "redirect:/";
     	} else {
-    		model.addAttribute("errMsg", "회원가입 처리 중 오류가 발생했습니다.");
+    		redirectAttrs.addFlashAttribute("error", "회원가입 처리 중 오류가 발생했습니다.");
     		
-    		return "member/registerFrm";
+    		return "redirect:/member/registerFrm";
     	}
     	
     }
@@ -153,6 +153,11 @@ public class MemberController {
       @ResponseBody
       public Map<String, String> sendAuthCode(@RequestBody Map<String, String> body) {
           String email = body.get("email");
+          
+          if(memberService.isEmailDuplicated(email)) {
+          	return Map.of("error", "이미 가입된 이메일입니다.");
+          }
+          
           return memberService.sendAuthCodeWithJwt(email);
       }
 
