@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,13 +16,15 @@ import jakarta.mail.MessagingException;
 public class AdminService {
 	
 	@Autowired(required = false)
-	AdministratorMapper am;
+	private AdministratorMapper am;
 	
 	@Autowired(required = false)
-	CryptographicDecryption cd;
+	private CryptographicDecryption cd;
 	
-
 	
+	@Autowired
+	private ApplicationContext context;
+		
 	/**
 	 * 로그인할 때,
 	 * 아이디와 비밀번호 check
@@ -77,9 +80,9 @@ public class AdminService {
 		
 		StaffDomain sd=am.selectOneStaffDetail(staff_id);
 		
-		sd.setDept_name(departmentMapping(sd.getDept_iden()));
-		
-		sd.setPosition_name(positionMapping(sd.getPosition_identified_code()));
+		sd.setDept_name(departmentMapping(sd.getDept_iden()));//이름
+		sd.setPermission_str_kor(staff_id);
+		sd.setPosition_name(positionMapping(sd.getPosition_identified_code()));//부서
 		sd.setStaff_status_kor(statusMapping(sd.getStaff_status()));
 		
 		System.out.println("sd-------------------"+sd);
@@ -198,14 +201,15 @@ public class AdminService {
 		
 		//permission_id_code는 기본적으로 List 형태니까.
 		//이걸 한 개씩 보내주도록 해야겠지.
-		resultCnt3=processPermissionList(sDTO);
+		//transaction 때문에... 어쩔 수 없음... getBean 써줘야 한다.
+		resultCnt3=context.getBean(AdminService.class).processPermissionList(sDTO);
 		
 		return resultCnt1+resultCnt2+resultCnt3;
 	}//registerStaff
 	
 
 	@Autowired
-	AdministratorSendMail sendMail;
+	private AdministratorSendMail sendMail;
 	
 	/*이메일 보내기*/
 	public void sendMail(String employeeEmail) {
@@ -453,6 +457,9 @@ public class AdminService {
 		accessPage.put("/admin/member","member");
 		
 		accessPage.put("/admin/roomlist","room");
+		accessPage.put("/admin/resvroomlist","room");
+		accessPage.put("/admin/roomsales","room");
+		
 		accessPage.put("/admin/dining","dinning");
 		accessPage.put("/adminDiningResvList","dinning");
 		
@@ -463,9 +470,4 @@ public class AdminService {
 		return accessPage.get(uri);
 		
 	}//mappingURLtoID
-	
-
-
-	
-	
 }//class
