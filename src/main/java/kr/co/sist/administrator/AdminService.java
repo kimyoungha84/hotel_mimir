@@ -36,8 +36,8 @@ public class AdminService {
 		boolean flag=false;
 		//현재 사용자가 입력한 아이디와 비밀번호가 맞는지 check
 		String resultPass=am.selectEmployeeLogin(id);
-		//System.out.println("resultPass------------"+resultPass);
-		
+		System.out.println("resultPass------------"+resultPass);
+		System.out.println("Stringpass=============="+pass);
 	
 		if(cd.useBcryptMatches(pass, resultPass)) {
 			//비밀번호 일치
@@ -183,9 +183,10 @@ public class AdminService {
 	@Transactional
 	public int registerStaff(StaffDTO staffDTO){
 		StaffDTO sDTO=registerStaffInitSetting(staffDTO);
+		int returnVal=0;
 		int resultCnt1=0;
 		int resultCnt2=0;
-		int resultCnt3=0;
+		int resultCnt3=1;
 		
 
 		if(chkEmptyData(staffDTO)) {
@@ -201,9 +202,24 @@ public class AdminService {
 		
 		//permission_id_code는 기본적으로 List 형태니까.
 		//이걸 한 개씩 보내주도록 해야겠지.
-		//transaction 때문에... 어쩔 수 없음... getBean 써줘야 한다.
-		resultCnt3=context.getBean(AdminService.class).processPermissionList(sDTO);
+		int permissionListSize=sDTO.getPermission_id_code_list().size();
 		
+		//System.out.println("listSize-------------------"+permissionListSize);
+		
+		for(int i=0; i<permissionListSize; i++) {
+			//System.out.println("listValue------------"+sDTO.getPermission_id_code_list().get(i));
+			sDTO.setPermission_id_code(sDTO.getPermission_id_code_list().get(i));
+			returnVal+=am.insertStaffPermission(sDTO);
+			
+			//System.out.println("returnVal--------------------"+returnVal);
+		}//end for
+		
+		if(returnVal == 0) {
+			resultCnt3=0;
+		}//end if
+		
+		
+		System.out.println("===================resultCnt3==================================="+(resultCnt1+resultCnt2+resultCnt3));
 		return resultCnt1+resultCnt2+resultCnt3;
 	}//registerStaff
 	
@@ -215,7 +231,7 @@ public class AdminService {
 	public void sendMail(String employeeEmail) {
 	
 		try {
-			sendMail.sendMail("hyeon931023@gmail.com", "MIMIR 비밀번호 재설정","templates/administrator_email_template/reset_password_info.html");
+			sendMail.sendMail("j90729444@gmail.com", "MIMIR 비밀번호 재설정","templates/administrator_email_template/reset_password_info.html");
 			//sendMail.sendMail(employeeEmail, "MIMIR 비밀번호 재설정");
 		} catch (MessagingException e) {
 			e.printStackTrace();
@@ -424,29 +440,7 @@ public class AdminService {
 	}//chkEmptyData
 	
 	
-	/*permission_id_code list 처리*/
-	private int processPermissionList(StaffDTO sDTO) {
-		int returnVal=0;
-		
-		int permissionListSize=sDTO.getPermission_id_code_list().size();
-		
-		//System.out.println("listSize-------------------"+permissionListSize);
-		
-		for(int i=0; i<permissionListSize; i++) {
-			//System.out.println("listValue------------"+sDTO.getPermission_id_code_list().get(i));
-			sDTO.setPermission_id_code(sDTO.getPermission_id_code_list().get(i));
-			returnVal+=am.insertStaffPermission(sDTO);
-			
-			//System.out.println("returnVal--------------------"+returnVal);
-		}//end for
-		
-		if(returnVal == 0) {
-			return 0;
-		}//end if
-		
-		return 1;
-	}//processPermissionList
-	
+
 	
 	/*mapping URL에 해당하는 권한을 반환해준다.*/
 	private String mappingURLtoAthority(String uri) {

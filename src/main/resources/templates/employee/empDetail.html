@@ -145,7 +145,7 @@ Vue.createApp({
             console.log("sessionStorage --sDomainJSON----------- "+this.sDomainJSON);
             console.log("sessionStorage id ------------------"+this.sDomainJSON.staff_id);
             //sessionStorage 다 썼으면 지우기
-            //sessionStorage.removeItem("staffModifyCache");
+            sessionStorage.removeItem("staffModifyCache");
         }else{
             //서버값 사용
             this.sDomainJSON=staffJson;

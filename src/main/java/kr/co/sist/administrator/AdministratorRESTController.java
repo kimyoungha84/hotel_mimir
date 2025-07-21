@@ -89,7 +89,7 @@ public class AdministratorRESTController {
 		}else {
 			//직원 등록이 완료되었을 때 실행됨.
 			//직원 등록이 완료되면, password를 초기화할 수 있는 이메일 전송해야 함!
-			as.sendMail(null);
+			//as.sendMail(null);
 		}//if~else
 		
 

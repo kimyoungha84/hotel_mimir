@@ -37,7 +37,7 @@ public class AdministratorSendMail {
 		helper.setSubject(subject);
 		helper.setText(loadHtmlMailTemplate(url), true);
 		
-		helper.setFrom("hyeon931023@gmail.com");//보내는 사람 설정
+		//helper.setFrom("hyeon931023@gmail.com");//보내는 사람 설정
 		
 		
 		mailSender.send(message);
