@@ -15,7 +15,11 @@ public interface ReservationMapper {
     
     public Integer checkRoomAvailability(ReservationDTO rDTO);   
     
-    public void insertReservation(ReservationDTO rDTO);
+    public ReservationDTO loginUserData(int userNum);   
+    
+    public void insertNonMemberReservation(ReservationDTO rDTO);
+    
+    public void insertMemberReservation(ReservationDTO rDTO);
     
     public void updateReservation(ReservationDTO rDTO);
     

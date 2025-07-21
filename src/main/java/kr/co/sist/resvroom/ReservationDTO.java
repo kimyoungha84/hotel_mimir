@@ -35,5 +35,6 @@ public class ReservationDTO {
 	private String requestMsg;  //o
 	private int paymentPrice;  
 	private int breakfast;
+	private String imgPath;
 	
 }//class

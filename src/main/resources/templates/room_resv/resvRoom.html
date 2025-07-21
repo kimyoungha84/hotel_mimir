@@ -351,23 +351,37 @@
         <div class="mb-3">
           <br>
           <label for="name" class="form-label">이름</label>
-          <input type="text" id="name" name="userName" class="form-control">
+          <input type="text" id="name" name="userName" class="form-control"
+       th:value="${user != null} ? ${user.userName} : ''" />
         </div>
 
         <div class="row g-3 mb-3">
           <div class="col-md-6">
             <label for="email" class="form-label">이메일</label>
-            <input type="text" id="email" name="userEmail" class="form-control">
+            <input type="text" id="email" name="userEmail" class="form-control"
+       th:value="${user != null} ? ${user.userEmail} : ''" />
           </div>
           <div class="col-md-6">
 		    <label for="domain" class="form-label">도메인</label>
-		    <select id="domain" class="form-select" name="userDomain">
-			    <option value="">도메인 선택</option>
-			    <option value="@naver.com">@naver.com</option>
-			    <option value="@gmail.com">@gmail.com</option>
-			    <option value="@hanmail.net">@hanmail.net</option>
-			    <option value="custom" id="customOption">직접 입력</option>
-			</select>
+		   <select id="domain" class="form-select" name="userDomain">
+    <option value="">도메인 선택</option>
+    <option value="@naver.com"
+            th:selected="${user != null and user.userDomain == '@naver.com'}">
+        @naver.com
+    </option>
+    <option value="@gmail.com"
+            th:selected="${user != null and user.userDomain == '@gmail.com'}">
+        @gmail.com
+    </option>
+    <option value="@hanmail.net"
+            th:selected="${user != null and user.userDomain == '@hanmail.net'}">
+        @hanmail.net
+    </option>
+    <option value="custom"
+            th:selected="${user != null and (user.userDomain != '@naver.com' and user.userDomain != '@gmail.com' and user.userDomain != '@hanmail.net')}">
+        직접 입력
+    </option>
+</select>
 		    <input type="text" id="custom-domain" class="form-control mt-2 d-none" placeholder="도메인을 입력하세요">
 		</div>
         </div>
@@ -375,7 +389,9 @@
         <div class="row g-3 mb-4">
           <div class="mb-3">
             <label for="phone" class="form-label">연락처</label>
-            <input type="text" id="phone" name="userTel" class="form-control" placeholder="010-1234-5678" maxlength="13">
+			   <input type="text" id="phone" name="userTel" class="form-control"
+			       placeholder="010-1234-5678" maxlength="13"
+			       th:value="${user != null} ? ${user.userTel} : ''" />
           </div>
         </div>
       </div>
@@ -493,6 +509,7 @@
       <input type="hidden" id="breakfast-hidden" name="breakfast" value="0">
       <input type="hidden" id="pricePerNight" name="pricePerNight" th:value="${pricePerNight}" />
       <input type="hidden" id="nights" name="nights" th:value="${nights}" />
+      <input type="hidden" id="userNum" name="userNum"th:value="${user != null} ? ${user.userNum} : ''" />
       <input type="hidden" id="checkinDate" name="checkinDate" th:value="${checkIn}" />
       <input type="hidden" id="checkoutDate" name="checkoutDate" th:value="${checkOut}" />
       <input type="hidden" id="numGuestsAdult" name="numGuestsAdult" value="2" />

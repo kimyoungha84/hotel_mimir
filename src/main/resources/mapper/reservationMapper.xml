@@ -98,12 +98,20 @@
   ORDER BY r.RESV_ID ASC
   </select>
 	
-	<insert id="insertReservation" parameterType="kr.co.sist.resvroom.ReservationDTO">
+	<insert id="insertNonMemberReservation" parameterType="kr.co.sist.resvroom.ReservationDTO">
 		INSERT INTO RESERVATION (RESV_ID, ROOM_ID, NON_MEM_ID, PAYMENT_ID, CHECKIN_DATE, CHECKOUT_DATE, 
 		NUM_GUESTS_CHILD, NUM_GUESTS_ADULT, STATUS, REQUEST_MSG, BREAKFAST)
 		VALUES (#{resvId}, #{roomId}, #{userNum}, #{paymentId}, #{checkinDate}, #{checkoutDate},
 		 #{numGuestsChild}, #{numGuestsAdult}, #{status}, #{requestMsg}, #{breakfast})
 	</insert>
+	
+	<insert id="insertMemberReservation" parameterType="kr.co.sist.resvroom.ReservationDTO">
+		INSERT INTO RESERVATION (RESV_ID, ROOM_ID, USER_NUM, PAYMENT_ID, CHECKIN_DATE, CHECKOUT_DATE, 
+		NUM_GUESTS_CHILD, NUM_GUESTS_ADULT, STATUS, REQUEST_MSG, BREAKFAST)
+		VALUES (#{resvId}, #{roomId}, #{userNum}, #{paymentId}, #{checkinDate}, #{checkoutDate},
+		 #{numGuestsChild}, #{numGuestsAdult}, #{status}, #{requestMsg}, #{breakfast})
+	</insert>
+	
 
 <select id="checkRoomAvailability" parameterType="kr.co.sist.resvroom.ReservationDTO" resultType="Integer">
     SELECT room_id
@@ -129,7 +137,11 @@
     WHERE ROWNUM = 1
 </select>
 
-
+<select id="loginUserData" parameterType="int" resultType="reservationDTO">
+    SELECT USER_NUM userNum, EMAIL_ID userEmail, TEL userTel, USER_NAME userName
+    FROM MIMIR_USER
+    WHERE user_Num = #{userNum}
+</select>
 
 
 	<update id="updateReservation" parameterType="kr.co.sist.resvroom.ReservationDTO">

@@ -5,7 +5,6 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -38,7 +37,10 @@ public class ReservationController {
           @RequestParam("pricePerNight") int pricePerNight,
           Model model) {
       
-	   //detail.getUserNum();
+	   if(detail != null) {
+		   
+		   model.addAttribute("user",rs.loginUserData(detail.getUserNum()));
+	   }
        model.addAttribute("roomId", roomId);
           model.addAttribute("checkIn", checkIn);
           model.addAttribute("checkOut", checkOut);
@@ -65,28 +67,32 @@ public class ReservationController {
    
    @PostMapping("/room_resv/reservation")
    public String reservation(ReservationDTO rDTO, RedirectAttributes redirectAttributes) {
+
        Integer roomId = rs.checkRoomAvailability(rDTO);
        if (roomId == null) {
-    	   return "redirect:/room_resv/error_page";
+           return "redirect:/room_resv/error_page";
        }
 
        int paySeq = ps.searchPaymentSeq();
-       int nonMemSeq = nms.searchNonMemberSeq();
        int resvSeq = rs.searchReservationSeq();
 
        rDTO.setRoomId(roomId);
-       rDTO.setUserNum(nonMemSeq);
        rDTO.setPaymentId(paySeq);
        rDTO.setResvId(resvSeq);
        rDTO.setStatus("예약완료");
+       System.out.println("테스트"+rDTO.getUserNum());
+       if (rDTO.getUserNum() == null) {
+           int nonMemSeq = nms.searchNonMemberSeq();
+           rDTO.setUserNum(nonMemSeq);
 
-       System.out.println("체크인"+rDTO.getCheckinDate());
-       System.out.println("체크아웃"+rDTO.getCheckoutDate());
-       nms.addNonMember(rDTO);
-       ps.addPayment(rDTO);
-       rs.addReservation(rDTO);
+           nms.addNonMember(rDTO);
+           ps.addPayment(rDTO);
+           rs.addNonMemberReservation(rDTO);
+       } else {
+           ps.addPayment(rDTO);
+           rs.addMemberReservation(rDTO);
+       }
 
-       // GET으로 redirect 할 때 보여줄 데이터
        redirectAttributes.addFlashAttribute("resCon", rDTO);
        return "redirect:/room_resv/resultResv";
    }
