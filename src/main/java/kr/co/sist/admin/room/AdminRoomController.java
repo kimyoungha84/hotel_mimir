@@ -1,6 +1,11 @@
 package kr.co.sist.admin.room;
 
 import java.io.File;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -98,7 +103,49 @@ public class AdminRoomController {
 	
 	
 	@GetMapping("admin/roomsales")
-	public String adminRoomSales() {
+	public String adminRoomSales(@RequestParam(required = false) String startDate,
+            @RequestParam(required = false) String endDate,
+            Model model) {
+		
+	    // 현재 연도 기준 기본 날짜 설정
+	    LocalDate now = LocalDate.now();
+	    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+
+	    if (startDate == null) {
+	        startDate = now.withMonth(1).withDayOfMonth(1).format(formatter); // 1월 1일
+	    }
+	    if (endDate == null) {
+	        endDate = now.withMonth(12).withDayOfMonth(31).format(formatter); // 12월 31일
+	    }
+
+	    List<SalesSummaryDTO> salesList = ars.searchSalesSummary(startDate, endDate);
+
+	    // 총합계 계산
+	    int totalMember = 0, totalNonMember = 0, totalCheckout = 0, totalComplete = 0, totalCancel = 0, totalAmount = 0;
+
+	    for (SalesSummaryDTO s : salesList) {
+	        totalMember += s.getMemberCount();
+	        totalNonMember += s.getNonMemberCount();
+	        totalCheckout += s.getCheckoutCount();
+	        totalComplete += s.getCompletedCount();
+	        totalCancel += s.getCancelCount();
+	        totalAmount += s.getTotalAmount();
+	    }
+
+	    Map<String, Integer> summary = new HashMap<>();
+	    summary.put("totalMember", totalMember);
+	    summary.put("totalNonMember", totalNonMember);
+	    summary.put("totalCheckout", totalCheckout);
+	    summary.put("totalComplete", totalComplete);
+	    summary.put("totalCancel", totalCancel);
+	    summary.put("totalAmount", totalAmount);
+
+	    model.addAttribute("summary", summary);
+
+	    // 현재 사용된 날짜도 다시 전달해서 input에 표시되게
+	    model.addAttribute("startDate", startDate);
+	    model.addAttribute("endDate", endDate);
+        
 		return "/admin_room/admin_room_sales";
 	}//adminRoomSales
 	

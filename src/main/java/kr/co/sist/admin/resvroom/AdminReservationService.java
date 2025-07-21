@@ -23,5 +23,14 @@ public class AdminReservationService {
 	}//searchOneResv
 	
 	
+	public boolean modifyAdminResv(ReservationDTO rDTO) {
+		int resvResult = rm.updateResvAdmin(rDTO);
+		int nonMemResult = 0;
+
+	    if (!rDTO.getIsMember()) { // 비회원일 경우에만
+	    	nonMemResult = rm.updateNonMemberAdmin(rDTO);
+	    }//end if
+	    return (resvResult > 0) && (rDTO.getIsMember() ? true : nonMemResult > 0);
+	}//modifyAdminResv
 	
 }//class

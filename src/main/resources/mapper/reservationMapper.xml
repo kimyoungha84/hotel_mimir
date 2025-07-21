@@ -144,11 +144,24 @@
 </select>
 
 
-	<update id="updateReservation" parameterType="kr.co.sist.resvroom.ReservationDTO">
-	  UPDATE faq
-	  SET faq_title = #{faq_title},
-	      faq_content = #{faq_content}
-	  WHERE faq_num = #{faq_num}
-	</update>
+	<update id="updateResvAdmin" parameterType="reservationDTO">
+  UPDATE reservation
+  SET
+    num_guests_adult = #{numGuestsAdult},
+    num_guests_child = #{numGuestsChild},
+    status = #{status},
+    request_msg = #{requestMsg}
+  WHERE resv_id = #{resvId}
+</update>
+
+<!-- 2. 비회원 정보 업데이트 -->
+<update id="updateNonMemberAdmin" parameterType="reservationDTO">
+  UPDATE non_member
+  SET
+    user_name = #{userName},
+    user_tel = #{userTel},
+    user_email = #{userEmail}
+  WHERE non_mem_id = #{userNum}
+</update>
 	
 </mapper>

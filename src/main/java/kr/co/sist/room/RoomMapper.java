@@ -5,6 +5,8 @@ import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
+import kr.co.sist.admin.room.SalesSummaryDTO;
+
 @Mapper
 public interface RoomMapper {
 
@@ -26,5 +28,7 @@ public interface RoomMapper {
 	public Integer findRoomIdByNames(@Param("typeName") String typeName,
             @Param("bedName") String bedName,
             @Param("viewName") String viewName);
+	
+	public List<SalesSummaryDTO> selectSalesSummary(String startDate, String endDate);
 	
 }//interface

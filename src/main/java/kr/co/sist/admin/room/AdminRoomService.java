@@ -35,4 +35,8 @@ public class AdminRoomService {
 	    return rm.findRoomIdByNames(typeName, bedName, viewName);
 	}
 	
+	public List<SalesSummaryDTO> searchSalesSummary(String startDate, String endDate) {
+        return rm.selectSalesSummary(startDate, endDate);
+    }
+	
 }//class

@@ -23,5 +23,8 @@ public interface ReservationMapper {
     
     public void updateReservation(ReservationDTO rDTO);
     
+    public int updateResvAdmin(ReservationDTO rDTO);
+    public int updateNonMemberAdmin(ReservationDTO rDTO);
+    
 }
 

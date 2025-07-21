@@ -9,6 +9,7 @@
 <th:block th:replace="~{/administrator/fragments/admin_header :: admin_header}"></th:block>
 </head>
 <body>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
 <th:block th:replace="~{/administrator/fragments/admin_sidebar :: admin_sidebar}"></th:block>
 <div id="body-pd" class="body-pd">
 <div class="table-section">
@@ -16,11 +17,12 @@
 <div class="table-section">
   <h2 class="h2Title">
     객실 예약 현황 상세
-    <a class="edit-btn"  title="수정" th:href="@{admin/resvroommodify(resvId=${resv.resvId})}">
+    <a class="edit-btn"  title="수정" th:href="@{/admin/resvroommodify(resvId=${resv.resvId})}">
       ✏️
     </a>
   </h2>
 
+  
   <div class="detail-box">
     <table class="detail-table">
       <tr>
@@ -36,7 +38,7 @@
         <td th:text="${resv.userTel}">010-1234-5678</td>
       </tr>
       <tr>
-        <td>E-Mail</td>
+        <td>이메일</td>
         <td th:text="${resv.userEmail}"></td>
       </tr>
       <tr>
@@ -61,7 +63,10 @@
       </tr>
       <tr>
         <td>인원 수</td>
-        <td  th:text="|성인: ${resv.numGuestsAdult}, 아동: ${resv.numGuestsChild}|"></td>
+        <td>  
+        <label>성인: </label><span th:text="${resv.numGuestsAdult}"></span>,
+        <label>아동: </label><span th:text="${resv.numGuestsChild}"></span>
+         </td>
       </tr>
       <tr>
         <td>예약상태</td>
@@ -80,6 +85,11 @@
   </div>
   </div>
   </div>
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    [[${msg} ? 'alert("' + ${msg} + '");' : '']]
+    /*]]>*/
+</script>
 
 </body>
 </html>
