@@ -1,6 +1,7 @@
 package kr.co.sist.dining.user;
 
 
+import java.util.Date;
 import java.util.List;
 
 import lombok.Getter;
@@ -16,6 +17,9 @@ public class DiningDomain {
 	private String type;
 	private String location;
 	private String phone_number;
+	private String manager_name;
+	private String dining_operation_hours;
+	private Date dining_reg_date;
 	private String dining_classification;
 	private char dining_resv_availability;
 	private String dining_detailinfo;

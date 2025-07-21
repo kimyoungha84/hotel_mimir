@@ -6,7 +6,6 @@
 
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link rel="stylesheet" href="/admin_dining/css/admin_dining.css" />
 
 
 <!-- jquery CDN -->
@@ -15,6 +14,7 @@
 <th:block th:replace="~{/administrator/fragments/admin_header :: admin_header}"></th:block>
 
 <script src="/admin_common_assets/js/pagination.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 </head>
 <body>
 <th:block th:replace="~{/administrator/fragments/admin_sidebar :: admin_sidebar}"></th:block>
@@ -26,49 +26,121 @@
     <main class="main-content">
     
 
-      <section class="faq-section">
+      <section class="dining-section">
         <h1>다이닝</h1>
 
         <!-- 검색 필터 Fragment -->
 		<div th:replace="~{fragments/filter :: filter(${filter})}"></div>
 
-        <!-- FAQ 테이블 -->
-        <table class="faq-table">
-          <thead>
-            <tr>
-              <th><input type="checkbox" id="selectAll" /></th>
-              <th>이름</th>
-              <th>타입</th>
-              <th>등록일</th>
-              <th>담당자</th>
-            </tr>
-          </thead>
-         <tbody th:fragment="dining_list_fm" id="resultArea" >
-		  <tr th:each="dining, stat : ${diningList}" th:if="${stat.count <= 5}")>
-		    <td><input type="checkbox" name="chk" th:value="${dining.dining_id}"/></td>
-		    <td th:text="${dining.dining_name}"></td>
-		    <td th:text="${dining.type}"></td>
-		    <td th:text="${#dates.format(dining.dining_reg_date, 'yyyy-MM-dd')}"></td>
-		    <td th:text="${dining.manager_name}"></td>
-		  </tr>
-		</tbody>
+ 
 
-        </table>
+<table class="dining-table">
+  <thead>
+    <tr>
+      <th>번호</th>
+      <th>이름</th>
+      <th>타입</th>
+      <th>등록일</th>
+      <th>담당자</th>
+      <th style="text-align: center;">
+        <a th:href="@{/admin/dining/add}">
+          <button type="button" style="font-size: 1.5rem; width: 40px; height: 40px; background: #e0e0e0; border: none; cursor: pointer;">+</button>
+        </a>
+      </th>
+    </tr>
+  </thead>
+ <tbody th:fragment="dining_list_fm" id="resultArea" >
+  <tr th:each="dining, stat : ${diningList}" th:if="${stat.count <= 5}" th:attr="data-dining-id=${dining.dining_id}">
+    <td th:text="${stat.count}"></td>
+    <td th:text="${dining.dining_name}"></td>
+    <td th:text="${dining.type}"></td>
+    <td th:text="${#dates.format(dining.dining_reg_date, 'yyyy-MM-dd')}"></td>
+    <td th:text="${dining.manager_name}"></td>
+    <td>
+      <a th:href="@{/dining/edit(diningId=${dining.dining_id})}">
+        <button type="button" style="background: #e0e0e0; border: none; border-radius: 6px; padding: 6px 16px; cursor: pointer;">수정</button>
+      </a>
+    </td>
+  </tr>
+</tbody>
+</table>
 
-        <!-- 하단 버튼 -->
-        <div class="bottom-controls">
-          <button class="btn modify" id="btnModify">수정</button>
-          <button id="deleteBtn" class="btn delete">삭제</button>
-          <button class="btn apply" onclick="location.href='/admin/faq/register'">FAQ 등록</button>
-        </div>
+<!-- 하이라이트용 CSS -->
+<style>
+  .highlight-row {
+    background-color: #6bcbd8 !important;
+    transition: background 0.2s;
+  }
+  .faq-table tbody tr {
+    cursor: pointer;
+  }
+</style>
 
-        <!-- 페이징 -->
-        <div th:replace="~{fragments/pagination :: pagination}">
-		</div>
-        
-      </section>
-    </main>
+<!-- 행 클릭 시 하이라이트 JS -->
+<script>
+// 반드시 전역에 선언
+let selectedDiningId = null;
+
+document.addEventListener('DOMContentLoaded', function() {
+  const tbody = document.getElementById('resultArea');
+  tbody.addEventListener('click', function(e) {
+    let tr = e.target.closest('tr');
+    if (!tr || !tr.getAttribute('data-dining-id')) return;
+    Array.from(tbody.querySelectorAll('tr')).forEach(r => r.classList.remove('highlight-row'));
+    tr.classList.add('highlight-row');
+    window.selectedDiningId = tr.getAttribute('data-dining-id');
+    console.log('row click:', window.selectedDiningId);
+  });
+
+  document.getElementById('repMenuEditBtn').addEventListener('click', function(e) {
+    if (!window.selectedDiningId) {
+      alert('레코드를 선택하세요.');
+      e.preventDefault();
+      return;
+    }
+    window.location.href = '/admin/dining/repMenuEdit?diningId=' + window.selectedDiningId;
+    e.preventDefault();
+  });
+
+  document.getElementById('deleteBtn').addEventListener('click', function(e) {
+    e.preventDefault();
+    if (!window.selectedDiningId) {
+      alert('레코드를 선택하세요.');
+      return;
+    }
+    if (!confirm('정말 삭제하시겠습니까?')) {
+      return;
+    }
+    axios.delete('/dining/' + window.selectedDiningId)
+      .then(function(response) {
+        alert('삭제가 완료되었습니다.');
+        // 테이블 갱신 (예: 검색 버튼 클릭 트리거)
+        // location.reload(); // 또는 아래처럼 fragment만 갱신
+        document.getElementById('searchApiBtn')?.click();
+        window.selectedDiningId = null;
+      })
+      .catch(function(error) {
+        alert('삭제에 실패했습니다. 참조된 데이터가 있을 수 있습니다.');
+        console.error(error);
+      });
+  });
+});
+</script>
+
+<!-- 오른쪽 하단 대표메뉴 수정/삭제 버튼 -->
+<div style="position: fixed; right: 40px; bottom: 40px; display: flex; gap: 16px; z-index: 100;">
+  <a id="repMenuEditBtn" href="#"><button type="button" style="background: #4ecdc4; color: #fff; border: none; border-radius: 6px; padding: 1rem 2rem; font-size: 1.1rem; font-weight: 500; cursor: pointer;">대표메뉴 수정</button></a>
+  <a id="deleteBtn" href="#"><button type="button" style="background: #ff6b6b; color: #fff; border: none; border-radius: 6px; padding: 1rem 2rem; font-size: 1.1rem; font-weight: 500; cursor: pointer;">삭제</button></a>
 </div>
-  <script src="/admin_dining/js/admin_dining.js"></script>
+
+
+
+<div th:replace="~{fragments/pagination :: pagination}">
+</div>
+
+</section>
+<!-- 페이징 -->
+</main>
+</div>
 </body>
 </html>

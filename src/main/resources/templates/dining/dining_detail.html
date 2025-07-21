@@ -32,6 +32,62 @@ color: white;
     color: white;
 }
 
+.ico-dining-type {
+  width: 2.4rem;
+  height: 2.4rem;
+  background-color: #c3c3c3;
+  border-radius: 50%;
+  display: inline-block;
+  vertical-align: middle;
+  margin-right: 0.6rem;
+  background-image: url('/dining/images/dining_type.svg');
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 60% 60%;
+}
+
+.ico-dining-location {
+  width: 2.4rem;
+  height: 2.4rem;
+  background-color: #c3c3c3;
+  border-radius: 50%;
+  display: inline-block;
+  vertical-align: middle;
+  margin-right: 0.6rem;
+  background-image: url('/dining/images/dining_location.svg');
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 60% 60%;
+}
+
+.ico-dining-opertime {
+  width: 2.4rem;
+  height: 2.4rem;
+  background-color: #c3c3c3;
+  border-radius: 50%;
+  display: inline-block;
+  vertical-align: middle;
+  margin-right: 0.6rem;
+  background-image: url('/dining/images/dining_opertime.svg');
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 60% 60%;
+}
+
+.ico-dining-inquiry {
+  width: 2.4rem;
+  height: 2.4rem;
+  background-color: #c3c3c3;
+  border-radius: 50%;
+  display: inline-block;
+  vertical-align: middle;
+  margin-right: 0.6rem;
+  background-image: url('/dining/images/dining_inquiry.svg');
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 60% 60%;
+}
+
 .main-img{
 	position: fixed;
     overflow: hidden;
@@ -103,9 +159,9 @@ color: white;
 
 .di-info-wrap{
 
-margin-top: 50px;
+margin-top: 100px;
 display: flex;
-width: 70%;
+width: 75%;
 
 }
 
@@ -126,7 +182,7 @@ text-align: start;
   width: 100%;
   margin-top: auto;
   margin-bottom: auto;
-  padding: 3rem 0rem;
+  padding: 2.5rem 0rem;
   border-bottom: 1px solid #333;
 
 }
@@ -139,7 +195,6 @@ border-bottom: 1px solid #dddddd;
 
 .info-row{
 display: flex;
-
 }
 
 .info-list-wrap{
@@ -148,18 +203,24 @@ border-top: 2px solid #333;
 }
 
 .list-col-1{
+display: flex;
 width: 30%;
-font-weight: bold;
+font-weight: 500;
+font-size: 18px;
+align-items: center;
 }
 
 .list-col-2{
+  display: flex;
+  align-items: center;
+  font-size: 18px;
 }
 
 
 .menu-wrap{
 
-margin-top: 100px;
-width: 70%;
+margin-top: 200px;
+width: 75%;
 margin-left: auto;
 margin-right: auto;
 
@@ -183,9 +244,13 @@ border-top : 2px solid #333;
 
 }
 
+.menu-list .list-col-1 {
+  align-items: flex-start;
+}
+
 .gallery-wrap{
-	margin-top: 130px;
-	width: 70%;
+	margin-top: 200px;
+	width: 75%;
 	margin-left: auto;
 	margin-right: auto;
 
@@ -235,8 +300,8 @@ width: 100%;         /* 이미지가 부모 카드의 너비에 맞게 크기 �
 
 /* pagination.html에서 가져온 mimir-pg-btn 스타일 */
 .mimir-pg-btn {
-  width: 40px;
-  height: 40px;
+  width: 50px;
+  height: 50px;
   border-radius: 50%;
   border: 1.5px solid #222;
   background: #fff;
@@ -419,6 +484,305 @@ width: 100%;         /* 이미지가 부모 카드의 너비에 맞게 크기 �
   line-height: 1.1;
   text-shadow: 0 1px 2px rgba(0,0,0,0.10);
 }
+
+/* 예약 패널 스타일 */
+.reservation-panel {
+  position: fixed;
+  right: -400px;
+  bottom: 0; /* 화면 하단에 붙임 */
+  width: 400px;
+  height: 60vh; /* 높이를 60%로 줄임 */
+  background: #f8f8f8;
+  box-shadow: -2px 0 10px rgba(0,0,0,0.1);
+  transition: right 0.3s ease;
+  z-index: 1001; /* 슬라이드 모달보다 낮은 z-index */
+  display: flex;
+  flex-direction: column;
+  border-top-left-radius: 12px; /* 상단 왼쪽 모서리 둥글게 */
+}
+
+.reservation-panel.active {
+  right: 0;
+}
+
+.reservation-header {
+  background: #333;
+  color: white;
+  padding: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.reservation-header h3 {
+  margin: 0;
+  font-size: 1.2rem;
+}
+
+.close-btn {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 24px;
+  cursor: pointer;
+  padding: 0;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.reservation-content {
+  padding: 20px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.dining-info, .guest-info {
+  background: white;
+  padding: 15px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  transition: all 0.2s ease;
+}
+
+.dining-info:hover, .guest-info:hover {
+  box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+  transform: translateY(-1px);
+}
+
+.dining-info h4, .guest-info h4 {
+  margin: 0 0 10px 0;
+  color: #333;
+  font-size: 1rem;
+}
+
+.guest-summary {
+  display: flex;
+  gap: 15px;
+  margin-bottom: 10px;
+}
+
+.guest-summary span {
+  font-size: 0.9rem;
+  color: #666;
+}
+
+/* .edit-guest-btn 스타일 제거 - 더 이상 사용하지 않음 */
+
+.search-btn {
+  background: #856956;
+  color: white;
+  border: none;
+  padding: 15px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 1.1rem;
+  font-weight: 500;
+  margin-top: auto;
+}
+
+/* 슬라이드 모달 스타일 */
+.modal-slide {
+  position: fixed;
+  right: 400px; /* 예약 패널 바로 왼쪽에서 시작 */
+  bottom: 0; /* 화면 하단에 붙임 */
+  width: 400px;
+  height: 60vh; /* 예약 패널과 동일한 높이 */
+  background: white;
+  box-shadow: -2px 0 10px rgba(0,0,0,0.1);
+  transition: transform 0.3s ease, visibility 0.3s ease;
+  z-index: 1002;
+  display: flex;
+  flex-direction: column;
+  transform: translateX(100%); /* 처음에는 예약 패널 뒤에 숨겨져 있음 */
+  visibility: hidden; /* 초기에는 보이지 않음 */
+  opacity: 0; /* 투명도 추가 */
+  border-top-left-radius: 12px; /* 상단 왼쪽 모서리 둥글게 */
+}
+
+.modal-slide.active {
+  transform: translateX(0); /* 활성화되면 예약 패널 왼쪽으로 슬라이드 */
+  visibility: visible; /* 활성화되면 보임 */
+  opacity: 1; /* 완전히 보임 */
+}
+
+.modal-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.modal-header {
+  background: #333;
+  color: white;
+  padding: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.modal-header h3 {
+  margin: 0;
+  font-size: 1.2rem;
+}
+
+/* 다이닝 선택 스타일 */
+.dining-options {
+  flex: 1;
+  padding: 20px;
+  overflow-y: auto;
+}
+
+.dining-option {
+  display: flex;
+  align-items: center;
+  padding: 15px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  margin-bottom: 15px;
+  cursor: pointer;
+  transition: all 0.2s;
+  position: relative;
+}
+
+.dining-option:hover {
+  border-color: #856956;
+  box-shadow: 0 2px 8px rgba(133, 105, 86, 0.2);
+}
+
+.dining-option.selected {
+  border-color: #856956;
+  background: #f8f6f4;
+}
+
+.dining-option img {
+  width: 80px;
+  height: 60px;
+  object-fit: cover;
+  border-radius: 4px;
+  margin-right: 15px;
+}
+
+.dining-details {
+  flex: 1;
+}
+
+.dining-details h4 {
+  margin: 0 0 5px 0;
+  font-size: 1.1rem;
+  color: #333;
+}
+
+.dining-details p {
+  margin: 2px 0;
+  font-size: 0.9rem;
+  color: #666;
+}
+
+.selection-indicator {
+  width: 20px;
+  height: 20px;
+  border: 2px solid #ddd;
+  border-radius: 50%;
+  position: absolute;
+  right: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.dining-option.selected .selection-indicator {
+  border-color: #856956;
+  background: #856956;
+}
+
+/* 인원수 선택 스타일 */
+.guest-selection {
+  flex: 1;
+  padding: 20px;
+}
+
+.guest-type {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 0;
+  border-bottom: 1px solid #eee;
+}
+
+.guest-type:last-child {
+  border-bottom: none;
+}
+
+.guest-type span {
+  font-size: 1.1rem;
+  color: #333;
+}
+
+.counter {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.counter button {
+  width: 30px;
+  height: 30px;
+  border: 1px solid #ddd;
+  background: white;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  color: #333;
+}
+
+.counter button:hover {
+  background: #f0f0f0;
+}
+
+.counter span {
+  font-size: 1.2rem;
+  font-weight: 500;
+  min-width: 30px;
+  text-align: center;
+}
+
+.select-btn {
+  background: #333;
+  color: white;
+  border: none;
+  padding: 15px;
+  margin: 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 1.1rem;
+  font-weight: 500;
+}
+
+/* 오버레이 */
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.5);
+  z-index: 1000;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s ease;
+}
+
+.overlay.active {
+  opacity: 1;
+  visibility: visible;
+}
 </style>
 </head>
 <body>
@@ -441,8 +805,8 @@ width: 100%;         /* 이미지가 부모 카드의 너비에 맞게 크기 �
         <div class="category-img">
           <img th:src="@{${diningInfo.dining_logo_image}}" alt="다이닝 로고 이미지" loading="lazy">
         </div>
-        <div class="category-copy">
-            <p class="txt01">시그니엘 서울 STAY에서 미쉐린 3스타 셰프 야닉 알레노의 특별한 프랑스 요리를 경험해 보시기 바랍니다.</p>
+        <div class="category-copy" th:if="${diningInfo.dining_introduction != null and !#strings.isEmpty(diningInfo.dining_introduction)}">
+            <p class="txt01" style="font-size: 17px;" th:text="${diningInfo.dining_introduction}">소개내용</p>
         </div>
     </div> 
 
@@ -455,6 +819,7 @@ width: 100%;         /* 이미지가 부모 카드의 너비에 맞게 크기 �
         <div class="info-list">
         <div class="info-row">
         <div class="list-col-1">
+          <i class="ico ico-dining-type" aria-hidden="true"></i>
         타입
         </div>
         <div class="list-col-2" th:text="${diningInfo.type}">
@@ -465,6 +830,7 @@ width: 100%;         /* 이미지가 부모 카드의 너비에 맞게 크기 �
         <div class="info-list">
         <div class="info-row">
         <div class="list-col-1">
+          <i class="ico ico-dining-location" aria-hidden="true"></i>
         위치
         </div>
         <div class="list-col-2" th:text="${diningInfo.location}">
@@ -475,22 +841,24 @@ width: 100%;         /* 이미지가 부모 카드의 너비에 맞게 크기 �
         <div class="info-list">
         <div class="info-row">
         <div class="list-col-1">
+          <i class="ico ico-dining-opertime" aria-hidden="true"></i>
         영업시간
         </div>
-        <div class="list-col-2">
-        넣을예정
+        <div class="list-col-2" style="white-space: pre-line;" th:text="${diningInfo.dining_operation_hours}">
+        영업시간내용
         </div>
         </div>
         </div>
         <div class="info-list">
         <div class="info-row">
         <div class="list-col-1">
+          <i class="ico ico-dining-inquiry" aria-hidden="true"></i>
         문의 및 예약
         </div>
         <div class="list-col-2" style="display: flex; align-items: center;">
           <span th:text="${diningInfo.phone_number}">프렌치</span>
           <th:block th:if="${#strings.equalsIgnoreCase(#strings.trim(diningInfo.dining_resv_availability), 'Y')}">
-            <a th:href="@{/diningResv(diningId=${diningInfo.dining_id})}" style="margin-left: 16px;">
+            <a th:href="@{/diningResv(diningId=${diningInfo.dining_id})}" style="margin-left: 50px;">
               <button type="button" class="list-btn">예약하기</button>
             </a>
           </th:block>
@@ -500,57 +868,30 @@ width: 100%;         /* 이미지가 부모 카드의 너비에 맞게 크기 �
         </div>
     </div> 
     
-    <div class="menu-wrap">
-    <h1>대표메뉴</h1>
-    <div class="menu-list-wrap">
-    <div class="menu-list">
-    <div class="info-row">
-    <div class="list-col-1">
-        타입
-    </div>
-    <div class="list-col-2">
-        프렌치
-    </div>
-    </div>
-    </div>
-    <div class="menu-list">
-    <div class="info-row">
-    <div class="list-col-1">
-        타입
-    </div>
-    <div class="list-col-2">
-        프렌치
-    </div>
-    </div>
-    </div>
-    <div class="menu-list">
-    <div class="info-row">
-    <div class="list-col-1">
-        타입
-    </div>
-    <div class="list-col-2">
-        프렌치
-    </div>
-    </div>
-    </div>
-    <div class="menu-list">
-    <div class="info-row">
-    <div class="list-col-1">
-        타입
-    </div>
-    <div class="list-col-2">
-        프렌치
-    </div>
-    </div>
-    </div>
+    <div class="menu-wrap" th:if="${groupedMenuMap != null and !#maps.isEmpty(groupedMenuMap)}">
+  <h1>대표메뉴</h1>
+  <div class="menu-list-wrap">
+    <th:block th:each="entry : ${groupedMenuMap}">
+      <div class="menu-list">
+        <div class="info-row">
+          <div class="list-col-1" th:text="${entry.key}"></div>
+          <div class="list-col-2" style="display: flex; gap: 250px;">
+            <th:block th:each="menu : ${entry.value}">
+              <div style="min-width: 180px;">
+                <div th:text="${menu.menu_name}"></div>
+                <div style="margin-top: 16px;">
+                  <span th:text="${#numbers.formatInteger(menu.price, 0, 'COMMA')}"></span> KRW
+                </div>
+              </div>
+            </th:block>
+          </div>
+        </div>
+      </div>
+    </th:block>
+  </div>
+</div>
     
-    
-    
-    </div>
-    
-    </div>
-    
-    <div class="gallery-wrap">
+    <div class="gallery-wrap" th:if="${diningInfo.dining_carousel_images != null and #lists.size(diningInfo.dining_carousel_images) > 0}">
       <div class="gallery-flex-row">
         <h1 class="gallery-title">갤러리</h1>
         <div class="gallery-carousel">
@@ -586,10 +927,10 @@ width: 100%;         /* 이미지가 부모 카드의 너비에 맞게 크기 �
     </div>
 
       <!-- 추가 정보 섹션 -->
-      <div class="additional-info-wrap">
+      <div class="additional-info-wrap" th:if="${diningInfo.dining_detailinfo != null and !#strings.isEmpty(diningInfo.dining_detailinfo)}">
         <h1 class="gallery-title">추가 정보</h1>
         <div class="additional-info-content-bg">
-          <div class="additional-info-content" th:utext="${additionalInfo}"></div>
+          <div class="additional-info-content" style="color:#707070" th:utext="${diningInfo.dining_detailinfo}"></div>
         </div>
       </div>
       <hr class="section-divider">
@@ -599,10 +940,106 @@ width: 100%;         /* 이미지가 부모 카드의 너비에 맞게 크기 �
 </div> 
 
 <!-- 화면 우측 하단 예약하기 플로팅 버튼 -->
-<a href="#" class="floating-reserve-btn">
+<a href="#" class="floating-reserve-btn" onclick="openReservationPanel(event)">
   <img src="/dining/images/reservation_calender.svg" alt="예약 아이콘" class="reserve-icon">
   <span class="reserve-text">예약하기</span>
 </a>
+
+<!-- 예약 패널 (오른쪽) -->
+<div id="reservation-panel" class="reservation-panel">
+  <div class="reservation-header">
+    <h3>다이닝 예약</h3>
+    <button class="close-btn" onclick="closeReservationPanel()">×</button>
+  </div>
+  <div class="reservation-content">
+    <div class="dining-info" onclick="openDiningModal()" style="cursor: pointer;">
+      <h4>다이닝</h4>
+      <p id="selected-dining-name" th:text="${diningInfo.dining_name}">스테이, 모던 레스토랑</p>
+      <span style="font-size: 12px; color: #666;">클릭하여 변경</span>
+    </div>
+    <div class="guest-info" onclick="openGuestModal()" style="cursor: pointer;">
+      <h4>인원</h4>
+      <div class="guest-summary">
+        <span>성인 <span id="adult-count">1</span></span>
+        <span>어린이 <span id="child-count">0</span></span>
+        <span>유아 <span id="infant-count">0</span></span>
+      </div>
+      <span style="font-size: 12px; color: #666;">클릭하여 변경</span>
+    </div>
+    <button class="search-btn" onclick="searchReservation()">검색</button>
+  </div>
+</div>
+
+<!-- 다이닝 선택 모달 (왼쪽 슬라이드) -->
+<div id="dining-modal" class="modal-slide">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h3>다이닝 선택</h3>
+      <button class="close-btn" onclick="closeDiningModal()">×</button>
+    </div>
+    <div class="dining-options">
+      <div class="dining-option" data-dining-id="1" onclick="selectDining(this, '더 라운지', '79층')">
+        <img src="/dining/images/lounge.jpg" alt="더 라운지">
+        <div class="dining-details">
+          <h4>더 라운지</h4>
+          <p>타입 | 레스토랑 & 바</p>
+          <p>위치 | 79층</p>
+        </div>
+        <div class="selection-indicator"></div>
+      </div>
+      <div class="dining-option selected" data-dining-id="2" onclick="selectDining(this, '스테이, 모던 레스토랑', '81층')">
+        <img src="/dining/images/stay.jpg" alt="스테이, 모던 레스토랑">
+        <div class="dining-details">
+          <h4>스테이, 모던 레스토랑</h4>
+          <p>타입 | 프렌치</p>
+          <p>위치 | 81층</p>
+        </div>
+        <div class="selection-indicator"></div>
+      </div>
+    </div>
+    <button class="select-btn" onclick="confirmDiningSelection()">선택</button>
+  </div>
+</div>
+
+<!-- 인원수 선택 모달 (왼쪽 슬라이드) -->
+<div id="guest-modal" class="modal-slide">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h3>인원수</h3>
+      <button class="close-btn" onclick="closeGuestModal()">×</button>
+    </div>
+    <div class="guest-selection">
+      <div class="guest-type">
+        <span>성인</span>
+        <div class="counter">
+          <button onclick="decreaseCount('adult')">-</button>
+          <span id="adult-counter">1</span>
+          <button onclick="increaseCount('adult')">+</button>
+        </div>
+      </div>
+      <div class="guest-type">
+        <span>어린이</span>
+        <div class="counter">
+          <button onclick="decreaseCount('child')">-</button>
+          <span id="child-counter">0</span>
+          <button onclick="increaseCount('child')">+</button>
+        </div>
+      </div>
+      <div class="guest-type">
+        <span>유아</span>
+        <div class="counter">
+          <button onclick="decreaseCount('infant')">-</button>
+          <span id="infant-counter">0</span>
+          <button onclick="increaseCount('infant')">+</button>
+        </div>
+      </div>
+    </div>
+    <button class="select-btn" onclick="confirmGuestSelection()">선택</button>
+  </div>
+</div>
+
+<!-- 배경 오버레이 -->
+<div id="overlay" class="overlay" onclick="closeAllModals()"></div>
 
 
 </main>
@@ -645,6 +1082,197 @@ window.addEventListener('DOMContentLoaded', function() {
     progress.style.width = '0%';
   }
 });
+
+// 예약 패널 관련 함수들
+function openReservationPanel(event) {
+  // 기본 동작 방지 (화면 최상단으로 이동 방지)
+  if (event) {
+    event.preventDefault();
+  }
+  
+  document.getElementById('reservation-panel').classList.add('active');
+  document.getElementById('overlay').classList.add('active');
+}
+
+function closeReservationPanel() {
+  const reservationPanel = document.getElementById('reservation-panel');
+  const diningModal = document.getElementById('dining-modal');
+  const guestModal = document.getElementById('guest-modal');
+  const overlay = document.getElementById('overlay');
+  
+  // 예약 패널 닫기
+  reservationPanel.classList.remove('active');
+  
+  // 열려있는 모달들도 함께 닫기
+  diningModal.classList.remove('active');
+  guestModal.classList.remove('active');
+  overlay.classList.remove('active');
+  
+  // 애니메이션 완료 후 모달들 완전히 숨기기
+  setTimeout(() => {
+    if (!diningModal.classList.contains('active')) {
+      diningModal.style.visibility = 'hidden';
+    }
+    if (!guestModal.classList.contains('active')) {
+      guestModal.style.visibility = 'hidden';
+    }
+  }, 300);
+}
+
+function openDiningModal() {
+  // 예약 패널이 열려있을 때만 다이닝 모달 열기
+  if (document.getElementById('reservation-panel').classList.contains('active')) {
+    // 다른 모달이 열려있으면 닫기
+    closeGuestModal();
+    
+    const modal = document.getElementById('dining-modal');
+    modal.style.visibility = 'visible'; // visibility 초기화
+    modal.classList.add('active');
+    document.getElementById('overlay').classList.add('active');
+  }
+}
+
+function closeDiningModal() {
+  const modal = document.getElementById('dining-modal');
+  modal.classList.remove('active');
+  
+  // 애니메이션 완료 후 완전히 숨기기
+  setTimeout(() => {
+    if (!modal.classList.contains('active')) {
+      modal.style.visibility = 'hidden';
+    }
+  }, 300);
+  
+  document.getElementById('overlay').classList.remove('active');
+}
+
+function openGuestModal() {
+  // 예약 패널이 열려있을 때만 인원수 모달 열기
+  if (document.getElementById('reservation-panel').classList.contains('active')) {
+    // 다른 모달이 열려있으면 닫기
+    closeDiningModal();
+    
+    const modal = document.getElementById('guest-modal');
+    modal.style.visibility = 'visible'; // visibility 초기화
+    modal.classList.add('active');
+    document.getElementById('overlay').classList.add('active');
+  }
+}
+
+function closeGuestModal() {
+  const modal = document.getElementById('guest-modal');
+  modal.classList.remove('active');
+  
+  // 애니메이션 완료 후 완전히 숨기기
+  setTimeout(() => {
+    if (!modal.classList.contains('active')) {
+      modal.style.visibility = 'hidden';
+    }
+  }, 300);
+  
+  document.getElementById('overlay').classList.remove('active');
+}
+
+function closeAllModals() {
+  const reservationPanel = document.getElementById('reservation-panel');
+  const diningModal = document.getElementById('dining-modal');
+  const guestModal = document.getElementById('guest-modal');
+  const overlay = document.getElementById('overlay');
+  
+  // 모든 모달 닫기
+  reservationPanel.classList.remove('active');
+  diningModal.classList.remove('active');
+  guestModal.classList.remove('active');
+  overlay.classList.remove('active');
+  
+  // 애니메이션 완료 후 완전히 숨기기
+  setTimeout(() => {
+    if (!diningModal.classList.contains('active')) {
+      diningModal.style.visibility = 'hidden';
+    }
+    if (!guestModal.classList.contains('active')) {
+      guestModal.style.visibility = 'hidden';
+    }
+  }, 300);
+}
+
+// 다이닝 선택 관련 함수들
+function selectDining(element, name, location) {
+  // 모든 다이닝 옵션에서 selected 클래스 제거
+  document.querySelectorAll('.dining-option').forEach(option => {
+    option.classList.remove('selected');
+  });
+  
+  // 선택된 다이닝에 selected 클래스 추가
+  element.classList.add('selected');
+  
+  // 선택된 다이닝 정보 저장
+  window.selectedDining = {
+    name: name,
+    location: location,
+    id: element.getAttribute('data-dining-id')
+  };
+}
+
+function confirmDiningSelection() {
+  if (window.selectedDining) {
+    document.getElementById('selected-dining-name').textContent = window.selectedDining.name;
+    closeDiningModal();
+  }
+}
+
+// 인원수 관련 함수들
+function increaseCount(type) {
+  const counter = document.getElementById(type + '-counter');
+  const count = document.getElementById(type + '-count');
+  let currentValue = parseInt(counter.textContent);
+  
+  if (type === 'adult' && currentValue < 10) {
+    currentValue++;
+  } else if (type === 'child' && currentValue < 10) {
+    currentValue++;
+  } else if (type === 'infant' && currentValue < 5) {
+    currentValue++;
+  }
+  
+  counter.textContent = currentValue;
+  count.textContent = currentValue;
+}
+
+function decreaseCount(type) {
+  const counter = document.getElementById(type + '-counter');
+  const count = document.getElementById(type + '-count');
+  let currentValue = parseInt(counter.textContent);
+  
+  if (currentValue > 0) {
+    currentValue--;
+    counter.textContent = currentValue;
+    count.textContent = currentValue;
+  }
+}
+
+function confirmGuestSelection() {
+  closeGuestModal();
+}
+
+// 예약 검색 함수
+function searchReservation() {
+  const diningName = document.getElementById('selected-dining-name').textContent;
+  const adultCount = document.getElementById('adult-count').textContent;
+  const childCount = document.getElementById('child-count').textContent;
+  const infantCount = document.getElementById('infant-count').textContent;
+  
+  // 여기에 예약 검색 로직 추가
+  console.log('예약 검색:', {
+    dining: diningName,
+    adults: adultCount,
+    children: childCount,
+    infants: infantCount
+  });
+  
+  // 예약 페이지로 이동하거나 검색 결과를 표시
+  // window.location.href = `/diningResv?dining=${encodeURIComponent(diningName)}&adults=${adultCount}&children=${childCount}&infants=${infantCount}`;
+}
 </script>
 </body>
 </html>

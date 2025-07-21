@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html xmlns="http://www.thymeleaf.org" lang="ko">
+<head>
+<meta charset="UTF-8">
+<title>다이닝 정보 수정</title>
+<link rel="stylesheet" href="/admin_common_assets/css/common.css">
+<style>
+  .edit-form-label { display: block; margin-top: 24px; font-weight: bold; }
+  .edit-form-input, .edit-form-textarea, .edit-form-select { width: 100%; padding: 8px; margin-top: 4px; }
+  .edit-form-img-preview { max-width: 200px; margin-top: 8px; display: block; }
+  .edit-form-img-list { display: flex; gap: 16px; flex-wrap: wrap; margin-top: 8px; }
+  .edit-form-img-list img { max-width: 120px; border: 1px solid #ccc; border-radius: 4px; }
+  .edit-form-section { margin-bottom: 32px; width: 50%; }
+  .edit-form-btn-area { margin-top: 32px; display: flex; gap: 16px; }
+</style>
+</head>
+<body>
+<th:block th:replace="~{/administrator/fragments/admin_header :: admin_header}"></th:block>
+<th:block th:replace="~{/administrator/fragments/admin_sidebar :: admin_sidebar}"></th:block>
+<div class="body-pd">
+  <main class="main-content">
+    <section class="dining-section">
+      <h1>다이닝 정보 수정</h1>
+      
+      <!-- 메시지 표시 영역 -->
+      <div th:if="${message}" class="message-area" style="margin-bottom: 20px; padding: 10px; background-color: #e8f5e8; border: 1px solid #4caf50; border-radius: 4px;">
+        <span th:text="${message == 'dataUpdated' ? '데이터가 성공적으로 수정되었습니다.' : 
+                        message == 'filesUpdated' ? '파일이 성공적으로 업로드되었습니다.' : message}"></span>
+      </div>
+
+      <!-- 일반 데이터 폼 -->
+      <form id="diningDataForm" th:action="@{/dining/edit}" method="post">
+        <input type="hidden" name="dining_id" th:value="${dining.dining_id}" />
+
+        <div class="edit-form-section">
+          <label class="edit-form-label">이름</label>
+          <input class="edit-form-input" type="text" name="dining_name" th:value="${dining.dining_name}" required />
+        </div>
+        <div class="edit-form-section">
+          <label class="edit-form-label">타입</label>
+          <input class="edit-form-input" type="text" name="type" th:value="${dining.type}" required />
+        </div>
+        <div class="edit-form-section">
+          <label class="edit-form-label">위치</label>
+          <input class="edit-form-input" type="text" name="location" th:value="${dining.location}" required />
+        </div>
+        <div class="edit-form-section">
+          <label class="edit-form-label">전화번호</label>
+          <input class="edit-form-input" type="text" name="phone_number" th:value="${dining.phone_number}" required />
+        </div>
+        <div class="edit-form-section">
+          <label class="edit-form-label">담당자</label>
+          <input class="edit-form-input" type="text" name="manager_name" th:value="${dining.manager_name}" required />
+        </div>
+        <div class="edit-form-section">
+          <label class="edit-form-label">소개</label>
+          <textarea class="edit-form-textarea" name="dining_introduction" rows="3" th:text="${dining.dining_introduction}"></textarea>
+        </div>
+        <div class="edit-form-section">
+          <label class="edit-form-label">상세정보</label>
+          <textarea class="edit-form-textarea" name="dining_detailinfo" rows="5" th:text="${dining.dining_detailinfo}"></textarea>
+        </div>
+        <div class="edit-form-section">
+          <label class="edit-form-label">영업시간</label>
+          <textarea class="edit-form-textarea" name="dining_operation_hours" rows="3" th:text="${dining.dining_operation_hours}"></textarea>
+        </div>
+        <div class="edit-form-section">
+          <label class="edit-form-label">예약 가능 여부</label>
+          <select class="edit-form-select" name="dining_resv_availability">
+            <option value="Y" th:selected="${dining.dining_resv_availability == 'Y'}">Y</option>
+            <option value="N" th:selected="${dining.dining_resv_availability == 'N'}">N</option>
+          </select>
+        </div>
+        <div class="edit-form-section">
+          <label class="edit-form-label">분류</label>
+          <select class="edit-form-select" name="dining_classification" required>
+            <option value="레스토랑" th:selected="${dining.dining_classification == '레스토랑'}">레스토랑</option>
+            <option value="라운지 &amp; 바" th:selected="${dining.dining_classification == '라운지 & 바'}">라운지 & 바</option>
+            <option value="베이커리 &amp; 카페" th:selected="${dining.dining_classification == '베이커리 & 카페'}">베이커리 & 카페</option>
+            <option value="룸서비스" th:selected="${dining.dining_classification == '룸서비스'}">룸서비스</option>
+          </select>
+        </div>
+
+        <div class="edit-form-btn-area">
+          <button type="submit" class="list-btn">데이터 수정</button>
+        </div>
+      </form>
+
+      <!-- 파일 업로드 폼 -->
+      <form id="diningFileForm" th:action="@{/dining/editFiles}" method="post" enctype="multipart/form-data">
+        <input type="hidden" name="dining_id" th:value="${dining.dining_id}" />
+
+        <div class="edit-form-section">
+          <label class="edit-form-label">메인 이미지</label>
+          <input type="file" name="main_image_file" accept="image/*" />
+          <input type="hidden" name="main_image_url" />
+          <img th:if="${dining.dining_main_image != null}" th:src="@{${dining.dining_main_image}}" class="edit-form-img-preview" />
+        </div>
+        <div class="edit-form-section">
+          <label class="edit-form-label">로고 이미지</label>
+          <input type="file" name="logo_image_file" accept="image/*" />
+          <input type="hidden" name="logo_image_url" />
+          <img th:if="${dining.dining_logo_image != null}" th:src="@{${dining.dining_logo_image}}" class="edit-form-img-preview" />
+        </div>
+        <div class="edit-form-section">
+          <label class="edit-form-label">케러셀 이미지 (여러 장 가능)</label>
+          <div class="edit-form-img-list" id="carousel-img-list" style="display:flex; flex-direction:column; gap:0;">
+            <th:block th:each="img, iterStat : ${dining.dining_carousel_images}">
+              <div class="carousel-img-item" th:attr="data-index=${iterStat.index}" style="position:relative; display:flex; align-items:center; padding:12px 0; border-bottom:1px solid #e0e0e0;">
+                <span style="width:32px; display:inline-block; text-align:center; font-weight:bold;">[[${iterStat.index + 1}]]</span>
+                <img th:src="@{${img}}" style="max-width:120px; border:1px solid #ccc; border-radius:4px; margin:0 16px;" />
+                <button type="button" class="delete-carousel-btn"
+                        th:onclick="'deleteCarouselImage(' + ${iterStat.index} + ')'"
+                        style="margin-right:8px;">삭제</button>
+                <input type="file" th:name="'replace_carousel_image_' + ${iterStat.index}"
+                       style="display:none;" th:onchange="'replaceCarouselImage(event, ' + ${iterStat.index} + ')'" />
+                <button type="button" th:onclick="'triggerReplace(' + ${iterStat.index} + ')'" style="margin-right:8px;">교체</button>
+                <button type="button" th:onclick="'moveCarouselImage(' + ${iterStat.index} + ', \'up\')'" style="margin-right:2px;">↑</button>
+                <button type="button" th:onclick="'moveCarouselImage(' + ${iterStat.index} + ', \'down\')'">↓</button>
+                <input type="hidden" name="carousel_image_urls" th:value="${img}" />
+              </div>
+            </th:block>
+          </div>
+        </div>
+
+        <div class="edit-form-btn-area" style="margin-bottom: 100px;">
+          <button type="button" class="list-btn" onclick="saveCarouselImages()">케러셀 저장</button>
+          <button type="button" class="list-btn" onclick="window.history.back()">취소</button>
+        </div>
+      </form>
+    </section>
+  </main>
+</div>
+<script>
+let deletedCarouselUrls = [];
+let replacedCarouselFiles = {};
+let carouselOrder = [];
+let mainImageFile = null;
+let logoImageFile = null;
+
+function renumberCarouselItems() {
+  const carouselList = document.getElementById('carousel-img-list');
+  Array.from(carouselList.children).forEach(function(child, i) {
+    const span = child.querySelector('span');
+    if (span) span.textContent = i + 1;
+    child.setAttribute('data-index', i);
+  });
+}
+
+function deleteCarouselImage(idx) {
+  const item = document.querySelectorAll('.carousel-img-item')[idx];
+  const urlInput = item.querySelector('input[name="carousel_image_urls"]');
+  if (urlInput && urlInput.value) {
+    deletedCarouselUrls.push(urlInput.value); // URL을 직접 저장
+    // 디버깅용 로그
+    console.log('삭제될 이미지 URL:', urlInput.value);
+  }
+  item.parentNode.removeChild(item); // 완전히 DOM에서 제거
+  renumberCarouselItems();
+}
+
+function triggerReplace(idx) {
+  let input = document.getElementsByName('replace_carousel_image_' + idx)[0];
+  if (!input) {
+    input = document.createElement('input');
+    input.type = 'file';
+    input.name = 'replace_carousel_image_' + idx;
+    input.style.display = 'none';
+    input.onchange = function(event) { replaceCarouselImage(event, idx); };
+    document.getElementById('diningFileForm').appendChild(input);
+  }
+  input.click();
+}
+
+function replaceCarouselImage(event, idx) {
+  // 미리보기 변경
+  let img = document.querySelectorAll('.carousel-img-item img')[idx];
+  img.src = URL.createObjectURL(event.target.files[0]);
+  // 교체 파일 hidden input 추가
+  let input = document.createElement('input');
+  input.type = 'hidden';
+  input.name = 'replace_carousel_indexes';
+  input.value = idx;
+  document.getElementById('diningFileForm').appendChild(input);
+}
+
+function moveCarouselImage(idx, direction) {
+  const items = document.querySelectorAll('.carousel-img-item');
+  if (direction === 'up' && idx > 0) {
+    items[idx].parentNode.insertBefore(items[idx], items[idx - 1]);
+  } else if (direction === 'down' && idx < items.length - 1) {
+    items[idx].parentNode.insertBefore(items[idx + 1], items[idx]);
+  }
+  // 순서 변경 후 hidden input에 순서 저장
+  updateCarouselOrder();
+  renumberCarouselItems();
+}
+
+function updateCarouselOrder() {
+  const items = document.querySelectorAll('.carousel-img-item');
+  let order = [];
+  items.forEach((item, i) => {
+    order.push(item.querySelector('input[name="carousel_image_urls"]').value);
+  });
+  // 기존 hidden input 제거 후 새로 추가
+  document.querySelectorAll('input[name="carousel_order[]"]').forEach(e => e.remove());
+  order.forEach((url, i) => {
+    let input = document.createElement('input');
+    input.type = 'hidden';
+    input.name = 'carousel_order[]';
+    input.value = url;
+    document.getElementById('diningFileForm').appendChild(input);
+  });
+}
+
+function uploadAllImages() {
+  console.log('uploadAllImages called!');
+  const diningId = document.querySelector('input[name="dining_id"]').value;
+
+  // 메인 이미지
+  const mainFile = document.querySelector('input[name="main_image_file"]').files[0];
+  if (mainFile) {
+    uploadSingleFile(diningId, mainFile, 'main');
+  }
+
+  // 로고 이미지
+  const logoFile = document.querySelector('input[name="logo_image_file"]').files[0];
+  if (logoFile) {
+    uploadSingleFile(diningId, logoFile, 'logo');
+  }
+
+  // 케러셀 이미지(여러 장)
+  const carouselFiles = document.querySelector('input[name="carousel_image_files"]').files;
+  for (let i = 0; i < carouselFiles.length; i++) {
+    uploadSingleFile(diningId, carouselFiles[i], 'carousel', i);
+  }
+}
+
+function uploadSingleFile(diningId, file, type, idx) {
+  const formData = new FormData();
+  formData.append('dining_id', diningId);
+  if (type === 'main') {
+    formData.append('main_image_file', file);
+  } else if (type === 'logo') {
+    formData.append('logo_image_file', file);
+  } else if (type === 'carousel') {
+    formData.append('carousel_image_file', file);
+    formData.append('carousel_index', idx);
+  }
+  return fetch('/dining/editFiles', {
+    method: 'POST',
+    body: formData
+  })
+  .then(res => {
+    if (!res.ok) throw new Error('업로드 실패');
+    return res.json();
+  })
+  .then(data => {
+    // 업로드 성공 시 미리보기 변경
+    if (type === 'main') {
+      // 메인 이미지 미리보기 변경
+      const mainImg = document.querySelector('input[name="main_image_file"]').nextElementSibling;
+      if (mainImg && mainImg.tagName === 'IMG') {
+        mainImg.src = data.imageUrl + '?t=' + new Date().getTime();
+      }
+    } else if (type === 'logo') {
+      // 로고 이미지 미리보기 변경
+      const logoImg = document.querySelector('input[name="logo_image_file"]').nextElementSibling;
+      if (logoImg && logoImg.tagName === 'IMG') {
+        logoImg.src = data.imageUrl + '?t=' + new Date().getTime();
+      }
+    } else if (type === 'carousel') {
+      // idx번째 케러셀 이미지 미리보기 변경
+      const carouselImgs = document.querySelectorAll('.carousel-img-item img');
+      if (carouselImgs[idx]) {
+        carouselImgs[idx].src = data.imageUrl + '?t=' + new Date().getTime();
+      }
+    }
+  });
+}
+
+function saveCarouselImages() {
+  const diningId = document.querySelector('input[name="dining_id"]').value;
+  const items = document.querySelectorAll('.carousel-img-item');
+  const uploadPromises = [];
+
+  // 메인 이미지 업로드
+  if (mainImageFile) {
+    const formData = new FormData();
+    formData.append('dining_id', diningId);
+    formData.append('main_image_file', mainImageFile);
+    uploadPromises.push(
+      fetch('/dining/editFiles', {
+        method: 'POST',
+        body: formData
+      })
+      .then(res => res.json())
+      .then(data => {
+        document.querySelector('input[name="main_image_url"]').value = data.imageUrl;
+      })
+    );
+  }
+
+  // 로고 이미지 업로드
+  if (logoImageFile) {
+    const formData = new FormData();
+    formData.append('dining_id', diningId);
+    formData.append('logo_image_file', logoImageFile);
+    uploadPromises.push(
+      fetch('/dining/editFiles', {
+        method: 'POST',
+        body: formData
+      })
+      .then(res => res.json())
+      .then(data => {
+        document.querySelector('input[name="logo_image_url"]').value = data.imageUrl;
+      })
+    );
+  }
+
+  // 케러셀 이미지 업로드 (추가/교체된 것만)
+  items.forEach((item, idx) => {
+    const file = item.file;
+    if (file) {
+      const formData = new FormData();
+      formData.append('dining_id', diningId);
+      formData.append('carousel_image_file', file);
+      formData.append('carousel_index', idx + 1);
+      uploadPromises.push(
+        fetch('/dining/editFiles', {
+          method: 'POST',
+          body: formData
+        })
+        .then(res => res.json())
+        .then(data => {
+          const urlInput = item.querySelector('input[name="carousel_image_urls"]');
+          if (urlInput) urlInput.value = data.imageUrl;
+        })
+      );
+    }
+  });
+
+  // 모든 업로드가 끝난 후 순서 동기화
+  Promise.all(uploadPromises).then(() => {
+    const orderedUrls = [];
+    items.forEach(item => {
+      const urlInput = item.querySelector('input[name="carousel_image_urls"]');
+      if (urlInput && urlInput.value) {
+        orderedUrls.push(urlInput.value);
+      }
+    });
+    updateCarouselOrderOnServer(diningId, orderedUrls);
+    // 업로드 후 파일 변수 초기화
+    mainImageFile = null;
+    logoImageFile = null;
+    items.forEach(item => { item.file = null; });
+  }).catch(() => {
+    alert('업로드 실패');
+  });
+}
+
+function updateCarouselOrderOnServer(diningId, imageUrls) {
+  console.log('삭제될 이미지 URL 전체:', deletedCarouselUrls);
+
+  const bodyData = `dining_id=${encodeURIComponent(diningId)}&` +
+    imageUrls.map(url => `image_urls=${encodeURIComponent(url)}`).join('&') +
+    deletedCarouselUrls.map(url => `&deleted_image_urls=${encodeURIComponent(url)}`).join('');
+  console.log('fetch body:', bodyData); // 실제 전송되는 데이터 확인
+  fetch('/dining/updateCarouselOrder', {
+    method: 'POST',
+    headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+    body: bodyData
+  })
+  .then(res => {
+    if (res.ok) {
+      alert('저장 완료!');
+      location.reload();
+    } else {
+      alert('순서 저장 실패');
+    }
+  })
+  .catch(error => {
+    console.error('Error updating carousel order:', error);
+    alert('순서 저장 실패');
+  });
+}
+
+function uploadSingleFileAndUpdateHidden(diningId, file, idx, type, div) {
+  const formData = new FormData();
+  formData.append('dining_id', diningId);
+  if (type === 'main') {
+    formData.append('main_image_file', file);
+  } else if (type === 'logo') {
+    formData.append('logo_image_file', file);
+  } else {
+    formData.append('carousel_image_file', file);
+    formData.append('carousel_index', idx + 1);
+  }
+  fetch('/dining/editFiles', {
+    method: 'POST',
+    body: formData
+  })
+  .then(res => res.json())
+  .then(data => {
+    // 업로드 후 해당 .carousel-img-item의 hidden input value를 새 URL로 갱신
+    const urlInput = div.querySelector('input[name="carousel_image_urls"]');
+    if (urlInput) urlInput.value = data.imageUrl;
+  });
+}
+
+// 1. 케러셀 이미지 추가 버튼 추가 (케러셀 영역 위에)
+// <button type="button" onclick="addCarouselImage()">케러셀 이미지 추가</button>
+// (HTML에 직접 추가하거나, 아래 코드 참고)
+document.addEventListener('DOMContentLoaded', function() {
+  const addBtn = document.createElement('button');
+  addBtn.type = 'button';
+  addBtn.textContent = '케러셀 이미지 추가';
+  addBtn.onclick = addCarouselImage;
+  const carouselSection = document.getElementById('carousel-img-list');
+  if (carouselSection) {
+    carouselSection.parentNode.insertBefore(addBtn, carouselSection);
+  }
+});
+
+// 2. input[name='carousel_image_files'] 제거 (HTML에서 삭제)
+// <input type="file" id="add-carousel-images" name="carousel_image_files" accept="image/*" multiple />
+// 이 줄을 삭제하세요.
+
+// 3. addCarouselImage 함수는 새로운 .carousel-img-item을 추가
+function addCarouselImage() {
+  const carouselList = document.getElementById('carousel-img-list');
+  const idx = carouselList.children.length;
+  const div = document.createElement('div');
+  div.className = 'carousel-img-item';
+  div.style.position = 'relative';
+  div.style.display = 'flex';
+  div.style.alignItems = 'center';
+  div.style.padding = '12px 0';
+  div.style.borderBottom = '1px solid #e0e0e0';
+  div.setAttribute('data-index', idx);
+  // 번호(순번)
+  const numSpan = document.createElement('span');
+  numSpan.style.width = '32px';
+  numSpan.style.display = 'inline-block';
+  numSpan.style.textAlign = 'center';
+  numSpan.style.fontWeight = 'bold';
+  numSpan.textContent = idx + 1;
+  div.appendChild(numSpan);
+  // 이미지 미리보기
+  const img = document.createElement('img');
+  img.style.maxWidth = '120px';
+  img.style.border = '1px solid #ccc';
+  img.style.borderRadius = '4px';
+  img.style.margin = '0 16px';
+  div.appendChild(img);
+  // 파일 input
+  const fileInput = document.createElement('input');
+  fileInput.type = 'file';
+  fileInput.accept = 'image/*';
+  fileInput.onchange = function(e) {
+    if (e.target.files[0]) {
+      img.src = URL.createObjectURL(e.target.files[0]);
+      div.file = e.target.files[0]; // 파일 객체 저장
+      hiddenInput.value = '';
+    }
+  };
+  div.appendChild(fileInput);
+  // hidden input (업로드 후 서버에서 반환된 URL로 갱신)
+  const hiddenInput = document.createElement('input');
+  hiddenInput.type = 'hidden';
+  hiddenInput.name = 'carousel_image_urls';
+  div.appendChild(hiddenInput);
+  // 삭제 버튼
+  const delBtn = document.createElement('button');
+  delBtn.type = 'button';
+  delBtn.textContent = '삭제';
+  delBtn.className = 'delete-carousel-btn';
+  delBtn.style.marginRight = '8px';
+  delBtn.onclick = function() { div.parentNode.removeChild(div); renumberCarouselItems(); };
+  div.appendChild(delBtn);
+  // 교체 버튼
+  const replaceBtn = document.createElement('button');
+  replaceBtn.type = 'button';
+  replaceBtn.textContent = '교체';
+  replaceBtn.style.marginRight = '8px';
+  replaceBtn.onclick = function() { fileInput.click(); };
+  div.appendChild(replaceBtn);
+  // 순서 이동 버튼
+  const upBtn = document.createElement('button');
+  upBtn.type = 'button';
+  upBtn.textContent = '↑';
+  upBtn.style.marginRight = '2px';
+  upBtn.onclick = function() { moveCarouselImage(idx, 'up'); };
+  div.appendChild(upBtn);
+  const downBtn = document.createElement('button');
+  downBtn.type = 'button';
+  downBtn.textContent = '↓';
+  downBtn.onclick = function() { moveCarouselImage(idx, 'down'); };
+  div.appendChild(downBtn);
+  // 추가
+  carouselList.appendChild(div);
+  renumberCarouselItems();
+}
+</script>
+<script>
+document.getElementById('diningFileForm').addEventListener('submit', function(e) {
+  // input[file] 개수 확인
+  const files = this.querySelectorAll('input[type="file"]');
+  console.log('input[file] 개수:', files.length);
+  files.forEach((input, idx) => {
+    console.log(idx, input.name, input.files.length, input.files[0]?.name);
+  });
+
+  // input[type=hidden]도 확인
+  const hiddens = this.querySelectorAll('input[type="hidden"]');
+  hiddens.forEach((input, idx) => {
+    console.log('hidden', idx, input.name, input.value);
+  });
+});
+</script>
+<script>
+// 메인 이미지 파일 선택 시 미리보기만 갱신, 업로드는 저장 시에만
+const mainInput = document.querySelector('input[name="main_image_file"]');
+if (mainInput) {
+  mainInput.addEventListener('change', function(e) {
+    const file = e.target.files[0];
+    if (file) {
+      mainImageFile = file;
+      const img = e.target.nextElementSibling;
+      if (img && img.tagName === 'IMG') {
+        img.src = URL.createObjectURL(file);
+      }
+    }
+  });
+}
+// 로고 이미지 파일 선택 시 미리보기만 갱신, 업로드는 저장 시에만
+const logoInput = document.querySelector('input[name="logo_image_file"]');
+if (logoInput) {
+  logoInput.addEventListener('change', function(e) {
+    const file = e.target.files[0];
+    if (file) {
+      logoImageFile = file;
+      const img = e.target.nextElementSibling;
+      if (img && img.tagName === 'IMG') {
+        img.src = URL.createObjectURL(file);
+      }
+    }
+  });
+}
+// 케러셀 이미지 여러 장 선택 시 미리보기 즉시 변경 (추가된 파일만 미리보기)
+const carouselInput = document.querySelector('input[name="carousel_image_files"]');
+if (carouselInput) {
+  carouselInput.addEventListener('change', function(e) {
+    const files = e.target.files;
+    const carouselList = document.getElementById('carousel-img-list');
+    // 기존 미리보기는 그대로 두고, 새로 선택한 파일만 추가 미리보기로 보여줌
+    for (let i = 0; i < files.length; i++) {
+      const file = files[i];
+      // 이미 있는 미리보기는 건너뜀
+      if (carouselList.children[i]) {
+        const img = carouselList.children[i].querySelector('img');
+        if (img) {
+          img.src = URL.createObjectURL(file);
+        }
+      }
+    }
+  });
+}
+</script>
+</body>
+</html> 

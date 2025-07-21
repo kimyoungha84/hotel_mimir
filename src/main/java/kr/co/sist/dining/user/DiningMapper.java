@@ -10,4 +10,13 @@ public interface DiningMapper {
     DiningDomain selectDiningInfoBase(@Param("diningId") int diningId);
     // 케러셀 이미지 리스트
     List<String> selectDiningCarouselImages(@Param("diningId") int diningId);
+    
+    List<RepMenuDomain> selectRepMenu(@Param("diningId") int diningId);
+    
+    void deleteDining(@Param("diningId") int diningId);
+    void updateDining(DiningDTO dto);
+    void deleteDiningImagesByType(@Param("diningId") int diningId, @Param("imageType") String imageType);
+    void insertDiningImage(@Param("diningId") int diningId, @Param("imageType") String imageType, @Param("imageUrl") String imageUrl, @Param("displayOrder") int displayOrder);
+    void deleteDiningImageByUrl(@Param("diningId") int diningId, @Param("imageUrl") String imageUrl, @Param("imageType") String imageType);
+    void updateDisplayOrder(@Param("diningId") int diningId, @Param("imageUrl") String imageUrl, @Param("displayOrder") int displayOrder);
 }

@@ -13,6 +13,8 @@
       d.TYPE,
       d.LOCATION,
       d.PHONE_NUMBER,
+      d.MANAGER_NAME,
+      d.DINING_OPERATION_HOURS,
       d.DINING_CLASSIFICATION,
       d.DINING_RESV_AVAILABILITY,
       d.DINING_INTRODUCTION,
@@ -33,5 +35,55 @@
       AND IMAGE_TYPE = 'CAROUSEL'
     ORDER BY DISPLAY_ORDER
   </select>
+  
+  <select id="selectRepMenu" parameterType="int" resultType="kr.co.sist.dining.user.RepMenuDomain">
+  	SELECT MENU_NAME, DESCRIPTION, PRICE
+  	FROM REP_MENU
+  	WHERE DINING_ID = #{diningId}
+  </select>
+
+  <update id="updateDining" parameterType="kr.co.sist.dining.user.DiningDTO">
+    UPDATE DINING
+    SET
+      DINING_NAME = #{dining_name},
+      TYPE = #{type},
+      LOCATION = #{location},
+      PHONE_NUMBER = #{phone_number},
+      MANAGER_NAME = #{manager_name},
+      DINING_INTRODUCTION = #{dining_introduction},
+      DINING_DETAILINFO = #{dining_detailinfo},
+      DINING_OPERATION_HOURS = #{dining_operation_hours},
+      DINING_RESV_AVAILABILITY = #{dining_resv_availability},
+      DINING_CLASSIFICATION = #{dining_classification}
+    WHERE DINING_ID = #{dining_id}
+  </update>
+
+  <delete id="deleteDiningImagesByType">
+    DELETE FROM DINING_IMAGE WHERE DINING_ID = #{diningId} AND IMAGE_TYPE = #{imageType}
+  </delete>
+
+  <insert id="insertDiningImage">
+    INSERT INTO DINING_IMAGE (IMAGE_ID, DINING_ID, IMAGE_TYPE, IMAGE_URL, DISPLAY_ORDER, REG_DATE)
+    VALUES (DINING_IMAGE_SEQ.NEXTVAL, #{diningId}, #{imageType}, #{imageUrl}, #{displayOrder}, SYSDATE)
+  </insert>
+
+  <delete id="deleteDining" parameterType="int">
+    DELETE FROM DINING WHERE DINING_ID = #{diningId}
+  </delete>
+
+  <delete id="deleteDiningImageByUrl">
+    DELETE FROM DINING_IMAGE
+    WHERE DINING_ID = #{diningId}
+      AND IMAGE_URL = #{imageUrl}
+      AND IMAGE_TYPE = #{imageType}
+  </delete>
+
+  <update id="updateDisplayOrder">
+    UPDATE DINING_IMAGE
+    SET DISPLAY_ORDER = #{displayOrder}
+    WHERE DINING_ID = #{diningId}
+      AND IMAGE_URL = #{imageUrl}
+      AND IMAGE_TYPE = 'CAROUSEL'
+  </update>
 
 </mapper>
