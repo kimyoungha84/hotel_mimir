@@ -1,16 +1,131 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" th:class="sub-page">
 <head>
-<meta charset="UTF-8">
-<title>MyPage</title>
+    <meta charset="UTF-8">
+    <title>마이페이지</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" th:href="@{/css/header.css}">
+    <style>
+        body {
+            background-color: #fff;
+            padding-top: 130px;
+        }
 
-	<!-- Custom CSS -->
-    <link rel="stylesheet" th:href="@{/css/header.css}" />
+        .sidebar {
+            background-color: #f9f9f9;
+            padding: 20px;
+            min-height: 100vh;
+        }
 
+        .sidebar h6 {
+            margin-top: 30px;
+        }
+
+        .profile-card {
+            background-color: #5e5047;
+            color: white;
+            padding: 25px;
+            border-radius: 5px;
+        }
+
+        .profile-card i {
+            font-size: 2rem;
+            margin-right: 10px;
+        }
+
+        .reservation-box {
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: box-shadow 0.2s ease;
+        }
+
+        .reservation-box:hover {
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .reservation-icon {
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+
+        .section-title {
+            font-size: 1.2rem;
+            margin-top: 40px;
+            margin-bottom: 20px;
+        }
+
+        .menu-link {
+            display: block;
+            padding: 10px 0;
+            color: #333;
+            text-decoration: none;
+        }
+
+        .menu-link:hover {
+            font-weight: bold;
+        }
+    </style>
 </head>
 <body>
-	<!-- 헤더 삽입 -->
-    <div th:replace="~{fragments/header :: header}"></div>
+
+<!-- Header -->
+<div th:replace="~{fragments/header :: header}"></div>
+
+<div class="container-fluid">
+    <div class="row">
+        <!-- 사이드바 -->
+        <div class="col-md-2 sidebar">
+            <h6>마이페이지</h6>
+            <a href="#" class="menu-link">예약</a>
+            <a href="#" class="menu-link ps-3">- 객실 예약 내역</a>
+            <a href="#" class="menu-link ps-3">- 다이닝 예약 내역</a>
+            <a href="#" class="menu-link">문의하기</a>
+            <a href="#" class="menu-link ps-3">- 1:1 문의</a>
+            <a href="#" class="menu-link">나의 정보관리</a>
+            <a href="#" class="menu-link ps-3">- 회원정보 수정</a>
+            <a href="#" class="menu-link ps-3">- 비밀번호 재설정</a>
+            <a href="#" class="menu-link ps-3">- SNS 연동</a>
+            <a href="#" class="menu-link ps-3">- 회원탈퇴</a>
+        </div>
+
+        <!-- 본문 -->
+        <div class="col-md-10 p-5">
+            <!-- 프로필 카드 -->
+            <div class="profile-card d-flex align-items-center justify-content-between mb-4">
+                <div>
+                    <div><strong th:text="${memberInfo.user_name} + ' 님'">홍길동 님</strong></div>
+                    <div class="mt-1" th:text="'📞 ' + ${memberInfo.tel}">📞 010-0000-0000</div>
+                    <div th:text="'🎂 ' + ${#dates.format(memberInfo.birth_date, 'yyyy년 MM월 dd일')}">🎂 1993년 09월 03일</div>
+                </div>
+                <div>
+                    <a href="#" class="text-white text-decoration-underline">프로필 수정 &gt;</a>
+                </div>
+            </div>
+
+            <!-- 예약/주문 섹션 -->
+            <div class="section-title">나의 예약/주문</div>
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <div class="reservation-box">
+                        <div class="reservation-icon">🏨</div>
+                        <div><strong>객실 예약</strong></div>
+                        <div class="text-muted mt-1">투숙 예정 0건</div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="reservation-box">
+                        <div class="reservation-icon">🍽️</div>
+                        <div><strong>다이닝 예약</strong></div>
+                        <div class="text-muted mt-1">방문 예정 0건</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
 </body>
 </html>

@@ -19,5 +19,7 @@ public interface MemberService {
     void updateLastLoginTime(String emailId);
 
     boolean isEmailDuplicated(String email);
+
+    MemberDTO getMemberByEmail(String email);
     
 }

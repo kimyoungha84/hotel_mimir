@@ -111,5 +111,10 @@ public class MemberServiceImpl implements MemberService {
 	public boolean isEmailDuplicated(String email) {
 		return memberMapper.selectMemberByEmail(email) != null;
 	}
+
+	@Override
+	public MemberDTO getMemberByEmail(String email) {
+		return memberMapper.selectMemberByEmail(email);
+	}
     
 }

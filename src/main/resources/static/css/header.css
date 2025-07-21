@@ -6,6 +6,7 @@ body {
 
 .user-status {
     color: white;
+    transition: color 0.3s ease;
 }
 
 /* 툴바 */
@@ -52,7 +53,6 @@ body {
 .toolbar.scrolled {
   background-color: rgba(0, 0, 0, 0.85);
   color: white;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
 }
 .toolbar.scrolled a {
   color: white !important;
@@ -133,9 +133,11 @@ body {
 .sub-page .toolbar.scrolled {
   background-color: rgba(0, 0, 0, 0.85);
   color: white;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
 }
 .sub-page .toolbar.scrolled a {
+  color: white !important;
+}
+.sub-page .toolbar.scrolled .user-status {
   color: white !important;
 }
 .sub-page .toolbar.scrolled a:hover {
