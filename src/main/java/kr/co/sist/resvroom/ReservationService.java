@@ -26,6 +26,10 @@ public class ReservationService {
 		return rm.selectReservationSeq();
 	}
 	
+	public void cancelResv(String resvId) {
+		rm.cancelResv(resvId);
+	}
+	
 	public ReservationDTO loginUserData(int userNum) {
 	    ReservationDTO rsvDTO = rm.loginUserData(userNum);
 	    

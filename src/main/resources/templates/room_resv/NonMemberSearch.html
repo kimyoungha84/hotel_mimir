@@ -87,7 +87,7 @@
     </div>
     <form action="/searchResvDetail" method="POST">
       <label>예약번호 <span style="color: red">*</span></label>
-      <input type="text" placeholder="예약번호 입력" name="resvId">
+      <input type="text" placeholder="예약번호 입력" name="resvId" oninput="this.value=this.value.replace(/[^0-9]/g,'')">
       <div class="desc">예약번호를 분실하신 고객님께서는 미미르 객실예약과로 직접 문의해 주세요.</div>
 
       <label>이름 <span style="color: red">*</span></label>

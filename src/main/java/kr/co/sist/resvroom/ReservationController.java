@@ -61,12 +61,17 @@ public class ReservationController {
    
    @PostMapping("/searchResvDetail")
    public String searchResvDetail(ReservationDTO rDTO, Model model) {
-	   System.out.println("테스트"+rDTO);
 	   rDTO=rs.searchReservationData(rDTO);
-	   
 	   model.addAttribute("resvData",rDTO);
 	   
 	   return "room_resv/searchResvDetail";
+   }//roomList
+   
+   @PostMapping("/cancelResv")
+   public String cancelResv(@RequestParam String resvId) {
+	   rs.cancelResv(resvId);
+	   
+	   return "room_resv/cancelResv";
    }//roomList
    
    @GetMapping("/room_resv/error_page")
@@ -90,7 +95,6 @@ public class ReservationController {
        rDTO.setPaymentId(paySeq);
        rDTO.setResvId(resvSeq);
        rDTO.setStatus("예약완료");
-       System.out.println("테스트"+rDTO.getUserNum());
        if (rDTO.getUserNum() == null) {
            int nonMemSeq = nms.searchNonMemberSeq();
            rDTO.setUserNum(nonMemSeq);

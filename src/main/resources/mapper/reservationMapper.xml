@@ -191,6 +191,12 @@
   WHERE non_mem_id = #{userNum}
 </update>
 
+<update id="cancelResv" parameterType="String">
+  UPDATE reservation
+  SET STATUS = '예약취소'
+  WHERE RESV_ID = #{resvId}
+</update>
+
   <select id="selectCapacity" parameterType="int" resultType="int">
     SELECT capacity
     FROM room
