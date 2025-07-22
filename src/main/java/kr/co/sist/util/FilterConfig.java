@@ -16,7 +16,8 @@ public enum FilterConfig {
         List.of(
             new Option("name", "이름", "dining_name")
         ),
-        null
+        null,
+        null // 체크박스 옵션 없음
     ),
     
     
@@ -37,7 +38,8 @@ public enum FilterConfig {
     		        			new LabelSelectorItem("인룸 다이닝", "인룸 다이닝"))
     		        			)
     		        
-    		    )
+    		    ),
+    			null
     ),
     
     
@@ -57,7 +59,8 @@ public enum FilterConfig {
 		        			new LabelSelectorItem("프리미엄 베이커리&카페", "프리미엄 베이커리&카페"),
 		        			new LabelSelectorItem("인룸 다이닝", "인룸 다이닝"))
 		        			)
-		    )
+		    ),
+			null
     ),
     
     
@@ -65,6 +68,7 @@ public enum FilterConfig {
     		"reservationDate",
     		"reservation_date",
     		List.of(new Option("name", "이름", "dining_name")),
+    		null,
     		null
     		),
     
@@ -80,6 +84,7 @@ public enum FilterConfig {
             List.of(
                 new Option("title", "제목", "faq_title")
             ),
+            null,
             null
         ),
     
@@ -111,6 +116,7 @@ public enum FilterConfig {
     		        			)
     		        
     		    )
+            ,null
         ),
     
     
@@ -148,7 +154,8 @@ public enum FilterConfig {
     		        			new LabelSelectorItem("체크아웃", "체크아웃"))
     		        			)
     		        
-    		    )
+    		    ),
+            null
         ),
     
     
@@ -168,7 +175,8 @@ public enum FilterConfig {
     		        			new LabelSelectorItem("프리미어룸", "프리미어룸"),
     		        			new LabelSelectorItem("스탠다드룸", "스탠다드룸"))
     		        			)
-            		)
+            		),
+            null
         ),
     
     
@@ -213,8 +221,26 @@ public enum FilterConfig {
 	                				new LabelSelectorItem("활성", "ACTIVE"), 
 	                				new LabelSelectorItem("비활성", "DEACTIVE"))
 	                )
-	            )
-	     );
+	            ),
+	            null
+	 
+	     ),
+	MEMBER(
+			"staff", false, true, true, true,
+			null,
+			null,
+			List.of(
+					new Option("id", "아이디", "s.staff_id"),
+					new Option("name", "이름", "s.staff_id"),
+					new Option("loginType", "가입방식", "s.staff_id")
+					),
+			null,
+			List.of(new CheckboxOption("use","탈퇴 여부","use_yn","N","Y")
+					
+					
+					)
+			
+			);
 
     private final String filterType;
     private final boolean showDatePicker;
@@ -227,7 +253,9 @@ public enum FilterConfig {
 
     private final List<Option> selectOptions;
     private final List<LabelSelectorOption> labelSelectorOptions;  // 추가된 부분
+    private final List<CheckboxOption> checkboxOptions; // 체크박스 옵션 추가
 
+    
     @Getter
     @RequiredArgsConstructor
     public static class Option {
@@ -251,6 +279,16 @@ public enum FilterConfig {
         private final String label;  // 셀렉터 항목에 표시될 라벨
         private final String searchValue;  // 선택된 값이 연결되는 컬럼명 (ex. "status_all", "category_tech")
     }
+
+	@Getter
+	@RequiredArgsConstructor
+	public static class CheckboxOption {
+		private final String name;         // form name (파라미터명)
+		private final String label;        // 체크박스 앞 라벨
+		private final String columnName;   // DB에서 비교할 컬럼명 ← 추가!
+		private final String checkedValue; // 체크됐을 때 DB 값
+		private final String uncheckedValue; // 체크 안됐을 때 DB 값
+	}
     
     public String resolveColumnName(String searchType) {
         return selectOptions.stream()

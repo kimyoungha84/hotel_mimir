@@ -31,7 +31,9 @@ public class FilterConditionBuilder {
         "s.staff_id", "staff_name", "dept_iden", "position_identified_code", 
         "permission_id_code", "staff_status",
         // Room 예약 관련 컬럼
-        "user_name","type_name","ismember","status","resv_reg_date"
+        "user_name","type_name","ismember","status","resv_reg_date",
+        // Member 관련 컬럼
+        "use_yn"
         
     );
 
@@ -113,6 +115,21 @@ public class FilterConditionBuilder {
                     }
                 }
             }
+            // 체크박스 필터링 조건 추가
+            List<FilterConfig.CheckboxOption> checkboxOptions = config.getCheckboxOptions();
+            if (checkboxOptions != null) {
+                for (FilterConfig.CheckboxOption checkbox : checkboxOptions) {
+                    String checked = params.getFirst(checkbox.getName());
+                    String value = ("on".equals(checked) || "true".equals(checked) || checked != null) ? checkbox.getCheckedValue() : checkbox.getUncheckedValue();
+                    String column = checkbox.getColumnName();
+                    if (isValidColumn(column)) {
+                        list.add(new FilterCondition(column, FilterOperator.EQ, value));
+                        logger.debug("체크박스 검색 조건 추가 - column: {}, value: {}", column, value);
+                    } else {
+                        logger.warn("허용되지 않은 체크박스 컬럼명: {}", column);
+                    }
+                }
+            }
             logger.debug("검색 조건 생성 완료 - 총 {}개 조건", list.size());
             return list;
         } catch (Exception e) {
@@ -178,6 +195,21 @@ public class FilterConditionBuilder {
                         } else {
                             logger.warn("허용되지 않은 셀렉터 컬럼명: {}", column);
                         }
+                    }
+                }
+            }
+            // 체크박스 필터링 조건 추가 (단일값)
+            List<FilterConfig.CheckboxOption> checkboxOptions = config.getCheckboxOptions();
+            if (checkboxOptions != null) {
+                for (FilterConfig.CheckboxOption checkbox : checkboxOptions) {
+                    String checked = params.get(checkbox.getName());
+                    String value = ("on".equals(checked) || "true".equals(checked) || checked != null) ? checkbox.getCheckedValue() : checkbox.getUncheckedValue();
+                    String column = checkbox.getColumnName();
+                    if (isValidColumn(column)) {
+                        list.add(new FilterCondition(column, FilterOperator.EQ, value));
+                        logger.debug("체크박스 검색 조건 추가 - column: {}, value: {}", column, value);
+                    } else {
+                        logger.warn("허용되지 않은 체크박스 컬럼명: {}", column);
                     }
                 }
             }

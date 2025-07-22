@@ -123,6 +123,17 @@
       <input type="date" name="endDate" th:value="${param.endDate}" />
     </div>
     
+<!-- 🔹 체크박스 필터 옵션 -->
+<div th:if="${filter.checkboxOptions != null and #lists.size(filter.checkboxOptions) > 0}" style="display: flex; flex-wrap: wrap; gap: 10px; align-items: center;">
+  <div th:each="cb : ${filter.checkboxOptions}" class="filter-selector">
+    <label>
+      <input type="checkbox" th:name="${cb.name}" value="on"
+        th:checked="${param[cb.name] != null}" />
+      <span th:text="${cb.label}"></span>
+    </label>
+  </div>
+</div>
+
 <!-- 🔹 라벨 + 셀렉터 (가로 배치) -->
 <div th:if="${filter.labelSelectorOptions != null and #lists.size(filter.labelSelectorOptions) > 0}" 
      style="display: flex; flex-wrap: wrap; gap: 10px;">
