@@ -104,10 +104,9 @@ public class AdminRoomController {
 	
 	@GetMapping("admin/roomsales")
 	public String adminRoomSales(@RequestParam(required = false) String startDate,
-            @RequestParam(required = false) String endDate,
-            Model model) {
-		
-	    // 현재 연도 기준 기본 날짜 설정
+	                             @RequestParam(required = false) String endDate,
+	                             Model model) {
+
 	    LocalDate now = LocalDate.now();
 	    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
@@ -120,9 +119,9 @@ public class AdminRoomController {
 
 	    List<SalesSummaryDTO> salesList = ars.searchSalesSummary(startDate, endDate);
 
-	    
 	    int memberCount = 0;
 	    int nonMemberCount = 0;
+
 	    int totalMemberStay = 0;
 	    int totalNonMemberStay = 0;
 	    int totalCheckout = 0;
@@ -131,25 +130,32 @@ public class AdminRoomController {
 	    int totalCancel = 0;
 	    int totalStay = 0;
 	    int totalAmount = 0;
+	    int totalCheckinAmount = 0;
+	    int totalCheckoutAmount = 0;
+	    int totalCompletedAmount = 0;
+	    int totalCancelAmount = 0;
 
 	    for (SalesSummaryDTO s : salesList) {
-	        // 개별 상태별 합계 (객실 종류별 행에서 사용)
+	        // 전체 회원/비회원 수 (모든 예약 건 포함)
 	        memberCount += s.getMemberCount();
 	        nonMemberCount += s.getNonMemberCount();
+
+	        // 체크인+체크아웃 상태 회원/비회원만 합산
+	        totalMemberStay += s.getMemberStayCount();
+	        totalNonMemberStay += s.getNonMemberStayCount();
+
+	        // 상태별 집계
 	        totalCheckout += s.getCheckoutCount();
 	        totalCheckin += s.getCheckinCount();
 	        totalComplete += s.getCompletedCount();
 	        totalCancel += s.getCancelCount();
 	        totalStay += s.getStayCount();
-
-	        // 체크인 또는 체크아웃이 있는 경우만 stay 인원에 포함
-	        if (s.getCheckinCount() + s.getCheckoutCount() > 0) {
-	            totalMemberStay += s.getMemberCount();
-	            totalNonMemberStay += s.getNonMemberCount();
-	            totalAmount += s.getTotalAmount(); // 금액도 stay에만 포함
-	        }
+	        totalAmount += s.getTotalAmount();
+	        totalCheckinAmount += s.getCheckinAmount();
+	        totalCheckoutAmount += s.getCheckoutAmount();
+	        totalCompletedAmount += s.getCompletedAmount();
+	        totalCancelAmount += s.getCancelAmount();
 	    }
-
 
 
 	    Map<String, Integer> summary = new HashMap<>();
@@ -161,19 +167,21 @@ public class AdminRoomController {
 	    summary.put("totalCancel", totalCancel);
 	    summary.put("totalStay", totalStay);
 	    summary.put("totalAmount", totalAmount);
+	    summary.put("totalCheckinAmount", totalCheckinAmount);
+	    summary.put("totalCheckoutAmount", totalCheckoutAmount);
+	    summary.put("totalCompletedAmount", totalCompletedAmount);
+	    summary.put("totalCancelAmount", totalCancelAmount);
 
-	    model.addAttribute("salesList",salesList);
+	    model.addAttribute("salesList", salesList);
 	    model.addAttribute("memberCount", memberCount);
 	    model.addAttribute("nonMemberCount", nonMemberCount);
 	    model.addAttribute("summary", summary);
-
-
-	    // 현재 사용된 날짜도 다시 전달해서 input에 표시되게
 	    model.addAttribute("startDate", startDate);
 	    model.addAttribute("endDate", endDate);
-        
-		return "/admin_room/admin_room_sales";
-	}//adminRoomSales
+
+	    return "/admin_room/admin_room_sales";
+	}
+//adminRoomSales
 	
 }//class
 

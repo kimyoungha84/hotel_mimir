@@ -21,4 +21,6 @@ public class SalesSummaryDTO {
     private int completedAmount;
     private int cancelAmount;
     private int totalAmount;
+    private int memberStayCount;
+    private int nonMemberStayCount;
 }//class

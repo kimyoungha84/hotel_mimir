@@ -39,7 +39,7 @@
       </form>
 
       <div class="notice">* 예약 취소 금액은 금액에 포함되지 않습니다.</div>
-      <div class="notice">* 예약 완료 / 예약 취소에 대한 예약 금액은 총 합계 금액에 포함되지 않습니다.</div>
+      <div class="notice">* 총 합계 회원 수, 비회원 수, 금액은 체크인/체크아웃일 경우에만 합계된 수치입니다.</div>
 
       <table>
         <thead>
@@ -61,7 +61,7 @@
             <td th:text="|${row.stayCount} 건|">21건</td>
             <td th:text="|${row.completedCount} 건|">21건</td>
             <td th:text="|${row.cancelCount} 건|">2건</td>
-            <td th:text="|₩${#numbers.formatInteger(row.checkinAmount + row.checkoutAmount, 0, 'COMMA')}|"></td>
+            <td th:text="|₩${#numbers.formatInteger(row.checkinAmount + row.checkoutAmount + row.completedAmount, 0, 'COMMA')}|"></td>
           </tr>
 
           <!-- 총 합계 -->

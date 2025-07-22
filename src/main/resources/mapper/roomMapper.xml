@@ -201,16 +201,21 @@ WHERE rn = 1
 SELECT
   rt.TYPE_NAME AS typeName,
 
-  -- 인원 수
+  -- 전체 인원 수 (예약 건수)
   COUNT(CASE WHEN r.USER_NUM IS NOT NULL THEN 1 END) AS memberCount,
   COUNT(CASE WHEN r.USER_NUM IS NULL THEN 1 END) AS nonMemberCount,
 
-  -- 상태별 건수
+  -- 체크인/체크아웃 상태별 건수
   SUM(CASE WHEN r.STATUS = '체크인' THEN 1 ELSE 0 END) AS checkinCount,
   SUM(CASE WHEN r.STATUS = '체크아웃' THEN 1 ELSE 0 END) AS checkoutCount,
   SUM(CASE WHEN r.STATUS IN ('체크인', '체크아웃') THEN 1 ELSE 0 END) AS stayCount,
+
   SUM(CASE WHEN r.STATUS = '예약완료' THEN 1 ELSE 0 END) AS completedCount,
   SUM(CASE WHEN r.STATUS = '예약취소' THEN 1 ELSE 0 END) AS cancelCount,
+
+  -- 체크인+체크아웃 상태의 회원/비회원 수 (이게 핵심)
+  SUM(CASE WHEN r.STATUS IN ('체크인', '체크아웃') AND r.USER_NUM IS NOT NULL THEN 1 ELSE 0 END) AS memberStayCount,
+  SUM(CASE WHEN r.STATUS IN ('체크인', '체크아웃') AND r.USER_NUM IS NULL THEN 1 ELSE 0 END) AS nonMemberStayCount,
 
   -- 상태별 금액
   SUM(CASE WHEN r.STATUS = '체크아웃' THEN COALESCE(p.PAYMENT_PRICE, 0) ELSE 0 END) AS checkoutAmount,
