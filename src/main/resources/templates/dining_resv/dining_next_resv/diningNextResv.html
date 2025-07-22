@@ -260,17 +260,5 @@
 
   <script th:src="@{/dining_resv/js/diningNextResv.js}"></script>
 
-<script>
-document.querySelector(".field-btn").addEventListener("click", function() {
-    document.querySelector("#paymentType").value = "현장결제";
-    document.querySelector("form").submit();
-});
-
-document.querySelector(".online-btn").addEventListener("click", function() {
-    document.querySelector("#paymentType").value = "온라인결제";
-    document.querySelector("form").submit();
-});
-</script>
-
 </body>
 </html>

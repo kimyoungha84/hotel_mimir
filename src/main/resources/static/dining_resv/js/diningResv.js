@@ -138,7 +138,6 @@ document.addEventListener("DOMContentLoaded", function () {
 	  if (!inputChild.value) inputChild.value = "0";
       
       // form 데이터 저장
-      document.getElementById("inputTime").value = `${selectedDateStr} ${timeText}`;
       if (!document.getElementById("inputMeal")) {
         const mealInput = document.createElement("input");
         mealInput.type = "hidden";

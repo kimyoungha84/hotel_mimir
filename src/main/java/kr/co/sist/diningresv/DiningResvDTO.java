@@ -1,7 +1,7 @@
 package kr.co.sist.diningresv;
 
 import java.sql.Date;
-import java.sql.Time;
+import java.sql.Timestamp;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -18,7 +18,7 @@ public class DiningResvDTO {
 	private String reservationEmail;
 	private Date reservationDate;
 	private String mealType;
-	private Time reservationTime;
+	private Timestamp reservationTime;
 	private int reservationCount;
 	private String reservationStatus;
 	private String reservationRequest;
@@ -27,12 +27,12 @@ public class DiningResvDTO {
 	private int diningId;
 	private String diningName;
 	
-	private int userNum;
+	private Integer userNum;
 	private String userName;
 	private String userTel;
 	private String userEmail;
 	
-	private int nonMemId;
+	private Integer nonMemId;
 	private String nonMemName;
 	private String nonMemTel;
 	private String nonMemEmail;

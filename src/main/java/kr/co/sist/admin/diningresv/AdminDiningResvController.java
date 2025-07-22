@@ -48,7 +48,7 @@ public class AdminDiningResvController {
     	
     	if (dto.getReservationTime() != null) {
     		
-    	    int hour = dto.getReservationTime().toLocalTime().getHour();
+    		int hour = dto.getReservationTime().toLocalDateTime().toLocalTime().getHour();
     	    
     	    if (hour >= 12 && hour <= 17) {
     	    	
