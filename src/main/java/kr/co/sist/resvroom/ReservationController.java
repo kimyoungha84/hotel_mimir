@@ -1,5 +1,8 @@
 package kr.co.sist.resvroom;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
@@ -9,6 +12,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import jakarta.mail.MessagingException;
+import kr.co.sist.administrator.AdministratorSendMail;
 import kr.co.sist.member.CustomUserDetails;
 import kr.co.sist.nonmember.NonMemberService;
 import kr.co.sist.payment.PaymentService;
@@ -79,7 +84,9 @@ public class ReservationController {
        return "room_resv/error";
    }
 
-   
+   @Autowired
+   private AdministratorSendMail sendMail;
+
    @PostMapping("/room_resv/reservation")
    public String reservation(ReservationDTO rDTO, RedirectAttributes redirectAttributes) {
 
@@ -95,6 +102,7 @@ public class ReservationController {
        rDTO.setPaymentId(paySeq);
        rDTO.setResvId(resvSeq);
        rDTO.setStatus("예약완료");
+
        if (rDTO.getUserNum() == null) {
            int nonMemSeq = nms.searchNonMemberSeq();
            rDTO.setUserNum(nonMemSeq);
@@ -107,7 +115,25 @@ public class ReservationController {
            rs.addMemberReservation(rDTO);
        }
 
+       String email= rDTO.getUserEmail()+rDTO.getUserDomain();
+       // 📧 메일 발송
+       Map<String, Object> variables = new HashMap<>();
+       variables.put("resCon", rDTO);
+
+       try {
+           sendMail.sendMail(
+        		   email,
+               "호텔 예약이 완료되었습니다.",
+               "room_resv/reservation-complete",
+               variables
+           );
+       } catch (MessagingException e) {
+           e.printStackTrace();
+       }
+
+       // 결과 페이지용 FlashAttribute
        redirectAttributes.addFlashAttribute("resCon", rDTO);
+
        return "redirect:/room_resv/resultResv";
    }
 
@@ -115,7 +141,6 @@ public class ReservationController {
    public String resultResv() {
        return "room_resv/resultResv";
    }
-
    
    
 }//class

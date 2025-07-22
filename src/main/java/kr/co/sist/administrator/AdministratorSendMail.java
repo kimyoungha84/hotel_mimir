@@ -1,8 +1,6 @@
 package kr.co.sist.administrator;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +9,8 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StreamUtils;
+import org.thymeleaf.context.Context;
+import org.thymeleaf.spring6.SpringTemplateEngine;
 
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
@@ -42,8 +42,24 @@ public class AdministratorSendMail {
 		
 		mailSender.send(message);
 	}//sendHtmlMail
-	
-	
+
+	    @Autowired
+	    private SpringTemplateEngine templateEngine;
+
+	    public void sendMail(String to, String subject, String templateName, Map<String, Object> variables) throws MessagingException {
+	        Context context = new Context();
+	        context.setVariables(variables);
+	        String htmlContent = templateEngine.process(templateName, context);
+
+	        MimeMessage message = mailSender.createMimeMessage();
+	        MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
+
+	        helper.setTo(to);
+	        helper.setSubject(subject);
+	        helper.setText(htmlContent, true);
+
+	        mailSender.send(message);
+	    }
 	
 	/**
 	 * html 템플릿 호출 및 반환<br>

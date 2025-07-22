@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>예약 완료 안내</title>
+</head>
+<body style="font-family: Arial, sans-serif; background-color: #ffffff; color: #333333; padding: 20px;">
+    <h2 style="text-align: center;">예약이 완료되었습니다</h2>
+
+    <div style="border-top: 2px solid #4CAF50; margin-top: 20px; padding-top: 10px;">
+        <p><strong>예약번호:</strong> <span th:text="${resCon.resvId}">20250617</span></p>
+        <p><strong>예약자:</strong> <span th:text="${resCon.userName}">홍길동</span></p>
+        <p><strong>휴대전화:</strong> <span th:text="${resCon.userTel}">010-1234-5678</span></p>
+        <p><strong>객실:</strong> <span th:text="${resCon.typeName}">로얄 스위트룸</span></p>
+        <p><strong>인원:</strong> 성인 <span th:text="${resCon.numGuestsAdult}">2명</span> / 아동 <span th:text="${resCon.numGuestsChild}">1명</span></p>
+        <p><strong>체크인 / 체크아웃:</strong> <span th:text="${resCon.checkinDate}">2025.06.17 15:00</span> ~ <span th:text="${resCon.checkoutDate}">2025.06.20 11:00</span></p>
+    </div>
+
+    <p style="margin-top: 20px;">
+        예약해 주셔서 감사합니다.<br>
+        궁금하신 점은 언제든 문의해주세요.
+    </p>
+
+    <p style="font-size: 12px; color: #999999;">
+        ⓒ 2025 호텔 예시. All rights reserved.
+    </p>
+</body>
+</html>
