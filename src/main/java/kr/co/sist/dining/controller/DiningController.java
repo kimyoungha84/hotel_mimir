@@ -163,4 +163,11 @@ public class DiningController {
         int newId = ds.insertDiningAndReturnId(dto);
         return Map.of("dining_id", newId);
     }
+
+    // 예약 가능(Y) 다이닝 목록 반환 API
+    @GetMapping("/user/available_dining_list")
+    @ResponseBody
+    public ResponseEntity<List<kr.co.sist.dining.user.DiningDomain>> getAvailableDiningList() {
+        return ResponseEntity.ok(ds.getAvailableDiningList());
+    }
 }

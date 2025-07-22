@@ -12,6 +12,29 @@
   .edit-form-img-list img { max-width: 120px; border: 1px solid #ccc; border-radius: 4px; }
   .edit-form-section { margin-bottom: 32px; width: 50%; }
   .edit-form-btn-area { margin-top: 32px; display: flex; gap: 16px; }
+
+  .modern-btn, .list-btn {
+    background: linear-gradient(90deg, #856956 0%, #a88d7b 100%);
+    color: #fff;
+    font-size: 1rem;
+    font-weight: 600;
+    border: none;
+    border-radius: 10px;
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+    box-shadow: 0 2px 8px rgba(133, 105, 86, 0.08);
+    transition: background 0.2s, box-shadow 0.2s, transform 0.1s;
+    margin: 0 8px;
+    letter-spacing: 0.5px;
+  }
+  .modern-btn:hover, .list-btn:hover {
+    background: linear-gradient(90deg, #6d5747 0%, #856956 100%);
+    box-shadow: 0 4px 16px rgba(133, 105, 86, 0.15);
+    transform: translateY(-2px) scale(1.03);
+  }
+  .dining-section {
+    margin-top : 50px;
+  }
 </style>
 </head>
 <body>
@@ -24,7 +47,7 @@
       <form id="diningDataForm" th:action="@{/admin/dining/add}" method="post">
         <div class="edit-form-section">
           <label class="edit-form-label">이름</label>
-          <input class="edit-form-input" type="text" name="dining_name" required />
+          <input class="edit-form-input" type="text" name="dining_name" required placeholder="예) 스테이, 모던 레스토랑" />
         </div>
         <div class="edit-form-section">
           <label class="edit-form-label">타입</label>
@@ -40,33 +63,33 @@
         </div>
         <div class="edit-form-section">
           <label class="edit-form-label">위치</label>
-          <input class="edit-form-input" type="text" name="location" required />
+          <input class="edit-form-input" type="text" name="location" required placeholder="예) 81층" />
         </div>
         <div class="edit-form-section">
-          <label class="edit-form-label">전화번호</label>
-          <input class="edit-form-input" type="text" name="phone_number" required />
+          <label class="edit-form-label">문의번호</label>
+          <input class="edit-form-input" type="text" name="phone_number" required placeholder="예) 02-1234-5678" />
         </div>
         <div class="edit-form-section">
           <label class="edit-form-label">담당자</label>
-          <input class="edit-form-input" type="text" name="manager_name" required />
+          <input class="edit-form-input" type="text" name="manager_name" required placeholder="예) 홍길동" />
         </div>
         <div class="edit-form-section">
           <label class="edit-form-label">소개</label>
-          <textarea class="edit-form-textarea" name="dining_introduction" rows="3"></textarea>
+          <textarea class="edit-form-textarea" name="dining_introduction" rows="3" placeholder="간단한 소개를 입력하세요. 예) 미쉐린 3스타 셰프가 선보이는 프렌치 레스토랑"></textarea>
         </div>
         <div class="edit-form-section">
           <label class="edit-form-label">상세정보</label>
-          <textarea class="edit-form-textarea" name="dining_detailinfo" rows="5"></textarea>
+          <textarea class="edit-form-textarea" name="dining_detailinfo" rows="5" placeholder="상세정보를 입력하세요. 예) 드레스코드, 좌석수, 특이사항 등"></textarea>
         </div>
         <div class="edit-form-section">
           <label class="edit-form-label">영업시간</label>
-          <textarea class="edit-form-textarea" name="dining_operation_hours" rows="3"></textarea>
+          <textarea class="edit-form-textarea" name="dining_operation_hours" rows="3" placeholder="예) 11:30~22:00 (Break Time 15:00~17:30)"></textarea>
         </div>
         <div class="edit-form-section">
           <label class="edit-form-label">예약 가능 여부</label>
           <select class="edit-form-select" name="dining_resv_availability">
-            <option value="Y">Y</option>
-            <option value="N">N</option>
+            <option value="Y">가능</option>
+            <option value="N">불가능</option>
           </select>
         </div>
         <div class="edit-form-section">
@@ -98,14 +121,14 @@
         </div>
         <div class="edit-form-section">
           <label class="edit-form-label">케러셀 이미지 (여러 장 가능)</label>
-          <button type="button" id="add-carousel-btn" class="list-btn" style="margin-bottom:12px;">케러셀 이미지 추가</button>
+          <button type="button" id="add-carousel-btn" style="margin-bottom:12px;">케러셀 이미지 추가</button>
           <input type="file" id="add-carousel-images" accept="image/*" multiple style="display:none;" />
           <div class="edit-form-img-list" id="carousel-img-list" style="display:flex; flex-direction:column; gap:0;"></div>
         </div>
 
         <div class="edit-form-btn-area" style="margin-bottom: 100px;">
-          <button type="submit" class="list-btn">추가</button>
-          <button type="button" class="list-btn" onclick="window.history.back()">취소</button>
+          <button type="submit" class="list-btn modern-btn">추가</button>
+          <button type="button" class="list-btn modern-btn" onclick="window.history.back()">취소</button>
         </div>
       </form>
     </section>
@@ -132,7 +155,7 @@ if (diningDataForm) {
       const fileFormDiningId = document.querySelector('#diningFileForm input[name="dining_id"]');
       if (fileFormDiningId) fileFormDiningId.value = diningId;
       saveCarouselImages(diningId, () => {
-        window.location.href = '/dining';
+        window.location.href = '/admin/dining';
       });
     });
   });
@@ -233,14 +256,14 @@ function saveCarouselImages(diningId, callback) {
       }
     });
     updateCarouselOrderOnServer(diningId, orderedUrls, () => {
-      window.location.href = '/dining';
+      window.location.href = '/admin/dining';
     });
     mainImageFile = null;
     logoImageFile = null;
     items.forEach(item => { item.file = null; });
   }).catch(() => {
-    alert('업로드 실패');
-    window.location.href = '/dining';
+    // alert('업로드 실패');
+    window.location.href = '/admin/dining';
   });
 }
 
@@ -421,7 +444,7 @@ if (diningFileForm) {
       if (fileFormDiningId) fileFormDiningId.value = diningId;
       // 2. 이미지 업로드
       saveCarouselImages(diningId, () => {
-        window.location.href = '/dining';
+        window.location.href = '/admin/dining';
       });
     });
   });

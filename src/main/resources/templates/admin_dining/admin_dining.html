@@ -44,7 +44,7 @@
       <th>담당자</th>
       <th style="text-align: center;">
         <a th:href="@{/admin/dining/add}">
-          <button type="button" style="font-size: 1.5rem; width: 40px; height: 40px; background: #e0e0e0; border: none; cursor: pointer;">+</button>
+          <button type="button" style="font-size: 1.5rem; width: 40px; height: 40px; background: #e0e0e0; border: 1px solid #333; cursor: pointer; border-radius: 6px;">+</button>
         </a>
       </th>
     </tr>
@@ -58,9 +58,9 @@
     <td th:text="${dining.manager_name}"></td>
     <td>
       <a th:href="@{/admin/dining/edit(diningId=${dining.dining_id})}">
-        <button type="button" style="background: #e0e0e0; border: none; border-radius: 6px; padding: 6px 16px; cursor: pointer;">수정</button>
+        <button type="button" style="background: #e0e0e0; border: 1px solid #333; border-radius: 6px; padding: 6px 16px; cursor: pointer;">수정</button>
       </a>
-    </td>
+    </td> 
   </tr>
 </tbody>
 </table>
@@ -68,7 +68,7 @@
 <!-- 하이라이트용 CSS -->
 <style>
   .highlight-row {
-    background-color: #6bcbd8 !important;
+    background-color: #d4cfc7 !important;
     transition: background 0.2s;
   }
   .faq-table tbody tr {
@@ -129,8 +129,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
 <!-- 오른쪽 하단 대표메뉴 수정/삭제 버튼 -->
 <div style="position: fixed; right: 40px; bottom: 40px; display: flex; gap: 16px; z-index: 100;">
-  <a id="repMenuEditBtn" href="#"><button type="button" style="background: #4ecdc4; color: #fff; border: none; border-radius: 6px; padding: 1rem 2rem; font-size: 1.1rem; font-weight: 500; cursor: pointer;">대표메뉴 수정</button></a>
-  <a id="deleteBtn" href="#"><button type="button" style="background: #ff6b6b; color: #fff; border: none; border-radius: 6px; padding: 1rem 2rem; font-size: 1.1rem; font-weight: 500; cursor: pointer;">삭제</button></a>
+  <a id="repMenuEditBtn" href="#"><button type="button" style="background: #4ecdc4; color: #fff; border: none; border-radius: 6px; padding: 0.7rem 1rem !important; font-size: 1.1rem; font-weight: 500; cursor: pointer;">대표메뉴 수정</button></a>
+  <a id="deleteBtn" href="#"><button type="button" style="background: #ff6b6b; color: #fff; border: none; border-radius: 6px; padding: 0.7rem 1rem !important; font-size: 1.1rem; font-weight: 500; cursor: pointer;">삭제</button></a>
 </div>
 
 

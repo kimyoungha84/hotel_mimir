@@ -179,4 +179,9 @@ public class DiningService {
         // 시퀀스에서 방금 insert된 PK 반환 (Oracle 기준)
         return diningMapper.selectLastInsertedDiningId();
     }
+
+    // 예약 가능(Y)인 다이닝 목록 조회
+    public List<DiningDomain> getAvailableDiningList() {
+        return diningMapper.selectAvailableDiningList();
+    }
 }

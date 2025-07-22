@@ -21,4 +21,6 @@ public interface DiningMapper {
     void updateDisplayOrder(@Param("diningId") int diningId, @Param("imageUrl") String imageUrl, @Param("displayOrder") int displayOrder);
     void insertDining(DiningDTO dto);
     int selectLastInsertedDiningId();
+    // 예약 가능(Y)인 다이닝 목록 조회
+    List<DiningDomain> selectAvailableDiningList();
 }

@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title th:text="${diningInfo.dining_name}">Insert title here</title>
 <link rel="stylesheet" th:href="@{/css/header.css}" />
 <link rel="stylesheet" th:href="@{/css/footer.css}" />
 <style>
@@ -208,6 +208,7 @@ width: 30%;
 font-weight: 500;
 font-size: 18px;
 align-items: center;
+gap: 5px;
 }
 
 .list-col-2{
@@ -585,6 +586,19 @@ width: 100%;         /* 이미지가 부모 카드의 너비에 맞게 크기 �
   margin-top: auto;
 }
 
+.search-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  background: #ccc !important;
+  color: #fff;
+  box-shadow: none;
+}
+.search-btn:disabled:hover {
+  background: #ccc !important;
+  color: #fff;
+  box-shadow: none;
+}
+
 /* 슬라이드 모달 스타일 */
 .modal-slide {
   position: fixed;
@@ -939,7 +953,7 @@ width: 100%;         /* 이미지가 부모 카드의 너비에 맞게 크기 �
       </div>
       <hr class="section-divider">
       <div class="btn-area">
-        <button type="button" class="list-btn" onclick="window.history.back()">목록</button>
+        <a th:href="@{/user/dining_main}"><button type="button" class="list-btn">목록</button></a>
       </div>
 </div> 
 
@@ -958,19 +972,19 @@ width: 100%;         /* 이미지가 부모 카드의 너비에 맞게 크기 �
   <div class="reservation-content">
     <div class="dining-info" onclick="openDiningModal()" style="cursor: pointer;">
       <h4>다이닝</h4>
-      <p id="selected-dining-name" th:text="${diningInfo.dining_name}">스테이, 모던 레스토랑</p>
+      <p id="selected-dining-name" style="color:#333;"></p>
       <span style="font-size: 12px; color: #666;">클릭하여 변경</span>
     </div>
     <div class="guest-info" onclick="openGuestModal()" style="cursor: pointer;">
       <h4>인원</h4>
       <div class="guest-summary">
-        <span>성인 <span id="adult-count">1</span></span>
+        <span>성인 <span id="adult-count">0</span></span>
         <span>어린이 <span id="child-count">0</span></span>
         <span>유아 <span id="infant-count">0</span></span>
       </div>
       <span style="font-size: 12px; color: #666;">클릭하여 변경</span>
     </div>
-    <button class="search-btn" onclick="searchReservation()">검색</button>
+    <button class="search-btn" id="reservation-search-btn" onclick="searchReservation()" disabled>예약하기</button>
   </div>
 </div>
 
@@ -981,25 +995,8 @@ width: 100%;         /* 이미지가 부모 카드의 너비에 맞게 크기 �
       <h3>다이닝 선택</h3>
       <button class="close-btn" onclick="closeDiningModal()">×</button>
     </div>
-    <div class="dining-options">
-      <div class="dining-option" data-dining-id="1" onclick="selectDining(this, '더 라운지', '79층')">
-        <img src="/dining/images/lounge.jpg" alt="더 라운지">
-        <div class="dining-details">
-          <h4>더 라운지</h4>
-          <p>타입 | 레스토랑 & 바</p>
-          <p>위치 | 79층</p>
-        </div>
-        <div class="selection-indicator"></div>
-      </div>
-      <div class="dining-option selected" data-dining-id="2" onclick="selectDining(this, '스테이, 모던 레스토랑', '81층')">
-        <img src="/dining/images/stay.jpg" alt="스테이, 모던 레스토랑">
-        <div class="dining-details">
-          <h4>스테이, 모던 레스토랑</h4>
-          <p>타입 | 프렌치</p>
-          <p>위치 | 81층</p>
-        </div>
-        <div class="selection-indicator"></div>
-      </div>
+    <div class="dining-options" id="dining-options-list">
+      <!-- JS로 예약 가능 다이닝 옵션 동적 렌더링 -->
     </div>
     <button class="select-btn" onclick="confirmDiningSelection()">선택</button>
   </div>
@@ -1017,7 +1014,7 @@ width: 100%;         /* 이미지가 부모 카드의 너비에 맞게 크기 �
         <span>성인</span>
         <div class="counter">
           <button onclick="decreaseCount('adult')">-</button>
-          <span id="adult-counter">1</span>
+          <span id="adult-counter">0</span>
           <button onclick="increaseCount('adult')">+</button>
         </div>
       </div>
@@ -1200,29 +1197,99 @@ function closeAllModals() {
   }, 300);
 }
 
-// 다이닝 선택 관련 함수들
-function selectDining(element, name, location) {
-  // 모든 다이닝 옵션에서 selected 클래스 제거
-  document.querySelectorAll('.dining-option').forEach(option => {
-    option.classList.remove('selected');
+// 예약 가능 다이닝 옵션 동적 로딩
+let availableDiningList = [];
+let selectedDiningId = null;
+let selectedDiningName = null;
+let hasSelectedDining = false;
+
+function renderDiningOptions() {
+  const list = document.getElementById('dining-options-list');
+  list.innerHTML = '';
+  availableDiningList.forEach((dining, idx) => {
+    const div = document.createElement('div');
+    div.className = 'dining-option' + (selectedDiningId == dining.dining_id ? ' selected' : '');
+    div.setAttribute('data-dining-id', dining.dining_id);
+    div.onclick = function() { selectDiningOption(dining.dining_id, dining.dining_name, div); };
+    div.innerHTML = `
+      <img src="${dining.dining_main_image || '/dining/images/no_image.png'}" alt="${dining.dining_name}" style="width:80px;height:60px;object-fit:cover;border-radius:4px;margin-right:15px;">
+      <div class="dining-details">
+        <h4>${dining.dining_name}</h4>
+        <p>타입 | ${dining.type || ''}</p>
+        <p>위치 | ${dining.location || ''}</p>
+      </div>
+      <div class="selection-indicator"></div>
+    `;
+    list.appendChild(div);
   });
-  
-  // 선택된 다이닝에 selected 클래스 추가
+}
+
+function updateReservationBtnState() {
+  const btn = document.getElementById('reservation-search-btn');
+  const diningSelected = !!selectedDiningId;
+  const adult = parseInt(document.getElementById('adult-count').textContent) || 0;
+  const child = parseInt(document.getElementById('child-count').textContent) || 0;
+  const infant = parseInt(document.getElementById('infant-count').textContent) || 0;
+  const total = adult + child + infant;
+  btn.disabled = !(diningSelected && total > 0);
+}
+
+// 다이닝 선택 시 버튼 상태 갱신
+function selectDiningOption(diningId, diningName, element) {
+  document.querySelectorAll('.dining-option').forEach(opt => opt.classList.remove('selected'));
   element.classList.add('selected');
-  
-  // 선택된 다이닝 정보 저장
-  window.selectedDining = {
-    name: name,
-    location: location,
-    id: element.getAttribute('data-dining-id')
-  };
+  selectedDiningId = diningId;
+  selectedDiningName = diningName;
+  hasSelectedDining = true;
+  updateReservationBtnState();
 }
 
 function confirmDiningSelection() {
-  if (window.selectedDining) {
-    document.getElementById('selected-dining-name').textContent = window.selectedDining.name;
+  if (selectedDiningName) {
+    document.getElementById('selected-dining-name').textContent = selectedDiningName;
     closeDiningModal();
+    updateReservationBtnState();
   }
+}
+
+function openReservationPanel(event) {
+  if (event) event.preventDefault();
+  document.getElementById('reservation-panel').classList.add('active');
+  document.getElementById('overlay').classList.add('active');
+  fetchAvailableDiningList();
+  updateReservationBtnState();
+}
+
+function fetchAvailableDiningList() {
+  fetch('/user/available_dining_list')
+    .then(res => res.json())
+    .then(data => {
+      availableDiningList = data;
+      // 기본 선택값: 없음(처음엔 선택 안 함)
+      if (!hasSelectedDining) {
+        selectedDiningId = null;
+        selectedDiningName = null;
+        document.getElementById('selected-dining-name').textContent = '선택해주세요';
+      } else if (selectedDiningId && availableDiningList.some(d => d.dining_id == selectedDiningId)) {
+        document.getElementById('selected-dining-name').textContent = selectedDiningName;
+      }
+      renderDiningOptions();
+    });
+}
+
+// 예약 검색 함수 (diningId 포함)
+function searchReservation() {
+  const diningId = selectedDiningId;
+  const diningName = selectedDiningName;
+  const adultCount = document.getElementById('adult-count').textContent;
+  const childCount = document.getElementById('child-count').textContent;
+  const infantCount = document.getElementById('infant-count').textContent;
+  if (!diningId) {
+    alert('다이닝을 선택해 주세요.');
+    return;
+  }
+  // 예시: 예약 페이지로 이동 (diningId 포함)
+  window.location.href = `/diningResv?diningId=${encodeURIComponent(diningId)}&adults=${adultCount}&children=${childCount}&infants=${infantCount}`;
 }
 
 // 인원수 관련 함수들
@@ -1241,6 +1308,7 @@ function increaseCount(type) {
   
   counter.textContent = currentValue;
   count.textContent = currentValue;
+  updateReservationBtnState();
 }
 
 function decreaseCount(type) {
@@ -1252,30 +1320,13 @@ function decreaseCount(type) {
     currentValue--;
     counter.textContent = currentValue;
     count.textContent = currentValue;
+    updateReservationBtnState();
   }
 }
 
 function confirmGuestSelection() {
   closeGuestModal();
-}
-
-// 예약 검색 함수
-function searchReservation() {
-  const diningName = document.getElementById('selected-dining-name').textContent;
-  const adultCount = document.getElementById('adult-count').textContent;
-  const childCount = document.getElementById('child-count').textContent;
-  const infantCount = document.getElementById('infant-count').textContent;
-  
-  // 여기에 예약 검색 로직 추가
-  console.log('예약 검색:', {
-    dining: diningName,
-    adults: adultCount,
-    children: childCount,
-    infants: infantCount
-  });
-  
-  // 예약 페이지로 이동하거나 검색 결과를 표시
-  // window.location.href = `/diningResv?dining=${encodeURIComponent(diningName)}&adults=${adultCount}&children=${childCount}&infants=${infantCount}`;
+  updateReservationBtnState();
 }
 </script>
 </body>

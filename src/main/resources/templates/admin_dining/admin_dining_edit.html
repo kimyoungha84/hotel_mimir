@@ -5,13 +5,35 @@
 <title>다이닝 정보 수정</title>
 <link rel="stylesheet" href="/admin_common_assets/css/common.css">
 <style>
-  .edit-form-label { display: block; margin-top: 24px; font-weight: bold; }
+  .edit-form-label { display: block; margin-top: 24px; font-weight: bold; margin-bottom: 15px; }
   .edit-form-input, .edit-form-textarea, .edit-form-select { width: 100%; padding: 8px; margin-top: 4px; }
   .edit-form-img-preview { max-width: 200px; margin-top: 8px; display: block; }
   .edit-form-img-list { display: flex; gap: 16px; flex-wrap: wrap; margin-top: 8px; }
   .edit-form-img-list img { max-width: 120px; border: 1px solid #ccc; border-radius: 4px; }
   .edit-form-section { margin-bottom: 32px; width: 50%; }
   .edit-form-btn-area { margin-top: 32px; display: flex; gap: 16px; }
+  .modern-btn, .list-btn {
+    background: linear-gradient(90deg, #856956 0%, #a88d7b 100%);
+    color: #fff;
+    font-size: 1rem;
+    font-weight: 600;
+    border: none;
+    border-radius: 10px;
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+    box-shadow: 0 2px 8px rgba(133, 105, 86, 0.08);
+    transition: background 0.2s, box-shadow 0.2s, transform 0.1s;
+    margin: 0 8px;
+    letter-spacing: 0.5px;
+  }
+  .modern-btn:hover, .list-btn:hover {
+    background: linear-gradient(90deg, #6d5747 0%, #856956 100%);
+    box-shadow: 0 4px 16px rgba(133, 105, 86, 0.15);
+    transform: translateY(-2px) scale(1.03);
+  }
+  .dining-section {
+    margin-top : 50px;
+  }
 </style>
 </head>
 <body>
@@ -53,7 +75,7 @@
           <input class="edit-form-input" type="text" name="location" th:value="${dining.location}" required />
         </div>
         <div class="edit-form-section">
-          <label class="edit-form-label">전화번호</label>
+          <label class="edit-form-label">문의번호</label>
           <input class="edit-form-input" type="text" name="phone_number" th:value="${dining.phone_number}" required />
         </div>
         <div class="edit-form-section">
@@ -75,8 +97,8 @@
         <div class="edit-form-section">
           <label class="edit-form-label">예약 가능 여부</label>
           <select class="edit-form-select" name="dining_resv_availability">
-            <option value="Y" th:selected="${dining.dining_resv_availability == 'Y'}">Y</option>
-            <option value="N" th:selected="${dining.dining_resv_availability == 'N'}">N</option>
+            <option value="Y" th:selected="${dining.dining_resv_availability == 'Y'}">가능</option>
+            <option value="N" th:selected="${dining.dining_resv_availability == 'N'}">불가능</option>
           </select>
         </div>
         <div class="edit-form-section">
@@ -90,9 +112,11 @@
         </div>
 
         <div class="edit-form-btn-area">
-          <button type="submit" class="list-btn">데이터 수정</button>
+          <button type="submit" class="list-btn modern-btn">데이터 수정</button>
         </div>
       </form>
+
+      <hr style="margin: 40px 0; border: none; border-top: 2px solid #e0e0e0;">
 
       <!-- 파일 업로드 폼 -->
       <form id="diningFileForm" th:action="@{/admin/dining/editFiles}" method="post" enctype="multipart/form-data">
@@ -132,8 +156,8 @@
         </div>
 
         <div class="edit-form-btn-area" style="margin-bottom: 100px;">
-          <button type="button" class="list-btn" onclick="saveCarouselImages()">이미지수정</button>
-          <a th:href="@{/admin/dining}"><button type="button" class="list-btn">취소</button></a>
+          <button type="button" class="list-btn modern-btn" onclick="saveCarouselImages()">이미지수정</button>
+          <a th:href="@{/admin/dining}"><button type="button" class="list-btn modern-btn">취소</button></a>
         </div>
       </form>
     </section>
