@@ -136,7 +136,7 @@ body {
   pointer-events: auto;
   opacity: 0.5;
   color: #888;
-  cursor: not-allowed;
+  cursor: not-allowed !important;
   text-decoration: none;
 }
 
@@ -574,4 +574,14 @@ input[type="checkbox"]:not(#checkAll)::after {
 
 input[type="checkbox"]:not(#checkAll):checked::after {
   color: #a38c67;
+}
+
+.checkbox-disabled {
+  opacity: 0.5;
+  pointer-events: none;
+  cursor: not-allowed !important;
+}
+
+.checkbox-disabled input[type="checkbox"] {
+  pointer-events: auto;
 }

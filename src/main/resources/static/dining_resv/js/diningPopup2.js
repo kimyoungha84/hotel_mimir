@@ -21,12 +21,34 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   });
 
-  const closeBtn = document.querySelector(".popup-close02");
   const popup = document.querySelector(".cnt-popup");
   const overlay = document.querySelector(".popup-overlay02");
+  const closeBtn = document.querySelector(".popup-close02");
+  const openBtn = document.getElementById("openCntPopup");
 
+  // 팝업 열기 함수
+  window.openCntPopup = function () {
+    popup.style.display = "block";
+    overlay.style.display = "block";
+
+    requestAnimationFrame(() => {
+      popup.classList.add("active");
+      overlay.classList.add("active");
+    });
+  };
+  
+  // 팝업 닫기 버튼
   closeBtn.addEventListener("click", function () {
-    popup.style.display = "none";
-    overlay.style.display = "none";
+    popup.classList.remove("active");
+    overlay.classList.remove("active");
+
+    setTimeout(() => {
+      popup.style.display = "none";
+      overlay.style.display = "none";
+    }, 500);
   });
+
+  if (openBtn) {
+    openBtn.addEventListener("click", openCntPopup);
+  }
 });

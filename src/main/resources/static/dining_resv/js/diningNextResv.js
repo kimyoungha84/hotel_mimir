@@ -9,7 +9,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const toggleBtn = document.getElementById("toggleRequestBtn");
   const requestContent = document.getElementById("requestContent");
   const checkAll = document.getElementById("checkAll");
-  const otherChecks = document.querySelectorAll("input[name='check']");
+  const allCheckboxes = document.querySelectorAll("input[type='checkbox']:not(#checkAll)");
   const requiredInputs = document.querySelectorAll(".input-field");
   const requiredChecks = document.querySelectorAll("input[name='check-required']");
   const payBtn = document.querySelector(".next-btn");
@@ -19,7 +19,70 @@ document.addEventListener("DOMContentLoaded", () => {
   const reselectPopup = document.getElementById("reselectPopup");
   const reselectBtn = document.getElementById("reselectBtn");
   const closePopupBtn = document.getElementById("closePopupBtn");
+  
+  const emailInput = document.querySelector('input[name="reservationEmail"]');
+  const emailError = emailInput.nextElementSibling;
 
+  emailInput.addEventListener('blur', () => {
+    const email = emailInput.value.trim();
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    if (email === '') {
+      // 필수 입력 에러 메시지 보여주기
+      emailError.textContent = "이메일을 입력해주세요.";
+      emailError.style.display = 'block';
+      emailInput.classList.add('error');
+    } else if (!emailPattern.test(email)) {
+      // 형식 에러 메시지 보여주기
+      emailError.textContent = "이메일 형식이 올바르지 않습니다.";
+      emailError.style.display = 'block';
+      emailInput.classList.add('error');
+    } else {
+      // 에러 메시지 숨기기
+      emailError.style.display = 'none';
+      emailInput.classList.remove('error');
+    }
+  });
+  
+  const telInput = document.getElementById('reservationTell');
+
+  telInput.addEventListener('input', (e) => {
+    let value = e.target.value;
+    
+    value = value.replace(/[^0-9]/g, '');
+    
+    if(value.length < 4){
+      e.target.value = value;
+    } else if(value.length < 8){
+      e.target.value = value.slice(0,3) + '-' + value.slice(3);
+    } else {
+      e.target.value = value.slice(0,3) + '-' + value.slice(3,7) + '-' + value.slice(7,11);
+    }
+  });
+  
+  const check04 = document.getElementById("check04");
+  const check05 = document.getElementById("check05");
+  const check06 = document.getElementById("check06");
+
+  const label05 = check05.closest('label');
+  const label06 = check06.closest('label');
+
+  function updateOptionalCheckboxState() {
+    const isCheck04Checked = check04.checked;
+
+    [check05, check06].forEach(chk => chk.checked = false);
+
+	  if (isCheck04Checked) {
+	    [check05, check06, label05, label06].forEach(el => el.classList.remove("checkbox-disabled"));
+	  } else {
+	    [check05, check06, label05, label06].forEach(el => el.classList.add("checkbox-disabled"));
+	  }
+	}
+
+  check04.addEventListener("change", updateOptionalCheckboxState);
+
+  updateOptionalCheckboxState();
+  
   // 토글 버튼
   toggleBtn.addEventListener("click", () => {
     const isVisible = requestContent.style.display === "block";
@@ -48,18 +111,19 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 
-  // 전체 동의 체크박스
+  // 전체 동의 누르면 전체 체크
   checkAll.addEventListener("change", () => {
     const isChecked = checkAll.checked;
-    document.querySelectorAll("input[type='checkbox']").forEach(chk => {
+    allCheckboxes.forEach(chk => {
       chk.checked = isChecked;
     });
     validateAll();
   });
 
-  otherChecks.forEach(chk => {
+  // 개별 체크 상태 바뀌면 전체 동의 자동 체크/해제
+  allCheckboxes.forEach(chk => {
     chk.addEventListener("change", () => {
-      const allChecked = Array.from(otherChecks).every(c => c.checked);
+      const allChecked = Array.from(allCheckboxes).every(c => c.checked);
       checkAll.checked = allChecked;
       validateAll();
     });

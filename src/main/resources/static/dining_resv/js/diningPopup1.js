@@ -2,8 +2,28 @@
  * 
  */
 document.addEventListener('DOMContentLoaded', function () {
-  document.querySelector('.popup-close01').addEventListener('click', function () {
-    document.querySelector('.dining-popup').style.display = 'none';
-    document.querySelector('.popup-overlay01').style.display = 'none';
-  });
+	const popup = document.querySelector('.dining-popup');
+	const overlay = document.querySelector('.popup-overlay01');
+	const openBtn = document.getElementById('openDiningPopup');
+	const closeBtn = document.querySelector('.popup-close01');
+
+	openBtn.addEventListener('click', () => {
+	  popup.style.display = 'block';
+	  overlay.style.display = 'block';
+
+	  requestAnimationFrame(() => {
+	    popup.classList.add('active');
+	    overlay.classList.add('active');
+	  });
+	});
+
+	closeBtn.addEventListener('click', () => {
+	  popup.classList.remove('active');
+	  overlay.classList.remove('active');
+
+	  setTimeout(() => {
+	    popup.style.display = 'none';
+	    overlay.style.display = 'none';
+	  }, 500);
+	});
 });
