@@ -68,7 +68,7 @@ public class PageConnectController {
 		return "employee/empRegister";
 	}//employeeRegister
 	
-	
+	//과연 GetMapping이 필요할 것인가에 대한 의문이 있지
 	@GetMapping("/admin/employee/detail")
 	public String employeeDetailGet() {
 		

@@ -139,7 +139,9 @@ Vue.createApp({
     },
     mounted(){
 
-        if(sessionStorage.getItem("staffModifyCache")){
+        var cacheVal=sessionStorage.getItem("staffModifyCache");
+
+        if(cacheVal != null){
             //sessionStorage에 값이 존재하면,
             this.sDomainJSON=JSON.parse(sessionStorage.getItem("staffModifyCache"));
             console.log("sessionStorage --sDomainJSON----------- "+this.sDomainJSON);

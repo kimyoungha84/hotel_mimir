@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.StringTokenizer;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
@@ -81,9 +82,9 @@ public class AdminService {
 		StaffDomain sd=am.selectOneStaffDetail(staff_id);
 		
 		sd.setDept_name(departmentMapping(sd.getDept_iden()));//이름
-		sd.setPermission_str_kor(staff_id);
+		sd.setPermission_str_kor(permissionMapping(sd.getPermission_id_code()));//권한 (이거 여러개 잖아.)
 		sd.setPosition_name(positionMapping(sd.getPosition_identified_code()));//부서
-		sd.setStaff_status_kor(statusMapping(sd.getStaff_status()));
+		sd.setStaff_status_kor(statusMapping(sd.getStaff_status()));//재직 상태
 		
 		System.out.println("sd-------------------"+sd);
 		
@@ -231,7 +232,7 @@ public class AdminService {
 	public void sendMail(String employeeEmail) {
 	
 		try {
-			sendMail.sendMail("j90729444@gmail.com", "MIMIR 비밀번호 재설정","templates/administrator_email_template/reset_password_info.html");
+			sendMail.sendMail(employeeEmail, "MIMIR 비밀번호 재설정","templates/administrator_email_template/reset_password_info.html");
 			//sendMail.sendMail(employeeEmail, "MIMIR 비밀번호 재설정");
 		} catch (MessagingException e) {
 			e.printStackTrace();
@@ -367,7 +368,9 @@ public class AdminService {
 	private String permissionMapping(String permissionCode) {
 	
 		StringBuilder sb=new StringBuilder();
+		
 		String permissionStr="";
+		
 		Map<String, String> permissionMap=new HashMap<String, String>();
 		permissionMap.put("room","객실");
 		permissionMap.put("dinning","다이닝");
@@ -376,11 +379,24 @@ public class AdminService {
 		permissionMap.put("employee","직원");
 		permissionMap.put("admin","관리자");
 		
+
 		if(permissionCode.contains(",")) {
+			//여기 들어왔다는건 권한이 여러 개라는 의미잖아.
+			StringTokenizer stk=new StringTokenizer(permissionCode,",");
+			System.out.println("token count ------------------"+stk.countTokens());
 			
+			while(stk.hasMoreTokens()) {
+				sb.append(permissionMap.get(stk.nextToken())).append(",");
+				
+			}//end while
+			
+			permissionStr=sb.toString();
 		}else {
 			permissionStr=permissionMap.get(permissionCode);
 		}//end if~else
+		
+		
+		System.out.println("permissionStr---------------"+permissionStr);
 		
 		
 		
