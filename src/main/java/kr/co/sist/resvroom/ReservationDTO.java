@@ -36,5 +36,5 @@ public class ReservationDTO {
 	private int paymentPrice;  
 	private int breakfast;
 	private String imgPath;
-	
+	private int capacity;
 }//class

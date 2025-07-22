@@ -51,7 +51,10 @@ public class AdminReservationController {
 	
 	@GetMapping("admin/resvroommodify")
 	public String adminResvRoomModify(Model model, @RequestParam int resvId) {
-		model.addAttribute("resv",ars.searchOneResv(resvId));
+		ReservationDTO rDTO=ars.searchOneResv(resvId);
+		model.addAttribute("resv",rDTO);
+		int capacity = ars.searchCapacity(rDTO.getRoomId());
+		model.addAttribute("capacity", capacity);
 		return "/admin_resv_room/admin_resv_room_edit";
 	}//adminResvRoomModify
 	

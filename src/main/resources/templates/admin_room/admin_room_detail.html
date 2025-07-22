@@ -22,7 +22,7 @@
 
         <div class="section">
           <label for="fileInput">썸네일</label>
-          <img th:src="${room.imagePath}" alt="room" id="thumbnailImage" style="cursor: pointer;" />
+          <img th:src="@{${room.imagePath}}" alt="room" id="thumbnailImage" style="cursor: pointer;" />
           <input type="file" id="fileInput" name="thumbnail" hidden accept="image/*" />
         </div>
 

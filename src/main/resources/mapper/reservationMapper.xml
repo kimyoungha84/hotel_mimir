@@ -182,14 +182,19 @@
   WHERE resv_id = #{resvId}
 </update>
 
-<!-- 2. 비회원 정보 업데이트 -->
 <update id="updateNonMemberAdmin" parameterType="reservationDTO">
   UPDATE non_member
   SET
-    user_name = #{userName},
-    user_tel = #{userTel},
-    user_email = #{userEmail}
+    non_mem_name = #{userName},
+    non_mem_tel = #{userTel},
+    non_mem_email = #{userEmail}
   WHERE non_mem_id = #{userNum}
 </update>
+
+  <select id="selectCapacity" parameterType="int" resultType="int">
+    SELECT capacity
+    FROM room
+    WHERE room_id = #{roomId}
+  </select>
 	
 </mapper>

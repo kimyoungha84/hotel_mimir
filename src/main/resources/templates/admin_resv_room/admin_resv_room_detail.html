@@ -6,10 +6,12 @@
   <link rel="icon shortcut"  href="/admin_common_assets/common_img/mimir_favicon.ico"/>
   <style>
   </style>
+    <!-- jquery CDN -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
 <th:block th:replace="~{/administrator/fragments/admin_header :: admin_header}"></th:block>
+
 </head>
 <body>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
 <th:block th:replace="~{/administrator/fragments/admin_sidebar :: admin_sidebar}"></th:block>
 <div id="body-pd" class="body-pd">
 <div class="table-section">
@@ -86,10 +88,14 @@
   </div>
   </div>
 <script th:inline="javascript">
-    /*<![CDATA[*/
-    [[${msg} ? 'alert("' + ${msg} + '");' : '']]
-    /*]]>*/
+  /*<![CDATA[*/
+  var msg = /*[[${msg}]]*/ null;
+  if (msg !== null && msg !== '') {
+    alert(msg);
+  }
+  /*]]>*/
 </script>
+
 
 </body>
 </html>

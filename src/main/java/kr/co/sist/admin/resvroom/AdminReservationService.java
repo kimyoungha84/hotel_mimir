@@ -14,6 +14,11 @@ public class AdminReservationService {
 	@Autowired
 	private ReservationMapper rm;
 	
+
+    public Integer searchCapacity(int roomId) {
+        return rm.selectCapacity(roomId);
+    }//return sqlSession.selectOne("kr.co.sist.room.RoomMapper.getRoomCapacityByRoomId", roomId);
+	
 	public List<ReservationDTO> searchAllResv(){
 		return rm.selectAllResv();
 	}//searchAllResv
@@ -32,5 +37,8 @@ public class AdminReservationService {
 	    }//end if
 	    return (resvResult > 0) && (rDTO.getIsMember() ? true : nonMemResult > 0);
 	}//modifyAdminResv
+	
+	
+	
 	
 }//class
