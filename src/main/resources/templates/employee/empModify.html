@@ -259,12 +259,17 @@ Vue.createApp({
             });
         },
         cancelBtn(){
-            location.href="/admin/employee/detail";
-            
+            // 이전 페이지로 돌아가면서 새로 고침
+            history.go(-1);  // 뒤로가기
+            setTimeout(function() {
+                // 뒤로가기를 한 후에, 페이지 새로 고침을 강제 실행
+                location.reload();
+            }, 500); // 0.5초 정도 대기 후 새로 고침
         },
 
     }
 }).mount("#app");
 </script>
+
 </body>
 </html>

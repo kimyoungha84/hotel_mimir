@@ -43,6 +43,35 @@
 var jsonStr='[[${staffDomain}]]';
 const staffJson=JSON.parse(jsonStr);
 
+
+// 페이지가 로드될 때마다 실행
+window.onload = function() {
+    // sessionStorage에서 'staffModifyCache' 값 읽기
+    var cacheVal = sessionStorage.getItem("staffModifyCache");
+    console.log("cacheVal----------" + cacheVal);
+    
+    debugger;
+
+    if (cacheVal != null && !sessionStorage.getItem("reloaded")) {
+        // sessionStorage에 값이 존재하고 새로 고침을 하지 않은 경우
+        sessionStorage.setItem("reloaded", "true"); // 새로 고침 flag 설정
+        location.reload(); // 새로 고침
+    } else {
+        // sessionStorage 다 썼으면 지우기
+        sessionStorage.removeItem("staffModifyCache");
+        sessionStorage.removeItem("reloaded");
+
+        // 서버 값 사용
+        var staffJson = {};  // 서버에서 가져온 데이터
+        var sDomainJSON = staffJson;  // 서버 데이터를 사용
+        console.log("Using server data", sDomainJSON);
+        
+        // 서버에서 받은 데이터를 sDomainJSON에 할당 후 추가 로직 처리
+    }
+};
+
+
+
 </script>
 
 </head>
@@ -138,20 +167,24 @@ Vue.createApp({
         }
     },
     mounted(){
+    //     var cacheVal=sessionStorage.getItem("staffModifyCache");
+    //     alert("cacheVal----------"+cacheVal);
 
-        var cacheVal=sessionStorage.getItem("staffModifyCache");
 
-        if(cacheVal != null){
-            //sessionStorage에 값이 존재하면,
-            this.sDomainJSON=JSON.parse(sessionStorage.getItem("staffModifyCache"));
-            console.log("sessionStorage --sDomainJSON----------- "+this.sDomainJSON);
-            console.log("sessionStorage id ------------------"+this.sDomainJSON.staff_id);
-            //sessionStorage 다 썼으면 지우기
-            sessionStorage.removeItem("staffModifyCache");
-        }else{
-            //서버값 사용
-            this.sDomainJSON=staffJson;
-        }//if~else
+    //     if((cacheVal != null) && !sessionStorage.getItem('reloaded')){
+    //         //sessionStorage에 값이 존재하면,
+    //         sessionStorage.setItem('reloaded', 'true');
+    //         location.reload(true);//새로고침
+    //         //this.$router.go(0);//새로고침
+    //         this.sDomainJSON=JSON.parse(sessionStorage.getItem("staffModifyCache"));
+    //         console.log("sessionStorage --sDomainJSON----------- "+this.sDomainJSON);
+    //         console.log("sessionStorage id ------------------"+this.sDomainJSON.staff_id);
+    //         //sessionStorage 다 썼으면 지우기
+    //         sessionStorage.removeItem("staffModifyCache");
+    //     }else{
+    //     //서버값 사용
+        this.sDomainJSON=staffJson;
+    //     }//if~else
 
         this.staffDTOJSON=this.sDomainJSON;
     }

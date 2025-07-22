@@ -81,7 +81,7 @@ public class AdminService {
 		
 		StaffDomain sd=am.selectOneStaffDetail(staff_id);
 		
-		sd.setDept_name(departmentMapping(sd.getDept_iden()));//이름
+		sd.setDept_name(departmentMapping(sd.getDept_iden()));//부서이름
 		sd.setPermission_str_kor(permissionMapping(sd.getPermission_id_code()));//권한 (이거 여러개 잖아.)
 		sd.setPosition_name(positionMapping(sd.getPosition_identified_code()));//부서
 		sd.setStaff_status_kor(statusMapping(sd.getStaff_status()));//재직 상태
@@ -398,7 +398,14 @@ public class AdminService {
 		
 		System.out.println("permissionStr---------------"+permissionStr);
 		
+		//아 여기서 정규식을 사용하면 되겠다.
+		//정규식을 사용해서 맨 끝의 ,를 빼면 된다.
+		if(permissionStr.endsWith(",")) {
+			//만약 맨 끝에 , 가 있다면
+			permissionStr.replaceAll(",$", "");
+		}//end if
 		
+		System.out.println("permissionStrstrstr---------------"+permissionStr);
 		
 		
 		

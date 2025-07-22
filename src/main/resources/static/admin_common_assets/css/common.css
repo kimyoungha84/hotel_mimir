@@ -64,7 +64,7 @@ table tr:hover{
 /* 세로형 전용 스타일 */
 .vertical-table {
     width: 100%; /* 또는 max-width: 100%; margin으로 가운데 정렬도 가능 */
-    max-width:700px; /*최대 너비 제한   */
+    max-width:600px; /*최대 너비 제한   */
     margin: 0 auto; /* 가운데 정렬 */
     margin-top:5rem; /*표와 hr 사이의 간격*/
     font-size:1.2rem;
@@ -82,14 +82,14 @@ table tr:hover{
 .vertical-table th {
     background-color: #F3ECE7;
     text-align: left;
-    padding: 10px 14px;
+    padding: 8px 10px;
     width: 30%;
     text-align: center;
 }
 
 .vertical-table td {
     text-align: left;
-    padding: 20px 8px;
+    padding: 10px 8px;
     text-align: center;
 
 }

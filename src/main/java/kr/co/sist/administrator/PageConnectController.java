@@ -68,15 +68,7 @@ public class PageConnectController {
 		return "employee/empRegister";
 	}//employeeRegister
 	
-	//과연 GetMapping이 필요할 것인가에 대한 의문이 있지
-	@GetMapping("/admin/employee/detail")
-	public String employeeDetailGet() {
-		
-		System.out.println("-----------------------getMapping /admin/employee/detail---------------------");
-		
-		return "employee/empDetail";
-	}//employeeDetailGet
-	
+
 	
 	/**
 	 * 직원 상세 post
@@ -87,7 +79,7 @@ public class PageConnectController {
 	@PostMapping("/admin/employee/detail")
 	public String employeeDetail(Model model, @RequestParam String staff_id) {
 		
-		System.out.println("--------detail의 staff_id-------------:"+staff_id);
+		System.out.println("\n\n\n\n\n\n--------detail의 staff_id-------------:"+staff_id);
 		//정보 부려줄 것들을 Model에 저장
 		StaffDomain sd=as.getOneStaffInfo(staff_id);
 		
