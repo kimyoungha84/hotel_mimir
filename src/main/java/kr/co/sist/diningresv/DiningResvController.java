@@ -1,7 +1,8 @@
 package kr.co.sist.diningresv;
 
+import java.text.SimpleDateFormat;
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Locale;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -34,11 +35,25 @@ public class DiningResvController {
         
     }
     
-    @GetMapping("diningResvComplete")
-    public String diningResvComplete() {
+    @GetMapping("/diningResvComplete")
+    public String diningResvComplete(@RequestParam int reservationId, Model model) {
     	
-    	return "dining_resv/dining_next_resv/diningResvComplete";
-    	
+        DiningResvDTO dto = drs.selectResvId(reservationId);
+        
+        model.addAttribute("reservationId", dto.getReservationId());
+        model.addAttribute("reservationName", dto.getReservationName());
+        model.addAttribute("reservationTell", dto.getReservationTell());
+        model.addAttribute("dining", dto.getDiningName());
+        model.addAttribute("reservationCount", dto.getReservationCount());
+
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy.MM.dd(E)", Locale.KOREAN);
+        String formattedDate = sdf.format(dto.getReservationDate());
+
+        model.addAttribute("reservationDate", formattedDate);
+        model.addAttribute("reservationTime", dto.getReservationTime().toString());
+
+        return "dining_resv/dining_next_resv/diningResvComplete";
+        
     }
     
 }

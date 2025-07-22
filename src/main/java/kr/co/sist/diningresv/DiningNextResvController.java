@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.Locale;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import kr.co.sist.dining.user.DiningDomain;
+import kr.co.sist.member.CustomUserDetails;
 import kr.co.sist.nonmember.NonMemberService;
 import kr.co.sist.payment.PaymentService;
 
@@ -54,6 +56,8 @@ public class DiningNextResvController {
         
         DiningDomain diningInfo = drs.searchDining(diningId);
 		
+        model.addAttribute("diningId", diningId);
+        
 	    model.addAttribute("dining", diningInfo.getDining_name());
 	    model.addAttribute("adult", adult);
 	    model.addAttribute("child", child);
@@ -80,11 +84,12 @@ public class DiningNextResvController {
 	    @RequestParam String time,
 	    @RequestParam String meal,
 	    @RequestParam int diningId,
+	    @AuthenticationPrincipal CustomUserDetails loginUser,
 	    Model model) {
 
 	    DiningResvDTO dto = new DiningResvDTO();
-	    
 	    int totalCount = adult + child;
+
 	    dto.setReservationName(reservationName);
 	    dto.setReservationEmail(reservationEmail);
 	    dto.setReservationTell(reservationTell);
@@ -93,49 +98,49 @@ public class DiningNextResvController {
 	    dto.setReservationCount(totalCount);
 	    dto.setDiningId(diningId);
 
+	    // 날짜/시간 세팅
 	    try {
-	        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
-	        Date parsedTime = sdf.parse(time);
-	        java.sql.Time sqlTime = new java.sql.Time(parsedTime.getTime());
-	        dto.setReservationTime(sqlTime);
-	    } catch (Exception e) {
-	        e.printStackTrace();
-	    }
-	    
-	    try {
-	        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-	        Date utilDate = sdf.parse(date);
-	        java.sql.Date sqlDate = new java.sql.Date(utilDate.getTime());
-	        dto.setReservationDate(sqlDate);
-	    } catch (Exception e) {
-	        e.printStackTrace();
-	    }
-	    
-	    // 1. 비회원 insert
-	    int nonMemId = nms.searchNonMemberSeq();
-	    dto.setNonMemId(nonMemId);
-	    nms.insertNonMember2(dto);
+	        SimpleDateFormat sdfDate = new SimpleDateFormat("yyyy-MM-dd");
+	        dto.setReservationDate(new java.sql.Date(sdfDate.parse(date).getTime()));
 
-	    // 2. 결제 insert
+	        SimpleDateFormat sdfTime = new SimpleDateFormat("HH:mm");
+	        dto.setReservationTime(new java.sql.Time(sdfTime.parse(time).getTime()));
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    }
+
+	    // ✅ 회원 / 비회원 분기
+	    if (loginUser != null) {
+	        // 🟢 회원일 경우
+	        dto.setUserNum(loginUser.getUser().getUserNum()); // 또는 loginUser.getUserNum()
+	        dto.setReservationType("회원");
+	    } else {
+	        // 🔵 비회원일 경우
+	        int nonMemId = nms.searchNonMemberSeq();
+	        dto.setNonMemId(nonMemId);
+	        nms.insertNonMember2(dto);
+	        dto.setReservationType("비회원");
+	    }
+
+	    // 결제
 	    int paymentId = ps.searchPaymentSeq();
 	    dto.setPaymentId(paymentId);
 	    dto.setPaymentStatus("결제완료");
 	    ps.insertPayment2(dto);
 
-	    // 3. 예약 insert
+	    // 예약
 	    int reservationId = drs.searchResvSeq();
 	    dto.setReservationId(reservationId);
-	    dto.setReservationType("비회원");
 	    drs.insertDiningResv(dto);
 
-	    // view로 전달
-	    String formattedDate = date;
+	    // View로 값 전달
+	    String formattedDate;
 	    try {
-	        SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd");
-	        Date parsedDate = inputFormat.parse(date);
 	        SimpleDateFormat outputFormat = new SimpleDateFormat("yyyy.MM.dd(E)", Locale.KOREAN);
-	        formattedDate = outputFormat.format(parsedDate);
-	    } catch (Exception e) {}
+	        formattedDate = outputFormat.format(dto.getReservationDate());
+	    } catch (Exception e) {
+	        formattedDate = date;
+	    }
 
 	    String mealLabel = switch (meal) {
 	        case "Lunch" -> "Lunch (11:30~14:30)";

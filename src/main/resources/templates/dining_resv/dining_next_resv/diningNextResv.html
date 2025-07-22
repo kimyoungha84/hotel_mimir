@@ -10,6 +10,7 @@
 
 <div th:replace="~{fragments/header.html :: header}"></div>
 
+<form id="reservationForm" th:action="@{/diningNextResv}" method="post">
 <div class="layout">
   <div class="form-wrap">
     <div class="form-header">
@@ -241,6 +242,7 @@
     </div>
 
     <div class="next-txt">
+      <input type="hidden" name="paymentType" id="paymentType" value="현장결제" />
       <input type="hidden" name="adult" th:value="${adult}" />
   	  <input type="hidden" name="child" th:value="${child}" />
   	  <input type="hidden" name="date" th:value="${date}" />
@@ -252,6 +254,7 @@
     
   </div>
 </div>
+</form>
 
   <div th:replace="~{/dining_resv/popup/diningPopup3}"></div>
 
