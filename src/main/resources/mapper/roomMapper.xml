@@ -198,23 +198,38 @@ WHERE rn = 1
 
 
 <select id="selectSalesSummary" resultType="kr.co.sist.admin.room.SalesSummaryDTO">
-    SELECT
-      rt.TYPE_NAME AS typeName,
-      COUNT(DISTINCT CASE WHEN r.USER_NUM IS NOT NULL THEN r.USER_NUM END) AS memberCount,
-      COUNT(DISTINCT CASE WHEN r.USER_NUM IS NULL THEN r.RESV_ID END) AS nonMemberCount,
-      SUM(CASE WHEN r.STATUS = '체크아웃' THEN 1 ELSE 0 END) AS checkoutCount,
-      SUM(CASE WHEN r.STATUS = '예약완료' THEN 1 ELSE 0 END) AS completedCount,
-      SUM(CASE WHEN r.STATUS = '취소' THEN 1 ELSE 0 END) AS cancelCount,
-      SUM(p.PAYMENT_PRICE) AS totalAmount
-    FROM RESERVATION r
-    LEFT JOIN ROOM rm ON r.ROOM_ID = rm.ROOM_ID
-    LEFT JOIN ROOM_TYPE rt ON rm.TYPE_ID = rt.TYPE_ID
-    LEFT JOIN PAYMENT p ON r.PAYMENT_ID = p.PAYMENT_ID
-    WHERE
-      r.CHECKIN_DATE &gt;= #{startDate}
-      AND r.CHECKOUT_DATE &lt;= #{endDate}
-    GROUP BY rt.TYPE_NAME
-    ORDER BY rt.TYPE_NAME
+SELECT
+  rt.TYPE_NAME AS typeName,
+
+  -- 인원 수
+  COUNT(CASE WHEN r.USER_NUM IS NOT NULL THEN 1 END) AS memberCount,
+  COUNT(CASE WHEN r.USER_NUM IS NULL THEN 1 END) AS nonMemberCount,
+
+  -- 상태별 건수
+  SUM(CASE WHEN r.STATUS = '체크인' THEN 1 ELSE 0 END) AS checkinCount,
+  SUM(CASE WHEN r.STATUS = '체크아웃' THEN 1 ELSE 0 END) AS checkoutCount,
+  SUM(CASE WHEN r.STATUS IN ('체크인', '체크아웃') THEN 1 ELSE 0 END) AS stayCount,
+  SUM(CASE WHEN r.STATUS = '예약완료' THEN 1 ELSE 0 END) AS completedCount,
+  SUM(CASE WHEN r.STATUS = '예약취소' THEN 1 ELSE 0 END) AS cancelCount,
+
+  -- 상태별 금액
+  SUM(CASE WHEN r.STATUS = '체크아웃' THEN COALESCE(p.PAYMENT_PRICE, 0) ELSE 0 END) AS checkoutAmount,
+  SUM(CASE WHEN r.STATUS = '체크인' THEN COALESCE(p.PAYMENT_PRICE, 0) ELSE 0 END) AS checkinAmount,
+  SUM(CASE WHEN r.STATUS = '예약완료' THEN COALESCE(p.PAYMENT_PRICE, 0) ELSE 0 END) AS completedAmount,
+  SUM(CASE WHEN r.STATUS = '예약취소' THEN COALESCE(p.PAYMENT_PRICE, 0) ELSE 0 END) AS cancelAmount,
+
+  -- 실제 매출: 체크인 + 체크아웃만 합산
+  SUM(CASE WHEN r.STATUS IN ('체크인', '체크아웃') THEN COALESCE(p.PAYMENT_PRICE, 0) ELSE 0 END) AS totalAmount
+
+FROM RESERVATION r
+LEFT JOIN ROOM rm ON r.ROOM_ID = rm.ROOM_ID
+LEFT JOIN ROOM_TYPE rt ON rm.TYPE_ID = rt.TYPE_ID
+LEFT JOIN PAYMENT p ON r.PAYMENT_ID = p.PAYMENT_ID
+WHERE
+  r.CHECKIN_DATE &gt;= #{startDate}
+  AND r.CHECKOUT_DATE &lt;= #{endDate}
+GROUP BY rt.TYPE_NAME
+ORDER BY rt.TYPE_NAME
   </select>
 
 </mapper>

@@ -4,78 +4,79 @@
   <meta charset="UTF-8" />
   <link rel="stylesheet" th:href="@{/css/admin_room/admin_room_sales.css}" />
   <link rel="icon shortcut"  href="/admin_common_assets/common_img/mimir_favicon.ico"/>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
   <style>
 
   </style>
 <th:block th:replace="~{/administrator/fragments/admin_header :: admin_header}"></th:block>
 </head>
-<body>
-<th:block th:replace="~{/administrator/fragments/admin_sidebar :: admin_sidebar}"></th:block>
-<div id="body-pd" class="body-pd">
-<div class="table-section">
-  <h2 class="h2Title">매출 현황</h2>
+ <th:block th:replace="~{/administrator/fragments/admin_sidebar :: admin_sidebar}"></th:block>
+  <div id="body-pd" class="body-pd">
+    <div class="table-section">
+      <h2 class="h2Title">매출 현황</h2>
 
-  <div class="filters">
-    <div class="date-range">
-      <label>시작일</label>
-      <input type="date" name="startDate" />
-      <span>-</span>
-      <label>종료일</label>
-      <input type="date" name="endDate" />
+      <form method="get" action="/admin/roomsales" class="filters">
+        <div class="date-range">
+          <label>시작일</label>
+          <input type="date" name="startDate" th:value="${startDate}" />
+          <span>-</span>
+          <label>종료일</label>
+          <input type="date" name="endDate" th:value="${endDate}" />
+        </div>
+
+        <div class="room-filter">
+          <label>룸 종류</label>
+          <select name="roomType">
+            <option value="" th:selected="${typeName == null or typeName == ''}">전체</option>
+            <option th:selected="${typeName == '스탠다드룸'}">스탠다드룸</option>
+            <option th:selected="${typeName == '프리미어룸'}">프리미어룸</option>
+            <option th:selected="${typeName == '스위트룸'}">스위트룸</option>
+            <option th:selected="${typeName == '프레지덴셜 스위트 룸'}">프레지덴셜 스위트 룸</option>
+            <option th:selected="${typeName == '로얄 스위트룸'}">로얄 스위트룸</option>
+          </select>
+        </div>
+
+      </form>
+
+      <div class="notice">* 예약 취소 금액은 금액에 포함되지 않습니다.</div>
+      <div class="notice">* 예약 완료 / 예약 취소에 대한 예약 금액은 총 합계 금액에 포함되지 않습니다.</div>
+
+      <table>
+        <thead>
+          <tr>
+            <th>객실 종류</th>
+            <th>회원 수</th>
+            <th>비회원 수</th>
+            <th>체크인/아웃 건 수</th>
+            <th>예약 완료</th>
+            <th>취소 건수</th>
+            <th>금액</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr th:each="row : ${salesList}">
+            <td th:text="|${row.typeName} 명|">스탠다드룸</td>
+            <td th:text="|${row.memberCount} 명|">13명</td>
+            <td th:text="|${row.nonMemberCount} 건|">31건</td>
+            <td th:text="|${row.stayCount} 건|">21건</td>
+            <td th:text="|${row.completedCount} 건|">21건</td>
+            <td th:text="|${row.cancelCount} 건|">2건</td>
+            <td th:text="|₩${#numbers.formatInteger(row.checkinAmount + row.checkoutAmount, 0, 'COMMA')}|"></td>
+          </tr>
+
+          <!-- 총 합계 -->
+          <tr class="summary-row">
+            <td>총 합계</td>
+            <td th:text="|${summary.totalMemberStay} 명|">11명</td>
+            <td th:text="|${summary.totalNonMemberStay} 명|">56명</td>
+            <td th:text="|${summary.totalStay} 건|">56건</td>
+            <td th:text="|${summary.totalComplete} 건|">56건</td>
+            <td th:text="|${summary.totalCancel} 건|">11건</td>
+            <td th:text="|₩${#numbers.formatInteger(summary.totalAmount, 0, 'COMMA')}|">₩4,791,340,000</td>
+          </tr>
+        </tbody>
+      </table>
     </div>
-
-    <div class="room-filter">
-      <label>룸 종류</label>
-      <select name="roomType">
-        <option value="">전체</option>
-        <option>스탠다드룸</option>
-        <option>프리미어룸</option>
-        <option>스위트룸</option>
-        <option>프레지덴셜 스위트 룸</option>
-        <option>로얄 스위트룸</option>
-      </select>
-    </div>
-  </div>
-
-  <div class="notice">* 취소 건수 / 예약 완료에 대한 건은 고객의 요청에 의해 포함되지 않습니다.</div>
-
-  <table>
-    <thead>
-      <tr>
-        <th>객실 종류</th>
-        <th>회원 수</th>
-        <th>비회원 수</th>
-        <th>체크아웃 완료 건 수</th>
-        <th>예약 완료</th>
-        <th>취소 건수</th>
-        <th>금액</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr th:each="row : ${salesList}">
-        <td th:text="${row.typeName}+ '명'">스탠다드룸</td>
-        <td th:text="${row.memberCount}+ '명'">13명</td>
-        <td th:text="${row.nonMemberCount}+ '건'">31명</td>
-        <td th:text="${row.checkoutCount} + '건'">21건</td>
-        <td th:text="${row.completedCount}+ '건'">21건</td>
-        <td th:text="${row.cancelCount}+ '건'">2건</td>
-        <td th:text="|₩${#numbers.formatInteger(row.totalAmount, 0, 'COMMA')}|">₩3,123,780,000</td>
-      </tr>
-
-      <!-- 총 합계 -->
-      <tr class="summary-row">
-        <td>총 합계</td>
-        <td th:text="${summary.totalMember}+ '명'">11명</td>
-        <td th:text="${summary.totalNonMember}+ '명'">56명</td>
-        <td th:text="${summary.totalCheckout} + '건'">56건</td>
-        <td th:text="${summary.totalComplete}+ '건'">56건</td>
-        <td th:text="${summary.totalCancel}+ '건'">11건</td>
-        <td th:text="|₩${#numbers.formatInteger(summary.totalAmount, 0, 'COMMA')}|">₩4,791,340,000</td>
-      </tr>
-    </tbody>
-  </table>
-  </div>
-
   </div>
 </body>
 </html>

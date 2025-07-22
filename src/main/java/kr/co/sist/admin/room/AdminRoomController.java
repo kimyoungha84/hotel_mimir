@@ -120,27 +120,53 @@ public class AdminRoomController {
 
 	    List<SalesSummaryDTO> salesList = ars.searchSalesSummary(startDate, endDate);
 
-	    // 총합계 계산
-	    int totalMember = 0, totalNonMember = 0, totalCheckout = 0, totalComplete = 0, totalCancel = 0, totalAmount = 0;
+	    
+	    int memberCount = 0;
+	    int nonMemberCount = 0;
+	    int totalMemberStay = 0;
+	    int totalNonMemberStay = 0;
+	    int totalCheckout = 0;
+	    int totalCheckin = 0;
+	    int totalComplete = 0;
+	    int totalCancel = 0;
+	    int totalStay = 0;
+	    int totalAmount = 0;
 
 	    for (SalesSummaryDTO s : salesList) {
-	        totalMember += s.getMemberCount();
-	        totalNonMember += s.getNonMemberCount();
+	        // 개별 상태별 합계 (객실 종류별 행에서 사용)
+	        memberCount += s.getMemberCount();
+	        nonMemberCount += s.getNonMemberCount();
 	        totalCheckout += s.getCheckoutCount();
+	        totalCheckin += s.getCheckinCount();
 	        totalComplete += s.getCompletedCount();
 	        totalCancel += s.getCancelCount();
-	        totalAmount += s.getTotalAmount();
+	        totalStay += s.getStayCount();
+
+	        // 체크인 또는 체크아웃이 있는 경우만 stay 인원에 포함
+	        if (s.getCheckinCount() + s.getCheckoutCount() > 0) {
+	            totalMemberStay += s.getMemberCount();
+	            totalNonMemberStay += s.getNonMemberCount();
+	            totalAmount += s.getTotalAmount(); // 금액도 stay에만 포함
+	        }
 	    }
 
+
+
 	    Map<String, Integer> summary = new HashMap<>();
-	    summary.put("totalMember", totalMember);
-	    summary.put("totalNonMember", totalNonMember);
+	    summary.put("totalMemberStay", totalMemberStay);
+	    summary.put("totalNonMemberStay", totalNonMemberStay);
 	    summary.put("totalCheckout", totalCheckout);
+	    summary.put("totalCheckin", totalCheckin);
 	    summary.put("totalComplete", totalComplete);
 	    summary.put("totalCancel", totalCancel);
+	    summary.put("totalStay", totalStay);
 	    summary.put("totalAmount", totalAmount);
 
+	    model.addAttribute("salesList",salesList);
+	    model.addAttribute("memberCount", memberCount);
+	    model.addAttribute("nonMemberCount", nonMemberCount);
 	    model.addAttribute("summary", summary);
+
 
 	    // 현재 사용된 날짜도 다시 전달해서 input에 표시되게
 	    model.addAttribute("startDate", startDate);

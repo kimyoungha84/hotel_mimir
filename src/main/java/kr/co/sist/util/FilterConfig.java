@@ -144,8 +144,8 @@ public enum FilterConfig {
     		        			new LabelSelectorItem("전체", null), 
     		        			new LabelSelectorItem("예약 완료", "예약완료"), 
     	    		        	new LabelSelectorItem("예약 취소", "예약취소"),
-    		        			new LabelSelectorItem("체크인 완료", "체크인 완료"),
-    		        			new LabelSelectorItem("체크아웃 완료", "체크아웃 완료"))
+    		        			new LabelSelectorItem("체크인", "체크인"),
+    		        			new LabelSelectorItem("체크아웃", "체크아웃"))
     		        			)
     		        
     		    )
