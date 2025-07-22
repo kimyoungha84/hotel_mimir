@@ -14,6 +14,18 @@ document.addEventListener("DOMContentLoaded", () => {
   const requiredChecks = document.querySelectorAll("input[name='check-required']");
   const payBtn = document.querySelector(".next-btn");
   const payBtnText = payBtn.querySelector("span");
+  const paymentMethod = document.getElementById("paymentMethod");
+  
+  const methodButtons = document.querySelectorAll('.payment-method-btn button');
+
+  methodButtons.forEach(btn => {
+    btn.addEventListener('click', () => {
+      methodButtons.forEach(b => b.classList.remove('selected'));
+      
+      btn.classList.add('selected');
+    });
+  });
+  
   const onSiteBtn = document.querySelector(".field-btn");
   const onlineBtn = document.querySelector(".online-btn");
   const reselectPopup = document.getElementById("reselectPopup");
@@ -153,6 +165,7 @@ document.addEventListener("DOMContentLoaded", () => {
     onSiteBtn.classList.add("selected");
     onlineBtn.classList.remove("selected");
     payBtnText.textContent = selectedPaymentText;
+	paymentMethod.style.display = "none";
     validateAll();
   });
 
@@ -163,6 +176,7 @@ document.addEventListener("DOMContentLoaded", () => {
     onlineBtn.classList.add("selected");
     onSiteBtn.classList.remove("selected");
     payBtnText.textContent = selectedPaymentText;
+	paymentMethod.style.display = "block";
     validateAll();
   });
 

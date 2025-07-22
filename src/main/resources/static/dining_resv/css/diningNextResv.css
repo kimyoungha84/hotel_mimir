@@ -349,6 +349,7 @@ body {
   height: 3rem;
   cursor: pointer;
   background-color: #fff;
+  border: 1px solid #111;
   border-radius: 0.5rem;
 }
 
@@ -397,6 +398,28 @@ body {
   gap: 1rem;
   padding-bottom: 1rem;
   border-bottom: 2px solid #ddd;
+}
+
+.payment-method-btn {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+}
+
+.payment-method-btn button {
+  padding: 0.8rem 1.2rem;
+  font-size: 1rem;
+  border: 1px solid #ddd;
+  background-color: #fff;
+  cursor: pointer;
+  border-radius: 0.5rem;
+  transition: 0.3s;
+}
+
+.payment-method-btn button.selected {
+  background-color: #a38c67;
+  color: #fff;
+  border-color: #a38c67;
 }
 
 .rule-txt01 {
