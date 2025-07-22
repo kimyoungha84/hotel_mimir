@@ -321,6 +321,20 @@ public class AdminService {
 		return flag;
 	}//chkHaveAuthority
 	
+	
+	/*해당 id가 가지고 있는 권한 가져오기*/
+	public String getAuthoritybyID(String id) {
+		
+		//url이 가진 권한은?!
+		//이거 mapper에 아마도 이 query가 있을 텐데....
+		String idAuthoryStr=am.selectPermissionById(id);
+
+
+
+		return idAuthoryStr;
+	}//chkHaveAuthority
+	
+	
 	/***********************************************************************/
 	
 	/**
@@ -400,10 +414,8 @@ public class AdminService {
 		
 		//아 여기서 정규식을 사용하면 되겠다.
 		//정규식을 사용해서 맨 끝의 ,를 빼면 된다.
-		if(permissionStr.endsWith(",")) {
-			//만약 맨 끝에 , 가 있다면
-			permissionStr.replaceAll(",$", "");
-		}//end if
+		permissionStr=permissionStr.replaceAll(",$", "");
+	
 		
 		System.out.println("permissionStrstrstr---------------"+permissionStr);
 		

@@ -6,7 +6,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import jakarta.servlet.http.HttpServletRequest;
 import kr.co.sist.util.FilterConfig;
@@ -24,8 +23,22 @@ public class PageConnectController {
 	
 	/*dashboard*/
 	@GetMapping("/admin/dashboard")
-	public String indexPage() {
-		return "administrator/index";
+	public String indexPage(HttpServletRequest request) {
+		String dashboardPageStr="administrator/index";
+		
+		String session_id=(String)request.getAttribute("session_id");
+		String authorityStr=as.getAuthoritybyID(session_id);
+		
+		System.out.println("dashboard=================session-id"+session_id);
+		
+		
+		if(authorityStr.contains("room")) {
+			dashboardPageStr="administrator/dashboard/room_dashboard";
+		}else if(authorityStr.contains("dinning")) {
+			dashboardPageStr="administrator/dashboard/dining_dashboard";
+		}//end if~else
+		
+		return dashboardPageStr;
 	}//examplePage
 	
 	/**

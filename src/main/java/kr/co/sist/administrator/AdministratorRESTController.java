@@ -45,13 +45,14 @@ public class AdministratorRESTController {
 				if(passStr.contains("pass")) {
 					if(as.getPassById(lDTO.getId()).equals(lDTO.getPass())) {returnVal="initialIssue";}
 					else {//애초에 비밀번호가 틀린거
-						throw new Exception();}//end if~else
+							throw new Exception();
+						}//end if~else
 				}else {
 			
 					//아이디가 존재 //그러면 flag값이 true겠지.
 					flag=as.chkLogin(lDTO.getId(),lDTO.getPass());
 					
-					//System.out.println("flag----------------"+flag);
+//					System.out.println("flag----------------"+flag);
 					
 					if(flag) {
 						//로그인 성공
@@ -67,13 +68,17 @@ public class AdministratorRESTController {
 						
 			
 					}else {
-						//System.out.println("exception 발생!!!");
+						System.out.println("exception 발생!!!");
 						throw new Exception();
 						
 					}//end if~else
 				}//end if~else
-			}//end if
-		}//end if
+			}//end if //statusId != 0
+		}//end if //httpSession != null
+		
+		
+//		System.out.println("returnVal-----------------REsetConstolrler "+returnVal);
+		
 		return returnVal;
 	}//loginChk
 	

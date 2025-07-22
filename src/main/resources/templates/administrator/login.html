@@ -118,13 +118,13 @@ $(function(){
 <div  id="login">
 
 <div class="loginFormContainer">
-<div class="inputBoxFirst inputBoxDiv"><span>아이디</span><input type="text" v-model="jsonLoginObj.id" class="inputBox"/></div>
-<div class="inputBoxSecond inputBoxDiv"><span>비밀번호</span><input type="password" v-model="jsonLoginObj.pass" class="inputBox" @keyup.enter="loginChk"/></div>
+<div class="inputBoxFirst inputBoxDiv"><span>아이디</span><input type="text" v-model="jsonLoginObj.id" class="inputBox" @focus="initLoginValue"/></div>
+<div class="inputBoxSecond inputBoxDiv"><span>비밀번호</span><input type="password" v-model="jsonLoginObj.pass" class="inputBox" @keyup.enter="loginChk" @focus="initLoginValue"/></div>
 
 <div class="inputBoxDiv"><span></span><input type="button" value="로그인" class="loginBtn" @Click="loginChk"/></div>
 </div>
 
-<div id="loginResult">{{resultMsg}}</div>
+<div id="loginResult" style="margin-left:95px; ">{{resultMsg}}</div>
 </div>
 
 
@@ -153,6 +153,8 @@ Vue.createApp({
                 }else if(res.data === "initialIssue"){
                     alert("초기 비밀번호를 변경해주세요.");
                     location.href="/admin/resetPassword";
+                }else if(res.data==="fail"){
+                    this.resultMsg="아이디와 비밀번호가 일치하지 않습니다.";
                 }
             })
             .catch(err=>{
@@ -161,6 +163,13 @@ Vue.createApp({
                 this.resultMsg="아이디와 비밀번호가 일치하지 않습니다.";
             });
         },
+        initLoginValue(){
+            if(this.resultMsg !== ""){
+                this.jsonLoginObj.id = "";
+                this.jsonLoginObj.pass = "";
+                this.resultMsg = "";
+            }
+        }
     }
 }).mount("#login");
 </script>

@@ -29,10 +29,15 @@ public class PageAuthorityInterceptor implements HandlerInterceptor{
 		
 		/*접근 URL 받아오기*/
 		String url=request.getRequestURI();
-		System.out.println("접근 uri-------------------"+url);
+		System.out.println("접근 uri--============================-----------------"+url);
 		//Map으로 권한하고 mapping을 해서 그걸로 비교하는 method를 작성해야 함.
+		
 		chkAuthStatus=as.chkHaveAuthority(sessionIdStr, url);
-		System.out.println("checkauthoroitystats -------"+chkAuthStatus);
+		
+		System.out.println("checkauthoroitystats --================================-----"+chkAuthStatus);
+		
+		
+		
 		if(!chkAuthStatus) {
 			//권한이 없으니까 보내야지.
 			response.sendRedirect("/admin/noAuthor"); //이거 때문에, 이 요청은 여기서 끝난것.

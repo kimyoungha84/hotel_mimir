@@ -5,6 +5,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 
 @Controller
@@ -22,10 +23,24 @@ public class AdminController {
 	 * @return 
 	 */
 	@GetMapping("/admin")
-	public String admin() {
+	public String admin(HttpServletRequest request) {
 
-	
-		return "administrator/index";
+		String dashboardPageStr="administrator/index";
+		
+		String session_id=(String)request.getSession().getAttribute("session_id");
+		String authorityStr=as.getAuthoritybyID(session_id);
+		
+		System.out.println("dashboard=================session-id"+session_id);
+		
+		
+		if(authorityStr.contains("room")) {
+			dashboardPageStr="administrator/dashboard/room_dashboard";
+		}else if(authorityStr.contains("dinning")) {
+			dashboardPageStr="administrator/dashboard/dining_dashboard";
+		}//end if~else
+		
+		
+		return dashboardPageStr;
 	}//admin
 	
 	
@@ -73,9 +88,28 @@ public class AdminController {
 	
 	
 
+	/*객실 메인일 때 나오는 페이지*/
+	@GetMapping("/admin/roomDashboard")
+	public String roomDashBoard(HttpSession session, Model model) {
+		
+		
+		model.addAttribute("session_id",session.getAttribute("session_id"));
+		model.addAttribute("session_name",session.getAttribute("session_name"));
+		
+		return "administrator/dashboard/room_dashboard";
+	}//roomDashBoard
 
 	
-	
+	/*다이닝 메인일 때 나오는 페이지*/
+	@GetMapping("/admin/diningDashboard")
+	public String diningDashBoard(HttpSession session, Model model) {
+		
+		
+		model.addAttribute("session_id",session.getAttribute("session_id"));
+		model.addAttribute("session_name",session.getAttribute("session_name"));
+		
+		return "administrator/dashboard/dining_dashboard";
+	}//roomDashBoard
 
 	
 	

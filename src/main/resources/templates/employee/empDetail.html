@@ -107,7 +107,7 @@ window.onload = function() {
 </tr>
 <tr>
     <th>권한</td>
-    <td></td>
+    <td th:text="${staffDomain.permission_str_kor}"></td>
 </tr>
 <tr>
     <th>상태</td>
@@ -125,7 +125,7 @@ window.onload = function() {
 </table>
 
 <div>
-<input type="button" value="로그 기록 보기" class="radiusBtn" style="background-color: #c1c1c1;  margin-top: 2rem; float:none;display: flex; justify-content: center;"/>
+<input type="button" value="로그 기록 보기" class="radiusBtn" style="background-color: #c1c1c1;  margin-top: 5rem; float:none;display: flex; justify-content: center; margin:0px auto"/>
 </div>
 <div class="btnGroup" style="margin-left:50rem;">
 <input type="button" class="darkBtn" value="수정" id="modifyBtn" @click="modifyBtn"/>
