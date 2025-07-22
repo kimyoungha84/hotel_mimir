@@ -26,6 +26,10 @@
 		VALUES (#{userNum}, #{userName}, #{userTel}, sysdate ,#{userEmail})
 	</insert>
 	
+	<insert id="insertNonMember2" parameterType="kr.co.sist.diningresv.DiningResvDTO">
+		INSERT INTO NON_MEMBER (NON_MEM_ID, NON_MEM_NAME, NON_MEM_TEL, NON_MEM_REG_DATE, NON_MEM_EMAIL)
+		VALUES (#{userNum}, #{userName}, #{userTel}, sysdate ,#{userEmail})
+	</insert>
 
 	<update id="updateNonMember" parameterType="kr.co.sist.nonmember.NonMemberDTO">
 	  UPDATE faq

@@ -29,6 +29,13 @@
 		#{paymentType}, #{paymentStatus})
 	</insert>
 	
+	<insert id="insertPayment2" parameterType="kr.co.sist.diningresv.DiningResvDTO">
+		INSERT INTO payment (PAYMENT_ID, PAYMENT_PRICE,
+		 PAYMENT_TYPE, PAYMENT_STATUS)
+		VALUES (#{paymentId}, #{paymentPrice}, 
+		#{paymentType}, #{paymentStatus})
+	</insert>
+	
 	<update id="updatePayment" parameterType="kr.co.sist.payment.PaymentDTO">
 	  UPDATE faq
 	  SET faq_title = #{faq_title},

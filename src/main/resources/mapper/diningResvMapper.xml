@@ -79,6 +79,23 @@
     WHERE R.RESERVATION_ID = #{reservationId}
   </select>
   
+  <select id="selectResvSeq" resultType="int">
+    SELECT DINING_RESERVATION_SEQ.NEXTVAL FROM DUAL
+  </select>
+
+  <insert id="insertDiningResv" parameterType="kr.co.sist.diningresv.DiningResvDTO">
+    INSERT INTO DINING_RESERVATION (
+        RESERVATION_ID, DINING_ID, USER_NUM, PAYMENT_ID, NON_MEM_ID,
+        RESERVATION_TYPE, RESERVATION_NAME, RESERVATION_DATE, RESERVATION_TIME,
+        RESERVATION_COUNT, RESERVATION_REQUEST, RESERVATION_TELL, RESERVATION_STATUS
+    )
+    VALUES (
+        #{reservationId}, #{diningId}, #{userNum}, #{paymentId}, #{nonMemId},
+        #{reservationType}, #{reservationName}, #{reservationDate}, #{reservationTime},
+        #{reservationCount}, #{reservationRequest}, #{reservationTell}, #{reservationStatus}
+    )
+</insert>
+  
   <update id="updateResvInfo" parameterType="kr.co.sist.diningresv.DiningResvDTO">
     UPDATE DINING_RESERVATION
     SET

@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
 
+import kr.co.sist.diningresv.DiningResvDTO;
 import kr.co.sist.resvroom.ReservationDTO;
 
 @Mapper
@@ -18,4 +19,5 @@ public interface NonMemberMapper {
     
     public void updateNonMember(NonMemberDTO nonDTO);
    
+    public void insertNonMember2(DiningResvDTO dto);
 }

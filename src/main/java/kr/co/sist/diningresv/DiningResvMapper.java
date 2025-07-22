@@ -20,4 +20,8 @@ public interface DiningResvMapper {
 	
 	int updateResvInfo(DiningResvDTO dto);
 	
+	public int selectResvSeq();
+	
+	int insertDiningResv(DiningResvDTO dto);
+	
 }

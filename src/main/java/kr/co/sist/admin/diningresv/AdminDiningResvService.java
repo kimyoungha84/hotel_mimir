@@ -18,13 +18,13 @@ public class AdminDiningResvService {
 		
 		return drm.selectAllResv();
 		
-	};
+	}
 	
 	public DiningResvDTO selectResvId(int reservationId) {
 		
 		return drm.selectResvId(reservationId);
 		
-	};
+	}
 	
     public DiningResvDTO resvDetail(int reservationId) {
     	

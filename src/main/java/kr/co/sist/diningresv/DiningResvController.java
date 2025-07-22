@@ -35,7 +35,7 @@ public class DiningResvController {
     }
     
     @GetMapping("diningResvComplete")
-    public String diningResvMain() {
+    public String diningResvComplete() {
     	
     	return "dining_resv/dining_next_resv/diningResvComplete";
     	

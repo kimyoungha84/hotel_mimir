@@ -25,4 +25,22 @@ public class DiningResvService {
 		
 	}
 	
+	public DiningResvDTO selectResvId(int reservationId) {
+		
+		return drm.selectResvId(reservationId);
+		
+	}
+	
+	public int searchResvSeq(){
+		
+		return drm.selectResvSeq();
+		
+	}
+	
+    public void insertDiningResv(DiningResvDTO dto) {
+    	
+        drm.insertDiningResv(dto);
+        
+    }
+	
 }

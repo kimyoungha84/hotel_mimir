@@ -21,17 +21,17 @@
     <div class="info-row">
       <span>예약번호</span>
       <span class="info-colon">:</span>
-      <span class="info-value italic" th:text="${resvId}"></span>
+      <span class="info-value italic" th:text="${reservationId}"></span>
     </div>
     <div class="info-row">
       <span>예약자</span>
       <span class="info-colon">:</span>
-      <span class="info-value" th:text="${resvName}"></span>
+      <span class="info-value" th:text="${reservationName}"></span>
     </div>
     <div class="info-row">
       <span>휴대전화</span>
       <span class="info-colon">:</span>
-      <span class="info-value italic" th:text="${resvTel}"></span>
+      <span class="info-value italic" th:text="${reservationTell}"></span>
     </div>
     <div class="info-row">
       <span>다이닝</span>
@@ -41,14 +41,14 @@
     <div class="info-row">
       <span>인원</span>
       <span class="info-colon">:</span>
-      <span class="info-value" th:text="${resvCnt} + '명'"></span>
+      <span class="info-value" th:text="${reservationCount} + '명'"></span>
     </div>
     <div class="info-row">
       <span>예약 일시</span>
       <span class="info-colon">:</span>
       <span class="info-value italic"> 
       <span class="meal-txt" th:text="${mealLabel}"></span>
-      <span class="date-txt" th:text="${formattedDate} + ' ' + ${time}"></span>
+      <span class="date-txt" th:text="${reservationDate} + ' ' + ${reservationTime}"></span>
       </span>
     </div>
   </div>

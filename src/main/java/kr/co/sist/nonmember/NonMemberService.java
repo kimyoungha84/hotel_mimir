@@ -3,6 +3,7 @@ package kr.co.sist.nonmember;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import kr.co.sist.diningresv.DiningResvDTO;
 import kr.co.sist.resvroom.ReservationDTO;
 
 @Service
@@ -19,5 +20,9 @@ public class NonMemberService {
 	public int searchNonMemberSeq() {
 		return nmm.selectNonMemberSeq();
 	}
+	
+    public void insertNonMember2(DiningResvDTO dto) {
+        nmm.insertNonMember2(dto);
+    }
 
 }//class

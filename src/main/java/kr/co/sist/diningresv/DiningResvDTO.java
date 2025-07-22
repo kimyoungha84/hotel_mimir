@@ -15,6 +15,7 @@ public class DiningResvDTO {
 	private int reservationId;
 	private String reservationName;
 	private String reservationTell;
+	private String reservationEmail;
 	private Date reservationDate;
 	private String mealType;
 	private Time reservationTime;
@@ -34,8 +35,11 @@ public class DiningResvDTO {
 	private int nonMemId;
 	private String nonMemName;
 	private String nonMemTel;
+	private String nonMemEmail;
 	
 	private int paymentId;  
 	private int paymentPrice;  
+	private String paymentType;  
+	private String paymentStatus;  
 
 }

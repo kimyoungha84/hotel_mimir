@@ -23,17 +23,17 @@
       <div class="input-inner">
         <div class="input-item">
           <label>성명<span class="required-star">*</span></label>
-          <input type="text" name="name" class="input-field" placeholder="성명 입력"/>
+          <input type="text" name="reservationName" class="input-field" placeholder="성명 입력"/>
           <div class="error-message">성명을 입력해주세요.</div>
         </div>
         <div class="input-item">
           <label>이메일<span class="required-star">*</span></label>
-          <input type="email" name="email" class="input-field" placeholder="이메일 입력"/>
+          <input type="email" name="reservationEmail" class="input-field" placeholder="이메일 입력"/>
           <div class="error-message">이메일 주소를 입력해주세요.</div>
         </div>
         <div class="input-item">
           <label>연락처<span class="required-star">*</span></label>
-          <input type="tel" name="tel" class="input-field" placeholder="연락처 입력"/>
+          <input type="tel" name="reservationTell" class="input-field" placeholder="연락처 입력"/>
           <div class="error-message">연락처를 입력해주세요.</div>
         </div>
       </div>
@@ -48,7 +48,7 @@
         <div class="request-content" id="requestContent" style="display:none;">
           <div class="request-label">요청 내용</div>
           <div class="request-box">
-            <input type="text" id="request" name="request" placeholder="예약 시 문의사항이나 추가 요청사항이 있으시면 입력해주세요." class="request-input"/>
+            <input type="text" id="request" name="reservationRequest" placeholder="예약 시 문의사항이나 추가 요청사항이 있으시면 입력해주세요." class="request-input"/>
           </div>
           <div class="request-tip">* 자세한 내용은 업장으로 문의하시면 빠른 답변을 받으실 수 있습니다.</div>
           <div class="request-tip">* 외국에서 오시는 고객의 경우, 로밍된 연락처나 추가로 가능한 수단을 입력해주세요.</div>
@@ -241,15 +241,33 @@
     </div>
 
     <div class="next-txt">
-      <a href="#" class="next-btn disabled" aria-disabled="true"><span>결제</span></a>
+      <input type="hidden" name="adult" th:value="${adult}" />
+  	  <input type="hidden" name="child" th:value="${child}" />
+  	  <input type="hidden" name="date" th:value="${date}" />
+  	  <input type="hidden" name="time" th:value="${time}" />
+  	  <input type="hidden" name="meal" th:value="${meal}" />
+  	  <input type="hidden" name="diningId" th:value="${diningId}" />
+      <button type="submit" class="next-btn disabled" aria-disabled="true"><span>결제</span></button>
     </div>
+    
   </div>
-  
 </div>
 
   <div th:replace="~{/dining_resv/popup/diningPopup3}"></div>
 
   <script th:src="@{/dining_resv/js/diningNextResv.js}"></script>
+
+<script>
+document.querySelector(".field-btn").addEventListener("click", function() {
+    document.querySelector("#paymentType").value = "현장결제";
+    document.querySelector("form").submit();
+});
+
+document.querySelector(".online-btn").addEventListener("click", function() {
+    document.querySelector("#paymentType").value = "온라인결제";
+    document.querySelector("form").submit();
+});
+</script>
 
 </body>
 </html>
