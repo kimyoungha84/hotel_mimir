@@ -4,16 +4,22 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import kr.co.sist.dining.user.DiningDomain;
+
 @Controller
 public class DiningNextResvController {
 	
+    @Autowired
+    private DiningResvService drs;
+	
 	@GetMapping("/diningNextResv")
-	public String nextReservation(@RequestParam String dining,
+	public String nextReservation(@RequestParam("dining") int diningId,
 	                              @RequestParam int adult,
 	                              @RequestParam int child,
 	                              @RequestParam String date,
@@ -36,8 +42,10 @@ public class DiningNextResvController {
             case "Dinner" -> "Dinner (17:30~22:00)";
             default -> meal;
         };
+        
+        DiningDomain diningInfo = drs.searchDining(diningId);
 		
-	    model.addAttribute("dining", dining);
+	    model.addAttribute("dining", diningInfo.getDining_name());
 	    model.addAttribute("adult", adult);
 	    model.addAttribute("child", child);
 	    model.addAttribute("date", date);

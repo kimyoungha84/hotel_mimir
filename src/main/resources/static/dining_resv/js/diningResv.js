@@ -89,11 +89,12 @@ document.addEventListener("DOMContentLoaded", function () {
   document.querySelector(".dining-select-btn").addEventListener("click", () => {
     if (selectedItem) {
       const name = selectedItem.querySelector(".title-txt")?.textContent.trim();
-      if (name) {
-        diningNameBtnSpan.textContent = name;
-        inputDining.value = name;
-      }
-    }
+	  const id = selectedItem.getAttribute("data-id");
+	    if (name && id) {
+	      const newUrl = `${location.pathname}?diningId=${id}`;
+	      location.href = newUrl;
+	    }
+	  }
     document.querySelector(".popup-overlay01").style.display = "none";
     document.querySelector(".dining-popup").style.display = "none";
   });
