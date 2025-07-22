@@ -20,7 +20,7 @@ function connectWebSocket() {
         if (event.data.includes(":read:")) {
             const [roomId, , ids] = event.data.split(":");
             ids.split(",").forEach(id => {
-                $(`#message-${id} .read-badge`).text("읽음");
+                $(`#message-${id} .read-badge`).text("읽음").css("color", "#007bff");
             });
             return;
         }
@@ -140,7 +140,7 @@ $(document).on("click", ".user-item", function() {
                 // is_from_user가 'N'이면 오른쪽(관리자), 'Y'이면 왼쪽(사용자)
                 const isMine = msg.is_from_user === 'N';
                 console.log('[관리자 채팅] staffId:', staffId, 'msg.staff_id:', msg.staff_id, 'is_from_user:', msg.is_from_user, 'isMine:', isMine, 'content:', msg.content);
-                appendChat(isMine ? staffId : msg.user_num, msg.content, isMine, msg.send_time);
+                appendChat(isMine ? staffId : msg.user_num, msg.content, isMine, msg.send_time, msg.is_read, msg.message_id);
             });
             
             // 스크롤을 맨 아래로
@@ -180,7 +180,8 @@ function sendMessage() {
     const msg = $("#messageInput").val();
     if (msg && currentRoomId && ws && ws.readyState === WebSocket.OPEN) {
         ws.send(currentRoomId + ":" + msg);
-        appendChat(staffId, msg, true);
+        // 전송 직후에는 임시로 '안읽음' 뱃지 표시
+        appendChat(staffId, msg, true, undefined, '0');
         $("#messageInput").val("");
         loadUserList(); // 메시지 전송 시 리스트 갱신
     } else if (!currentRoomId) {
@@ -190,12 +191,28 @@ function sendMessage() {
     }
 }
 
+// HTML 태그를 escape하는 함수 (XSS 방지)
+function escapeHtml(str) {
+  return String(str)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/\"/g, "&quot;")
+    .replace(/'/g, "&#39;");
+}
+
 // 채팅 출력
 function appendChat(user, msg, isMine, timestamp, isRead, messageId) {
     const time = timestamp ? formatTime(timestamp) : new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-    const formattedMsg = msg.replace(/\n/g, "<br>");
+    // HTML escape 적용
+    const formattedMsg = escapeHtml(msg).replace(/\n/g, "<br>");
     const block = $("<div>").addClass("message-block").addClass(isMine ? "right" : "left").attr("id", messageId ? `message-${messageId}` : undefined);
     const message = $("<div>").addClass("chat-message").addClass(isMine ? "right" : "left").html(formattedMsg);
+    // isMine(관리자 메시지)면 읽음/안읽음 뱃지 표시
+    if (isMine) {
+      const badge = $("<span>").addClass("read-badge").text(isRead === '1' ? "읽음" : "안읽음").css({"margin-left":"8px","font-size":"12px","color":isRead==='1'?"#007bff":"#aaa"});
+      message.append(badge);
+    }
     const timeElem = $("<div>").addClass("message-time").text(time);
     block.append(message).append(timeElem);
     $("#chatBody").append(block).scrollTop($("#chatBody")[0].scrollHeight);

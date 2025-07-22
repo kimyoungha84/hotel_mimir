@@ -24,4 +24,17 @@
         SELECT COUNT(*) FROM chat_message WHERE room_id = #{room_id} AND staff_id = #{staff_id} AND is_read = '0'
     </select>
 
+    <!-- 5. 안읽은 메시지들을 읽음 처리하고, 그 id 리스트를 반환 -->
+    <select id="markAsReadAndReturnIds" resultType="int">
+        <![CDATA[
+        WITH updated AS (
+            UPDATE chat_message
+            SET is_read = '1'
+            WHERE room_id = #{room_id} AND staff_id = #{staff_id} AND is_read = '0'
+            RETURNING message_id
+        )
+        SELECT message_id FROM updated
+        ]]>
+    </select>
+
 </mapper> 

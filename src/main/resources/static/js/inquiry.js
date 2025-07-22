@@ -69,6 +69,30 @@ $(document).ready(function() {
     return `${h}:${m}`;
   }
 
+  // HTML 태그를 escape하는 함수 (XSS 방지)
+  function escapeHtml(str) {
+    return String(str)
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/\"/g, "&quot;")
+      .replace(/'/g, "&#39;");
+  }
+
+  // 문의 유형 버튼 HTML 반환 함수 (초기화/재사용)
+  function getChatOptionsHtml() {
+    return `
+      <p style="text-align: center; color: #0000FF;">상담 시간 10:00 ~17:00</p>
+      <p style="text-align: center; font-size: 13px; color: #FF0000;">※욕설금지 = 관리자도 누군가의 자녀이자 부모님이다.※</p>
+      <p style="text-align: center; color: #aaa;">문의 유형을 선택해주세요</p>
+      <div class="chat-options">
+        <button class="chat-option" data-type="0">객실 문의</button>
+        <button class="chat-option" data-type="1">다이닝 문의</button>
+        <button class="chat-option" data-type="2">일반 문의</button>
+      </div>
+    `;
+  }
+
   // ===== 채팅 관련 변수 =====
   let isOpen = false; // 채팅창 열림/닫힘 상태
   let currentRoomId = null; // 현재 채팅방 ID
@@ -91,7 +115,7 @@ $(document).ready(function() {
       if (event.data.includes(":read:")) {
         const [roomId, , ids] = event.data.split(":");
         ids.split(",").forEach(id => {
-          $(`#message-${id} .read-badge`).text("읽음");
+          $(`#message-${id} .read-badge`).text("읽음").css("color", "#007bff");
         });
         return;
       }
@@ -100,7 +124,8 @@ $(document).ready(function() {
       if (roomId == currentRoomId) {
         const isMine = sender == userNum;
         const alignClass = isMine ? "right" : "left";
-        const formattedMsg = msg.replace(/\n/g, "<br>");
+        // HTML escape 적용
+        const formattedMsg = escapeHtml(msg).replace(/\n/g, "<br>");
         const messageBlock = $("<div>").addClass("message-block " + alignClass);
         if (!isMine) {
           const timeElem = $("<div>").addClass("message-time").text(getCurrentTime());
@@ -108,6 +133,9 @@ $(document).ready(function() {
           messageBlock.append(msgElem, timeElem);
         } else {
           const msgElem = $("<div>").addClass("chat-message right").html(formattedMsg);
+          // 전송 직후에는 임시로 '안읽음' 뱃지 표시 (id는 없으므로 나중에 읽음 이벤트 오면 최신 메시지에 적용)
+          const badge = $("<span>").addClass("read-badge").text("안읽음").css({"margin-left":"8px","font-size":"12px","color":"#aaa"});
+          msgElem.append(badge);
           messageBlock.append(msgElem);
         }
         $("#chatBody").append(messageBlock).scrollTop($("#chatBody")[0].scrollHeight);
@@ -165,28 +193,32 @@ $(document).ready(function() {
         messages.forEach(function(msg) {
           // is_from_user가 'Y'면 오른쪽(사용자), 'N'이면 왼쪽(관리자)
           const isMine = msg.is_from_user === 'Y';
-          console.log('[사용자 채팅] userNum:', userNum, 'msg.user_num:', msg.user_num, 'is_from_user:', msg.is_from_user, 'isMine:', isMine, 'content:', msg.content);
           const alignClass = isMine ? "right" : "left";
-          const messageBlock = $("<div>").addClass("message-block " + alignClass);
-          const formattedMsg = msg.content.replace(/\n/g, "<br>");
+          // HTML escape 적용
+          const formattedMsg = escapeHtml(msg.content).replace(/\n/g, "<br>");
+          const messageBlock = $("<div>").addClass("message-block " + alignClass).attr("id", msg.message_id ? `message-${msg.message_id}` : undefined);
           const message = $("<div>").addClass("chat-message " + alignClass).html(formattedMsg);
-          if (!isMine) {
+          if (isMine) {
+            // 사용자 메시지: 읽음/안읽음 뱃지 표시
+            const badge = $("<span>").addClass("read-badge").text(msg.is_read === '1' ? "읽음" : "안읽음").css({"margin-left":"8px","font-size":"12px","color":msg.is_read==='1'?"#007bff":"#aaa"});
+            message.append(badge);
+            messageBlock.append(message);
+          } else {
             const timeElem = $("<div>").addClass("message-time").text(formatTime(msg.send_time));
             messageBlock.append(message, timeElem);
-          } else {
-            messageBlock.append(message);
           }
           $("#chatBody").append(messageBlock);
         });
         $("#chatBody").scrollTop($("#chatBody")[0].scrollHeight);
+        // 메시지 불러온 후 읽음 처리
+        $.ajax({
+          url: '/api/chat/read',
+          method: 'POST',
+          data: { room_id: roomId },
+          xhrFields: { withCredentials: true }
+        });
       },
       error: function(xhr) {
-        if (xhr.status === 401) {
-          alert('로그인이 필요합니다.');
-          location.href = '/member/loginFrm';
-        } else {
-          alert('메시지 조회 중 오류가 발생했습니다.');
-        }
       }
     });
   }
@@ -209,10 +241,15 @@ $(document).ready(function() {
     }
     if (msg !== "" && currentRoomId && ws && ws.readyState === WebSocket.OPEN) {
       const msgElem = $("<div>").addClass("message-block right");
-      const formattedMsg = msg.replace(/\n/g, "<br>");
+      // HTML escape 적용
+      const formattedMsg = escapeHtml(msg).replace(/\n/g, "<br>");
       const message = $("<div>").addClass("chat-message right").html(formattedMsg);
+      // 전송 직후에는 임시로 '안읽음' 뱃지 표시
+      const badge = $("<span>").addClass("read-badge").text("안읽음").css({"margin-left":"8px","font-size":"12px","color":"#aaa"});
+      message.append(badge);
+      msgElem.append(message);
       const timeElem = $("<div>").addClass("message-time").text(getCurrentTime());
-      msgElem.append(message, timeElem);
+      msgElem.append(timeElem);
       $("#chatBody").append(msgElem).scrollTop($("#chatBody")[0].scrollHeight);
       ws.send(currentRoomId + ':' + msg);
       $("#messageInput").val("");
@@ -311,18 +348,8 @@ $(document).ready(function() {
     // 뒤로가기 버튼 클릭 시 채팅방 나가기
     $("#backBtn").off('click').on('click', function() {
       $("#inputArea").hide();
-      $("#chatBody").empty();
-      // 문의 유형 버튼 HTML을 강제로 다시 넣어줌
-      $("#chatOptions").html(`
-        <p style="text-align: center; color: #0000FF;">상담 시간 10:00 ~17:00</p>
-        <p style="text-align: center; font-size: 13px; color: #FF0000;">※욕설금지 = 관리자도 누군가의 자녀이자 부모님이다.※</p>
-        <p style="text-align: center; color: #aaa;">문의 유형을 선택해주세요</p>
-        <div class="chat-options">
-          <button class="chat-option" data-type="0">객실 문의</button>
-          <button class="chat-option" data-type="1">다이닝 문의</button>
-          <button class="chat-option" data-type="2">일반 문의</button>
-        </div>
-      `).show();
+      // 문의 유형 선택 화면을 #chatBody에 새로 렌더링
+      $("#chatBody").html(getChatOptionsHtml());
       if (!userNum) {
         $("#loginCheck").show();
         $("#chatOptions").hide();
