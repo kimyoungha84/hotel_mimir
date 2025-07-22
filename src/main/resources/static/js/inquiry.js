@@ -88,6 +88,13 @@ $(document).ready(function() {
       console.log('WebSocket 연결됨');
     };
     ws.onmessage = function(event) {
+      if (event.data.includes(":read:")) {
+        const [roomId, , ids] = event.data.split(":");
+        ids.split(",").forEach(id => {
+          $(`#message-${id} .read-badge`).text("읽음");
+        });
+        return;
+      }
       // roomId:sender:msg 포맷에 맞게 파싱
       const [roomId, sender, msg] = event.data.split(":", 3);
       if (roomId == currentRoomId) {

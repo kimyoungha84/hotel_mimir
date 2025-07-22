@@ -131,4 +131,17 @@ public class ChatWebSocketHandler extends TextWebSocketHandler {
         }
         return null;
     }
+
+    // Add this method to send read events after marking messages as read
+    public void sendReadEvent(int roomId, String targetId, java.util.List<Integer> messageIds) {
+        WebSocketSession targetSession = userSessions.get(targetId);
+        if (targetSession != null && targetSession.isOpen() && !messageIds.isEmpty()) {
+            String msg = roomId + ":read:" + messageIds.stream().map(String::valueOf).collect(java.util.stream.Collectors.joining(","));
+            try {
+                targetSession.sendMessage(new TextMessage(msg));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
 }

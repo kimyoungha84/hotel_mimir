@@ -17,6 +17,13 @@ function connectWebSocket() {
     };
     
     ws.onmessage = function(event) {
+        if (event.data.includes(":read:")) {
+            const [roomId, , ids] = event.data.split(":");
+            ids.split(",").forEach(id => {
+                $(`#message-${id} .read-badge`).text("읽음");
+            });
+            return;
+        }
         // roomId:sender:msg 형태로 분리
         const [roomId, sender, msg] = event.data.split(":", 3);
         // 현재 선택된 방과 일치할 때만 appendChat
@@ -184,18 +191,14 @@ function sendMessage() {
 }
 
 // 채팅 출력
-function appendChat(user, msg, isMine, timestamp) {
+function appendChat(user, msg, isMine, timestamp, isRead, messageId) {
     const time = timestamp ? formatTime(timestamp) : new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
     const formattedMsg = msg.replace(/\n/g, "<br>");
-
-    const block = $("<div>").addClass("message-block").addClass(isMine ? "right" : "left");
+    const block = $("<div>").addClass("message-block").addClass(isMine ? "right" : "left").attr("id", messageId ? `message-${messageId}` : undefined);
     const message = $("<div>").addClass("chat-message").addClass(isMine ? "right" : "left").html(formattedMsg);
     const timeElem = $("<div>").addClass("message-time").text(time);
-
     block.append(message).append(timeElem);
-
-    $("#chatBody").append(block);
-    $("#chatBody").scrollTop($("#chatBody")[0].scrollHeight);
+    $("#chatBody").append(block).scrollTop($("#chatBody")[0].scrollHeight);
 }
 
 // 시간 포맷팅 (DB timestamp)
