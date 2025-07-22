@@ -112,7 +112,7 @@ public class DiningNextResvController {
 	    // ✅ 회원 / 비회원 분기
 	    if (loginUser != null) {
 	        // 🟢 회원일 경우
-	        dto.setUserNum(loginUser.getUser().getUserNum()); // 또는 loginUser.getUserNum()
+	        dto.setUserNum(loginUser.getUserNum());
 	        dto.setReservationType("회원");
 	    } else {
 	        // 🔵 비회원일 경우
