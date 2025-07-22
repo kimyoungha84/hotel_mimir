@@ -52,38 +52,4 @@ public class AdminChatController {
             return ResponseEntity.status(500).body(Map.of("error", "메시지 조회 중 오류가 발생했습니다."));
         }
     }
-    
-    /**
-     * 메시지 읽음 처리
-     */
-    @PostMapping("/read")
-    public ResponseEntity<?> markMessagesAsRead(@RequestParam int room_id, HttpServletRequest request) {
-        String staff_id = (String)request.getSession().getAttribute("session_id");
-        if (staff_id == null) {
-            return ResponseEntity.status(401).body(Map.of("error", "로그인이 필요합니다."));
-        }
-        try {
-            chatService.markMessagesAsRead(room_id, staff_id);
-            return ResponseEntity.ok(Map.of("message", "읽음 처리 완료"));
-        } catch (Exception e) {
-            return ResponseEntity.status(500).body(Map.of("error", "읽음 처리 중 오류가 발생했습니다."));
-        }
-    }
-    
-    /**
-     * 안읽은 메시지 개수 조회
-     */
-    @GetMapping("/unread-count")
-    public ResponseEntity<?> getUnreadCount(@RequestParam int room_id, HttpServletRequest request) {
-        String staff_id = (String)request.getSession().getAttribute("session_id");
-        if (staff_id == null) {
-            return ResponseEntity.status(401).body(Map.of("error", "로그인이 필요합니다."));
-        }
-        try {
-            int count = chatService.countUnreadByRoomAndStaff(room_id, staff_id);
-            return ResponseEntity.ok(Map.of("count", count));
-        } catch (Exception e) {
-            return ResponseEntity.status(500).body(Map.of("error", "안읽은 메시지 조회 중 오류가 발생했습니다."));
-        }
-    }
 } 

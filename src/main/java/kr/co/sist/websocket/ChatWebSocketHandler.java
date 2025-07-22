@@ -86,11 +86,12 @@ public class ChatWebSocketHandler extends TextWebSocketHandler {
             chatMsg.setDept_iden(room.getDept_iden());
             chatMsg.setContent(msg);
             chatMsg.setSend_time(new Timestamp(System.currentTimeMillis()));
+            chatMsg.setIs_read("0"); // 항상 0으로 저장
             // 채팅방에 2명 이상 접속 중이면 읽음, 아니면 안읽음
-            Set<String> sessions = roomSessions.get(roomId);
-            boolean bothInRoom = sessions != null && sessions.size() > 1;
-            chatMsg.setIs_read(bothInRoom ? "1" : "0");
-            System.out.println("[채팅메시지 저장] sender=" + sender + ", isUser=" + isUser + ", room.getUser_num()=" + room.getUser_num() + ", chatMsg.getUser_num()=" + chatMsg.getUser_num() + ", is_read=" + chatMsg.getIs_read());
+            // Set<String> sessions = roomSessions.get(roomId);
+            // boolean bothInRoom = sessions != null && sessions.size() > 1;
+            // chatMsg.setIs_read(bothInRoom ? "1" : "0");
+            // System.out.println("[채팅메시지 저장] sender=" + sender + ", isUser=" + isUser + ", room.getUser_num()=" + room.getUser_num() + ", chatMsg.getUser_num()=" + chatMsg.getUser_num() + ", is_read=" + chatMsg.getIs_read());
             chatMessageMapper.insert(chatMsg);
             // 3. 상대방 세션에 전달
             String targetId;
@@ -125,13 +126,16 @@ public class ChatWebSocketHandler extends TextWebSocketHandler {
 
     private String getUserId(WebSocketSession session) {
         String query = session.getUri().getQuery();
-        if (query != null && query.startsWith("userId=")) {
-            String id = query.split("=")[1];
-            // 쌍따옴표가 있으면 제거
-            if (id.startsWith("\"") && id.endsWith("\"")) {
-                id = id.substring(1, id.length() - 1);
+        if (query != null) {
+            for (String param : query.split("&")) {
+                if (param.startsWith("userId=")) {
+                    String id = param.substring("userId=".length());
+                    if (id.startsWith("\"") && id.endsWith("\"")) {
+                        id = id.substring(1, id.length() - 1);
+                    }
+                    return id;
+                }
             }
-            return id;
         }
         return null;
     }
@@ -143,7 +147,7 @@ public class ChatWebSocketHandler extends TextWebSocketHandler {
             for (String param : query.split("&")) {
                 if (param.startsWith("roomId=")) {
                     try {
-                        return Integer.parseInt(param.split("=")[1]);
+                        return Integer.parseInt(param.substring("roomId=".length()));
                     } catch (Exception e) { return null; }
                 }
             }
@@ -152,21 +156,6 @@ public class ChatWebSocketHandler extends TextWebSocketHandler {
     }
 
     // Add this method to send read events after marking messages as read
-    public void sendReadEvent(int roomId, String targetId, java.util.List<Integer> messageIds) {
-        WebSocketSession targetSession = userSessions.get(targetId);
-        if (targetSession != null && targetSession.isOpen() && !messageIds.isEmpty()) {
-            String msg = roomId + ":read:" + messageIds.stream().map(String::valueOf).collect(java.util.stream.Collectors.joining(","));
-            try {
-                targetSession.sendMessage(new TextMessage(msg));
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
-    // 읽음 처리 + 읽음 메시지 id를 상대방에게 전송
-    public void markMessagesAsReadAndNotify(int roomId, String staffId, String targetId) {
-        List<Integer> updatedMsgIds = chatMessageMapper.markAsReadAndReturnIds(roomId, staffId);
-        sendReadEvent(roomId, targetId, updatedMsgIds);
-    }
+    // public void sendReadEvent(int roomId, String targetId, java.util.List<Integer> messageIds) { ... }
+    // public void markMessagesAsReadAndNotify(int roomId, String staffId, String targetId) { ... }
 }

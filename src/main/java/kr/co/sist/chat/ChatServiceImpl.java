@@ -90,12 +90,6 @@ public class ChatServiceImpl implements ChatService {
     }
 
     @Override
-    // 메시지 읽음 처리
-    public void markMessagesAsRead(int room_id, String staff_id) {
-        chatMessageMapper.markAsRead(room_id, staff_id);
-    }
-
-    @Override
     // staff_id로 담당 채팅방 리스트 조회
     public List<ChatRoomDTO> getRoomsByStaffId(String staff_id) {
         return chatRoomMapper.findRoomsByStaffId(staff_id);
@@ -105,12 +99,5 @@ public class ChatServiceImpl implements ChatService {
     // user_num으로 사용자의 채팅방 리스트 조회
     public List<ChatRoomDTO> getRoomsByUserId(int user_num) {
         return chatRoomMapper.findRoomsByUserId(user_num);
-    }
-
-    @Override
-    // 안읽은 메시지 개수 반환
-    public int countUnreadByRoomAndStaff(int room_id, String staff_id) {
-        // 특정 방, 특정 staff_id 기준 안읽은 메시지 개수 반환
-        return chatMessageMapper.countUnreadByRoomAndStaff(room_id, staff_id);
     }
 }

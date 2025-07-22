@@ -60,6 +60,7 @@ public class ChatController {
         Integer userNum = userDetails.getUserNum();
         try {
             List<ChatMessageDTO> messages = chatService.getMessagesByRoomId(room_id);
+            // is_read 관련 필드/값 제거
             return ResponseEntity.ok(messages);
         } catch (Exception e) {
             return ResponseEntity.status(500).body(Map.of("error", "메시지 조회 중 오류가 발생했습니다."));

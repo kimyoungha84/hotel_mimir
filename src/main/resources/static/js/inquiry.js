@@ -106,19 +106,15 @@ $(document).ready(function() {
   function connectWebSocket() {
     if (!userNum) return;
     const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
-    const wsUrl = `${protocol}//${window.location.host}/chat?userId=${userNum}`;
+    // roomId가 선택된 경우에만 roomId를 포함
+    const wsUrl = currentRoomId
+      ? `${protocol}//${window.location.host}/chat?userId=${userNum}&roomId=${currentRoomId}`
+      : `${protocol}//${window.location.host}/chat?userId=${userNum}`;
     ws = new WebSocket(wsUrl);
     ws.onopen = function() {
       console.log('WebSocket 연결됨');
     };
     ws.onmessage = function(event) {
-      if (event.data.includes(":read:")) {
-        const [roomId, , ids] = event.data.split(":");
-        ids.split(",").forEach(id => {
-          $(`#message-${id} .read-badge`).text("읽음").css("color", "#007bff");
-        });
-        return;
-      }
       // roomId:sender:msg 포맷에 맞게 파싱
       const [roomId, sender, msg] = event.data.split(":", 3);
       if (roomId == currentRoomId) {
@@ -133,9 +129,6 @@ $(document).ready(function() {
           messageBlock.append(msgElem, timeElem);
         } else {
           const msgElem = $("<div>").addClass("chat-message right").html(formattedMsg);
-          // 전송 직후에는 임시로 '안읽음' 뱃지 표시 (id는 없으므로 나중에 읽음 이벤트 오면 최신 메시지에 적용)
-          const badge = $("<span>").addClass("read-badge").text("안읽음").css({"margin-left":"8px","font-size":"12px","color":"#aaa"});
-          msgElem.append(badge);
           messageBlock.append(msgElem);
         }
         $("#chatBody").append(messageBlock).scrollTop($("#chatBody")[0].scrollHeight);
@@ -200,8 +193,6 @@ $(document).ready(function() {
           const message = $("<div>").addClass("chat-message " + alignClass).html(formattedMsg);
           if (isMine) {
             // 사용자 메시지: 읽음/안읽음 뱃지 표시
-            const badge = $("<span>").addClass("read-badge").text(msg.is_read === '1' ? "읽음" : "안읽음").css({"margin-left":"8px","font-size":"12px","color":msg.is_read==='1'?"#007bff":"#aaa"});
-            message.append(badge);
             messageBlock.append(message);
           } else {
             const timeElem = $("<div>").addClass("message-time").text(formatTime(msg.send_time));
@@ -210,13 +201,7 @@ $(document).ready(function() {
           $("#chatBody").append(messageBlock);
         });
         $("#chatBody").scrollTop($("#chatBody")[0].scrollHeight);
-        // 메시지 불러온 후 읽음 처리
-        $.ajax({
-          url: '/api/chat/read',
-          method: 'POST',
-          data: { room_id: roomId },
-          xhrFields: { withCredentials: true }
-        });
+        // 메시지 불러온 후 읽음 처리 AJAX 삭제
       },
       error: function(xhr) {
       }
@@ -244,9 +229,7 @@ $(document).ready(function() {
       // HTML escape 적용
       const formattedMsg = escapeHtml(msg).replace(/\n/g, "<br>");
       const message = $("<div>").addClass("chat-message right").html(formattedMsg);
-      // 전송 직후에는 임시로 '안읽음' 뱃지 표시
-      const badge = $("<span>").addClass("read-badge").text("안읽음").css({"margin-left":"8px","font-size":"12px","color":"#aaa"});
-      message.append(badge);
+      // 읽음/안읽음 뱃지 표시 부분 삭제
       msgElem.append(message);
       const timeElem = $("<div>").addClass("message-time").text(getCurrentTime());
       msgElem.append(timeElem);
