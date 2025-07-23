@@ -11,8 +11,6 @@ document.addEventListener("DOMContentLoaded", function () {
   const tabTitle = document.getElementById("title");
   const schedulerSection = document.querySelector(".scheduler-content-wrap");
   const selectDayTxt = document.querySelector(".select-day-wrap");
-  const diningNameBtnSpan = document.querySelector(".dining-name-btn span");
-  const inputDining = document.getElementById("inputDining");
   const inputAdult = document.getElementById("inputAdult");
   const inputChild = document.getElementById("inputChild");
   const inputTime = document.getElementById("inputTime");
@@ -29,6 +27,7 @@ document.addEventListener("DOMContentLoaded", function () {
     btnScheduler.classList.add("active");
     btnMenu.classList.remove("active");
     schedulerContent.style.display = "block";
+	if (menuContent) menuContent.style.display = "none";
     menuContent.style.display = "none";
     tabTitle.textContent = "예약일 선택";
     
@@ -40,6 +39,7 @@ document.addEventListener("DOMContentLoaded", function () {
       selectDayTxt.style.display = "block";
   });
 
+if (btnMenu && menuContent) {
   btnMenu.addEventListener("click", () => {
     btnMenu.classList.add("active");
     btnScheduler.classList.remove("active");
@@ -49,7 +49,7 @@ document.addEventListener("DOMContentLoaded", function () {
     schedulerSection.style.display = "none";
     selectDayTxt.style.display = "none";
   });
-
+}
   // 초기 상태 설정
   btnScheduler.classList.add("active");
   schedulerContent.style.display = "block";

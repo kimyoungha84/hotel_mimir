@@ -66,14 +66,14 @@
           <div class="payment-btn">
           	<button class="field-btn" type="button">현장 결제</button>
           </div>
-          <div class="payment-btn">
+          <div class="payment-btn" th:if="${diningId != '2'}">
           	<button class="online-btn" type="button">온라인 결제</button>
           </div>
         </div>
       </div>
     </div>
     
-    <div class="payment-method" id="paymentMethod" style="display: none;">
+    <div class="payment-method" id="paymentMethod" th:if="${diningId != '2'}" style="display: none;">
       <div class="payment-method-btn">
         <button type="button" class="kakao-pay-btn">카카오페이</button>
         <button type="button" class="toss-pay-btn">토스페이</button>
@@ -212,7 +212,7 @@
       <div class="reservation-info01">
         <div class="hotel-name"><span>미미르 호텔</span>
         <button class="dining-name-btn" type="button">
-          <span class="dining-name-txt" th:text="${dining}"></span>
+          <span class="dining-name-txt" th:text="${diningName}"></span>
           <span class="arrow">➤</span>
         </button>
         </div>
@@ -243,21 +243,23 @@
       <div class="reservation-info04">
         <div class="reservation-price"><span>총 금액</span></div>
           <div class="price-txt">
-            <span class="price-num" th:text="${#numbers.formatInteger(totalPrice, 3, 'COMMA')}">0</span>
+            <span class="price-num" th:text="${#numbers.formatInteger(totalPrice, 1, 'COMMA')}">0</span>
             <span class="price-num-txt">원</span>
           </div>
       </div>
     </div>
 
     <div class="next-txt">
-      <input type="hidden" name="paymentType" id="paymentType" value="현장결제" />
-      <input type="hidden" name="paymentPrice" th:value="${totalPrice}" />
+  	  <input type="hidden" name="diningId" th:value="${diningId}" />
+  	  
       <input type="hidden" name="adult" th:value="${adult}" />
   	  <input type="hidden" name="child" th:value="${child}" />
   	  <input type="hidden" name="date" th:value="${date}" />
   	  <input type="hidden" name="time" th:value="${time}" />
   	  <input type="hidden" name="meal" th:value="${meal}" />
-  	  <input type="hidden" name="diningId" th:value="${diningId}" />
+  	  
+      <input type="hidden" name="paymentType" id="paymentType" value="현장결제" />
+      <input type="hidden" name="paymentPrice" th:value="${totalPrice}" />
       <button type="submit" class="next-btn disabled" aria-disabled="true"><span>결제</span></button>
     </div>
     

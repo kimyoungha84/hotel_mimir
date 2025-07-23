@@ -163,7 +163,13 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   reselectBtn.addEventListener("click", () => {
-    window.location.href = "/diningResv";
+    const diningIdInput = document.querySelector('input[name="diningId"]');
+    if (diningIdInput && diningIdInput.value) {
+      const diningId = diningIdInput.value;
+      window.location.href = `/diningResv?diningId=${diningId}`;
+    } else {
+      alert("diningId 정보를 찾을 수 없습니다.");
+    }
   });
 
   // 결제 방법 버튼 클릭

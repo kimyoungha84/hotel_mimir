@@ -26,7 +26,7 @@ public class PageConnectController {
 	public String indexPage(HttpServletRequest request) {
 		String dashboardPageStr="administrator/index";
 		
-		String session_id=(String)request.getAttribute("session_id");
+		String session_id=(String)request.getSession().getAttribute("session_id");
 		String authorityStr=as.getAuthoritybyID(session_id);
 		
 		System.out.println("dashboard=================session-id"+session_id);
