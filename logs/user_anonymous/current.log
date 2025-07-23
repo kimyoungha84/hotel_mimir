@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 00:00:34.693 [restartedMain] INFO  kr.co.sist.HotelMimirApplication - Starting HotelMimirApplication using Java 17.0.3 with PID 19064 (D:\git project\hotel_mimir\target\classes started by zlxl1 in D:\git project\hotel_mimir)
 00:00:34.699 [restartedMain] INFO  kr.co.sist.HotelMimirApplication - The following 1 profile is active: "dev2"
 00:00:34.845 [restartedMain] DEBUG org.mybatis.spring.boot.autoconfigure.MybatisAutoConfiguration - Searching for mappers annotated with @Mapper
@@ -13354,3 +13355,74 @@ This generated password is for development use only. Your security configuration
 16:41:52.200 [http-nio-8080-exec-7] WARN  org.thymeleaf.standard.processor.AbstractStandardFragmentInsertionTagProcessor - [THYMELEAF][http-nio-8080-exec-7][inquiry/inquiry] Deprecated unwrapped fragment expression "fragments/footer :: footerFragment" found in template inquiry/inquiry, line 76, col 7. Please use the complete syntax of fragment expressions instead ("~{fragments/footer :: footerFragment}"). The old, unwrapped syntax for fragment expressions will be removed in future versions of Thymeleaf.
 16:42:05.851 [http-nio-8080-exec-1] WARN  org.thymeleaf.standard.processor.AbstractStandardFragmentInsertionTagProcessor - [THYMELEAF][http-nio-8080-exec-1][inquiry/admin_faq] Deprecated unwrapped fragment expression "fragments/filter :: filter(${filter})" found in template inquiry/admin_faq, line 32, col 27. Please use the complete syntax of fragment expressions instead ("~{fragments/filter :: filter(${filter})}"). The old, unwrapped syntax for fragment expressions will be removed in future versions of Thymeleaf.
 16:42:05.861 [http-nio-8080-exec-1] WARN  org.thymeleaf.standard.processor.AbstractStandardFragmentInsertionTagProcessor - [THYMELEAF][http-nio-8080-exec-1][inquiry/admin_faq] Deprecated unwrapped fragment expression "fragments/pagination :: pagination" found in template inquiry/admin_faq, line 63, col 34. Please use the complete syntax of fragment expressions instead ("~{fragments/pagination :: pagination}"). The old, unwrapped syntax for fragment expressions will be removed in future versions of Thymeleaf.
+=======
+16:45:25.993 [background-preinit] INFO  org.hibernate.validator.internal.util.Version - HV000001: Hibernate Validator 8.0.2.Final
+16:45:26.054 [restartedMain] INFO  kr.co.sist.HotelMimirApplication - Starting HotelMimirApplication using Java 17.0.3 with PID 3752 (C:\dev\workspace\hotel_mimir\target\classes started by user in C:\dev\workspace\hotel_mimir)
+16:45:26.064 [restartedMain] INFO  kr.co.sist.HotelMimirApplication - The following 1 profile is active: "dev"
+16:45:26.115 [restartedMain] INFO  org.springframework.boot.devtools.restart.ChangeableUrls - The Class-Path manifest attribute in C:\Users\user\.m2\repository\com\oracle\database\jdbc\ojdbc11\23.7.0.25.01\ojdbc11-23.7.0.25.01.jar referenced one or more files that do not exist: file:/C:/Users/user/.m2/repository/com/oracle/database/jdbc/ojdbc11/23.7.0.25.01/oraclepki.jar
+16:45:26.115 [restartedMain] INFO  org.springframework.boot.devtools.env.DevToolsPropertyDefaultsPostProcessor - Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+16:45:26.115 [restartedMain] INFO  org.springframework.boot.devtools.env.DevToolsPropertyDefaultsPostProcessor - For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+16:45:27.176 [restartedMain] DEBUG org.mybatis.spring.boot.autoconfigure.MybatisAutoConfiguration - Searching for mappers annotated with @Mapper
+16:45:27.176 [restartedMain] DEBUG org.mybatis.spring.boot.autoconfigure.MybatisAutoConfiguration - Using auto-configuration base package 'kr.co.sist'
+16:45:27.367 [restartedMain] DEBUG org.mybatis.spring.mapper.ClassPathMapperScanner - Identified candidate component class: file [C:\dev\workspace\hotel_mimir\target\classes\kr\co\sist\administrator\AdministratorMapper.class]
+16:45:27.368 [restartedMain] DEBUG org.mybatis.spring.mapper.ClassPathMapperScanner - Identified candidate component class: file [C:\dev\workspace\hotel_mimir\target\classes\kr\co\sist\chat\ChatMessageMapper.class]
+16:45:27.368 [restartedMain] DEBUG org.mybatis.spring.mapper.ClassPathMapperScanner - Identified candidate component class: file [C:\dev\workspace\hotel_mimir\target\classes\kr\co\sist\chat\ChatRoomMapper.class]
+16:45:27.368 [restartedMain] DEBUG org.mybatis.spring.mapper.ClassPathMapperScanner - Identified candidate component class: file [C:\dev\workspace\hotel_mimir\target\classes\kr\co\sist\diningresv\DiningResvMapper.class]
+16:45:27.368 [restartedMain] DEBUG org.mybatis.spring.mapper.ClassPathMapperScanner - Identified candidate component class: file [C:\dev\workspace\hotel_mimir\target\classes\kr\co\sist\dining\user\DiningMapper.class]
+16:45:27.368 [restartedMain] DEBUG org.mybatis.spring.mapper.ClassPathMapperScanner - Identified candidate component class: file [C:\dev\workspace\hotel_mimir\target\classes\kr\co\sist\FAQ\FAQMapper.class]
+16:45:27.368 [restartedMain] DEBUG org.mybatis.spring.mapper.ClassPathMapperScanner - Identified candidate component class: file [C:\dev\workspace\hotel_mimir\target\classes\kr\co\sist\filepath\FilePathMapper.class]
+16:45:27.369 [restartedMain] DEBUG org.mybatis.spring.mapper.ClassPathMapperScanner - Identified candidate component class: file [C:\dev\workspace\hotel_mimir\target\classes\kr\co\sist\member\MemberMapper.class]
+16:45:27.371 [restartedMain] DEBUG org.mybatis.spring.mapper.ClassPathMapperScanner - Identified candidate component class: file [C:\dev\workspace\hotel_mimir\target\classes\kr\co\sist\nonmember\NonMemberMapper.class]
+16:45:27.371 [restartedMain] DEBUG org.mybatis.spring.mapper.ClassPathMapperScanner - Identified candidate component class: file [C:\dev\workspace\hotel_mimir\target\classes\kr\co\sist\payment\PaymentMapper.class]
+16:45:27.371 [restartedMain] DEBUG org.mybatis.spring.mapper.ClassPathMapperScanner - Identified candidate component class: file [C:\dev\workspace\hotel_mimir\target\classes\kr\co\sist\resvroom\ReservationMapper.class]
+16:45:27.371 [restartedMain] DEBUG org.mybatis.spring.mapper.ClassPathMapperScanner - Identified candidate component class: file [C:\dev\workspace\hotel_mimir\target\classes\kr\co\sist\room\RoomMapper.class]
+16:45:27.371 [restartedMain] DEBUG org.mybatis.spring.mapper.ClassPathMapperScanner - Identified candidate component class: file [C:\dev\workspace\hotel_mimir\target\classes\kr\co\sist\util\mapper\DynamicSearchMapper.class]
+16:45:27.373 [restartedMain] DEBUG org.mybatis.spring.mapper.ClassPathMapperScanner - Creating MapperFactoryBean with name 'administratorMapper' and 'kr.co.sist.administrator.AdministratorMapper' mapperInterface
+16:45:27.375 [restartedMain] DEBUG org.mybatis.spring.mapper.ClassPathMapperScanner - Creating MapperFactoryBean with name 'chatMessageMapper' and 'kr.co.sist.chat.ChatMessageMapper' mapperInterface
+16:45:27.375 [restartedMain] DEBUG org.mybatis.spring.mapper.ClassPathMapperScanner - Creating MapperFactoryBean with name 'chatRoomMapper' and 'kr.co.sist.chat.ChatRoomMapper' mapperInterface
+16:45:27.375 [restartedMain] DEBUG org.mybatis.spring.mapper.ClassPathMapperScanner - Creating MapperFactoryBean with name 'diningResvMapper' and 'kr.co.sist.diningresv.DiningResvMapper' mapperInterface
+16:45:27.376 [restartedMain] DEBUG org.mybatis.spring.mapper.ClassPathMapperScanner - Creating MapperFactoryBean with name 'diningMapper' and 'kr.co.sist.dining.user.DiningMapper' mapperInterface
+16:45:27.376 [restartedMain] DEBUG org.mybatis.spring.mapper.ClassPathMapperScanner - Creating MapperFactoryBean with name 'FAQMapper' and 'kr.co.sist.FAQ.FAQMapper' mapperInterface
+16:45:27.377 [restartedMain] DEBUG org.mybatis.spring.mapper.ClassPathMapperScanner - Creating MapperFactoryBean with name 'filePathMapper' and 'kr.co.sist.filepath.FilePathMapper' mapperInterface
+16:45:27.377 [restartedMain] DEBUG org.mybatis.spring.mapper.ClassPathMapperScanner - Creating MapperFactoryBean with name 'memberMapper' and 'kr.co.sist.member.MemberMapper' mapperInterface
+16:45:27.378 [restartedMain] DEBUG org.mybatis.spring.mapper.ClassPathMapperScanner - Creating MapperFactoryBean with name 'nonMemberMapper' and 'kr.co.sist.nonmember.NonMemberMapper' mapperInterface
+16:45:27.378 [restartedMain] DEBUG org.mybatis.spring.mapper.ClassPathMapperScanner - Creating MapperFactoryBean with name 'paymentMapper' and 'kr.co.sist.payment.PaymentMapper' mapperInterface
+16:45:27.378 [restartedMain] DEBUG org.mybatis.spring.mapper.ClassPathMapperScanner - Creating MapperFactoryBean with name 'reservationMapper' and 'kr.co.sist.resvroom.ReservationMapper' mapperInterface
+16:45:27.379 [restartedMain] DEBUG org.mybatis.spring.mapper.ClassPathMapperScanner - Creating MapperFactoryBean with name 'roomMapper' and 'kr.co.sist.room.RoomMapper' mapperInterface
+16:45:27.379 [restartedMain] DEBUG org.mybatis.spring.mapper.ClassPathMapperScanner - Creating MapperFactoryBean with name 'dynamicSearchMapper' and 'kr.co.sist.util.mapper.DynamicSearchMapper' mapperInterface
+16:45:28.196 [restartedMain] INFO  org.springframework.boot.web.embedded.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
+16:45:28.212 [restartedMain] INFO  org.apache.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8080"]
+16:45:28.213 [restartedMain] INFO  org.apache.catalina.core.StandardService - Starting service [Tomcat]
+16:45:28.214 [restartedMain] INFO  org.apache.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.42]
+16:45:28.282 [restartedMain] INFO  org.apache.catalina.core.ContainerBase.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+16:45:28.282 [restartedMain] INFO  org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 2167 ms
+16:45:28.787 [restartedMain] DEBUG org.mybatis.spring.SqlSessionFactoryBean - Parsed mapper file: 'file [C:\dev\workspace\hotel_mimir\target\classes\mapper\administrator\administratorMapper.xml]'
+16:45:28.801 [restartedMain] DEBUG org.mybatis.spring.SqlSessionFactoryBean - Parsed mapper file: 'file [C:\dev\workspace\hotel_mimir\target\classes\mapper\chatMapper.xml]'
+16:45:28.813 [restartedMain] DEBUG org.mybatis.spring.SqlSessionFactoryBean - Parsed mapper file: 'file [C:\dev\workspace\hotel_mimir\target\classes\mapper\chatMessageMapper.xml]'
+16:45:28.835 [restartedMain] DEBUG org.mybatis.spring.SqlSessionFactoryBean - Parsed mapper file: 'file [C:\dev\workspace\hotel_mimir\target\classes\mapper\diningMapper.xml]'
+16:45:28.851 [restartedMain] DEBUG org.mybatis.spring.SqlSessionFactoryBean - Parsed mapper file: 'file [C:\dev\workspace\hotel_mimir\target\classes\mapper\diningResvMapper.xml]'
+16:45:28.878 [restartedMain] DEBUG org.mybatis.spring.SqlSessionFactoryBean - Parsed mapper file: 'file [C:\dev\workspace\hotel_mimir\target\classes\mapper\dynamicSearchMapper.xml]'
+16:45:28.886 [restartedMain] DEBUG org.mybatis.spring.SqlSessionFactoryBean - Parsed mapper file: 'file [C:\dev\workspace\hotel_mimir\target\classes\mapper\FAQMapper.xml]'
+16:45:28.894 [restartedMain] DEBUG org.mybatis.spring.SqlSessionFactoryBean - Parsed mapper file: 'file [C:\dev\workspace\hotel_mimir\target\classes\mapper\filepath.xml]'
+16:45:28.907 [restartedMain] DEBUG org.mybatis.spring.SqlSessionFactoryBean - Parsed mapper file: 'file [C:\dev\workspace\hotel_mimir\target\classes\mapper\MemberMapper.xml]'
+16:45:28.917 [restartedMain] DEBUG org.mybatis.spring.SqlSessionFactoryBean - Parsed mapper file: 'file [C:\dev\workspace\hotel_mimir\target\classes\mapper\nonMemberMapper.xml]'
+16:45:28.930 [restartedMain] DEBUG org.mybatis.spring.SqlSessionFactoryBean - Parsed mapper file: 'file [C:\dev\workspace\hotel_mimir\target\classes\mapper\paymentMapper.xml]'
+16:45:28.942 [restartedMain] DEBUG org.mybatis.spring.SqlSessionFactoryBean - Parsed mapper file: 'file [C:\dev\workspace\hotel_mimir\target\classes\mapper\reservationMapper.xml]'
+16:45:28.952 [restartedMain] DEBUG org.mybatis.spring.SqlSessionFactoryBean - Parsed mapper file: 'file [C:\dev\workspace\hotel_mimir\target\classes\mapper\roomMapper.xml]'
+16:45:29.355 [restartedMain] WARN  org.springframework.boot.autoconfigure.security.servlet.UserDetailsServiceAutoConfiguration - 
+
+Using generated security password: 60512ec3-ddaa-46bb-9001-00f78202b224
+
+This generated password is for development use only. Your security configuration must be updated before running your application in production.
+
+16:45:29.363 [restartedMain] INFO  org.springframework.security.config.annotation.authentication.configuration.InitializeUserDetailsBeanManagerConfigurer$InitializeUserDetailsManagerConfigurer - Global AuthenticationManager configured with UserDetailsService bean with name inMemoryUserDetailsManager
+16:45:29.494 [restartedMain] INFO  org.springframework.boot.autoconfigure.web.servlet.WelcomePageHandlerMapping - Adding welcome page template: index
+16:45:29.989 [restartedMain] DEBUG org.mybatis.spring.boot.autoconfigure.MybatisAutoConfiguration - Not found configuration for registering mapper bean using @MapperScan, MapperFactoryBean and MapperScannerConfigurer.
+16:45:30.440 [restartedMain] INFO  org.springframework.boot.devtools.autoconfigure.OptionalLiveReloadServer - LiveReload server is running on port 35729
+16:45:30.467 [restartedMain] INFO  org.apache.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8080"]
+16:45:30.496 [restartedMain] INFO  org.springframework.boot.web.embedded.tomcat.TomcatWebServer - Tomcat started on port 8080 (http) with context path '/'
+16:45:30.511 [restartedMain] INFO  kr.co.sist.HotelMimirApplication - Started HotelMimirApplication in 5.001 seconds (process running for 5.839)
+16:45:33.538 [http-nio-8080-exec-2] INFO  org.apache.catalina.core.ContainerBase.[Tomcat].[localhost].[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+16:45:33.539 [http-nio-8080-exec-2] INFO  org.springframework.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+16:45:33.543 [http-nio-8080-exec-2] INFO  org.springframework.web.servlet.DispatcherServlet - Completed initialization in 4 ms
+>>>>>>> 51ac051 (비회원 예약조회 연결)
