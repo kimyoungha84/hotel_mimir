@@ -66,14 +66,14 @@
           <div class="payment-btn">
           	<button class="field-btn" type="button">현장 결제</button>
           </div>
-          <div class="payment-btn">
+          <div class="payment-btn" th:if="${diningId != '2'}">
           	<button class="online-btn" type="button">온라인 결제</button>
           </div>
         </div>
       </div>
     </div>
     
-    <div class="payment-method" id="paymentMethod" style="display: none;">
+    <div class="payment-method" id="paymentMethod" th:if="${diningId != '2'}" style="display: none;">
       <div class="payment-method-btn">
         <button type="button" class="kakao-pay-btn">카카오페이</button>
         <button type="button" class="toss-pay-btn">토스페이</button>
@@ -243,7 +243,7 @@
       <div class="reservation-info04">
         <div class="reservation-price"><span>총 금액</span></div>
           <div class="price-txt">
-            <span class="price-num" th:text="${#numbers.formatInteger(totalPrice, 3, 'COMMA')}">0</span>
+            <span class="price-num" th:text="${#numbers.formatInteger(totalPrice, 1, 'COMMA')}">0</span>
             <span class="price-num-txt">원</span>
           </div>
       </div>
