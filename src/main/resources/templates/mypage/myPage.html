@@ -39,7 +39,7 @@
                     <div class="reservation-box">
                         <div class="reservation-icon">🏨</div>
                         <div><strong>객실 예약</strong></div>
-                        <div class="text-muted mt-1">투숙 예정 0건</div>
+                        <div class="text-muted mt-1" id="room-resv-count">투숙 예정 0건</div>
                     </div>
                 </div>
                 <div class="col-md-6">
@@ -53,6 +53,23 @@
         </div>
     </div>
 </div>
+
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script type="text/javascript">
+    $(document).ready(function() {
+        $.ajax({
+            url: "/mypage/expected-room-resv-count",
+            type: "GET",
+            success: function(count) {
+                $("#room-resv-count").text("투숙 예정 " + count + "건");
+            },
+            error: function(xhr, status, error) {
+                console.error("객실 예약 건수 조회 실패:", error);
+                $("#room-resv-count").text("정보를 불러올 수 없습니다.");
+            }
+        });
+    });
+</script>
 
 </body>
 </html>
