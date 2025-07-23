@@ -37,7 +37,7 @@ public class DiningNextResvController {
 	
 	@GetMapping("/diningNextResv")
 	public String nextReservation(
-								  @RequestParam("dining") int diningId,
+								  @RequestParam("diningId") int diningId,
 	                              @RequestParam int adult,
 	                              @RequestParam int child,
 	                              @RequestParam String date,
@@ -94,7 +94,7 @@ public class DiningNextResvController {
         DiningDomain diningInfo = drs.searchDining(diningId);
 		
         model.addAttribute("diningId", diningId);
-	    model.addAttribute("dining", diningInfo.getDining_name());
+	    model.addAttribute("diningName", diningInfo.getDining_name());
 	    model.addAttribute("adult", adult);
 	    model.addAttribute("child", child);
 	    model.addAttribute("date", date);
