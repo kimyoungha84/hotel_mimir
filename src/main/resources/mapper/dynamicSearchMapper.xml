@@ -438,4 +438,104 @@ WHERE rnum BETWEEN #{offset} AND #{end}
 
 <!--///////////////////////////////// MEMBER-END /////////////////////////////////-->
 
+<!--///////////////////////////////// ROOM-USER /////////////////////////////////-->
+
+<sql id="roomUserFilter">
+  <if test="filters != null and filters.size() > 0">
+    <foreach collection="filters" item="filter">
+      <choose>
+        <when test="filter.operator.name() == 'EQ'">
+          AND ${filter.column} = #{filter.value}
+        </when>
+        <when test="filter.operator.name() == 'LIKE'">
+          AND ${filter.column} LIKE '%' || #{filter.value} || '%'
+        </when>
+        <when test="filter.operator.name() == 'IN'">
+          <if test="filter.value != null and filter.value.size() > 1">
+            AND ${filter.column} IN
+            <foreach collection="filter.value" item="v" open="(" separator="," close=")">
+              #{v}
+            </foreach>
+          </if>
+          <if test="filter.value != null and filter.value.size() == 1">
+            AND ${filter.column} = #{filter.value[0]}
+          </if>
+        </when>
+        <!-- 필요시 BETWEEN 등 추가 -->
+      </choose>
+    </foreach>
+  </if>
+</sql>
+
+
+<select id="searchRoom" parameterType="RoomSearchDTO" resultType="kr.co.sist.util.domain.SearchDataDomain">
+SELECT
+  roomId,
+  bedName,
+  typeName,
+  viewName,
+  floorType,
+  countAvailableRooms,
+  status
+FROM (
+  SELECT 
+    r.room_id roomId,
+    b.bed_Name bedName,
+    t.type_Name typeName,
+    v.view_Name viewName,
+    NVL((
+      SELECT status
+      FROM (
+        SELECT res.status
+        FROM RESERVATION res
+        WHERE res.room_id = r.room_id
+        ORDER BY res.RESV_REG_DATE DESC
+      )
+      WHERE ROWNUM = 1
+    ), '없음') AS status,
+    CASE
+      WHEN r.ROOM_FLOOR IN (6, 7) THEN '저층'
+      WHEN r.ROOM_FLOOR = 8 THEN '중층'
+      WHEN r.ROOM_FLOOR = 9 THEN '고층'
+      WHEN r.ROOM_FLOOR = 10 THEN '초고층'
+      ELSE '미정'
+    END AS floorType,
+    (
+      SELECT COUNT(*)
+      FROM room r2
+      JOIN room_type rt2 ON r2.type_id = rt2.type_id
+      JOIN view_type vt2 ON r2.view_id = vt2.view_id
+      JOIN bed_type bt2 ON r2.bed_id = bt2.bed_id
+      WHERE rt2.type_name = t.type_name
+        AND vt2.view_name = v.view_name
+        AND bt2.bed_name = b.bed_name
+        AND NOT EXISTS (
+          SELECT 1
+          FROM reservation res
+          WHERE res.room_id = r2.room_id
+            AND res.status IN ('예약완료', '체크인')
+            AND res.checkout_date &gt; TO_DATE(#{checkIn}, 'yyyy-MM-dd')
+            AND res.checkin_date &lt; TO_DATE(#{checkOut}, 'yyyy-MM-dd')
+        )
+    ) AS countAvailableRooms,
+    ROW_NUMBER() OVER (
+      PARTITION BY t.type_Name, b.bed_Name, v.view_Name
+      ORDER BY r.room_id
+    ) rn
+  FROM Room r
+  JOIN Bed_Type b ON r.bed_Id = b.bed_Id
+  JOIN Room_Type t ON r.type_Id = t.type_Id
+  JOIN View_Type v ON r.view_Id = v.view_Id
+  WHERE 1=1
+    <include refid="roomUserFilter"/>
+)
+WHERE rn = 1
+ORDER BY roomId
+</select>
+
+
+
+
+<!--///////////////////////////////// ROOM-USER-END /////////////////////////////////-->
+
 </mapper>

@@ -55,6 +55,12 @@ public class SearchDataDomain {
 	private String userName;
 	private String status; 
 	
+	//ROOM_USER
+	private String bedName;
+	private String floorType;
+	private String viewName;
+	private int countAvailableRooms;
+	
 	//MEMBER
 	private int user_num;
 	private String login_type;
