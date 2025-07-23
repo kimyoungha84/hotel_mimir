@@ -20,4 +20,6 @@ public interface MemberMapper {
 	void invalidateRefreshToken(String emailId);
 
 	void updateLastLoginTime(String emailId);
+
+	int selectExpectedRoomResvCount(String userNum);
 }

@@ -128,5 +128,10 @@ public class MemberServiceImpl implements MemberService {
 		// BCryptPasswordEncoder를 사용하여 비밀번호 일치 여부 확인
 		return passwordEncoder.matches(password, member.getPassword());
 	}
+
+	@Override
+	public int getExpectedRoomResvCount(String userNum) {
+		return memberMapper.selectExpectedRoomResvCount(userNum);
+	}
     
 }

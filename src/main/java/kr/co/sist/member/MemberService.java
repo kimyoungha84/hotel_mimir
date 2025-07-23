@@ -23,5 +23,7 @@ public interface MemberService {
     MemberDTO getMemberByEmail(String email);
 
     boolean checkPassword(String email, String password);
+
+    int getExpectedRoomResvCount(String userNum);
     
 }

@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import kr.co.sist.member.CustomUserDetails;
@@ -60,5 +61,14 @@ public class MyPageController {
             redirectAttrs.addFlashAttribute("error", "비밀번호가 일치하지 않습니다.");
             return "redirect:/mypage/confirm-password"; // 불일치 시 에러 메시지와 함께 다시 확인 페이지로
         }
+    }
+
+    @GetMapping("/expected-room-resv-count")
+    @ResponseBody
+    public int getExpectedRoomResvCount(@AuthenticationPrincipal CustomUserDetails userDetails) {
+        if (userDetails == null) {
+            return 0;
+        }
+        return memberService.getExpectedRoomResvCount(String.valueOf(userDetails.getUserNum()));
     }
 }

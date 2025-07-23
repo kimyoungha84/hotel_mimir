@@ -30,6 +30,12 @@
 		)
 	</insert>
 	
+	<select id="selectMemberByUserNum" parameterType="int" resultType="kr.co.sist.member.MemberDTO">
+ 		 SELECT *
+ 		 FROM MIMIR_USER
+ 		 WHERE USER_NUM = #{userNum}
+	</select>
+	
 	<!-- RefreshToken 갱신 -->
 	<update id="updateRefreshToken" parameterType="map">
 		UPDATE MIMIR_USER
@@ -65,5 +71,11 @@
     WHERE EMAIL_ID = #{emailId}
   </update>
 
+  <!-- (마이페이지) 투숙 예정 예약 건수 조회 -->
+  <select id="selectExpectedRoomResvCount" parameterType="String" resultType="int">
+    SELECT count(*)
+    FROM RESERVATION
+    WHERE USER_NUM = #{userNum} AND STATUS = '예약완료'
+  </select>
 
 </mapper>
