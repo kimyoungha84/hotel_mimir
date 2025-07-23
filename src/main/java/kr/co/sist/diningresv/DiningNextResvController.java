@@ -43,6 +43,7 @@ public class DiningNextResvController {
 	                              @RequestParam String date,
 	                              @RequestParam String time,
 	                              @RequestParam String meal,
+	                              @AuthenticationPrincipal CustomUserDetails loginUser,
 	                              Model model) {
 		
 		List<RepMenuDomain> menuList = ds.searchRepMenu(diningId);
@@ -106,6 +107,13 @@ public class DiningNextResvController {
         model.addAttribute("formattedDate", formattedDate);
         model.addAttribute("mealLabel", mealLabel);
 	    
+        if (loginUser != null) {
+        	DiningResvDTO user = drs.loginUserData(loginUser.getUserNum());
+        	model.addAttribute("userName", user.getUserName());
+        	model.addAttribute("userEmail", user.getUserEmail());
+            model.addAttribute("userTel", user.getUserTel());
+        }
+        
 	    return "dining_resv/dining_next_resv/diningNextResv";
 	    
 	}

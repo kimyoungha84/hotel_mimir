@@ -24,17 +24,17 @@
       <div class="input-inner">
         <div class="input-item">
           <label>성명<span class="required-star">*</span></label>
-          <input type="text" name="reservationName" class="input-field" placeholder="성명 입력"/>
+          <input type="text" name="reservationName" class="input-field" placeholder="성명 입력" th:value="${userName}" />
           <div class="error-message">성명을 입력해주세요.</div>
         </div>
         <div class="input-item">
           <label>이메일<span class="required-star">*</span></label>
-          <input type="email" name="reservationEmail" class="input-field" placeholder="이메일 입력"/>
+          <input type="email" name="reservationEmail" class="input-field" placeholder="이메일 입력" th:value="${userEmail}" />
           <div class="error-message">이메일 주소를 입력해주세요.</div>
         </div>
         <div class="input-item">
           <label>연락처<span class="required-star">*</span></label>
-          <input type="tel" id="reservationTell" name="reservationTell" class="input-field" placeholder="연락처 입력"/>
+          <input type="tel" id="reservationTell" name="reservationTell" class="input-field" placeholder="연락처 입력" th:value="${userTel}" />
           <div class="error-message">연락처를 입력해주세요.</div>
         </div>
       </div>

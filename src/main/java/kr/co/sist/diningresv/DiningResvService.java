@@ -42,5 +42,35 @@ public class DiningResvService {
         drm.insertDiningResv(dto);
         
     }
+    
+    public DiningResvDTO loginUserData(int userNum) {
+    	
+      DiningResvDTO dto = drm.loginUserData(userNum);
+    	
+    	if(dto != null) {
+    		
+    	  if(dto.getUserTel() != null) {
+    		  
+    	    String tel = dto.getUserTel().replaceAll("[^0-9]", "");
+    	    
+    		  if (tel.length() == 11) {
+    			  
+    		    tel = tel.replaceFirst("(\\d{3})(\\d{4})(\\d{4})", "$1-$2-$3");
+    		    
+    		  } else if (tel.length() == 10) {
+    			  
+    			  tel = tel.replaceFirst("(\\d{2,3})(\\d{3,4})(\\d{4})", "$1-$2-$3");
+    			  
+    		  }
+    		  
+    		  dto.setUserTel(tel);
+    		  
+    	  }
+    	  
+        }
+    	
+        return dto;
+        
+    }
 	
 }
