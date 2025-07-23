@@ -21,5 +21,7 @@ public interface MemberService {
     boolean isEmailDuplicated(String email);
 
     MemberDTO getMemberByEmail(String email);
+
+    boolean checkPassword(String email, String password);
     
 }

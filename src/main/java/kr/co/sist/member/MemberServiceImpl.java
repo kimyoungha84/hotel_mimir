@@ -116,5 +116,17 @@ public class MemberServiceImpl implements MemberService {
 	public MemberDTO getMemberByEmail(String email) {
 		return memberMapper.selectMemberByEmail(email);
 	}
+
+	@Override
+	public boolean checkPassword(String email, String password) {
+		MemberDTO member = memberMapper.selectMemberByEmail(email);
+		
+		if (member == null) {
+			return false; // 사용자가 존재하지 않음
+		}
+		
+		// BCryptPasswordEncoder를 사용하여 비밀번호 일치 여부 확인
+		return passwordEncoder.matches(password, member.getPassword());
+	}
     
 }

@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<body>
+    <!-- 사이드바 -->
+    <div class="col-md-2 sidebar" th:fragment="sidebar">
+        <h3>마이페이지</h3>
+        <hr>
+        <a class="menu"><strong>예약</strong></a>
+        <a href="#" class="menu-link ps-3">- 객실 예약 내역</a>
+        <a href="#" class="menu-link ps-3">- 다이닝 예약 내역</a>
+        <a class="menu"><strong>나의 정보관리</strong></a>
+        <a th:href="@{/mypage/edit-profile}" class="menu-link ps-3">- 회원정보 수정</a>
+        <a th:href="@{/mypage/confirm-password}" class="menu-link ps-3">- 비밀번호 재설정</a>
+        <a href="#" class="menu-link ps-3">- SNS 연동</a>
+        <a href="#" class="menu-link ps-3">- 회원탈퇴</a>
+    </div>
+</body>
+</html>
