@@ -46,6 +46,11 @@ public class DiningNextResvController {
 	                              @AuthenticationPrincipal CustomUserDetails loginUser,
 	                              Model model) {
 		
+	    System.out.println("🔍 diningId: " + diningId);
+	    System.out.println("🔍 adult: " + adult + ", child: " + child);
+	    System.out.println("🔍 date: " + date + ", time: " + time + ", meal: " + meal);
+	    System.out.println("🔍 loginUser: " + (loginUser != null ? loginUser.getUserNum() : "null"));
+		
 		List<RepMenuDomain> menuList = ds.searchRepMenu(diningId);
 		
 	    int totalPrice = 0;

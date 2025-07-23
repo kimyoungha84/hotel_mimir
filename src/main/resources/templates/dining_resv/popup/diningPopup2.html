@@ -22,7 +22,7 @@
           <span>성인</span>
           <div class="cnt-adult-btn">
             <button class="minus" type="button" data-type="adult">-</button>
-            <span id="adultCnt">1</span>
+            <span id="adultCnt" th:text="${adult}"></span>
             <button class="plus" type="button" data-type="adult">+</button>
           </div>
         </div>
@@ -31,7 +31,7 @@
           <span>어린이</span>
           <div class="cnt-child-btn">
             <button class="minus" type="button" data-type="child">-</button>
-            <span id="childCnt">0</span>
+            <span id="childCnt" th:text="${child}"></span>
             <button class="plus" type="button" data-type="child">+</button>
           </div>
         </div>

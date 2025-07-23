@@ -21,12 +21,36 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   });
 
+  // 선택 버튼 클릭 시 인원수 반영
+  const confirmBtn = document.querySelector(".cntBtn");
+  confirmBtn.addEventListener("click", function () {
+    const adultCnt = document.getElementById("adultCnt").textContent.trim();
+    const childCnt = document.getElementById("childCnt").textContent.trim();
+
+    const adultTxtSpan = document.querySelector(".cnt-adult-txt");
+    const childTxtSpan = document.querySelector(".cnt-child-txt");
+    if (adultTxtSpan) adultTxtSpan.textContent = adultCnt;
+    if (childTxtSpan) childTxtSpan.textContent = childCnt;
+
+    const inputAdult = document.getElementById("inputAdult");
+    const inputChild = document.getElementById("inputChild");
+    if (inputAdult) inputAdult.value = adultCnt;
+    if (inputChild) inputChild.value = childCnt;
+
+    // 팝업 닫기
+    popup.classList.remove("active");
+    overlay.classList.remove("active");
+    setTimeout(() => {
+      popup.style.display = "none";
+      overlay.style.display = "none";
+    }, 500);
+  });
+
   const popup = document.querySelector(".cnt-popup");
   const overlay = document.querySelector(".popup-overlay02");
   const closeBtn = document.querySelector(".popup-close02");
   const openBtn = document.getElementById("openCntPopup");
 
-  // 팝업 열기 함수
   window.openCntPopup = function () {
     popup.style.display = "block";
     overlay.style.display = "block";
@@ -36,8 +60,7 @@ document.addEventListener("DOMContentLoaded", function () {
       overlay.classList.add("active");
     });
   };
-  
-  // 팝업 닫기 버튼
+
   closeBtn.addEventListener("click", function () {
     popup.classList.remove("active");
     overlay.classList.remove("active");
