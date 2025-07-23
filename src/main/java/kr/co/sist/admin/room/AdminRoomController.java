@@ -9,6 +9,7 @@ import java.util.Map;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,6 +22,9 @@ import kr.co.sist.room.RoomDTO;
 
 @Controller
 public class AdminRoomController {
+	
+	@Value("${upload.saveDir}")
+	private String saveDir;
 	
 	@Autowired
 	private AdminRoomService ars;
@@ -52,19 +56,21 @@ public class AdminRoomController {
 	) {
 	    try {
 	        RoomDTO oldRoom = ars.searchOneRoom(roomId);
-
 	        String imagePath = null;
+	        int maxSize=1024*1024*10;
+			if(thumbnail.getSize() > maxSize) {
+				throw new Exception("업로드 파일의 크기는 최대 10MByte까지만 가능합니다.");
+			}//end if
 	        if (thumbnail != null && !thumbnail.isEmpty()) {
 				/* String uploadDir = "C:/upload/room_images/"; */
-	        	String uploadDir = new File("src/main/resources/static/upload/room_images/").getAbsolutePath();
-	            File dir = new File(uploadDir);
+	            File dir = new File(saveDir);
 	            if (!dir.exists()) dir.mkdirs();
 
 	            String fileName = UUID.randomUUID() + "_" + thumbnail.getOriginalFilename();
-	            File dest = new File(uploadDir, fileName);
+	            File dest = new File(saveDir, fileName);
 	            thumbnail.transferTo(dest);
 
-	            imagePath = "/upload/room_images/" + fileName;
+	            imagePath = "/room_images/" + fileName;
 	        }
 
 	        boolean isModified = false;
