@@ -7,7 +7,7 @@
 
         <sift>
             <appender name="FILE-${userId}" class="ch.qos.logback.core.rolling.RollingFileAppender">
-                <file>logs/user_${userId}/current.log</file>
+                <file>c:/dev/logs/user_${userId}/current.log</file>
 
                 <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
                     <fileNamePattern>logs/user_${userId}/%d{yyyy-MM-dd}.log</fileNamePattern>

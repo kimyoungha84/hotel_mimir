@@ -40,7 +40,7 @@ public class AdminiStratorAspect {
 		
 	    Object[] args = jp.getArgs();
 	    for (Object arg : args) {
-	        System.out.println("arg: " + arg);
+	        logger.info("arg: " + arg);
 	    }
 		
 		//logger.info("여기는 before---idname---"+idname);
@@ -52,7 +52,7 @@ public class AdminiStratorAspect {
 	
 	@After("execution(* kr.co.sist.administrator.*.*(..))")
 	public void afterAdvice(JoinPoint jp) {
-		//System.out.println("여기는 after "+jp.getSignature());
+		logger.info("여기는 after "+jp.getSignature());
 	}//afterAdvice
 	
 	@AfterThrowing(
@@ -61,7 +61,7 @@ public class AdminiStratorAspect {
 			)
 	public void afterThrowAdvice(JoinPoint jp, Throwable ex) {
 		//System.out.println(ex.getMessage());
-		//System.out.println("여기는 afterthrow "+jp.getSignature());
+		logger.info("여기는 afterthrow "+jp.getSignature());
 		
 	}//beforeAdvice
 	
