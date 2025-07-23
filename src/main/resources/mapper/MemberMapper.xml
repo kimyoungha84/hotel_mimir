@@ -30,6 +30,12 @@
 		)
 	</insert>
 	
+	<select id="selectMemberByUserNum" parameterType="int" resultType="kr.co.sist.member.MemberDTO">
+ 		 SELECT *
+ 		 FROM MIMIR_USER
+ 		 WHERE USER_NUM = #{userNum}
+	</select>
+	
 	<!-- RefreshToken 갱신 -->
 	<update id="updateRefreshToken" parameterType="map">
 		UPDATE MIMIR_USER
