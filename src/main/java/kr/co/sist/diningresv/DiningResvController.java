@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import kr.co.sist.dining.user.DiningDomain;
+import kr.co.sist.dining.user.DiningService;
+import kr.co.sist.dining.user.RepMenuDomain;
 
 @Controller
 public class DiningResvController {
@@ -18,10 +20,17 @@ public class DiningResvController {
 	@Autowired
 	private DiningResvService drs;
 	
+	@Autowired
+	private DiningService ds;
+	
     @GetMapping("diningResv")
     public String diningResv(@RequestParam("diningId") int diningId, Model model) {
 
     	DiningDomain diningInfo = drs.searchDining(diningId);
+    	
+    	List<RepMenuDomain> menuList = ds.searchRepMenu(diningId);
+    	
+    	model.addAttribute("menuList", menuList);
     	
     	model.addAttribute("diningInfo", diningInfo);
     	

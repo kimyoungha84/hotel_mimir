@@ -82,14 +82,21 @@ document.addEventListener("DOMContentLoaded", () => {
   function updateOptionalCheckboxState() {
     const isCheck04Checked = check04.checked;
 
-    [check05, check06].forEach(chk => chk.checked = false);
-
-	  if (isCheck04Checked) {
-	    [check05, check06, label05, label06].forEach(el => el.classList.remove("checkbox-disabled"));
-	  } else {
-	    [check05, check06, label05, label06].forEach(el => el.classList.add("checkbox-disabled"));
-	  }
-	}
+    if (isCheck04Checked) {
+      // 옵션 활성화
+      [label05, label06].forEach(label => label.classList.remove("checkbox-disabled"));
+      [check05, check06].forEach(chk => {
+        chk.disabled = false;
+      });
+    } else {
+      // 옵션 비활성화
+      [check05, check06].forEach(chk => {
+        chk.checked = false;
+        chk.disabled = true;
+      });
+      [label05, label06].forEach(label => label.classList.add("checkbox-disabled"));
+    }
+  }
 
   check04.addEventListener("change", updateOptionalCheckboxState);
 
@@ -129,6 +136,8 @@ document.addEventListener("DOMContentLoaded", () => {
     allCheckboxes.forEach(chk => {
       chk.checked = isChecked;
     });
+	updateOptionalCheckboxState();
+	
     validateAll();
   });
 

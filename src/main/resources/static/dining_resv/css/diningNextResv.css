@@ -601,10 +601,10 @@ input[type="checkbox"]:not(#checkAll):checked::after {
 
 .checkbox-disabled {
   opacity: 0.5;
-  pointer-events: none;
-  cursor: not-allowed !important;
+  pointer-events: auto;
+  cursor: not-allowed;
 }
 
-.checkbox-disabled input[type="checkbox"] {
-  pointer-events: auto;
+.checkbox-disabled input[type="checkbox"]::after {
+  color: #ccc !important;
 }

@@ -80,38 +80,37 @@
 
       <div id="title" class="tab-title"><span>예약일 선택</span></div>
 
-      <div class="tap-wrap">
-        <div class="tab-content">
-          <div id="scheduler" class="tab-scheduler" style="display: block;">
-          	<!-- 달력 -->
-          </div>
-
-          <div id="menu" class="tab-menu" style="display: none;">
-            <div class="menu-info-item">
-              <div class="menu01"><span>조식</span></div>
-              <div class="price-group">
-                <div class="price01"><span>성인<br />70,000 KRW</span></div>
-                <div class="price01"><span>소인<br />47,000 KRW</span></div>
-              </div>
-            </div>
-
-            <div class="menu-info-item">
-              <div class="menu01"><span>중식</span></div>
-              <div class="price-group">
-                <div class="price01"><span>Fun<br />170,000 KRW</span></div>
-                <div class="price01"><span>Emotion<br />147,000 KRW</span></div>
-              </div>
-            </div>
-
-            <div class="menu-info-item">
-              <div class="menu01"><span>석식</span></div>
-              <div class="price-group">
-                <div class="price01"><span>Modern<br />270,000 KRW</span></div>
-                <div class="price01"><span>Must Try<br />247,000 KRW</span></div>
-              </div>
-            </div>
-          </div>
+	<div class="tap-wrap">
+	  <div class="tab-content">
+		<div id="scheduler" class="tab-scheduler" style="display: block;">
+		  <!-- 달력 -->
         </div>
+
+	  <div id="menu" class="tab-menu" style="display: none;">
+  		<!-- Lunch (중식) -->
+  		<div class="menu-info-item">
+    	  <div class="menu01"><span>Lunch</span></div>
+    		<div class="price-group">
+      		  <div class="price01" th:each="menu : ${menuList}" th:if="${menu.description == '중식'}">
+        		<span th:text="${menu.menu_name}"></span><br />
+        		<span th:text="${#numbers.formatInteger(menu.price, 3, 'COMMA') + ' KRW'}"></span>
+      		  </div>
+    		</div>
+  		</div>
+
+  		<!-- Dinner (석식) -->
+  		<div class="menu-info-item">
+    	  <div class="menu01"><span>Dinner</span></div>
+    		<div class="price-group">
+      		  <div class="price01" th:each="menu : ${menuList}" th:if="${menu.description == '석식'}">
+       		 	<span th:text="${menu.menu_name}"></span><br />
+        		<span th:text="${#numbers.formatInteger(menu.price, 3, 'COMMA') + ' KRW'}"></span>
+      		  </div>
+    		</div>
+  		</div>
+	  </div>
+	  
+	  </div>
 
         <div class="select-day-wrap">
           <span class="icon-txt">◆</span>

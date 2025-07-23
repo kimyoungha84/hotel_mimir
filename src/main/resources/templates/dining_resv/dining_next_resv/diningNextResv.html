@@ -190,11 +190,11 @@
    	      <div class="agree-item">
   	        <div class="agree-inner">
   	          <div class="agree-inner-txt">
-  	            <label class="checkbox-inner02">
+  	            <label class="checkbox-inner02 checkbox-disabled">
   		          <input type="checkbox" id="check05" name="check"/>
   		            <span>SMS</span>
   		        </label>
-  	            <label class="checkbox-inner02">
+  	            <label class="checkbox-inner02 checkbox-disabled">
   		          <input type="checkbox" id="check06" name="check"/>
   		            <span>E-mail</span>
   		        </label>
@@ -242,15 +242,16 @@
       
       <div class="reservation-info04">
         <div class="reservation-price"><span>총 금액</span></div>
-        <div class="price-txt">
-          <span class="price-num">0</span>
-          <span class="price-num-txt">원</span>
-        </div>
+          <div class="price-txt">
+            <span class="price-num" th:text="${#numbers.formatInteger(totalPrice, 3, 'COMMA')}">0</span>
+            <span class="price-num-txt">원</span>
+          </div>
       </div>
     </div>
 
     <div class="next-txt">
       <input type="hidden" name="paymentType" id="paymentType" value="현장결제" />
+      <input type="hidden" name="paymentPrice" th:value="${totalPrice}" />
       <input type="hidden" name="adult" th:value="${adult}" />
   	  <input type="hidden" name="child" th:value="${child}" />
   	  <input type="hidden" name="date" th:value="${date}" />

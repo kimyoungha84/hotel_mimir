@@ -2,6 +2,7 @@ package kr.co.sist.diningresv;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +14,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import kr.co.sist.dining.user.DiningDomain;
+import kr.co.sist.dining.user.DiningService;
+import kr.co.sist.dining.user.RepMenuDomain;
 import kr.co.sist.member.CustomUserDetails;
 import kr.co.sist.nonmember.NonMemberService;
 import kr.co.sist.payment.PaymentService;
@@ -22,6 +25,9 @@ public class DiningNextResvController {
 	
     @Autowired
     private DiningResvService drs;
+    
+	@Autowired
+	private DiningService ds;
     
     @Autowired
     private NonMemberService nms;
@@ -38,6 +44,28 @@ public class DiningNextResvController {
 	                              @RequestParam String time,
 	                              @RequestParam String meal,
 	                              Model model) {
+		
+		List<RepMenuDomain> menuList = ds.searchRepMenu(diningId);
+		
+	    int totalPrice = 0;
+	    
+	    if (meal.equals("Lunch")) {
+	    	
+	        totalPrice = menuList.stream()
+	                .filter(menu -> "중식".equals(menu.getDescription()))
+	                .limit(2)
+	                .mapToInt(RepMenuDomain::getPrice)
+	                .sum();
+	        
+	    } else if (meal.equals("Dinner")) {
+	    	
+	        totalPrice = menuList.stream()
+	                .filter(menu -> "석식".equals(menu.getDescription()))
+	                .limit(2)
+	                .mapToInt(RepMenuDomain::getPrice)
+	                .sum();
+	        
+	    }
 		
         String formattedDate;
         
@@ -73,6 +101,8 @@ public class DiningNextResvController {
 	    model.addAttribute("time", time);
 	    model.addAttribute("meal", meal);
 	    
+	    model.addAttribute("totalPrice", totalPrice);
+	    
         model.addAttribute("formattedDate", formattedDate);
         model.addAttribute("mealLabel", mealLabel);
 	    
@@ -93,6 +123,7 @@ public class DiningNextResvController {
 								@RequestParam String time,
 								@RequestParam String meal,
 								@RequestParam int diningId,
+								@RequestParam int paymentPrice,
 								@AuthenticationPrincipal CustomUserDetails loginUser,
 								Model model) {
 
@@ -152,6 +183,7 @@ public class DiningNextResvController {
 	    int paymentId = ps.searchPaymentSeq();
 	    
 	    dto.setPaymentId(paymentId);
+	    dto.setPaymentPrice(paymentPrice);
 	    dto.setPaymentStatus("결제완료");
 	    
 	    ps.insertPayment2(dto);
