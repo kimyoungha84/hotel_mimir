@@ -284,7 +284,7 @@ $(document).ready(function() {
   }
 
   // ===== 욕설 필터 함수와 리스트를 최상단에 선언 =====
-  const badWords = ["ㅅㅂ", "개새끼", "병신", "김영하하"];
+  const badWords = ["ㅅㅂ", "개새끼", "병신", ""];
   function filterBadWords(msg) {
       if (!msg) return "";
       let filtered = msg;
