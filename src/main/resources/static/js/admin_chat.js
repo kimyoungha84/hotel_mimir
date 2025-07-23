@@ -109,21 +109,41 @@ $(document).ready(function() {
 function addUserToList(user, lastMsg, unreadCount, roomId, chatType) {
     const chatTypeName = getChatTypeName(chatType);
     const userKey = `user_${user}_${chatType}`;
-    
-    if ($("#userList").find(`[data-user='${userKey}']`).length === 0) {
-        $("#userList").append(`
-            <div class="user-item" data-user="${userKey}" data-room-id="${roomId}" data-chat-type="${chatType}">
-                <div class="user-info">
-                    <strong>사용자 ${user}</strong><br>
-                    <span class="chat-type">${chatTypeName} 문의</span><br>
-                    <span class="last-message">${lastMsg}</span>
+    // 사용자 이름 캐싱 (중복 ajax 방지)
+    if (!window.userNameCache) window.userNameCache = {};
+    function renderUser(name) {
+        if ($("#userList").find(`[data-user='${userKey}']`).length === 0) {
+            $("#userList").append(`
+                <div class="user-item" data-user="${userKey}" data-room-id="${roomId}" data-chat-type="${chatType}">
+                    <div class="user-info">
+                        <strong>${name}</strong><br>
+                        <span class="chat-type">${chatTypeName} 문의</span><br>
+                        <span class="last-message">${lastMsg}</span>
+                    </div>
+                    <div class="badge"></div>
                 </div>
-                <div class="badge"></div>
-            </div>
-        `);
+            `);
+        } else {
+            $(`[data-user='${userKey}'] .last-message`).text(lastMsg);
+            $(`[data-user='${userKey}'] .badge`).text("");
+        }
+    }
+    if (window.userNameCache[user]) {
+        renderUser(window.userNameCache[user]);
     } else {
-        $(`[data-user='${userKey}'] .last-message`).text(lastMsg);
-        $(`[data-user='${userKey}'] .badge`).text("");
+        // 일단 user_num으로 표시, ajax로 이름 받아오면 교체
+        renderUser("사용자 " + user);
+        $.ajax({
+            url: "/api/chat/user-name",
+            method: "GET",
+            data: { user_num: user },
+            success: function(res) {
+                if (res && res.user_name) {
+                    window.userNameCache[user] = res.user_name;
+                    $(`[data-user='${userKey}'] .user-info strong`).text(res.user_name);
+                }
+            }
+        });
     }
 }
 
@@ -144,7 +164,11 @@ $(document).on("click", ".user-item", function() {
     const chatType = $(this).data("chat-type");
     const chatTypeName = getChatTypeName(chatType);
     currentUser = userKey;
-    $("#chatWith").text(`사용자 ${userKey.split('_')[1]} - ${chatTypeName} 문의`);
+    // user_num 추출
+    const userNum = userKey.split('_')[1];
+    // 이름 캐시 있으면 이름, 없으면 user_num
+    let displayName = window.userNameCache && window.userNameCache[userNum] ? window.userNameCache[userNum] : ("사용자 " + userNum);
+    $("#chatWith").text(`${displayName} - ${chatTypeName} 문의`);
     $("#chatBody").html("");
     // 채팅방 선택 시마다 WebSocket 재연결
     if (ws) { ws.close(); }
