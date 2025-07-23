@@ -19,16 +19,30 @@ function connectWebSocket() {
         console.log('관리자 WebSocket 연결됨', wsUrl);
     };
     ws.onmessage = function(event) {
-        // roomId:sender:msg 형태로 분리
-        const [roomId, sender, msg] = event.data.split(":", 3);
-        if (roomId == currentRoomId) {
-            const isMine = sender === staffId;
-            appendChat(sender, msg, isMine);
+        let handled = false;
+        try {
+            const data = JSON.parse(event.data);
+            if ((data.type === "typing" || data.type === "typing_end") && data.userId !== staffId) {
+                if (data.type === "typing") {
+                    $("#typing-indicator").text("상대방이 입력 중입니다...");
+                } else {
+                    $("#typing-indicator").text("");
+                }
+                handled = true;
+            }
+        } catch(e) {}
+        if (!handled) {
+            // 기존 텍스트 메시지 처리
+            const [roomId, sender, msg] = event.data.split(":", 3);
+            if (roomId == currentRoomId) {
+                const isMine = sender === staffId;
+                appendChat(sender, msg, isMine);
+            }
+            if (sender !== staffId) {
+                addUserToList(sender, msg);
+            }
+            loadUserList();
         }
-        if (sender !== staffId) {
-            addUserToList(sender, msg);
-        }
-        loadUserList();
     };
     ws.onclose = function() {
         console.log('관리자 WebSocket 연결 종료');
@@ -64,6 +78,31 @@ $(document).ready(function() {
     currentRoomId = null; // 반드시 null로 초기화
     $("#chatBody").html(""); // 채팅창 비우기
     $("#chatWith").text("선택된 유저 없음");
+    // #chatBody 아래에 typing-indicator가 없으면 추가
+    if ($("#typing-indicator").length === 0) {
+        $("#chatBody").after('<div id="typing-indicator" style="min-height:20px;color:#888;font-size:13px;padding:2px 10px;"></div>');
+    }
+    // ===== 타이핑 인디케이터 기능 =====
+    let typingTimeout;
+    $("#messageInput").on("keyup", function() {
+        clearTimeout(typingTimeout);
+        if (ws && ws.readyState === WebSocket.OPEN) {
+            ws.send(JSON.stringify({
+                type: "typing",
+                roomId: currentRoomId,
+                userId: staffId
+            }));
+        }
+        typingTimeout = setTimeout(() => {
+            if (ws && ws.readyState === WebSocket.OPEN) {
+                ws.send(JSON.stringify({
+                    type: "typing_end",
+                    roomId: currentRoomId,
+                    userId: staffId
+                }));
+            }
+        }, 500);
+    });
 });
 
 // 유저 목록 추가 또는 메시지 갱신
@@ -188,3 +227,37 @@ function formatTime(timestamp) {
     const m = date.getMinutes().toString().padStart(2, '0');
     return `${h}:${m}`;
 }
+
+// ws.onmessage 내부에 아래 코드 추가(기존 텍스트 메시지 처리와 병합)
+const origOnMessage = ws && ws.onmessage;
+function adminChatOnMessage(event) {
+    let handled = false;
+    try {
+        const data = JSON.parse(event.data);
+        if ((data.type === "typing" || data.type === "typing_end") && data.userId !== staffId) {
+            if (data.type === "typing") {
+                $("#typing-indicator").text("상대방이 입력 중입니다...");
+            } else {
+                $("#typing-indicator").text("");
+            }
+            handled = true;
+        }
+    } catch(e) {}
+    if (!handled) {
+        // 기존 메시지 처리
+        if (typeof origOnMessage === 'function') origOnMessage.call(ws, event);
+        else {
+            // 기존 ws.onmessage 코드 복사
+            const [roomId, sender, msg] = event.data.split(":", 3);
+            if (roomId == currentRoomId) {
+                const isMine = sender === staffId;
+                appendChat(sender, msg, isMine);
+            }
+            if (sender !== staffId) {
+                addUserToList(sender, msg);
+            }
+            loadUserList();
+        }
+    }
+}
+if (ws) ws.onmessage = adminChatOnMessage;

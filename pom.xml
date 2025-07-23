@@ -78,6 +78,12 @@
   			<version>1.16.1</version>
 		</dependency>
 		
+		<dependency>
+    		<groupId>org.json</groupId>
+    		<artifactId>json</artifactId>
+    		<version>20240303</version> <!-- 최신 버전 -->
+		</dependency>
+		
 		<!-- 유효성 검증 -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>

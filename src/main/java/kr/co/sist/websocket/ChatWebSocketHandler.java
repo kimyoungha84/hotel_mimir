@@ -1,11 +1,11 @@
 package kr.co.sist.websocket;
 
 import java.sql.Timestamp;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.socket.CloseStatus;
@@ -53,11 +53,42 @@ public class ChatWebSocketHandler extends TextWebSocketHandler {
         System.out.println("[DEBUG] handleTextMessage sender=" + sender + ", payload=" + payload);
         System.out.println("[DEBUG] userSessions: " + userSessions.keySet());
 
+        // ===== 타이핑 인디케이터 신호 처리 =====
+        boolean typingHandled = false;
+        if (payload.trim().startsWith("{")) {
+            try {
+                JSONObject obj = new JSONObject(payload);
+                String type = obj.optString("type");
+                int roomId = obj.optInt("roomId");
+                String userId = obj.optString("userId");
+                if ("typing".equals(type) || "typing_end".equals(type)) {
+                    Set<String> roomUserIds = roomSessions.get(roomId);
+                    if (roomUserIds != null) {
+                        for (String targetId : roomUserIds) {
+                            if (!targetId.equals(userId)) {
+                                WebSocketSession targetSession = userSessions.get(targetId);
+                                if (targetSession != null && targetSession.isOpen()) {
+                                    targetSession.sendMessage(new TextMessage(payload));
+                                }
+                            }
+                        }
+                    }
+                    typingHandled = true;
+                    return;
+                }
+            } catch (Exception e) {
+                // JSON 파싱 실패시 무시하고 아래로 진행 (일반 채팅 메시지 처리로 반드시 넘어감)
+            }
+        }
+
         // payload: "room_id:content"
-        if (payload.contains(":")) {
+        if (!typingHandled && payload.contains(":")) {
             String[] parts = payload.split(":", 2);
             int roomId = Integer.parseInt(parts[0]);
             String msg = parts[1];
+
+            // 욕설 필터 적용
+            msg = filterBadWords(msg);
 
             // 1. 채팅방 정보 조회
             ChatRoomDTO room = chatRoomMapper.findByRoomId(roomId);
@@ -105,6 +136,18 @@ public class ChatWebSocketHandler extends TextWebSocketHandler {
                 targetSession.sendMessage(new TextMessage(roomId + ":" + sender + ":" + msg));
             }
         }
+    }
+
+    // 욕설 필터 메서드
+    private String filterBadWords(String msg) {
+        // 예시 욕설 단어 리스트 (실제 운영시 더 추가/수정 필요)
+        String[] badWords = {"ㅅㅂ", "개새끼", "병신", "김영하"};
+        String filtered = msg;
+        for (String bad : badWords) {
+            if (bad.trim().isEmpty()) continue;
+            filtered = filtered.replaceAll(bad, "**");
+        }
+        return filtered;
     }
 
     @Override

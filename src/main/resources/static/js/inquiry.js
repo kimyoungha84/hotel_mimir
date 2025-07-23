@@ -115,23 +115,36 @@ $(document).ready(function() {
       console.log('WebSocket 연결됨');
     };
     ws.onmessage = function(event) {
-      // roomId:sender:msg 포맷에 맞게 파싱
-      const [roomId, sender, msg] = event.data.split(":", 3);
-      if (roomId == currentRoomId) {
-        const isMine = sender == userNum;
-        const alignClass = isMine ? "right" : "left";
-        // HTML escape 적용
-        const formattedMsg = escapeHtml(msg).replace(/\n/g, "<br>");
-        const messageBlock = $("<div>").addClass("message-block " + alignClass);
-        if (!isMine) {
-          const timeElem = $("<div>").addClass("message-time").text(getCurrentTime());
-          const msgElem = $("<div>").addClass("chat-message left").html(formattedMsg);
-          messageBlock.append(msgElem, timeElem);
-        } else {
-          const msgElem = $("<div>").addClass("chat-message right").html(formattedMsg);
-          messageBlock.append(msgElem);
+      let handled = false;
+      try {
+        const data = JSON.parse(event.data);
+        if ((data.type === "typing" || data.type === "typing_end") && data.userId !== userNum) {
+          if (data.type === "typing") {
+            $("#typing-indicator").text("상대방이 입력 중입니다...");
+          } else {
+            $("#typing-indicator").text("");
+          }
+          handled = true;
         }
-        $("#chatBody").append(messageBlock).scrollTop($("#chatBody")[0].scrollHeight);
+      } catch(e) {}
+      if (!handled) {
+        // 기존 텍스트 메시지 처리
+        const [roomId, sender, msg] = event.data.split(":", 3);
+        if (roomId == currentRoomId) {
+          const isMine = sender == userNum;
+          const alignClass = isMine ? "right" : "left";
+          const formattedMsg = escapeHtml(msg).replace(/\n/g, "<br>");
+          const messageBlock = $("<div>").addClass("message-block " + alignClass);
+          if (!isMine) {
+            const timeElem = $("<div>").addClass("message-time").text(getCurrentTime());
+            const msgElem = $("<div>").addClass("chat-message left").html(formattedMsg);
+            messageBlock.append(msgElem, timeElem);
+          } else {
+            const msgElem = $("<div>").addClass("chat-message right").html(formattedMsg);
+            messageBlock.append(msgElem);
+          }
+          $("#chatBody").append(messageBlock).scrollTop($("#chatBody")[0].scrollHeight);
+        }
       }
     };
     ws.onclose = function() {
@@ -211,8 +224,9 @@ $(document).ready(function() {
   // ===== 메시지 전송 함수 =====
   // 메시지 전송 및 도배 방지, 300자 제한 등
   function sendMessage() {
-    const msg = $("#messageInput").val();
+    let msg = $("#messageInput").val() || ""; // null/undefined 방지
     if (msg.replace(/\s/g, '') === "") return; // 공백/엔터만 있는 경우 차단
+    msg = filterBadWords(msg); // 전송 직전에만 필터링
     if (msg.length > 300) {
       showError("⚠️ 300자 초과로 전송할 수 없습니다.");
       return;
@@ -267,6 +281,19 @@ $(document).ready(function() {
       $("#errorBox").remove();
       messageTimestamps = [];
     }, 30000);
+  }
+
+  // ===== 욕설 필터 함수와 리스트를 최상단에 선언 =====
+  const badWords = ["ㅅㅂ", "개새끼", "병신", "김영하하"];
+  function filterBadWords(msg) {
+      if (!msg) return "";
+      let filtered = msg;
+      badWords.forEach(bad => {
+          if (bad.trim() === "") return;
+          const regex = new RegExp(bad, "gi");
+          filtered = filtered.replace(regex, "**");
+      });
+      return filtered;
   }
 
   // ====== fetchCurrentUser 완료 후 채팅/문의 바인딩 ======
@@ -343,6 +370,33 @@ $(document).ready(function() {
       $("#chatTitle").text("1:1 채팅");
       currentRoomId = null;
       currentChatType = null;
+    });
+
+    // #chatBody 아래에 typing-indicator가 없으면 추가
+    if ($("#typing-indicator").length === 0) {
+        $("#chatBody").after('<div id="typing-indicator" style="min-height:20px;color:#888;font-size:13px;padding:2px 10px;"></div>');
+    }
+
+    // ===== 타이핑 인디케이터 기능 =====
+    let typingTimeout;
+    $("#messageInput").on("keyup", function() {
+        clearTimeout(typingTimeout);
+        if (ws && ws.readyState === WebSocket.OPEN) {
+            ws.send(JSON.stringify({
+                type: "typing",
+                roomId: currentRoomId,
+                userId: userNum
+            }));
+        }
+        typingTimeout = setTimeout(() => {
+            if (ws && ws.readyState === WebSocket.OPEN) {
+                ws.send(JSON.stringify({
+                    type: "typing_end",
+                    roomId: currentRoomId,
+                    userId: userNum
+                }));
+            }
+        }, 500);
     });
   });
 });
