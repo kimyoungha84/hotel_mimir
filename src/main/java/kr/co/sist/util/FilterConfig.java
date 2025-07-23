@@ -226,16 +226,15 @@ public enum FilterConfig {
 	 
 	     ),
 	MEMBER(
-			"staff", false, true, true, true,
+			"member", false, true, true, true,
 			null,
 			null,
 			List.of(
-					new Option("id", "아이디", "s.staff_id"),
-					new Option("name", "이름", "s.staff_id"),
-					new Option("loginType", "가입방식", "s.staff_id")
+					new Option("userId", "아이디", "user_id"),
+					new Option("userName", "이름", "user_name")
 					),
 			null,
-			List.of(new CheckboxOption("use","탈퇴 여부","use_yn","N","Y")
+			List.of(new CheckboxOption("accUse","탈퇴","use_yn","N","Y")
 					
 					
 					)

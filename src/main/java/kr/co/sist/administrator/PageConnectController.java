@@ -130,7 +130,20 @@ public class PageConnectController {
 	/*************************************/
 	/*회원 관리*/
 	@GetMapping("/admin/member")
-	public String memberManage() {
+	public String memberManage(Model model) {
+		
+		int pageSize = 10; // 페이지당 항목 수
+
+		// fragment 정보 동적 등록
+		SearchController.addFragmentInfo(
+			FilterConfig.MEMBER,
+			"admin_member/memManage",
+			"member_list_fm",
+			"memberList"
+		);
+		modelUtils.setFilteringInfo(model, FilterConfig.MEMBER);
+		modelUtils.setPaginationAttributes(model, pageSize, FilterConfig.MEMBER);
+		
 		return "admin_member/memManage";
 	}//memberManage
 	

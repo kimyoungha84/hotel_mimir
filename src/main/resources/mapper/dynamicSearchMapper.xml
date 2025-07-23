@@ -381,5 +381,61 @@ WHERE rnum BETWEEN #{offset} AND #{end}
 
 <!--///////////////////////////////// ROOM-RESV-END /////////////////////////////////-->
 
+<!--///////////////////////////////// MEMBER /////////////////////////////////-->
+<sql id="memberFilter">
+  <if test="filters != null and filters.size() > 0">
+    <foreach collection="filters" item="filter">
+      <choose>
+        <!-- 아이디 검색(통합)만 OR로 묶어서 처리 -->
+        <when test="filter.column == 'user_id'">
+          AND (
+            email_id LIKE '%' || #{filter.value} || '%'
+            OR oauth_id LIKE '%' || #{filter.value} || '%'
+          )
+        </when>
+        <!-- 나머지는 기존 filter와 동일하게 처리 -->
+        <when test="filter.operator.name() == 'EQ'">
+          AND ${filter.column} = #{filter.value}
+        </when>
+        <when test="filter.operator.name() == 'LIKE'">
+          AND ${filter.column} LIKE '%' || #{filter.value} || '%'
+        </when>
+        <!-- 기타 연산자도 필요시 추가 -->
+      </choose>
+    </foreach>
+  </if>
+</sql>
+
+
+
+<select id="searchMember" resultType="kr.co.sist.util.domain.SearchDataDomain">
+  SELECT
+    user_num,
+    login_type,
+    CASE
+      WHEN login_type = 'social' THEN oauth_id
+      WHEN login_type = 'email' THEN email_id
+      ELSE NULL
+    END AS user_id,
+    user_name,
+    birth_date,
+    tel,
+    reg_time,
+    use_yn
+  FROM mimir_user
+  WHERE 1=1
+    <include refid="memberFilter"/>
+  ORDER BY reg_time DESC
+  OFFSET #{offset} - 1 ROWS FETCH NEXT #{pageSize} ROWS ONLY
+</select>
+
+<select id="countMember" resultType="int">
+  SELECT COUNT(*)
+  FROM mimir_user
+  WHERE 1=1
+    <include refid="memberFilter"/>
+</select>
+
+<!--///////////////////////////////// MEMBER-END /////////////////////////////////-->
 
 </mapper>

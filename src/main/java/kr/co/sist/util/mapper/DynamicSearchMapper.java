@@ -23,7 +23,7 @@ public interface DynamicSearchMapper {
     
     List<SearchDataDomain> searchRoomResv( @Param("filters") List<FilterCondition> filters, int offset, int end, int pageSize);
     
-    
+    List<SearchDataDomain> searchMember(@Param("filters") List<FilterCondition> filters, int offset, int end, int pageSize);
     
     
     int countFaq(@Param("filters") List<FilterCondition> filters);
@@ -31,5 +31,6 @@ public interface DynamicSearchMapper {
     int countStaff(@Param("filters") List<FilterCondition> filters);
     int countDiningResv(@Param("filters") List<FilterCondition> filters);
     int countRoomResv(@Param("filters") List<FilterCondition> filters);
+    int countMember(@Param("filters") List<FilterCondition> filters);
 
 }

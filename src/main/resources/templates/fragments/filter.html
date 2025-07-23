@@ -127,8 +127,10 @@
 <div th:if="${filter.checkboxOptions != null and #lists.size(filter.checkboxOptions) > 0}" style="display: flex; flex-wrap: wrap; gap: 10px; align-items: center;">
   <div th:each="cb : ${filter.checkboxOptions}" class="filter-selector">
     <label>
+      <!-- hidden input: 미체크 시 'off'로 고정 -->
+      <input type="hidden" th:name="${cb.name}" value="off" />
       <input type="checkbox" th:name="${cb.name}" value="on"
-        th:checked="${param[cb.name] != null}" />
+        th:checked="${param[cb.name]} == 'on'" />
       <span th:text="${cb.label}"></span>
     </label>
   </div>

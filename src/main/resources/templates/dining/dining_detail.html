@@ -980,7 +980,6 @@ width: 100%;         /* 이미지가 부모 카드의 너비에 맞게 크기 �
       <div class="guest-summary">
         <span>성인 <span id="adult-count">0</span></span>
         <span>어린이 <span id="child-count">0</span></span>
-        <span>유아 <span id="infant-count">0</span></span>
       </div>
       <span style="font-size: 12px; color: #666;">클릭하여 변경</span>
     </div>
@@ -1026,14 +1025,7 @@ width: 100%;         /* 이미지가 부모 카드의 너비에 맞게 크기 �
           <button onclick="increaseCount('child')">+</button>
         </div>
       </div>
-      <div class="guest-type">
-        <span>유아</span>
-        <div class="counter">
-          <button onclick="decreaseCount('infant')">-</button>
-          <span id="infant-counter">0</span>
-          <button onclick="increaseCount('infant')">+</button>
-        </div>
-      </div>
+      <!-- 유아 관련 UI 제거 -->
     </div>
     <button class="select-btn" onclick="confirmGuestSelection()">선택</button>
   </div>
@@ -1229,8 +1221,8 @@ function updateReservationBtnState() {
   const diningSelected = !!selectedDiningId;
   const adult = parseInt(document.getElementById('adult-count').textContent) || 0;
   const child = parseInt(document.getElementById('child-count').textContent) || 0;
-  const infant = parseInt(document.getElementById('infant-count').textContent) || 0;
-  const total = adult + child + infant;
+  // const infant = parseInt(document.getElementById('infant-count').textContent) || 0; // 유아 제거
+  const total = adult + child;
   btn.disabled = !(diningSelected && total > 0);
 }
 
@@ -1283,13 +1275,13 @@ function searchReservation() {
   const diningName = selectedDiningName;
   const adultCount = document.getElementById('adult-count').textContent;
   const childCount = document.getElementById('child-count').textContent;
-  const infantCount = document.getElementById('infant-count').textContent;
+  // const infantCount = document.getElementById('infant-count').textContent; // 유아 제거
   if (!diningId) {
     alert('다이닝을 선택해 주세요.');
     return;
   }
   // 예시: 예약 페이지로 이동 (diningId 포함)
-  window.location.href = `/diningResv?diningId=${encodeURIComponent(diningId)}&adults=${adultCount}&children=${childCount}&infants=${infantCount}`;
+  window.location.href = `/diningResv?diningId=${encodeURIComponent(diningId)}&adult=${adultCount}&child=${childCount}`;
 }
 
 // 인원수 관련 함수들
@@ -1301,8 +1293,6 @@ function increaseCount(type) {
   if (type === 'adult' && currentValue < 10) {
     currentValue++;
   } else if (type === 'child' && currentValue < 10) {
-    currentValue++;
-  } else if (type === 'infant' && currentValue < 5) {
     currentValue++;
   }
   

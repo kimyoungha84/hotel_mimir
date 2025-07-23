@@ -1,6 +1,7 @@
 package kr.co.sist.util.domain;
 
 import java.sql.Date;
+import java.sql.Timestamp;
 
 import org.apache.ibatis.type.Alias;
 
@@ -53,6 +54,16 @@ public class SearchDataDomain {
 	private Boolean isMember;
 	private String userName;
 	private String status; 
+	
+	//MEMBER
+	private int user_num;
+	private String login_type;
+	private String user_id; // oauth_id/email_id 대신 user_id만 둠 (SQL에서 as user_id)
+	private String user_name;
+	private String birth_date;
+	private String tel;
+	private Timestamp reg_time;
+	private char use_yn;
 	
 	
 }//class

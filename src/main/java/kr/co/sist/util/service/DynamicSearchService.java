@@ -36,6 +36,7 @@ public class DynamicSearchService {
                 case DINING_RESV -> searchDiningResv(filters, offset, end, pageSize);
                 case DINING_USER -> searchUserDining(filters, offset, end, pageSize);
                 case ROOM_RESV -> searchRoomResv(filters, offset, end, pageSize);
+                case MEMBER -> searchMember(filters, offset, end, pageSize); // 추가
                 default -> {
                     logger.warn("지원하지 않는 FilterConfig: {}", config);
                     yield List.of();
@@ -101,15 +102,25 @@ public class DynamicSearchService {
     }
     public List<SearchDataDomain> searchRoomResv(List<FilterCondition> filters, int offset, int end, int pageSize) {
     	try {
-    		logger.debug("직원 검색 - filters: {}, offset: {}, end: {}", filters.size(), offset, end);
+    		logger.debug("객실 검색 - filters: {}, offset: {}, end: {}", filters.size(), offset, end);
     		for(FilterCondition filter : filters) {
     			System.out.println(filter);
     		}
     		return mapper.searchRoomResv(filters, offset, end, pageSize);
     	} catch (Exception e) {
-    		logger.error("직원 검색 중 오류 발생", e);
+    		logger.error("객실 검색 중 오류 발생", e);
     		return List.of();
     	}
+    }
+
+    public List<SearchDataDomain> searchMember(List<FilterCondition> filters, int offset, int end, int pageSize) {
+        try {
+            logger.debug("멤버 검색 - filters: {}, offset: {}, end: {}", filters.size(), offset, end);
+            return mapper.searchMember(filters, offset, end, pageSize);
+        } catch (Exception e) {
+            logger.error("멤버 검색 중 오류 발생", e);
+            return List.of();
+        }
     }
 
     /**
@@ -123,6 +134,7 @@ public class DynamicSearchService {
                 case STAFF -> countStaff(filters);
                 case DINING_RESV -> countDiningResv(filters);
                 case ROOM_RESV -> countRoomResv(filters);
+                case MEMBER -> countMember(filters); // 추가
                 default -> {
                     logger.warn("지원하지 않는 FilterConfig: {}", config);
                     yield 0;
@@ -176,6 +188,15 @@ public class DynamicSearchService {
     		logger.error("다이닝예약 카운트 조회 중 오류 발생", e);
     		return 0;
     	}
+    }
+
+    public int countMember(List<FilterCondition> filters) {
+        try {
+            return mapper.countMember(filters);
+        } catch (Exception e) {
+            logger.error("멤버 카운트 조회 중 오류 발생", e);
+            return 0;
+        }
     }
     
 } // class

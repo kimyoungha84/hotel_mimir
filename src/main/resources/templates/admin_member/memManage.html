@@ -10,6 +10,8 @@
 <!-- jquery CDN -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
 
+<script src="/admin_common_assets/js/pagination.js"></script>
+
 <th:block th:replace="~{/administrator/fragments/admin_header :: admin_header}"></th:block>
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -28,7 +30,11 @@
     <h2 class="h2Title">회원 목록</h2>
     <hr/>
     
-    <div class="table-wrapper" id="app">    
+    <div class="table-wrapper" id="app">   
+    
+    <!-- 검색 필터 Fragment -->
+	<div th:replace="~{fragments/filter :: filter(${filter})}"></div>
+     
     <table>
     <thead>
         <tr>
@@ -42,19 +48,21 @@
             <th>탈퇴여부</th>
         </tr>
     </thead>
-    <tbody >
-       <tr>
-        <td>1</td>
-        <td>hello2</td>
-        <td>차은우</td>
-        <td>010-1234-1234</td>
-        <td>1000-10-54</td>
-        <td>애플로그인</td>
-        <td>2025-08-14 13:32</td>
-        <td>Y</td>
+    <tbody th:fragment="member_list_fm" id="resultArea">
+       <tr th:each="member, stat : ${memberList}">
+        <td th:text="${stat.count}">1</td>
+        <td th:text="${member.user_id}">hello2</td>
+        <td th:text="${member.user_name}">차은우</td>
+        <td th:text="${member.tel}">010-1234-1234</td>
+        <td th:text="${member.birth_date}">1000-10-54</td>
+        <td th:text="${member.login_type}">애플로그인</td>
+        <td th:text="${member.reg_time}">2025-08-14 13:32</td>
+        <td th:text="${member.use_yn}">Y</td>
         </tr>
     </tbody>
     </table>
+    
+    <div th:replace="~{fragments/pagination :: pagination}">
     </div>
 
 </div>
