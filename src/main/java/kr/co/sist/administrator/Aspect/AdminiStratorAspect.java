@@ -31,22 +31,38 @@ public class AdminiStratorAspect {
 		
 		HttpServletRequest request=sra.getRequest();
 		HttpSession session=request.getSession(false);//없으면 null 반환
+		logger.info("접근 URL -------------------"+request.getRequestURL());
 		String idname="";
 		
-		if(session==null) {idname="anonymos";}
-		else {idname=(String)session.getAttribute("session_id");}
+		if(session==null) {
+			idname="anonymos";
+		}else {
+			idname=(String)session.getAttribute("session_id");
+			MDC.put("userId", idname);
+		}
 				
-		MDC.put("userId", idname);
 		
-	    Object[] args = jp.getArgs();
-	    for (Object arg : args) {
-	        logger.info("arg: " + arg);
-	    }
+		
+		//만약 //ㅍtring kr.co.sist.administrator.AdministratorRESTController.loginChk(LoginDTO,HttpSession,HttpServletRequest)를 쓰면 이걸 로그에 남깁시다.
+		if(jp.getSignature().toString().contains("loginChk")) {
+			//그러면 지금 login 시도가 일어나고 있다는 의미지
+			logger.info("로그인 시도-------------"+jp.getArgs()[0].toString());
+		}//end
+		
+		if(jp.getSignature().toString().contains("loginout")) {
+			MDC.clear();	
+		}//end
+		
+		
+	    //Object[] args = jp.getArgs();
+	    //for (Object arg : args) {
+	    //    logger.info("arg: " + arg);
+	    //}
 		
 		//logger.info("여기는 before---idname---"+idname);
-		//System.out.println("여기는 before "+jp.getSignature());
+		//logger.info("여기는 before "+jp.getSignature());
 		
-		MDC.clear();
+		
 	}//beforeAdvice
 	
 	
