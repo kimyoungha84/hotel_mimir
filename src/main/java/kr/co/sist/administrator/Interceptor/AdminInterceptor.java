@@ -24,12 +24,11 @@ public class AdminInterceptor implements HandlerInterceptor{
 //			System.out.println("----------------------------AdminInterceptor 수정--------------------------------------------");
 			//세션아이디가 없으니까, 로그인 페이지로 이동
 			response.sendRedirect("/admin/login"); 
-		}else {
-	
-			flag=true; //원래 요청 흐름대로 컨트롤러 실행
-		}//end if~else
+			return false;
+		}//end if
 		
-		return flag;
+		
+		return true;
 	}//preHandle
 
 

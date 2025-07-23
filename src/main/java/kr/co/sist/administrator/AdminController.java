@@ -28,6 +28,9 @@ public class AdminController {
 		String dashboardPageStr="administrator/index";
 		
 		String session_id=(String)request.getSession().getAttribute("session_id");
+		if(session_id==null) {
+			return "redirect:/admin/login";
+		}
 		String authorityStr=as.getAuthoritybyID(session_id);
 		
 		System.out.println("dashboard=================session-id"+session_id);
