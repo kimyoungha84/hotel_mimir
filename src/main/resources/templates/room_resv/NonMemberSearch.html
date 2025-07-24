@@ -109,11 +109,11 @@
   <div id="diningForm" class="form-section">
     <form action="/searchDiningResvDetail" method="POST">
       <label>예약번호 <span style="color: red">*</span></label>
-      <input type="text" placeholder="예약번호 입력" name="resvId" oninput="this.value=this.value.replace(/[^0-9]/g,'')">
+      <input type="text" placeholder="예약번호 입력" name="reservationId" oninput="this.value=this.value.replace(/[^0-9]/g,'')">
       <div class="desc">예약번호를 분실하신 고객님께서는 미미르 다이닝예약과로 직접 문의해 주세요.</div>
 
       <label>이름 <span style="color: red">*</span></label>
-      <input type="text" placeholder="이름 입력" name="userName">
+      <input type="text" placeholder="이름 입력" name="reservationName">
 
       <button type="submit" class="btn">예약 조회</button>
     </form>

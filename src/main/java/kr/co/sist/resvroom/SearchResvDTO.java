@@ -20,6 +20,6 @@ public class SearchResvDTO {
 	private Date checkoutDate;  
 	private String status;  
 	private String resvName;
-
+	
 	
 }//class

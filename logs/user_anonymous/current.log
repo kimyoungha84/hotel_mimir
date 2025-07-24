@@ -1186,3 +1186,10 @@ Caused by: oracle.jdbc.OracleDatabaseException: ORA-00904: "DINING_REG_DATE": ë¶
 
 	at oracle.jdbc.driver.T4CTTIoer11.processError(T4CTTIoer11.java:723)
 	... 149 common frames omitted
+09:19:41.100 [File Watcher] INFO  org.springframework.boot.devtools.autoconfigure.LocalDevToolsAutoConfiguration$RestartingClassPathChangeChangedEventListener - Restarting due to 32 class path changes (0 additions, 0 deletions, 32 modifications)
+09:19:41.102 [Thread-33] INFO  org.springframework.boot.web.embedded.tomcat.GracefulShutdown - Commencing graceful shutdown. Waiting for active requests to complete
+09:19:41.102 [tomcat-shutdown] INFO  org.apache.coyote.http11.Http11NioProtocol - Pausing ProtocolHandler ["http-nio-8080"]
+09:19:41.433 [tomcat-shutdown] INFO  org.springframework.boot.web.embedded.tomcat.GracefulShutdown - Graceful shutdown complete
+09:19:41.434 [Thread-33] INFO  org.apache.coyote.http11.Http11NioProtocol - Stopping ProtocolHandler ["http-nio-8080"]
+09:19:41.435 [Thread-33] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-2 - Shutdown initiated...
+09:19:41.466 [Thread-33] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-2 - Shutdown completed.

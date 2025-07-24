@@ -17,12 +17,13 @@ public class DiningResvDTO {
 	private String reservationTell;
 	private String reservationEmail;
 	private Date reservationDate;
-	private String mealType;
 	private Timestamp reservationTime;
 	private int reservationCount;
 	private String reservationStatus;
 	private String reservationRequest;
 	private String reservationType;
+	
+	private String mealType;
 	
 	private int diningId;
 	private String diningName;
