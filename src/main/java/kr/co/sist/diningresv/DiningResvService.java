@@ -48,6 +48,18 @@ public class DiningResvService {
 		return drm.selectResvData(dto);
 		
 	}
+	
+	public void cancelResv2(int reservationId) {
+		
+		drm.cancelResv2(reservationId);
+		
+	}
+	
+    public String searchMainImage(int diningId) {
+    	
+        return drm.searchMainImage(diningId);
+        
+    }
     
     public DiningResvDTO loginUserData(int userNum) {
     	

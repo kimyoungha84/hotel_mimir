@@ -5,6 +5,14 @@
 
 <mapper namespace="kr.co.sist.diningresv.DiningResvMapper">
 
+<select id="searchMainImage" resultType="String" parameterType="int">
+  SELECT IMAGE_URL
+  FROM DINING_IMAGE
+  WHERE DINING_ID = #{diningId}
+    AND IMAGE_TYPE = 'MAIN'
+  FETCH FIRST 1 ROWS ONLY
+</select>
+
   <select id="selectAllResv" resultType="kr.co.sist.diningresv.DiningResvDTO">
     SELECT 
       r.RESERVATION_ID AS reservationId,
@@ -91,7 +99,7 @@
     )
     VALUES (
       #{reservationId, jdbcType=INTEGER},
-      #{diningId, jdbcType=INTEGER},
+      #{diningId, jdbcType=INTEGER},dlf
       #{userNum, jdbcType=INTEGER},
       #{paymentId, jdbcType=INTEGER},
       #{nonMemId, jdbcType=INTEGER},
@@ -117,7 +125,7 @@
     WHERE RESERVATION_ID = #{reservationId}
   </update>
   
-  <select id="selectResvData" parameterType="kr.co.sist.diningresv.DiningResvDTO" resultType="kr.co.sist.diningresv.DiningResvDTO">
+<select id="selectResvData" parameterType="kr.co.sist.diningresv.DiningResvDTO" resultType="kr.co.sist.diningresv.DiningResvDTO">
   SELECT 
     r.RESERVATION_ID AS reservationId,
     r.RESERVATION_NAME AS reservationName,
@@ -144,5 +152,11 @@
     FROM MIMIR_USER
     WHERE user_Num = #{userNum}
   </select>
+  
+  <update id="cancelResv2" parameterType="int">
+    UPDATE DINING_RESERVATION
+    SET RESERVATION_STATUS = '취소'
+    WHERE RESERVATION_ID = #{reservationId}
+  </update>
 
 </mapper>

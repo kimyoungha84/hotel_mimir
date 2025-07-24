@@ -28,4 +28,8 @@ public interface DiningResvMapper {
 	
 	public DiningResvDTO selectResvData(DiningResvDTO dto);
 	
+	public void cancelResv2(int reservationId);
+	
+	String searchMainImage(int diningId);
+	
 }

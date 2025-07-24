@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://thymeleaf.org" th:class="sub-page">
+<head>
+  <meta charset="UTF-8">
+  <title>다이닝 예약 조회</title>
+  <link href="https://fonts.googleapis.com/css2?family=Pretendard&display=swap" rel="stylesheet">
+  <link rel="stylesheet" th:href="@{/css/header.css}" />
+  <link rel="stylesheet" th:href="@{/css/footer.css}" />
+  <link rel="stylesheet" th:href="@{/dining_resv/css/cancelResv2.css}" />
+</head>
+<body>
+
+<div th:replace="~{fragments/header.html :: header}"></div>
+
+  <div class="container">
+    <h1>다이닝 예약 조회</h1>
+   
+    <h2 class="cancel-message">예약이 취소되었습니다.</h2>
+    
+    <div class="center-button">
+      <a th:href="@{/user/dining_main}">
+        <button class="confirm-btn">확인</button>
+      </a>
+    </div>
+  </div>
+
+  <div th:replace="~{fragments/footer.html :: footerFragment}"></div>
+   
+</body>
+
+</html>

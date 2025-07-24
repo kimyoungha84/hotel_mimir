@@ -7,7 +7,6 @@
   <link rel="stylesheet" th:href="@{/css/header.css}" />
   <link rel="stylesheet" th:href="@{/css/footer.css}" />
   <link rel="stylesheet" th:href="@{/dining_resv/css/searchDiningResvDetail.css}" />
-  
 </head>
 <body>
 
@@ -68,17 +67,17 @@
         <button type="button" class="confirm-btn">확인</button>
       </a>
 
-<!--       <form th:action="@{/cancelResv}" method="post"
+      <form th:action="@{/cancelResv2}" method="post"
       		th:if="${resvData.reservationStatus != '예약취소'}">
         <input type="hidden" name="reservationId" th:value="${resvData.reservationId}">
         <button type="submit" class="cancel-btn">예약 취소</button>
-      </form> -->
+      </form>
     </div>
     
   </div>
   </div>
   
-   <div th:replace="~{fragments/footer.html :: footerFragment}"></div>
+  <div th:replace="~{fragments/footer.html :: footerFragment}"></div>
    
 </body>
 

@@ -31,6 +31,11 @@ public class DiningResvController {
                     @RequestParam(name = "child", required = false, defaultValue = "0") int child,
     				Model model) {
 
+        // 메인 이미지 URL 조회
+        String mainImageUrl = drs.searchMainImage(diningId);
+        
+        model.addAttribute("mainImageUrl", mainImageUrl);
+    	
     	DiningDomain diningInfo = drs.searchDining(diningId);
     	
     	List<RepMenuDomain> menuList = ds.searchRepMenu(diningId);
@@ -68,6 +73,15 @@ public class DiningResvController {
 	  return "dining_resv/searchDiningResvDetail";
 	  
 	}
+	
+	 @PostMapping("/cancelResv2")
+	 public String cancelResv2(@RequestParam int reservationId) {
+		 
+	   drs.cancelResv2(reservationId);
+		   
+	   return "dining_resv/cancelResv2";
+	   
+	 }
     
     @GetMapping("/diningResvComplete")
     public String diningResvComplete(@RequestParam int reservationId, Model model) {
