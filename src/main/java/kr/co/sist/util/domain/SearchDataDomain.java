@@ -60,6 +60,9 @@ public class SearchDataDomain {
 	private String floorType;
 	private String viewName;
 	private int countAvailableRooms;
+	private int capacity;
+	private String imagePath;
+	private int pricePerNight;
 	
 	//MEMBER
 	private int user_num;
@@ -70,6 +73,22 @@ public class SearchDataDomain {
 	private String tel;
 	private Timestamp reg_time;
 	private char use_yn;
+	
+	//SALES
+    private int memberCount;
+    private int nonMemberCount;
+    private int checkoutCount;
+    private int checkinCount;
+    private int completedCount;
+    private int stayCount;
+    private int cancelCount;
+    private int checkoutAmount;
+    private int checkinAmount;
+    private int completedAmount;
+    private int cancelAmount;
+    private int totalAmount;
+    private int memberStayCount;
+    private int nonMemberStayCount;
 	
 	
 }//class

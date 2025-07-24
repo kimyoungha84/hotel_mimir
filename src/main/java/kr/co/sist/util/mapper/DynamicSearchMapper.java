@@ -6,6 +6,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import kr.co.sist.util.FilterCondition;
+import kr.co.sist.util.SortConditionBuilder.SortParam;
 import kr.co.sist.util.domain.SearchDataDomain;
 
 @Mapper
@@ -25,6 +26,9 @@ public interface DynamicSearchMapper {
     
     List<SearchDataDomain> searchMember(@Param("filters") List<FilterCondition> filters, int offset, int end, int pageSize);
     
+    List<SearchDataDomain> searchRoom(@Param("filters") List<FilterCondition> filters, @Param("sortParam") SortParam sortParam, int offset, int end, int pageSize, String checkIn, String checkOut);
+    
+    List<SearchDataDomain> searchRoomSales(@Param("filters") List<FilterCondition> filters, int offset, int end, int pageSize, String startDate, String endDate);
     
     int countFaq(@Param("filters") List<FilterCondition> filters);
     int countDining(@Param("filters") List<FilterCondition> filters);

@@ -10,12 +10,18 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import kr.co.sist.filepath.FilePathService;
+import kr.co.sist.util.FilterConfig;
+import kr.co.sist.util.ModelUtils;
+import kr.co.sist.util.controller.SearchController;
 
 @Controller
 public class RoomController {
 	
 	@Autowired
 	private FilePathService fps;
+	
+	@Autowired
+	private ModelUtils modelUtils;
 	
 	@Autowired
 	private RoomService rs;
@@ -37,28 +43,39 @@ public class RoomController {
 	    if (checkOut == null || checkOut.isBlank()) {
 	        checkOut = LocalDate.now().plusDays(1).toString();
 	    }
-
-	    RoomSearchDTO searchDTO = new RoomSearchDTO();
-	    searchDTO.setCheckIn(checkIn);
-	    searchDTO.setCheckOut(checkOut);
-
-	    List<RoomDTO> roomList = rs.searchAllRoom();
-
-	    for (RoomDTO room : roomList) {
-	        RoomSearchDTO dto = new RoomSearchDTO();
-	        dto.setCheckIn(checkIn);
-	        dto.setCheckOut(checkOut);
-	        dto.setTypeName(room.getTypeName());
-	        dto.setViewName(room.getViewName());
-	        dto.setBedName(room.getBedName());
-
-	        int availableCount = rs.countAvailableRooms(dto);
-	        room.setCountAvailableRooms(availableCount);
-	    }
-
-	    model.addAttribute("roomList", roomList);
+	    
+//	    RoomSearchDTO searchDTO = new RoomSearchDTO();
+//	    searchDTO.setCheckIn(checkIn);
+//	    searchDTO.setCheckOut(checkOut);
+//
+//	    List<RoomDTO> roomList = rs.searchAllRoom();
+//
+//	    for (RoomDTO room : roomList) {
+//	        RoomSearchDTO dto = new RoomSearchDTO();
+//	        dto.setCheckIn(checkIn);
+//	        dto.setCheckOut(checkOut);
+//	        dto.setTypeName(room.getTypeName());
+//	        dto.setViewName(room.getViewName());
+//	        dto.setBedName(room.getBedName());
+//
+//	        int availableCount = rs.countAvailableRooms(dto);
+//	        room.setCountAvailableRooms(availableCount);
+//	    }
+//
+//	    model.addAttribute("roomList", roomList);
 	    model.addAttribute("checkIn", checkIn);
 	    model.addAttribute("checkOut", checkOut);
+	    
+	    
+	 // fragment 정보 동적 등록
+		SearchController.addFragmentInfo(
+			FilterConfig.ROOM_LIST,
+			"room/room_list",
+			"room_list_fm",
+			"roomList"
+		);
+		modelUtils.setFilteringInfo(model, FilterConfig.ROOM_LIST);
+	    
 
 	    return "room/room_list";
 	}

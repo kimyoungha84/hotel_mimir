@@ -247,9 +247,39 @@
   
   <form id="userSearchForm" onsubmit="return false;">
     <input type="hidden" name="filterType" th:value="${filterType}" />
+    <th:block th:if="${filterType == 'room_list'}">
+      <input type="hidden" name="checkIn" th:value="${checkIn}" id="checkInInput"/>
+      <input type="hidden" name="checkOut" th:value="${checkOut}" id="checkOutInput"/>
+    </th:block>
     <div class="user-filtering-area">
       <div class="user-fi-btn-area">
-        <!-- FilterConfig의 labelSelectorOptions 기반 동적 필터 생성 -->
+        <!-- 정렬 셀렉터(단일선택) -->
+        <th:block th:if="${filter.sortSelectorOption != null}">
+          <div class="user-filter-select" th:id="${filter.sortSelectorOption.selectorName + 'Select'}">
+            <button class="user-filtering-btn" type="button">
+              <span th:text="${filter.sortSelectorOption.label}"></span>
+              <span class="count" style="display:none"></span>
+              <img class="user-arrow-img" src="/filter/images/keyword_button_filter.svg" alt="화살표">
+            </button>
+            <div class="user-custom-dropdown">
+              <div class="user-dropdown-guide">1개만 선택 가능</div>
+              <div class="user-pill-options">
+                <button class="user-pill-btn"
+                        th:each="item : ${filter.sortSelectorOption.options}"
+                        th:data-value="${item.value}"
+                        th:text="${item.label}"></button>
+              </div>
+              <div class="user-selected-filters" th:attr="id='selectedFilters-' + ${filter.sortSelectorOption.selectorName}"></div>
+              <div class="user-dropdown-bottom">
+                <button class="user-reset-btn" type="button">
+                  <img src="/filter/images/ico_btn_refresh_small.png" alt="초기화"> 선택해제
+                </button>
+                <img class="user-dropdown-arrow" src="/filter/images/keyword_button_filter.svg" alt="화살표">
+              </div>
+            </div>
+          </div>
+        </th:block>
+        <!-- 기존 라벨+셀렉터 필터(다중선택) -->
         <th:block th:if="${filter.labelSelectorOptions != null and #lists.size(filter.labelSelectorOptions) > 0}">
           <div th:each="selector : ${filter.labelSelectorOptions}" class="user-filter-select" th:id="${selector.selectorName + 'Select'}">
             <button class="user-filtering-btn" type="button">
@@ -355,19 +385,33 @@
     
     document.querySelectorAll('.user-pill-btn').forEach(function(btn) {
       btn.addEventListener('click', function(e) {
-        const selectId = btn.closest('.user-filter-select').id;
+        const select = btn.closest('.user-filter-select');
+        const selectId = select.id;
+        // sortSelectorOption(정렬 셀렉터)만 단일선택
+        const isSortSelector = selectId === 'selectorOrderSelect';
         const value = btn.dataset.value;
-        if (!selectedFilters[selectId]) selectedFilters[selectId] = [];
-        if (selectedFilters[selectId].includes(value)) {
-          selectedFilters[selectId] = selectedFilters[selectId].filter(v => v !== value);
+
+        if (isSortSelector) {
+          // 단일선택: 무조건 하나만
+          selectedFilters[selectId] = [value];
+          // 나머지 버튼 selected 해제
+          btn.parentElement.querySelectorAll('.user-pill-btn').forEach(function(otherBtn) {
+            if (otherBtn !== btn) otherBtn.classList.remove('selected');
+          });
         } else {
-          selectedFilters[selectId].push(value);
+          // 기존 다중선택
+          if (!selectedFilters[selectId]) selectedFilters[selectId] = [];
+          if (selectedFilters[selectId].includes(value)) {
+            selectedFilters[selectId] = selectedFilters[selectId].filter(v => v !== value);
+          } else {
+            selectedFilters[selectId].push(value);
+          }
         }
         updateSelectedFilters();
         updatePillSelection();
         updateFilterBtnStyle();
         updateFilterBtnCount();
-        search(); // 필터 선택 시마다 검색
+        search();
       });
     });
     
@@ -385,31 +429,56 @@
     
     // 셀렉터별로 선택된 필터 태그를 해당 위치에만 렌더링
     function updateSelectedFilters() {
-      // 모든 selected-filters 영역을 먼저 비움 (초기화/마지막 삭제 시 잔상 방지)
+      // 모든 selected-filters 영역을 먼저 비움
       document.querySelectorAll('[id^="selectedFilters-"]').forEach(function(container) {
         container.innerHTML = '';
       });
       Object.keys(selectedFilters).forEach(function(key) {
         const container = document.getElementById('selectedFilters-' + key.replace('Select', ''));
         if (!container) return;
-        // 이미 위에서 비웠으므로, 값이 없으면 아무것도 안함
         if (!selectedFilters[key] || selectedFilters[key].length === 0) return;
-        selectedFilters[key].forEach(function(val) {
+        // 정렬 셀렉터(단일선택)
+        if (key === 'selectorOrderSelect') {
+          // value → label로 변환
+          const value = selectedFilters[key][0];
+          // label 찾기
+          const btn = document.querySelector(`#${key} .user-pill-btn[data-value='${value}']`);
+          const label = btn ? btn.textContent : value;
           const tag = document.createElement('div');
           tag.className = 'user-filter-tag';
-          tag.innerHTML = `${filterMap[key]}: ${val} <span class=\"user-remove\">×</span>`;
+          tag.innerHTML = `정렬기준 : ${label} <span class="user-remove">×</span>`;
           tag.querySelector('.user-remove').onclick = function(e) {
-            e.stopPropagation(); // 드롭다운 닫힘 방지
-            selectedFilters[key] = selectedFilters[key].filter(v => v !== val);
-            if (selectedFilters[key].length === 0) delete selectedFilters[key];
+            e.stopPropagation();
+            delete selectedFilters[key];
             updateSelectedFilters();
             updatePillSelection();
             updateFilterBtnStyle();
             updateFilterBtnCount();
-            search(); // 태그 삭제 시도 검색
+            search();
           };
           container.appendChild(tag);
-        });
+        } else {
+          // 기존 다중선택 셀렉터
+          selectedFilters[key].forEach(function(val) {
+            const btn = document.querySelector(`#${key} .user-pill-btn[data-value='${val}']`);
+            const label = btn ? btn.textContent : val;
+            const filterMapLabel = filterMap[key] || '';
+            const tag = document.createElement('div');
+            tag.className = 'user-filter-tag';
+            tag.innerHTML = `${filterMapLabel}: ${label} <span class="user-remove">×</span>`;
+            tag.querySelector('.user-remove').onclick = function(e) {
+              e.stopPropagation();
+              selectedFilters[key] = selectedFilters[key].filter(v => v !== val);
+              if (selectedFilters[key].length === 0) delete selectedFilters[key];
+              updateSelectedFilters();
+              updatePillSelection();
+              updateFilterBtnStyle();
+              updateFilterBtnCount();
+              search();
+            };
+            container.appendChild(tag);
+          });
+        }
       });
     }
     
@@ -532,13 +601,23 @@
   <script>
     // 페이지 최초 로딩 시 파라미터 없이 /search 호출
     window.addEventListener('DOMContentLoaded', function() {
-      // filterType 값을 form에서 읽어서 전송
       const form = document.getElementById('userSearchForm');
       let params = new URLSearchParams();
       if (form) {
         const filterTypeInput = form.querySelector('input[name="filterType"]');
         if (filterTypeInput && filterTypeInput.value) {
           params.append('filterType', filterTypeInput.value);
+          // room_list면 checkIn, checkOut도 추가
+          if (filterTypeInput.value === 'room_list') {
+            const checkInInput = form.querySelector('input[name="checkIn"]');
+            const checkOutInput = form.querySelector('input[name="checkOut"]');
+            if (checkInInput && checkInInput.value) {
+              params.append('checkIn', checkInInput.value);
+            }
+            if (checkOutInput && checkOutInput.value) {
+              params.append('checkOut', checkOutInput.value);
+            }
+          }
         }
       }
       fetch('/search', {

@@ -285,6 +285,51 @@
     $errorMessage.style.display = 'none';
   });
 
+  // 시작일 변경 시 종료일의 min 속성 동기화
+  const startDateInput = document.querySelector("input[name='startDate']");
+  const endDateInput = document.querySelector("input[name='endDate']");
+
+  if (startDateInput && endDateInput) {
+    startDateInput.addEventListener('change', function() {
+      if (startDateInput.value) {
+        endDateInput.min = startDateInput.value;
+        // 만약 이미 선택된 종료일이 시작일보다 이전이면 종료일을 시작일로 맞춤
+        if (endDateInput.value && endDateInput.value < startDateInput.value) {
+          endDateInput.value = startDateInput.value;
+        }
+      } else {
+        endDateInput.min = '';
+      }
+    });
+    // 페이지 로딩 시에도 min값 동기화
+    if (startDateInput.value) {
+      endDateInput.min = startDateInput.value;
+      if (endDateInput.value && endDateInput.value < startDateInput.value) {
+        endDateInput.value = startDateInput.value;
+      }
+    }
+  }
+
+})();
+</script>
+
+<script th:inline="javascript">
+// filterType이 room_sales면 페이지 로딩 후 /search 1회 호출
+(function() {
+  window.addEventListener('DOMContentLoaded', function() {
+    const filterTypeInput = document.querySelector("input[name='filterType']");
+    if (filterTypeInput && filterTypeInput.value === 'room_sales') {
+      fetch('/search', {
+        method: 'POST',
+        body: new URLSearchParams({ filterType: 'room_sales' })
+      })
+      .then(res => res.text())
+      .then(html => {
+        const resultArea = document.getElementById('resultArea');
+        if (resultArea) resultArea.innerHTML = html;
+      });
+    }
+  });
 })();
 </script>
 

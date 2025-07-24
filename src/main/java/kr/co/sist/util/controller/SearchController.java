@@ -1,8 +1,9 @@
 package kr.co.sist.util.controller;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.slf4j.Logger;
@@ -11,7 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -22,6 +22,8 @@ import kr.co.sist.util.FilterCondition;
 import kr.co.sist.util.FilterConditionBuilder;
 import kr.co.sist.util.FilterConfig;
 import kr.co.sist.util.ModelUtils;
+import kr.co.sist.util.SortConditionBuilder;
+import kr.co.sist.util.SortConditionBuilder.SortParam;
 import kr.co.sist.util.domain.SearchDataDomain;
 import kr.co.sist.util.service.DynamicSearchService;
 
@@ -71,6 +73,8 @@ public class SearchController {
     private DynamicSearchService service;
     @Autowired 
     private FilterConditionBuilder builder;
+    @Autowired
+    private SortConditionBuilder sortBuilder;
 
     @PostMapping("/search")
     public String search(@RequestParam MultiValueMap<String, String> params, 
@@ -95,11 +99,54 @@ public class SearchController {
             logger.debug("검색 요청 - filterType: {}, offset: {}, end: {}", filterType, offset, end);
 
             List<FilterCondition> filters = builder.build(params, config);
-            List<SearchDataDomain> result = service.searchByFilterConfig(config, filters, offset, end, pageSize);
+            SortParam sortParam = sortBuilder.build(params, config);
+
+            List<SearchDataDomain> result;
+            // room_list + checkIn, checkOut이 null이 아니면 별도 호출
+            if (filterType.equals(FilterConfig.ROOM_LIST.getFilterType())) {
+                String checkIn = params.getFirst("checkIn");
+                String checkOut = params.getFirst("checkOut");
+                if (checkIn != null && !checkIn.isBlank() && checkOut != null && !checkOut.isBlank()) {
+                    result = service.searchRoom(filters, sortParam, offset, end, pageSize, checkIn, checkOut);
+                } else {
+                    // 기존 방식(혹은 빈 리스트)
+                    result = List.of();
+                }
+            } 
+            
+            else if(filterType.equals(FilterConfig.ROOM_SALES.getFilterType())) {
+            	System.out.println("sdfww2309r2903ru2390r23r9023u0923ru023rdfsdfsdfsdf");
+            	LocalDate now = LocalDate.now();
+        	    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        	    String startDate = params.getFirst("startDate");
+            	String endDate = params.getFirst("endDate");
+        	    if (startDate == null) {
+        	        startDate = now.withMonth(1).withDayOfMonth(1).format(formatter); // 1월 1일
+        	    }
+        	    if (endDate == null) {
+        	        endDate = now.withMonth(12).withDayOfMonth(31).format(formatter); // 12월 31일
+        	    }
+        	    result = service.searchRoomSales(filters, offset, end, pageSize, startDate, endDate);
+            	
+            }
+            
+            
+            else {
+                result = service.searchByFilterConfig(config, filters, offset, end, pageSize);
+            }
+
             if (result == null) {
                 logger.warn("검색 결과가 null입니다. filterType: {}", filterType);
                 result = List.of();
             }
+            
+            //ROOM_SALES는 모델에 다른방식으로 add
+            if(filterType.equals(FilterConfig.ROOM_SALES.getFilterType())) {
+            	String startDate = params.getFirst("startDate");
+            	String endDate = params.getFirst("endDate");
+            	modelUtils.setRoomSalesModel(model, result, startDate, endDate);
+            }
+            
             model.addAttribute(fragmentInfo.getResultKey(), result);
             model.addAttribute("pageSize", pageSize);
             logger.debug("검색 완료 - 결과 개수: {}", result.size());

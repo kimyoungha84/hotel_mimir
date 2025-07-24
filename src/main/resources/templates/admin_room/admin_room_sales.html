@@ -14,8 +14,10 @@
   <div id="body-pd" class="body-pd">
     <div class="table-section">
       <h2 class="h2Title">매출 현황</h2>
+      
+      <!-- <div th:replace="~{fragments/filter :: filter(${filter})}"></div> -->
 
-      <form method="get" th:action="@{/admin/roomsales}" class="filters">
+      <!-- <form method="get" th:action="@{/admin/roomsales}" class="filters">
         <div class="date-range">
           <label>시작일</label>
           <input type="date" name="startDate" th:value="${startDate}" />
@@ -36,7 +38,7 @@
           </select>
         </div>
 
-      </form>
+      </form> -->
 
       <div class="notice">* 예약 취소 금액은 금액에 포함되지 않습니다.</div>
       <div class="notice">* 총 합계 회원 수, 비회원 수, 금액은 체크인/체크아웃일 경우에만 합계된 수치입니다.</div>
@@ -53,8 +55,8 @@
             <th>금액</th>
           </tr>
         </thead>
-        <tbody>
-          <tr th:each="row : ${salesList}">
+        <tbody th:fragment="fm_salesList" id="resultArea">
+          <tr th:each="row : ${salesList}"> 
             <td th:text="|${row.typeName} 명|">스탠다드룸</td>
             <td th:text="|${row.memberCount} 명|">13명</td>
             <td th:text="|${row.nonMemberCount} 건|">31건</td>

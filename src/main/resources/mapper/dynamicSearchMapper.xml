@@ -468,21 +468,33 @@ WHERE rnum BETWEEN #{offset} AND #{end}
 </sql>
 
 
-<select id="searchRoom" parameterType="RoomSearchDTO" resultType="kr.co.sist.util.domain.SearchDataDomain">
+<select id="searchRoom" resultType="kr.co.sist.util.domain.SearchDataDomain">
 SELECT
   roomId,
   bedName,
   typeName,
   viewName,
+  capacity,
+  pricePerNight,
+  area_Sqm,
+  roomFloor,
+  description,
+  imagePath,
+  status,
   floorType,
-  countAvailableRooms,
-  status
+  countAvailableRooms
 FROM (
   SELECT 
     r.room_id roomId,
     b.bed_Name bedName,
     t.type_Name typeName,
     v.view_Name viewName,
+    r.capacity capacity,
+    r.price_Per_Night pricePerNight,
+    r.area_sqm area_Sqm,
+    r.ROOM_FLOOR roomFloor,
+    r.description description,
+    fp.path AS imagePath,
     NVL((
       SELECT status
       FROM (
@@ -526,16 +538,75 @@ FROM (
   JOIN Bed_Type b ON r.bed_Id = b.bed_Id
   JOIN Room_Type t ON r.type_Id = t.type_Id
   JOIN View_Type v ON r.view_Id = v.view_Id
+  LEFT JOIN FILE_PATH fp
+    ON fp.target_type = t.type_Name
+   AND fp.target_number = b.bed_Name
   WHERE 1=1
     <include refid="roomUserFilter"/>
 )
-WHERE rn = 1
-ORDER BY roomId
+WHERE rn = 1  
+<choose>
+  <when test="sortParam != null and sortParam.columnName != null and sortParam.direction != null">
+    ORDER BY ${sortParam.columnName} ${sortParam.direction}
+  </when>
+  <otherwise>
+    ORDER BY roomId
+  </otherwise>
+</choose>
+</select>
+
+<!--///////////////////////////////// ROOM-USER-END /////////////////////////////////-->
+
+<!--///////////////////////////////// ROOM-SALES /////////////////////////////////-->
+
+<select id="searchRoomSales" resultType="kr.co.sist.util.domain.SearchDataDomain">
+SELECT
+  rt.TYPE_NAME AS typeName,
+
+  -- 전체 인원 수 (예약 건수)
+  COUNT(CASE WHEN r.USER_NUM IS NOT NULL THEN 1 END) AS memberCount,
+  COUNT(CASE WHEN r.USER_NUM IS NULL THEN 1 END) AS nonMemberCount,
+
+  -- 체크인/체크아웃 상태별 건수
+  SUM(CASE WHEN r.STATUS = '체크인' THEN 1 ELSE 0 END) AS checkinCount,
+  SUM(CASE WHEN r.STATUS = '체크아웃' THEN 1 ELSE 0 END) AS checkoutCount,
+  SUM(CASE WHEN r.STATUS IN ('체크인', '체크아웃') THEN 1 ELSE 0 END) AS stayCount,
+
+  SUM(CASE WHEN r.STATUS = '예약완료' THEN 1 ELSE 0 END) AS completedCount,
+  SUM(CASE WHEN r.STATUS = '예약취소' THEN 1 ELSE 0 END) AS cancelCount,
+
+  -- 체크인+체크아웃 상태의 회원/비회원 수 (이게 핵심)
+  SUM(CASE WHEN r.STATUS IN ('체크인', '체크아웃') AND r.USER_NUM IS NOT NULL THEN 1 ELSE 0 END) AS memberStayCount,
+  SUM(CASE WHEN r.STATUS IN ('체크인', '체크아웃') AND r.USER_NUM IS NULL THEN 1 ELSE 0 END) AS nonMemberStayCount,
+
+  -- 상태별 금액
+  SUM(CASE WHEN r.STATUS = '체크아웃' THEN COALESCE(p.PAYMENT_PRICE, 0) ELSE 0 END) AS checkoutAmount,
+  SUM(CASE WHEN r.STATUS = '체크인' THEN COALESCE(p.PAYMENT_PRICE, 0) ELSE 0 END) AS checkinAmount,
+  SUM(CASE WHEN r.STATUS = '예약완료' THEN COALESCE(p.PAYMENT_PRICE, 0) ELSE 0 END) AS completedAmount,
+  SUM(CASE WHEN r.STATUS = '예약취소' THEN COALESCE(p.PAYMENT_PRICE, 0) ELSE 0 END) AS cancelAmount,
+
+  -- 실제 매출: 체크인 + 체크아웃만 합산
+  SUM(CASE WHEN r.STATUS IN ('체크인', '체크아웃') THEN COALESCE(p.PAYMENT_PRICE, 0) ELSE 0 END) AS totalAmount
+
+FROM RESERVATION r
+LEFT JOIN ROOM rm ON r.ROOM_ID = rm.ROOM_ID
+LEFT JOIN ROOM_TYPE rt ON rm.TYPE_ID = rt.TYPE_ID
+LEFT JOIN PAYMENT p ON r.PAYMENT_ID = p.PAYMENT_ID
+WHERE 1=1
+  <include refid="filter"/>
+  AND r.CHECKIN_DATE &gt;= TO_DATE(#{startDate}, 'YYYY-MM-DD')
+  AND r.CHECKOUT_DATE &lt;= TO_DATE(#{endDate}, 'YYYY-MM-DD')
+GROUP BY rt.TYPE_NAME
+ORDER BY rt.TYPE_NAME
 </select>
 
 
 
 
-<!--///////////////////////////////// ROOM-USER-END /////////////////////////////////-->
+
+
+<!--///////////////////////////////// ROOM-SALES-END /////////////////////////////////-->
+
+
 
 </mapper>

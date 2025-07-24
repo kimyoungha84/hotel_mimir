@@ -9,7 +9,7 @@
 <link rel="stylesheet" th:href="@{/css/room/room_list.css}" />
  <link rel="stylesheet" th:href="@{/css/header.css}" />
  <link rel="stylesheet" th:href="@{/css/footer.css}" />
-<script th:src="@{/js/room/room_list.js}"></script>
+<script th:src="@{/js/room/room_list2.js}"></script>
 <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/ko.js"></script>
 <style>
@@ -40,7 +40,7 @@
 <div class="filter-bar">
   <!-- 정렬 기준 아코디언 -->
 
-<div class="accordion bed-accordion">
+<!-- <div class="accordion bed-accordion">
     <button class="accordion-btn">정렬 기준</button>
     <div class="accordion-content" style="min-height: 100px;">
     <p style="position: relative; left: 30px; bottom: 10px;">정렬 기준</p>
@@ -54,7 +54,7 @@
     </div>
   </div>
   
-  <!-- 침대 타입 필터 -->
+  침대 타입 필터
   <div class="accordion bed-accordion">
     <button class="accordion-btn">침대 타입</button>
     <div class="accordion-content">
@@ -76,7 +76,7 @@
     </div>
   </div>
 
-  <!-- 전망 타입 필터 -->
+  전망 타입 필터
   <div class="accordion view-accordion">
     <button class="accordion-btn">전망 타입</button>
     <div class="accordion-content">
@@ -94,11 +94,14 @@
     </div>
       </div>
     </div>
-  </div>
+  </div> -->
+  
+  
+  <div th:replace="~{fragments/filter_user :: filter_user(${filter})}"></div>
 </div>
 
 	<div class="room-section">
-	<div class="room-list" th:fragement="room_list_fm" id="resultArea">
+	<div class="room-list" th:fragment="room_list_fm" id="resultArea">
 <th:block th:each="room : ${roomList}">
 
 

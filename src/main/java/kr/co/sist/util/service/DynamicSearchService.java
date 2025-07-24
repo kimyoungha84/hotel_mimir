@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import kr.co.sist.util.FilterCondition;
 import kr.co.sist.util.FilterConfig;
+import kr.co.sist.util.SortConditionBuilder.SortParam;
 import kr.co.sist.util.domain.SearchDataDomain;
 import kr.co.sist.util.mapper.DynamicSearchMapper;
 
@@ -123,6 +124,25 @@ public class DynamicSearchService {
         }
     }
 
+    public List<SearchDataDomain> searchRoom(List<FilterCondition> filters, SortParam sp, int offset, int end, int pageSize, String checkIn, String checkOut) {
+    	try {
+    		logger.debug("객실 검색 - filters: {}, offset: {}, end: {}", filters.size(), offset, end);
+    		return mapper.searchRoom(filters, sp, offset, end, pageSize, checkIn, checkOut);
+    	} catch (Exception e) {
+    		logger.error("객실 검색 중 오류 발생", e);
+    		return List.of();
+    	}
+    }
+    
+    public List<SearchDataDomain> searchRoomSales(List<FilterCondition> filters, int offset, int end, int pageSize, String startDate, String endDate) {
+    	try {
+    		logger.debug("객실 매출 검색 - filters: {}, offset: {}, end: {}", filters.size(), offset, end);
+    		return mapper.searchRoomSales(filters, offset, end, pageSize, startDate, endDate);
+    	} catch (Exception e) {
+    		logger.error("객실 매출 검색 중 오류 발생", e);
+    		return List.of();
+    	}
+    }
     /**
      * FilterConfig에 따른 통합 카운트 메서드
      */
@@ -185,7 +205,7 @@ public class DynamicSearchService {
     	try {
     		return mapper.countRoomResv(filters);
     	} catch (Exception e) {
-    		logger.error("다이닝예약 카운트 조회 중 오류 발생", e);
+    		logger.error("객실예약 카운트 조회 중 오류 발생", e);
     		return 0;
     	}
     }
@@ -197,6 +217,8 @@ public class DynamicSearchService {
             logger.error("멤버 카운트 조회 중 오류 발생", e);
             return 0;
         }
+        
+      
     }
     
 } // class

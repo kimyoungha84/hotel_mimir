@@ -1,9 +1,16 @@
 package kr.co.sist.util;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.ui.Model;
 
+import kr.co.sist.util.domain.SearchDataDomain;
 import kr.co.sist.util.service.DynamicSearchService;
 
 
@@ -130,6 +137,82 @@ public class ModelUtils {
         int totalPages = (int) Math.ceil((double) totalItems / pageSize);
         if (totalPages == 0) totalPages = 1; // 최소 1페이지는 보장
         model.addAttribute("totalPages", totalPages);
+    }
+    
+    public void setRoomSalesModel(Model model, List<SearchDataDomain> domain, String startDate, String endDate) {
+    	
+    	LocalDate now = LocalDate.now();
+	    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+
+	    if (startDate == null) {
+	        startDate = now.withMonth(1).withDayOfMonth(1).format(formatter); // 1월 1일
+	    }
+	    if (endDate == null) {
+	        endDate = now.withMonth(12).withDayOfMonth(31).format(formatter); // 12월 31일
+	    }
+
+	    List<SearchDataDomain> salesList = domain;
+
+	    int memberCount = 0;
+	    int nonMemberCount = 0;
+
+	    int totalMemberStay = 0;
+	    int totalNonMemberStay = 0;
+	    int totalCheckout = 0;
+	    int totalCheckin = 0;
+	    int totalComplete = 0;
+	    int totalCancel = 0;
+	    int totalStay = 0;
+	    int totalAmount = 0;
+	    int totalCheckinAmount = 0;
+	    int totalCheckoutAmount = 0;
+	    int totalCompletedAmount = 0;
+	    int totalCancelAmount = 0;
+
+	    for (SearchDataDomain s : salesList) {
+	        // 전체 회원/비회원 수 (모든 예약 건 포함)
+	        memberCount += s.getMemberCount();
+	        nonMemberCount += s.getNonMemberCount();
+
+	        // 체크인+체크아웃 상태 회원/비회원만 합산
+	        totalMemberStay += s.getMemberStayCount();
+	        totalNonMemberStay += s.getNonMemberStayCount();
+
+	        // 상태별 집계
+	        totalCheckout += s.getCheckoutCount();
+	        totalCheckin += s.getCheckinCount();
+	        totalComplete += s.getCompletedCount();
+	        totalCancel += s.getCancelCount();
+	        totalStay += s.getStayCount();
+	        totalAmount += s.getTotalAmount();
+	        totalCheckinAmount += s.getCheckinAmount();
+	        totalCheckoutAmount += s.getCheckoutAmount();
+	        totalCompletedAmount += s.getCompletedAmount();
+	        totalCancelAmount += s.getCancelAmount();
+	    }
+
+
+	    Map<String, Integer> summary = new HashMap<>();
+	    summary.put("totalMemberStay", totalMemberStay);
+	    summary.put("totalNonMemberStay", totalNonMemberStay);
+	    summary.put("totalCheckout", totalCheckout);
+	    summary.put("totalCheckin", totalCheckin);
+	    summary.put("totalComplete", totalComplete);
+	    summary.put("totalCancel", totalCancel);
+	    summary.put("totalStay", totalStay);
+	    summary.put("totalAmount", totalAmount);
+	    summary.put("totalCheckinAmount", totalCheckinAmount);
+	    summary.put("totalCheckoutAmount", totalCheckoutAmount);
+	    summary.put("totalCompletedAmount", totalCompletedAmount);
+	    summary.put("totalCancelAmount", totalCancelAmount);
+
+//	    model.addAttribute(resultKey, salesList);
+	    model.addAttribute("memberCount", memberCount);
+	    model.addAttribute("nonMemberCount", nonMemberCount);
+	    model.addAttribute("summary", summary);
+	    model.addAttribute("startDate", startDate);
+	    model.addAttribute("endDate", endDate);
+    	
     }
     
     

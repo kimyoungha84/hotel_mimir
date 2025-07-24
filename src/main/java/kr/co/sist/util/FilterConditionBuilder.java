@@ -33,7 +33,7 @@ public class FilterConditionBuilder {
         // Room 예약 관련 컬럼
         "user_name","type_name","ismember","status","resv_reg_date",
         // Member 관련 컬럼
-        "use_yn","user_id"
+        "use_yn","user_id","bed_name","view_name"
         
     );
 

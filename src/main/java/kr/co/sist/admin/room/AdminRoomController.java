@@ -18,6 +18,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import kr.co.sist.room.RoomDTO;
+import kr.co.sist.util.FilterConfig;
+import kr.co.sist.util.ModelUtils;
+import kr.co.sist.util.controller.SearchController;
 
 
 @Controller
@@ -28,6 +31,9 @@ public class AdminRoomController {
 	
 	@Autowired
 	private AdminRoomService ars;
+	
+	@Autowired
+	private ModelUtils modelUtils;
 
 	@GetMapping("/admin/roomlist")
 	public String adminRoomList(Model model) {
@@ -187,6 +193,25 @@ public class AdminRoomController {
 
 	    return "admin_room/admin_room_sales";
 	}//adminRoomSales
+	
+//	@GetMapping("admin/roomsales")
+//	public String adminRoomSales(
+//	                             Model model) {
+//
+//		// fragment 정보 동적 등록
+//		SearchController.addFragmentInfo(
+//			FilterConfig.ROOM_SALES,
+//			"admin_room/admin_room_sales",
+//			"fm_salesList",
+//			"salesList"
+//		);
+//		modelUtils.setFilteringInfo(model, FilterConfig.ROOM_SALES);
+//		modelUtils.setPaginationAttributes(model, 5, FilterConfig.ROOM_SALES);
+//		
+//		
+//		
+//	    return "admin_room/admin_room_sales";
+//	}//adminRoomSales
 	
 }//class
 
