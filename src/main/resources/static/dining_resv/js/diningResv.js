@@ -25,16 +25,6 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   });
   
-  nextBtn.addEventListener("click", function () {
-    if (!inputAdult.value || !inputChild.value) {
-      const adultTxt = document.querySelector(".cnt-adult-txt")?.textContent.trim() || "1";
-      const childTxt = document.querySelector(".cnt-child-txt")?.textContent.trim() || "0";
-
-      inputAdult.value = adultTxt;
-      inputChild.value = childTxt;
-    }
-  });
-  
   // 탭 전환 이벤트
   btnScheduler.addEventListener("click", () => {
     btnScheduler.classList.add("active");

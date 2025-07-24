@@ -52,6 +52,12 @@ document.addEventListener("DOMContentLoaded", function () {
   const openBtn = document.getElementById("openCntPopup");
 
   window.openCntPopup = function () {
+	const currentAdult = document.querySelector(".cnt-adult-txt")?.textContent.trim() || "1";
+	const currentChild = document.querySelector(".cnt-child-txt")?.textContent.trim() || "0";
+
+	document.getElementById("adultCnt").textContent = currentAdult;
+	document.getElementById("childCnt").textContent = currentChild;
+	
     popup.style.display = "block";
     overlay.style.display = "block";
 

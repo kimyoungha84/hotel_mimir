@@ -138,6 +138,12 @@ public class DiningNextResvController {
 	    DiningResvDTO dto = new DiningResvDTO();
 	    
 	    int totalCount = adult + child;
+	    
+	    if (reservationRequest == null || reservationRequest.trim().isEmpty()) {
+	    	
+	        reservationRequest = "없음";
+	        
+	    }
 
 	    dto.setReservationName(reservationName);
 	    dto.setReservationEmail(reservationEmail);

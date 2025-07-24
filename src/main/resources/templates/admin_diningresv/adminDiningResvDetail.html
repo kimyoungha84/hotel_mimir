@@ -34,7 +34,7 @@
       </tr>
       <tr>
         <td>예약자명</td>
-        <td th:text="${reservationDetail.reservationName + (reservationDetail.reservationType == 'member' ? ' (회원)' : ' (비회원)')}">
+        <td th:text="${reservationDetail.reservationName + (reservationDetail.reservationType == '회원' ? ' (회원)' : ' (비회원)')}">
           예약자명
         </td>
       </tr>
@@ -48,7 +48,7 @@
       </tr>
       <tr>
         <td>예약 날짜</td>
-        <td th:text="${#dates.format(reservationDetail.reservationDate, 'yyyy-MM-dd')}">예약 날짜</td>
+        <td th:text="${#dates.format(reservationDetail.reservationDate, 'yyyy-MM-dd(E)')}">예약 날짜</td>
       </tr>
       <tr>
         <td>예약 시간</td>
@@ -63,7 +63,7 @@
       </tr>
       <tr>
         <td>예약 현황</td>
-        <td th:text="${reservationDetail.reservationStatus}">예약 상태</td>
+        <td th:text="${reservationDetail.reservationStatus}">예약 현황</td>
       </tr>
       <tr>
         <td>요청 사항</td>

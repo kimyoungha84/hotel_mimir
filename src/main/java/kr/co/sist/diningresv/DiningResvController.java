@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import kr.co.sist.dining.user.DiningDomain;
@@ -50,6 +51,23 @@ public class DiningResvController {
         return "dining_resv/diningResv";
         
     }
+    
+	@PostMapping("/searchDiningResvDetail")
+	public String searchResvDetail(DiningResvDTO dto, Model model) {
+		
+	  dto = drs.searchResvData(dto);
+	  
+	    if (dto != null && (dto.getReservationRequest() == null || dto.getReservationRequest().trim().isEmpty())) {
+	    	
+	        dto.setReservationRequest("없음");
+	        
+	    }
+	  
+	  model.addAttribute("resvData", dto);
+		   
+	  return "dining_resv/searchDiningResvDetail";
+	  
+	}
     
     @GetMapping("/diningResvComplete")
     public String diningResvComplete(@RequestParam int reservationId, Model model) {

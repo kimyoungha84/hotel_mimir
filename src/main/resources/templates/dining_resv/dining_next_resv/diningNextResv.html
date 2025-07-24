@@ -5,6 +5,7 @@
   <title>다이닝 결제</title>
   <link rel="stylesheet" th:href="@{/dining_resv/css/diningNextResv.css}" />
   <link rel="stylesheet" th:href="@{/css/header.css}" />
+  <link rel="stylesheet" th:href="@{/css/footer.css}" />
 </head>
 <body>
 
@@ -66,14 +67,14 @@
           <div class="payment-btn">
           	<button class="field-btn" type="button">현장 결제</button>
           </div>
-          <div class="payment-btn" th:if="${diningId != '2'}">
+          <div class="payment-btn" th:if="${diningId != 3}">
           	<button class="online-btn" type="button">온라인 결제</button>
           </div>
         </div>
       </div>
     </div>
     
-    <div class="payment-method" id="paymentMethod" th:if="${diningId != '2'}" style="display: none;">
+    <div class="payment-method" id="paymentMethod" th:if="${diningId != 3}" style="display: none;">
       <div class="payment-method-btn">
         <button type="button" class="kakao-pay-btn" onclick="requestDiningPay('카카오페이')">카카오페이</button>
         <button type="button" class="toss-pay-btn" onclick="requestDiningPay('토스페이')">토스페이</button>
@@ -272,6 +273,8 @@
 <div th:replace="~{fragments/footer.html :: footerFragment}"></div>
 
   <script th:src="@{/dining_resv/js/diningNextResv.js}"></script>
+  
+  <script src="https://cdn.iamport.kr/v1/iamport.js"></script>
   
 <script>
 function requestDiningPay(method) {

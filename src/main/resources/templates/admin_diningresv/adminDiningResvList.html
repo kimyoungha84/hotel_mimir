@@ -36,11 +36,11 @@
     <tr th:each="resv : ${reservationList}" th:attr="data-id=${resv.reservation_id}" class="reservation-row" style="cursor:pointer;"
         th:onclick="'location.href=\'/adminDiningResvDetail/' + ${resv.reservation_id} + '\''">
       <td th:text="${resv.reservation_id}">예약 번호</td>
-      <td th:text="${resv.reservation_name + (resv.reservation_type == 'member' ? ' (회원)' : ' (비회원)')}">
+      <td th:text="${resv.reservation_name + (resv.reservation_type == '회원' ? ' (회원)' : ' (비회원)')}">
         예약자명
       </td>
       <td th:text="${resv.dining_name}">다이닝</td>
-      <td th:text="${#dates.format(resv.reservation_date, 'yyyy-MM-dd')}">예약 날짜</td>
+      <td th:text="${#dates.format(resv.reservation_date, 'yyyy-MM-dd(E)')}">예약 날짜</td>
       <td th:text="${resv.reservation_status}">예약 상태</td>
     </tr>
   </tbody>

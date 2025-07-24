@@ -46,6 +46,12 @@ public class AdminDiningResvController {
     	
     	DiningResvDTO dto = adrs.selectResvId(reservationId);
     	
+        if (dto.getReservationRequest() == null || dto.getReservationRequest().trim().isEmpty()) {
+        	
+            dto.setReservationRequest("없음");
+            
+        }
+    	
     	if (dto.getReservationTime() != null) {
     		
     		int hour = dto.getReservationTime().toLocalDateTime().toLocalTime().getHour();
@@ -72,6 +78,12 @@ public class AdminDiningResvController {
     public String adminDiningResvEdit(@PathVariable int reservationId, Model model) {
     	
         DiningResvDTO dto = adrs.resvDetail(reservationId);
+        
+        if (dto.getReservationRequest() == null || dto.getReservationRequest().trim().isEmpty()) {
+        	
+            dto.setReservationRequest("없음");
+            
+        }
         
         model.addAttribute("reservationDetail", dto);
         
