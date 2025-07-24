@@ -4,7 +4,8 @@ $(document).ready(function() {
   $(".faq-item").off('click').on('click', function() {
     const content = $(this).next(".faq-answer");
     $(".faq-answer").not(content).slideUp();
-    content.slideToggle();
+    // FAQ 답변도 escapeHtml 적용
+    content.html(escapeHtml(content.text())).slideToggle();
   });
 });
 
@@ -133,6 +134,7 @@ $(document).ready(function() {
         if (roomId == currentRoomId) {
           const isMine = sender == userNum;
           const alignClass = isMine ? "right" : "left";
+          // HTML escape 적용
           const formattedMsg = escapeHtml(msg).replace(/\n/g, "<br>");
           const messageBlock = $("<div>").addClass("message-block " + alignClass);
           if (!isMine) {
@@ -284,7 +286,7 @@ $(document).ready(function() {
   }
 
   // ===== 욕설 필터 함수와 리스트를 최상단에 선언 =====
-  const badWords = ["ㅅㅂ", "개새끼", "병신", ""];
+  const badWords = ["ㅅㅂ", "개새끼", "병신", "tq", "시발", "ㄳㄲ", "ㄱㅅㄲ", "ㅄ", "ㅅ1ㅂ", "ㅂ1ㅅ", "쉬발", "씨발", "씨1발", "보지", "자지", "섹스", "뒤져라", "애미", "애비", "tlqkf"];
   function filterBadWords(msg) {
       if (!msg) return "";
       let filtered = msg;
