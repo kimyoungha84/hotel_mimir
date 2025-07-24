@@ -29,14 +29,16 @@ public class PageConnectController {
 		String session_id=(String)request.getSession().getAttribute("session_id");
 		String authorityStr=as.getAuthoritybyID(session_id);
 		
-		System.out.println("dashboard=================session-id"+session_id);
+		System.out.println("PageConnectController   dashboard=================session-id"+session_id);
 		
 		
 		if(authorityStr.contains("room")) {
 			dashboardPageStr="administrator/dashboard/room_dashboard";
 		}else if(authorityStr.contains("dinning")) {
 			dashboardPageStr="administrator/dashboard/dining_dashboard";
-		}//end if~else
+		}else if(authorityStr.contains("employee") || authorityStr.contains("member")) {
+			dashboardPageStr="administrator/noAutorityPage";
+		}
 		
 		return dashboardPageStr;
 	}//examplePage

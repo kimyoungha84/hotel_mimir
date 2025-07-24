@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import jakarta.mail.MessagingException;
+import jakarta.servlet.http.HttpServletRequest;
 
 @Service
 public class AdminService {
@@ -302,19 +303,33 @@ public class AdminService {
 	public boolean chkHaveAuthority(String id, String uri) {
 		boolean flag=false;
 		
+		
+		
 		//id를 이용해서 해당 아이디가 가진 권한을 가져오기
 		//이거 mapper에 아마도 이 query가 있을 텐데....
 		String idAuthoryStr=am.selectPermissionById(id);
 		String urlAuthoryStr=mappingURLtoAthority(uri);
-		
+		System.out.println("adminServce=-----------");
 		System.out.println("idAuthoryStr------"+idAuthoryStr);
 		System.out.println("urlAuthoryStr-------"+urlAuthoryStr);
+		System.out.println("111222333-------"+uri);
 		
 		//이 url에 이 id가 접근 가능해도 되는건지?! 확인
 		
 		if(idAuthoryStr.contains(urlAuthoryStr) || idAuthoryStr.equals("admin")) {
 			//이 url에 이 id가 접근 가능해도 되나? || 관리자 인가?
 			flag=true;
+			System.out.println("여기는 들어오나?");
+			
+			System.out.println("11111"+idAuthoryStr.contains("member"));
+			System.out.println("22222"+idAuthoryStr.contains("employee"));
+			System.out.println("33333"+uri.equals("/admin/dashboard")  + "uri====="+uri);
+			//근데 만약 직원 권한, 회원 권한을 가진 사용자다! //그러면 index로 보내면 안됨
+			if((idAuthoryStr.contains("member") ||idAuthoryStr.contains("employee"))&& uri.isBlank()) {
+				System.out.println("직원 권한, 회원 권한을 가진 사용자다! //그러면 index로 보내면 안됨");
+				flag =false;
+			}//end if
+			
 		}//end if
 		System.out.println("falg--------"+flag);
 

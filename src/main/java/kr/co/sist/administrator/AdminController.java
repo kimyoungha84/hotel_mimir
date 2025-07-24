@@ -32,15 +32,20 @@ public class AdminController {
 			return "redirect:/admin/login";
 		}
 		String authorityStr=as.getAuthoritybyID(session_id);
+		System.out.println("authorityStr---------------------"+authorityStr);
 		
-		System.out.println("dashboard=================session-id"+session_id);
+		System.out.println("Admin Controller 여기인가 ?dashboard=================session-id"+session_id+ request.getRequestURL());
+		
 		
 		
 		if(authorityStr.contains("room")) {
 			dashboardPageStr="administrator/dashboard/room_dashboard";
 		}else if(authorityStr.contains("dinning")) {
 			dashboardPageStr="administrator/dashboard/dining_dashboard";
-		}//end if~else
+		}else if(authorityStr.contains("employee") || authorityStr.contains("member")) {
+			dashboardPageStr="administrator/noAutorityPage";
+		}
+
 		
 		
 		return dashboardPageStr;

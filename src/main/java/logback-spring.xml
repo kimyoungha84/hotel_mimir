@@ -1,4 +1,5 @@
 <configuration>
+<property name="LOG_HOME" value="C:/dev"/>
     <appender name="USER_FILE" class="ch.qos.logback.classic.sift.SiftingAppender">
         <discriminator>
             <key>userId</key>
@@ -7,10 +8,8 @@
 
         <sift>
             <appender name="FILE-${userId}" class="ch.qos.logback.core.rolling.RollingFileAppender">
-                <file>c:/dev/logs/user_${userId}/current.log</file>
-
                 <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-                    <fileNamePattern>logs/user_${userId}/%d{yyyy-MM-dd}.log</fileNamePattern>
+                    <fileNamePattern>${LOG_HOME}/logs/user_${userId}/%d{yyyy-MM-dd}.log</fileNamePattern>
                     <maxHistory>14</maxHistory>
                     <cleanHistoryOnStart>true</cleanHistoryOnStart>
                 </rollingPolicy>

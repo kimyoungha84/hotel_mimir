@@ -12,6 +12,12 @@
 
 <th:block th:replace="~{administrator/fragments/admin_header :: admin_header}"></th:block>
 
+<!-- Vue CDN -->
+<script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+
+<!-- axios CDN -->
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
 <!-- chart.js CDN -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
@@ -76,9 +82,38 @@
 </div>
 
 
+<div id="app">
+    <input type="hidden" v-model="messageStr"> <!-- message 값을 바인딩 -->
+    <input type="button" value="버튼" id="btn" @click="clickBtn">
 </div>
 
+</div>
 
+<script>
+Vue.createApp({
+    data(){
+        return{
+            messageStr:"tao"
+        }
+    },
+    methods:{
+        clickBtn(){
+            var message=JSON.stringify(this.messageStr);
+
+            axios.post("/api/chat",{message:message})
+            .then(res=>{
+                alert("성공!!" +res.data);
+            })
+            .catch(err=>{
+                alert("실패!!"+err.response.data);    
+                debugger;
+                
+            })
+        }
+    }
+}).mount("#app");
+
+</script>
 
 <script>
 const ctx = document.getElementById('myChart').getContext('2d');
@@ -225,5 +260,7 @@ const myChart4 =new Chart(ctx4, {
     },
 });
 </script>
+
+
 </body>
 </html>

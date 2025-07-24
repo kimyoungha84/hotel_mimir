@@ -27,6 +27,7 @@ public class PageAuthorityInterceptor implements HandlerInterceptor{
 		
 		
 		
+		//String inputUri=
 		/*접근 URL 받아오기*/
 		String url=request.getRequestURI();
 		System.out.println("접근 uri--============================-----------------"+url);
