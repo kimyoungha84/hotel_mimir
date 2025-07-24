@@ -27,13 +27,13 @@
         <appender-ref ref="RollingFile"/>
         <appender-ref ref="Console"/>
     </logger>
-
+<!-- 
     <logger name="org.hibernate.type.descriptor.sql.BasicBinder" level="TRACE" additivity="false">
         <appender-ref ref="RollingFile"/>
         <appender-ref ref="Console"/>
     </logger>
     
-
+ -->
 	<!-- 기본 루트 로거 -->
     <root level="INFO">
         <appender-ref ref="USER_FILE" />
