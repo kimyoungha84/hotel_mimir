@@ -106,36 +106,6 @@
     )
   </insert>
   
-<select id="selectResvData" parameterType="kr.co.sist.diningresv.DiningResvDTO" resultType="kr.co.sist.diningresv.DiningResvDTO">
-  SELECT 
-    dr.reservation_id AS reservationId,
-    dr.reservation_name AS reservationName,
-    dr.reservation_tell AS reservationTell,
-    dr.reservation_email AS reservationEmail,
-    dr.reservation_date AS reservationDate,
-    dr.reservation_time AS reservationTime,
-    dr.reservation_count AS reservationCount,
-    dr.reservation_status AS reservationStatus,
-    dr.reservation_request AS reservationRequest,
-    dr.reservation_type AS reservationType,
-    dr.meal_type AS mealType,
-    
-    d.dining_id AS diningId,
-    d.dining_name AS diningName,
-    
-    p.payment_id AS paymentId,
-    p.payment_price AS paymentPrice,
-    p.payment_type AS paymentType,
-    p.payment_status AS paymentStatus
-
-  FROM dining_reservation dr
-  LEFT JOIN dining d ON dr.dining_id = d.dining_id
-  LEFT JOIN payment p ON dr.reservation_id = p.reservation_id
-
-  WHERE dr.reservation_id = #{reservationId}
-    AND dr.reservation_name = #{reservationName}
-</select>
-  
   <update id="updateResvInfo" parameterType="kr.co.sist.diningresv.DiningResvDTO">
     UPDATE DINING_RESERVATION
     SET

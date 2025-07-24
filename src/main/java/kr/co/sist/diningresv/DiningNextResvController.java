@@ -118,24 +118,6 @@ public class DiningNextResvController {
 	    
 	}
 	
-	@GetMapping("/searchResv")
-	public String searchResv() {
-		
-	  return "room_resv/NonMemberSearch";
-	  
-	}
-	   
-	@PostMapping("/searchDiningResvDetail")
-	public String searchResvDetail(DiningResvDTO dto, Model model) {
-		
-	  dto = drs.searchResvData(dto);
-	  
-	  model.addAttribute("resvData", dto);
-		   
-	  return "room_resv/searchDiningResvDetail";
-	  
-	}
-	
 	@PostMapping("/diningNextResv")
 	public String insertReservation(
 								@RequestParam String reservationName,

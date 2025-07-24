@@ -43,12 +43,6 @@ public class DiningResvService {
         
     }
     
-	public DiningResvDTO searchResvData(DiningResvDTO dto) {
-		
-		return drm.selectResvData(dto);
-		
-	}
-    
     public DiningResvDTO loginUserData(int userNum) {
     	
       DiningResvDTO dto = drm.loginUserData(userNum);

@@ -26,6 +26,4 @@ public interface DiningResvMapper {
 	
 	DiningResvDTO loginUserData(int userNum);
 	
-	public DiningResvDTO selectResvData(DiningResvDTO dto);
-	
 }
