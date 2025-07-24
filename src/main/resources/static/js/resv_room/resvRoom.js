@@ -125,7 +125,3 @@ function changeBreakfast(amount) {
   updateTotalPrice();
 }
 
-
-
-fu
-
