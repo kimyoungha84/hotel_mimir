@@ -210,10 +210,13 @@
   <div th:replace="~{/dining_resv/popup/diningPopup1(diningList=${diningList}, selectDiningId=${selectDiningId})}"></div>
   <div th:replace="~{/dining_resv/popup/diningPopup2}"></div>
   <div th:replace="~{/dining_resv/popup/diningPopup4}"></div>
+  
+  <div th:replace="~{fragments/footer.html :: footerFragment}"></div>
 
   <script th:src="@{/dining_resv/js/diningResv.js}"></script>
   <script th:src="@{/dining_resv/js/calendar.js}"></script>
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  
   
 </body>
 

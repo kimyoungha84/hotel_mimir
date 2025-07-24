@@ -197,7 +197,16 @@ public class DiningNextResvController {
 	    
 	    dto.setPaymentId(paymentId);
 	    dto.setPaymentPrice(paymentPrice);
-	    dto.setPaymentStatus("결제완료");
+	    
+	    if ("현장결제".equals(paymentType)) {
+	    	
+	        dto.setPaymentStatus("대기");
+	        
+	    } else {
+	    	
+	        dto.setPaymentStatus("완료");
+	        
+	    }
 	    
 	    ps.insertPayment2(dto);
 
@@ -205,7 +214,7 @@ public class DiningNextResvController {
 	    int reservationId = drs.searchResvSeq();
 	    
 	    dto.setReservationId(reservationId);
-	    dto.setReservationStatus("완료");
+	    dto.setReservationStatus("진행");
 
 	    drs.insertDiningResv(dto);
 
