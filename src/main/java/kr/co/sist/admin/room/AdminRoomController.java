@@ -186,8 +186,7 @@ public class AdminRoomController {
 	    model.addAttribute("endDate", endDate);
 
 	    return "admin_room/admin_room_sales";
-	}
-//adminRoomSales
+	}//adminRoomSales
 	
 }//class
 

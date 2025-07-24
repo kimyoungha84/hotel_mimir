@@ -198,6 +198,7 @@ WHERE rn = 1
 
 
 <select id="selectSalesSummary" resultType="kr.co.sist.admin.room.SalesSummaryDTO">
+<![CDATA[
 SELECT
   rt.TYPE_NAME AS typeName,
 
@@ -231,10 +232,11 @@ LEFT JOIN ROOM rm ON r.ROOM_ID = rm.ROOM_ID
 LEFT JOIN ROOM_TYPE rt ON rm.TYPE_ID = rt.TYPE_ID
 LEFT JOIN PAYMENT p ON r.PAYMENT_ID = p.PAYMENT_ID
 WHERE
-  r.CHECKIN_DATE &gt;= #{startDate}
-  AND r.CHECKOUT_DATE &lt;= #{endDate}
+  r.CHECKIN_DATE >= TO_DATE(#{startDate}, 'YYYY-MM-DD')
+  AND r.CHECKOUT_DATE <= TO_DATE(#{endDate}, 'YYYY-MM-DD')
 GROUP BY rt.TYPE_NAME
 ORDER BY rt.TYPE_NAME
+]]>
   </select>
 
 </mapper>
