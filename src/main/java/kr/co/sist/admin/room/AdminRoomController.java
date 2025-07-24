@@ -33,14 +33,14 @@ public class AdminRoomController {
 	public String adminRoomList(Model model) {
 		model.addAttribute("roomList",ars.searchAllRoom());
 		
-		return "/admin_room/admin_room_list";
+		return "admin_room/admin_room_list";
 	}//adminRoomList
 	
 	
 	@GetMapping("admin/roomdetail")
 	public String adminRoomDetail(Model model, @RequestParam int roomId) {
 		model.addAttribute("room",ars.searchOneRoom(roomId));
-		return "/admin_room/admin_room_detail";
+		return "admin_room/admin_room_detail";
 	}//roomInfoDetail
 	
 	
@@ -86,7 +86,7 @@ public class AdminRoomController {
 	            model.addAttribute("success", false);
 	            model.addAttribute("message", "변경 사항이 없습니다.");
 	            model.addAttribute("roomId", oldRoom.getRoomId());
-	            return "redirect:/admin/roomdetail?roomId=" + roomId;
+	            return "redirect:admin/roomdetail?roomId=" + roomId;
 	        }
 
 	        ars.modifyRoom(typeName, bedName, viewName, description);
@@ -98,12 +98,12 @@ public class AdminRoomController {
 	        Integer newRoomId = ars.getRoomIdByNames(typeName, bedName, viewName);
 	        model.addAttribute("roomId", newRoomId);
 	        model.addAttribute("success", true);
-	        return "/admin_room/admin_roomupdate_result";
+	        return "admin_room/admin_roomupdate_result";
 
 	    } catch (Exception e) {
 	        e.printStackTrace();
 	        model.addAttribute("error", true);
-	        return "/admin_room/admin_roomupdate_result";
+	        return "admin_room/admin_roomupdate_result";
 	    }
 	}//adminRoomModifyProcess
 	
@@ -185,7 +185,7 @@ public class AdminRoomController {
 	    model.addAttribute("startDate", startDate);
 	    model.addAttribute("endDate", endDate);
 
-	    return "/admin_room/admin_room_sales";
+	    return "admin_room/admin_room_sales";
 	}
 //adminRoomSales
 	

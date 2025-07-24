@@ -37,7 +37,7 @@ public class AdminReservationController {
 			modelUtils.setPaginationAttributes(model, pageSize, FilterConfig.ROOM_RESV);
 		
 		
-		return "/admin_resv_room/admin_resv_room";
+		return "admin_resv_room/admin_resv_room";
 	}//adminResvRoomList
 	
 	@GetMapping("admin/resvroomdetail")
@@ -46,7 +46,7 @@ public class AdminReservationController {
 		model.addAttribute("resv",ars.searchOneResv(resvId));
 		
 		
-		return "/admin_resv_room/admin_resv_room_detail";
+		return "admin_resv_room/admin_resv_room_detail";
 	}//adminResvRoomDetail
 	
 	@GetMapping("admin/resvroommodify")
@@ -55,7 +55,7 @@ public class AdminReservationController {
 		model.addAttribute("resv",rDTO);
 		int capacity = ars.searchCapacity(rDTO.getRoomId());
 		model.addAttribute("capacity", capacity);
-		return "/admin_resv_room/admin_resv_room_edit";
+		return "admin_resv_room/admin_resv_room_edit";
 	}//adminResvRoomModify
 	
 	
@@ -80,11 +80,11 @@ public class AdminReservationController {
 	    	redirectAttrs.addFlashAttribute("msg", "예약 정보가 정상적으로 수정되었습니다.");
 	    	redirectAttrs.addAttribute("resvId", rDTO.getResvId());
 	    	
-	    	return "redirect:/admin/resvroomdetail";  // 수정 후 목록 페이지로 이동
+	    	return "redirect:admin/resvroomdetail";  // 수정 후 목록 페이지로 이동
 
 	    } else {
 	        redirectAttrs.addFlashAttribute("msg", "예약 수정에 실패했습니다. 다시 시도해주세요.");
-	        return "redirect:/admin/resvroommodify?resvId=" + rDTO.getResvId(); // 수정 페이지로 다시 이동
+	        return "redirect:admin/resvroommodify?resvId=" + rDTO.getResvId(); // 수정 페이지로 다시 이동
 	    }
 	}
 

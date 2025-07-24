@@ -15,7 +15,7 @@
     <div class="table-section">
       <h2 class="h2Title">매출 현황</h2>
 
-      <form method="get" action="/admin/roomsales" class="filters">
+      <form method="get" th:action="@{/admin/roomsales}" class="filters">
         <div class="date-range">
           <label>시작일</label>
           <input type="date" name="startDate" th:value="${startDate}" />
