@@ -75,6 +75,12 @@
       margin-top: 50px;
       font-size: 13px;
     }
+    .form-section {
+      display: none;
+    }
+    .form-section.active {
+      display: block;
+    }
   </style>
 </head>
 <body>
@@ -82,9 +88,11 @@
   <div class="container">
     <h1>비회원 예약 조회</h1>
     <div class="tabs">
-      <div class="tab active">객실 예약</div>
-      <div class="tab">다이닝 예약</div>
+      <div class="tab active" onclick="showTab('room')">객실 예약</div>
+      <div class="tab" onclick="showTab('dining')">다이닝 예약</div>
     </div>
+  <!-- 객실 예약 조회 폼 -->
+  <div id="roomForm" class="form-section active">
     <form action="/searchResvDetail" method="POST">
       <label>예약번호 <span style="color: red">*</span></label>
       <input type="text" placeholder="예약번호 입력" name="resvId" oninput="this.value=this.value.replace(/[^0-9]/g,'')">
@@ -95,14 +103,65 @@
 
       <button type="submit" class="btn">예약 조회</button>
     </form>
+  </div>
+  
+  <!-- 다이닝 예약 조회 폼 -->
+  <div id="diningForm" class="form-section">
+    <form action="/searchDiningResvDetail" method="POST">
+      <label>예약번호 <span style="color: red">*</span></label>
+      <input type="text" placeholder="예약번호 입력" name="resvId" oninput="this.value=this.value.replace(/[^0-9]/g,'')">
+      <div class="desc">예약번호를 분실하신 고객님께서는 미미르 다이닝예약과로 직접 문의해 주세요.</div>
 
-    <div class="login-info">
+      <label>이름 <span style="color: red">*</span></label>
+      <input type="text" placeholder="이름 입력" name="userName">
+
+      <button type="submit" class="btn">예약 조회</button>
+    </form>
+  </div>
+
+    <div class="login-info" id="loginInfo">
     <a th:href="@{/member/loginFrm}" style="text-decoration: none; color: inherit; font-size: 22px;">
       <strong>로그인</strong><br>
     </a>
       회원으로 객실을 예약하신 경우 마이페이지 > 객실 예약 내역에서 조회하실 수 있습니다.
     </div>
   </div>
-   <div th:replace="~{fragments/footer.html :: footerFragment}"></div>
+<div th:replace="~{fragments/footer.html :: footerFragment}"></div>
+   
+<script>
+  function showTab(tab) {
+    const roomTab = document.querySelectorAll('.tab')[0];
+    const diningTab = document.querySelectorAll('.tab')[1];
+    const roomForm = document.getElementById('roomForm');
+    const diningForm = document.getElementById('diningForm');
+
+    if (tab === 'room') {
+      roomTab.classList.add('active');
+      diningTab.classList.remove('active');
+      roomForm.classList.add('active');
+      diningForm.classList.remove('active');
+      
+      loginInfo.innerHTML = `
+          <a href="/member/loginFrm" style="text-decoration: none; color: inherit; font-size: 22px;">
+            <strong>로그인</strong><br>
+          </a>
+          회원으로 객실을 예약하신 경우 마이페이지 > <strong>객실 예약 내역</strong>에서 조회하실 수 있습니다.
+        `;
+          
+    } else {
+      diningTab.classList.add('active');
+      roomTab.classList.remove('active');
+      diningForm.classList.add('active');
+      roomForm.classList.remove('active');
+      
+      loginInfo.innerHTML = `
+          <a href="/member/loginFrm" style="text-decoration: none; color: inherit; font-size: 22px;">
+            <strong>로그인</strong><br>
+          </a>
+          회원으로 다이닝을 예약하신 경우 마이페이지 > <strong>다이닝 예약 내역</strong>에서 조회하실 수 있습니다.
+        `;
+    }
+  }
+</script>
 </body>
 </html>

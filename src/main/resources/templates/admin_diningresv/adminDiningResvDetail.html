@@ -10,11 +10,11 @@
 <!-- jquery CDN -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
 
-<th:block th:replace="~{/administrator/fragments/admin_header :: admin_header}"></th:block>
+<th:block th:replace="~{administrator/fragments/admin_header :: admin_header}"></th:block>
 
 </head>
 <body>
-<th:block th:replace="~{/administrator/fragments/admin_sidebar :: admin_sidebar}"></th:block>
+<th:block th:replace="~{administrator/fragments/admin_sidebar :: admin_sidebar}"></th:block>
 
 <div id="body-pd" class="body-pd">
 <h2 class="h2Title">다이닝 예약 상세정보</h2>
@@ -62,7 +62,7 @@
         <td th:text="${reservationDetail.reservationCount}">인원수</td>
       </tr>
       <tr>
-        <td>예약 상태</td>
+        <td>예약 현황</td>
         <td th:text="${reservationDetail.reservationStatus}">예약 상태</td>
       </tr>
       <tr>

@@ -43,7 +43,13 @@ public class DiningNextResvController {
 	                              @RequestParam String date,
 	                              @RequestParam String time,
 	                              @RequestParam String meal,
+	                              @AuthenticationPrincipal CustomUserDetails loginUser,
 	                              Model model) {
+		
+	    System.out.println("🔍 diningId: " + diningId);
+	    System.out.println("🔍 adult: " + adult + ", child: " + child);
+	    System.out.println("🔍 date: " + date + ", time: " + time + ", meal: " + meal);
+	    System.out.println("🔍 loginUser: " + (loginUser != null ? loginUser.getUserNum() : "null"));
 		
 		List<RepMenuDomain> menuList = ds.searchRepMenu(diningId);
 		
@@ -106,6 +112,13 @@ public class DiningNextResvController {
         model.addAttribute("formattedDate", formattedDate);
         model.addAttribute("mealLabel", mealLabel);
 	    
+        if (loginUser != null) {
+        	DiningResvDTO user = drs.loginUserData(loginUser.getUserNum());
+        	model.addAttribute("userName", user.getUserName());
+        	model.addAttribute("userEmail", user.getUserEmail());
+            model.addAttribute("userTel", user.getUserTel());
+        }
+        
 	    return "dining_resv/dining_next_resv/diningNextResv";
 	    
 	}
@@ -184,7 +197,16 @@ public class DiningNextResvController {
 	    
 	    dto.setPaymentId(paymentId);
 	    dto.setPaymentPrice(paymentPrice);
-	    dto.setPaymentStatus("결제완료");
+	    
+	    if ("현장결제".equals(paymentType)) {
+	    	
+	        dto.setPaymentStatus("대기");
+	        
+	    } else {
+	    	
+	        dto.setPaymentStatus("완료");
+	        
+	    }
 	    
 	    ps.insertPayment2(dto);
 
@@ -192,7 +214,7 @@ public class DiningNextResvController {
 	    int reservationId = drs.searchResvSeq();
 	    
 	    dto.setReservationId(reservationId);
-	    dto.setReservationStatus("완료");
+	    dto.setReservationStatus("진행");
 
 	    drs.insertDiningResv(dto);
 

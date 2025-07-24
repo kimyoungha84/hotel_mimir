@@ -185,7 +185,7 @@
           <div class="reservation-cnt"><span>예약 인원</span></div>
           <button class="cnt-btn" type="button" id="openCntPopup">
   			<span class="cnt-btn-txt">
-    		성인 <span class="cnt-adult-txt">1</span>, 어린이 <span class="cnt-child-txt">0</span>
+    		성인 <span class="cnt-adult-txt" th:text="${adult}"></span>, 어린이 <span class="cnt-child-txt" th:text="${child}"></span>
   			</span>
             <span class="arrow">➤</span>
           </button>
@@ -196,8 +196,8 @@
       <div class="next-txt">
         <form id="reservationForm" method="get" th:action="@{/diningNextResv}">
           <input type="hidden" name="diningId" id="inputDining" th:value="${selectDiningId}" />
-          <input type="hidden" name="adult" id="inputAdult" />
-          <input type="hidden" name="child" id="inputChild" />
+          <input type="hidden" name="adult" id="inputAdult" th:value="${adult}" />
+          <input type="hidden" name="child" id="inputChild" th:value="${child}" />
           <input type="hidden" name="date" id="inputDate" />
           <input type="hidden" name="time" id="inputTime" />
           <input type="hidden" name="meal" id="inputMeal" />
@@ -210,10 +210,13 @@
   <div th:replace="~{/dining_resv/popup/diningPopup1(diningList=${diningList}, selectDiningId=${selectDiningId})}"></div>
   <div th:replace="~{/dining_resv/popup/diningPopup2}"></div>
   <div th:replace="~{/dining_resv/popup/diningPopup4}"></div>
+  
+  <div th:replace="~{fragments/footer.html :: footerFragment}"></div>
 
   <script th:src="@{/dining_resv/js/diningResv.js}"></script>
   <script th:src="@{/dining_resv/js/calendar.js}"></script>
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  
   
 </body>
 

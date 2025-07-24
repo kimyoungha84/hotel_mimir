@@ -10,11 +10,11 @@
 <!-- jquery CDN -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
 
-<th:block th:replace="~{/administrator/fragments/admin_header :: admin_header}"></th:block>
+<th:block th:replace="~{administrator/fragments/admin_header :: admin_header}"></th:block>
 
 </head>
 <body>
-<th:block th:replace="~{/administrator/fragments/admin_sidebar :: admin_sidebar}"></th:block>
+<th:block th:replace="~{administrator/fragments/admin_sidebar :: admin_sidebar}"></th:block>
 
 <div id="body-pd" class="body-pd">
 <h2 class="h2Title">다이닝 예약 수정</h2>
@@ -71,11 +71,11 @@
             <td><input type="number" th:field="*{reservationCount}" min="1" /></td>
           </tr>
           <tr>
-            <td>예약 상태</td>
+            <td>예약 현황</td>
             <td>
               <select th:field="*{reservationStatus}">
                 <option value="완료">완료</option>
-                <option value="대기">대기</option>
+                <option value="대기">진행</option>
                 <option value="취소">취소</option>
               </select>
             </td>

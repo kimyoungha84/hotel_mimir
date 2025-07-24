@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import kr.co.sist.member.CustomUserDetails;
+import kr.co.sist.member.MemberMapper;
+import kr.co.sist.member.MemberDTO;
 
 // 채팅 컨트롤러: 사용자 채팅 API 제공
 @RestController
@@ -22,6 +24,9 @@ public class ChatController {
     
     @Autowired
     private ChatService chatService;
+    
+    @Autowired
+    private MemberMapper memberMapper;
     
     /**
      * 채팅방 생성 또는 조회
@@ -83,5 +88,20 @@ public class ChatController {
         } catch (Exception e) {
             return ResponseEntity.status(500).body(Map.of("error", "채팅방 조회 중 오류가 발생했습니다."));
         }
+    }
+
+    /**
+     * user_num으로 user_name 반환
+     */
+    @GetMapping("/user-name")
+    public ResponseEntity<?> getUserNameByUserNum(@RequestParam int user_num) {
+        MemberDTO member = memberMapper.selectMemberByUserNum(user_num);
+        if (member == null) {
+            return ResponseEntity.status(404).body(Map.of("error", "사용자를 찾을 수 없습니다."));
+        }
+        return ResponseEntity.ok(Map.of(
+            "user_num", user_num,
+            "user_name", member.getUser_name()
+        ));
     }
 }

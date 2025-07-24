@@ -24,4 +24,6 @@ public interface DiningResvMapper {
 	
 	int insertDiningResv(DiningResvDTO dto);
 	
+	DiningResvDTO loginUserData(int userNum);
+	
 }

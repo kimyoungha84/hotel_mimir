@@ -116,5 +116,11 @@
       RESERVATION_REQUEST = #{reservationRequest}
     WHERE RESERVATION_ID = #{reservationId}
   </update>
+  
+  <select id="loginUserData" parameterType="int" resultType="kr.co.sist.diningresv.DiningResvDTO">
+    SELECT USER_NUM userNum, EMAIL_ID userEmail, TEL userTel, USER_NAME userName
+    FROM MIMIR_USER
+    WHERE user_Num = #{userNum}
+  </select>
 
 </mapper>

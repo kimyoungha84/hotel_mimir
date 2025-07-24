@@ -16,9 +16,22 @@ document.addEventListener("DOMContentLoaded", function () {
   const inputTime = document.getElementById("inputTime");
   const nextBtn = document.querySelector(".next-btn");
   
+  inputAdult.value = document.querySelector(".cnt-adult-txt").textContent.trim() || "1";
+  inputChild.value = document.querySelector(".cnt-child-txt").textContent.trim() || "0";
+  
   document.querySelector(".next-btn").addEventListener("click", function(e) {
     if (this.classList.contains("disabled")) {
       e.preventDefault();
+    }
+  });
+  
+  nextBtn.addEventListener("click", function () {
+    if (!inputAdult.value || !inputChild.value) {
+      const adultTxt = document.querySelector(".cnt-adult-txt")?.textContent.trim() || "1";
+      const childTxt = document.querySelector(".cnt-child-txt")?.textContent.trim() || "0";
+
+      inputAdult.value = adultTxt;
+      inputChild.value = childTxt;
     }
   });
   
@@ -99,26 +112,13 @@ if (btnMenu && menuContent) {
     document.querySelector(".dining-popup").style.display = "none";
   });
 
-  // 인원수 팝업 열기
-  document.querySelector(".cnt-btn").addEventListener("click", () => {
-	  
-	document.getElementById("adultCnt").textContent = "1";
-    document.getElementById("childCnt").textContent = "0";
-
-    document.querySelector(".popup-overlay02").style.display = "block";
-    document.querySelector(".cnt-popup").style.display = "block";
-  });
-
   // 인원수 선택 후 반영 및 팝업 닫기
   document.querySelector(".cntBtn").addEventListener("click", () => {
-    const adult = document.getElementById("adultCnt").textContent;
-    const child = document.getElementById("childCnt").textContent;
+	const currentAdult = document.querySelector(".cnt-adult-txt")?.textContent.trim() || "1";
+	const currentChild = document.querySelector(".cnt-child-txt")?.textContent.trim() || "0";
 
-    document.querySelector(".cnt-adult-txt").textContent = adult;
-    document.querySelector(".cnt-child-txt").textContent = child;
-
-    inputAdult.value = adult;
-    inputChild.value = child;
+	document.getElementById("adultCnt").textContent = currentAdult;
+	document.getElementById("childCnt").textContent = currentChild;
 
     document.querySelector(".popup-overlay02").style.display = "none";
     document.querySelector(".cnt-popup").style.display = "none";
@@ -130,7 +130,6 @@ if (btnMenu && menuContent) {
       document.querySelectorAll(".time-btn").forEach(b => b.classList.remove("selected"));
       btn.classList.add("selected");
       
-      const timeText = btn.textContent.trim();
       const isLunch = btn.closest(".time-lunch") !== null;
       const mealType = isLunch ? "Lunch" : "Dinner";
 	  

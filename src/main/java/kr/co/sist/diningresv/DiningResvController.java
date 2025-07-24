@@ -24,7 +24,11 @@ public class DiningResvController {
 	private DiningService ds;
 	
     @GetMapping("diningResv")
-    public String diningResv(@RequestParam("diningId") int diningId, Model model) {
+    public String diningResv(
+    				@RequestParam("diningId") int diningId,
+                    @RequestParam(name = "adult", required = false, defaultValue = "1") int adult,
+                    @RequestParam(name = "child", required = false, defaultValue = "0") int child,
+    				Model model) {
 
     	DiningDomain diningInfo = drs.searchDining(diningId);
     	
@@ -39,6 +43,9 @@ public class DiningResvController {
         model.addAttribute("diningList", diningList);
         
         model.addAttribute("selectDiningId", diningId);
+        
+        model.addAttribute("adult", adult);
+        model.addAttribute("child", child);
     	
         return "dining_resv/diningResv";
         
