@@ -13,13 +13,13 @@ public interface DiningMapper {
     
     List<RepMenuDomain> selectRepMenu(@Param("diningId") int diningId);
     
-    void deleteDining(@Param("diningId") int diningId);
-    void updateDining(DiningDTO dto);
-    void deleteDiningImagesByType(@Param("diningId") int diningId, @Param("imageType") String imageType);
-    void insertDiningImage(@Param("diningId") int diningId, @Param("imageType") String imageType, @Param("imageUrl") String imageUrl, @Param("displayOrder") int displayOrder);
-    void deleteDiningImageByUrl(@Param("diningId") int diningId, @Param("imageUrl") String imageUrl, @Param("imageType") String imageType);
-    void updateDisplayOrder(@Param("diningId") int diningId, @Param("imageUrl") String imageUrl, @Param("displayOrder") int displayOrder);
-    void insertDining(DiningDTO dto);
+    int deleteDining(@Param("diningId") int diningId);
+    int updateDining(DiningDTO dto);
+    int deleteDiningImagesByType(@Param("diningId") int diningId, @Param("imageType") String imageType);
+    int insertDiningImage(@Param("diningId") int diningId, @Param("imageType") String imageType, @Param("imageUrl") String imageUrl, @Param("displayOrder") int displayOrder);
+    int deleteDiningImageByUrl(@Param("diningId") int diningId, @Param("imageUrl") String imageUrl, @Param("imageType") String imageType);
+    int updateDisplayOrder(@Param("diningId") int diningId, @Param("imageUrl") String imageUrl, @Param("displayOrder") int displayOrder);
+    int insertDining(DiningDTO dto);
     int selectLastInsertedDiningId();
     // 예약 가능(Y)인 다이닝 목록 조회
     List<DiningDomain> selectAvailableDiningList();

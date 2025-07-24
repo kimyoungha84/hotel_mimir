@@ -56,7 +56,7 @@
             <option value="프렌치">프렌치</option>
             <option value="회원제 레스토랑">회원제 레스토랑</option>
             <option value="레스토랑 & 바">레스토랑 & 바</option>
-            <option value="스카이바">스카이바</option>
+            <option value="스카이 바">스카이 바</option>
             <option value="프리미엄 베이커리 & 카페">프리미엄 베이커리 & 카페</option>
             <option value="인룸 다이닝">인룸 다이닝</option>
           </select>
@@ -179,8 +179,8 @@ function saveCarouselImages(diningId, callback) {
       .then(res => {
         if (!res.ok) {
           return res.text().then(text => {
-            console.error('업로드 실패:', res.status, res.statusText, text);
-            throw new Error('업로드 실패: ' + text);
+            console.error('메인 이미지 업로드 실패:', res.status, res.statusText, text);
+            throw new Error('메인 이미지 업로드 실패: ' + text);
           });
         }
         return res.json();
@@ -204,8 +204,8 @@ function saveCarouselImages(diningId, callback) {
       .then(res => {
         if (!res.ok) {
           return res.text().then(text => {
-            console.error('업로드 실패:', res.status, res.statusText, text);
-            throw new Error('업로드 실패: ' + text);
+            console.error('로고 이미지 업로드 실패:', res.status, res.statusText, text);
+            throw new Error('로고 이미지 업로드 실패: ' + text);
           });
         }
         return res.json();
@@ -232,8 +232,8 @@ function saveCarouselImages(diningId, callback) {
         .then(res => {
           if (!res.ok) {
             return res.text().then(text => {
-              console.error('업로드 실패:', res.status, res.statusText, text);
-              throw new Error('업로드 실패: ' + text);
+              console.error('케러셀 업로드 실패:', res.status, res.statusText, text);
+              throw new Error('케러셀 업로드 실패: ' + text);
             });
           }
           return res.json();
@@ -262,7 +262,7 @@ function saveCarouselImages(diningId, callback) {
     logoImageFile = null;
     items.forEach(item => { item.file = null; });
   }).catch(() => {
-    // alert('업로드 실패');
+    alert('업로드 실패');
     window.location.href = '/admin/dining';
   });
 }
