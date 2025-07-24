@@ -42,5 +42,6 @@ public class DiningResvDTO {
 	private int paymentPrice;  
 	private String paymentType;  
 	private String paymentStatus;  
+	private Timestamp paymentTime;  
 
 }

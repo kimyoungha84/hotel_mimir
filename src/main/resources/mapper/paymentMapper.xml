@@ -29,12 +29,12 @@
 		#{paymentType}, #{paymentStatus})
 	</insert>
 	
-	<insert id="insertPayment2" parameterType="kr.co.sist.diningresv.DiningResvDTO">
-		INSERT INTO payment (PAYMENT_ID, PAYMENT_PRICE,
-		 PAYMENT_TYPE, PAYMENT_STATUS)
-		VALUES (#{paymentId}, #{paymentPrice}, 
-		#{paymentType}, #{paymentStatus})
-	</insert>
+  <insert id="insertPayment2" parameterType="kr.co.sist.diningresv.DiningResvDTO">
+    INSERT INTO payment (PAYMENT_ID, PAYMENT_PRICE,
+     PAYMENT_TYPE, PAYMENT_STATUS, PAYMENT_TIME)
+    VALUES (#{paymentId}, #{paymentPrice}, 
+    #{paymentType}, #{paymentStatus}, #{paymentTime})
+  </insert>
 	
 	<update id="updatePayment" parameterType="kr.co.sist.payment.PaymentDTO">
 	  UPDATE faq

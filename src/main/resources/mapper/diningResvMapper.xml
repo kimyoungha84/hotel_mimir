@@ -99,7 +99,7 @@
     )
     VALUES (
       #{reservationId, jdbcType=INTEGER},
-      #{diningId, jdbcType=INTEGER},dlf
+      #{diningId, jdbcType=INTEGER},
       #{userNum, jdbcType=INTEGER},
       #{paymentId, jdbcType=INTEGER},
       #{nonMemId, jdbcType=INTEGER},

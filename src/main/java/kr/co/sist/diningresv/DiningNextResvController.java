@@ -1,5 +1,6 @@
 package kr.co.sist.diningresv;
 
+import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -203,9 +204,13 @@ public class DiningNextResvController {
 	    	
 	        dto.setPaymentStatus("대기");
 	        
+	        dto.setPaymentTime(null);
+	        
 	    } else {
 	    	
 	        dto.setPaymentStatus("완료");
+	        
+	        dto.setPaymentTime(new Timestamp(System.currentTimeMillis()));
 	        
 	    }
 	    
