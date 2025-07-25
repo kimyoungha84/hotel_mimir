@@ -128,23 +128,13 @@
           <div class="lunch-txt"><span>Lunch</span></div>
 
           <div class="time-lunch">
-  			<div class="time-lunch-btn" th:each="time : ${lunchTimeList}">
-    		  <button class="time-btn" type="button">
-      			<span th:text="'오후 ' + ${time}"></span><br />
-      			<small class="remain-seat" th:if="${remainingSeatMap != null}" th:text="'잔여좌석: ' + ${remainingSeatMap[time]} + '석'"></small>
-    		  </button>
-  			</div>
+			<div class="time-lunch-btn" id="lunchTimeContainer"></div>
           </div>
 
           <div class="Dinner-txt"><span>Dinner</span></div>
 
           <div class="time-Dinner">
-  			<div class="time-Dinner-btn" th:each="time : ${dinnerTimeList}">
-    		  <button class="time-btn" type="button">
-      			<span th:text="'오후 ' + ${time}"></span><br />
-      			<small class="remain-seat" th:if="${remainingSeatMap != null}" th:text="'잔여좌석: ' + ${remainingSeatMap[time]} + '석'"></small>
-    		  </button>
-  			</div>
+			<div class="time-Dinner-btn" id="dinnerTimeContainer"></div>
           </div>
         </div>
         

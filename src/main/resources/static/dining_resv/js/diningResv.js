@@ -154,6 +154,11 @@ if (btnMenu && menuContent) {
       nextBtn.removeAttribute("aria-disabled");
     });
   });
+  
+  const inputDiningId = document.getElementById("inputDining")?.value;
+  if (inputDiningId) {
+    loadTimeButtons(inputDiningId);
+  }
 
 });
 
@@ -164,47 +169,6 @@ window.addEventListener("message", function(event) {
   if (event.data && event.data.type === "dateSelected") {
 	  
 	selectedDateStr = event.data.date;
-	
-	const rawDate = new Date(selectedDateStr);
-	const yyyy = rawDate.getFullYear();
-	const mm = String(rawDate.getMonth() + 1).padStart(2, '0');
-	const dd = String(rawDate.getDate()).padStart(2, '0');
-	selectedDateStr = `${yyyy}-${mm}-${dd}`;
-
-	// 요청 URL 로그 삽입
-	const diningId = document.getElementById("inputDining").value;
-	console.log("🔵 요청 URL:", `/api/remainingSeats?diningId=${diningId}&date=${selectedDateStr}`);
-
-	// 좌석 AJAX 호출 삽입
-	fetch(`/api/remainingSeats?diningId=${diningId}&date=${selectedDateStr}`)
-	  .then(response => {
-	    if (!response.ok) throw new Error("API 요청 실패");
-	    return response.json();
-	  })
-	  .then(data => {
-	    console.log("✅ 잔여좌석 데이터:", data);
-
-	    // 각 버튼에 좌석 수 매핑
-		  document.querySelectorAll(".time-btn").forEach(btn => {
-		    const span = btn.querySelector("span");
-		    const timeText = span.textContent.replace("오후 ", "").trim();
-		    const seatCount = data[timeText];
-
-		    let seatTag = btn.querySelector("small.remain-seat");
-
-		    if (!seatTag) {
-		      seatTag = document.createElement("small");
-		      seatTag.classList.add("remain-seat");
-		      btn.appendChild(seatTag);
-		    }
-
-		    if (seatCount !== undefined) {
-		      seatTag.textContent = `잔여좌석: ${seatCount}석`;
-		    } else {
-		      seatTag.textContent = "잔여좌석: -석";
-		    }
-		  });
-		})
 	
     const schedulerSection = document.querySelector(".scheduler-content-wrap");
     if (schedulerSection) schedulerSection.style.display = "block";
@@ -222,6 +186,11 @@ window.addEventListener("message", function(event) {
       nextBtn.classList.add("disabled");
       nextBtn.setAttribute("aria-disabled", "true");
     }
+	
+	const inputDiningId = document.getElementById("inputDining")?.value;
+	if (inputDiningId) {
+	  loadTimeButtons(inputDiningId);
+	}
   }
 });
 
@@ -258,6 +227,83 @@ window.addEventListener("pageshow", function (event) {
 	}
   }
 });
+
+function loadTimeButtons(inputDiningId) {
+  const lunchContainer = document.getElementById("lunchTimeContainer");
+  const dinnerContainer = document.getElementById("dinnerTimeContainer");
+  const inputTime = document.getElementById("inputTime");
+  const inputMeal = document.getElementById("inputMeal");
+  const inputDate = document.getElementById("inputDate");
+  const nextBtn = document.querySelector(".next-btn");
+
+  function createTimeButton(time, remaining, mealType) {
+    const btn = document.createElement("button");
+    btn.className = "time-btn";
+    btn.type = "button";
+    btn.innerHTML = `<span>${time} (잔여 ${remaining}석)</span>`;
+
+    btn.addEventListener("click", () => {
+      document.querySelectorAll(".time-btn").forEach(b => b.classList.remove("selected"));
+      btn.classList.add("selected");
+
+      inputTime.value = time;
+      inputMeal.value = mealType;
+      inputDate.value = selectedDateStr;
+
+      nextBtn.classList.remove("disabled");
+      nextBtn.removeAttribute("aria-disabled");
+    });
+
+    return btn;
+  }
+  
+  const selectedDate = selectedDateStr;
+  if (!selectedDate) return;
+
+    // Lunch 시간대 + 잔여좌석
+    $.ajax({
+      type: "GET",
+      url: "/api/timeslots",
+      data: {
+        diningId: inputDiningId,
+        mealType: "Lunch",
+        reservationDate: selectedDate
+      },
+      dataType: "json",
+      success: function (slotList) {
+        lunchContainer.innerHTML = "";
+        slotList.forEach(slot => {
+          const btn = createTimeButton(slot.time, slot.remainingSeats, "Lunch");
+          lunchContainer.appendChild(btn);
+        });
+      },
+      error: function (xhr, status, error) {
+        console.error("Lunch 잔여좌석 로딩 실패:", error);
+      }
+    });
+
+    // Dinner 시간대 + 잔여좌석
+    $.ajax({
+      type: "GET",
+      url: "/api/timeslots",
+      data: {
+        diningId: inputDiningId,
+        mealType: "Dinner",
+        reservationDate: selectedDate
+      },
+      dataType: "json",
+      success: function (slotList) {
+        dinnerContainer.innerHTML = "";
+        slotList.forEach(slot => {
+          const btn = createTimeButton(slot.time, slot.remainingSeats, "Dinner");
+          dinnerContainer.appendChild(btn);
+        });
+      },
+      error: function (xhr, status, error) {
+        console.error("Dinner 잔여좌석 로딩 실패:", error);
+      }
+    });
+  }
 
 // 지도 팝업
 function openMapPopup() {

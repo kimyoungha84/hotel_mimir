@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.co.sist.diningtime.DiningTimeConfigMapper">
+
+  <select id="selectTimeSlots" resultType="string">
+    SELECT TIME_SLOT
+    FROM DINING_TIME_CONFIG
+    WHERE DINING_ID = #{diningId}
+      AND MEAL_TYPE = #{mealType}
+    ORDER BY TIME_SLOT
+  </select>
+
+  <insert id="insertTimeSlot" parameterType="kr.co.sist.diningtime.DiningTimeConfigDTO">
+    INSERT INTO DINING_TIME_CONFIG (CONFIG_ID, DINING_ID, MEAL_TYPE, TIME_SLOT)
+    VALUES (DINING_TIME_CONFIG_SEQ.NEXTVAL, #{diningId}, #{mealType}, #{timeSlot})
+  </insert>
+  
+  <update id="updateTimeSlot">
+    UPDATE DINING_TIME_CONFIG
+    SET TIME_SLOT = #{timeSlot}
+    WHERE CONFIG_ID = #{configId}
+  </update>
+
+  <delete id="deleteTimeSlots">
+    DELETE FROM DINING_TIME_CONFIG
+    WHERE DINING_ID = #{diningId}
+      AND MEAL_TYPE = #{mealType}
+  </delete>
+
+</mapper>

@@ -233,8 +233,8 @@ public class DiningNextResvController {
 	    dto.setReservationStatus("진행");
 
 	    drs.insertDiningResv(dto);
-
-	    dtss.reserveSeats(diningId, reservationDate, reservationTime, totalCount);
+	    
+	    dtss.handleSlot(diningId, reservationDate, reservationTime, totalCount);
 	    
 	    // View로 값 전달
 	    String formattedDate;
