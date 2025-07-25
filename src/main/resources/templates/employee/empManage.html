@@ -59,7 +59,7 @@
         </tr>
     </tbody>
     </table>
-    <form id="frm" method="post" th:action=@{/admin/employee/detail}>
+    <form id="frm" method="get" th:action=@{/admin/employee/detail}>
         <input type="hidden" id="staffClickedId" name="staff_id"/>
     </form>
     <div th:replace="fragments/pagination :: pagination"></div>

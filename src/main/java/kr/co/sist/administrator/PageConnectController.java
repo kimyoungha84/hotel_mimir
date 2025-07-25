@@ -6,6 +6,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.SessionAttributes;
 
 import jakarta.servlet.http.HttpServletRequest;
 import kr.co.sist.admin.resvroom.AdminResvRoomDashboardService;
@@ -14,6 +15,7 @@ import kr.co.sist.util.ModelUtils;
 import kr.co.sist.util.controller.SearchController;
 
 @Controller
+@SessionAttributes("staff_id")
 public class PageConnectController {
 	
 	@Autowired
@@ -101,7 +103,7 @@ public class PageConnectController {
 	 * @param staff_id
 	 * @return
 	 */
-	@PostMapping("/admin/employee/detail")
+	@GetMapping("/admin/employee/detail")
 	public String employeeDetail(Model model, @RequestParam String staff_id) {
 		
 		System.out.println("\n\n\n\n\n\n--------detail의 staff_id-------------:"+staff_id);
@@ -125,6 +127,8 @@ public class PageConnectController {
 		
 		return "employee/empDetail";
 	}//employeeDetail
+	
+
 	
 	
 	@PostMapping("/admin/employee/modify")
