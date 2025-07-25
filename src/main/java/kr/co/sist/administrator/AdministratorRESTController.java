@@ -173,4 +173,18 @@ public class AdministratorRESTController {
 	}//end employeeInitPassword
 	
 	
+	
+	
+	/********************************************/
+	
+	@PostMapping("/admin/gpt")
+	public String showGPTStatistical() {
+		
+		//callGPTbySchedule();
+		
+		
+		return "";
+	}//showGPTStatistical
+	
+	
 }//class

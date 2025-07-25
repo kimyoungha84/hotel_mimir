@@ -17,15 +17,15 @@ public class UseChatGPTForStatistics {
 
     // OpenAI API 키를 여기에 입력하세요
 	@Value("${openapi.key}")
-    private static String API_KEY;
+    private String API_KEY;
 	@Value("${openapi.model}")
-	private static String model;
+	private String model;
 	@Value("${openapi.url}")
-	private static String url;
+	private String url;
     private static final int BUFFER_SIZE = 4096;
     private static final int MAX_TOKENS = 4096; // 최대 토큰 수 설정
 
-    public static String analyzeUseGPT(String promptStr) {
+    public  String analyzeUseGPT(String promptStr) {
     	String resultStr="";
     	// 사용할 모델을 선택하세요
         //String model = "gpt-3.5-turbo"; // 예: gpt-3.5-turbo, gpt-4, gpt-4-32k
@@ -86,7 +86,7 @@ public class UseChatGPTForStatistics {
         return resultStr;
     }//main
 
-    private static String parseAndPrintResponse(String responseBody) {
+    private  String parseAndPrintResponse(String responseBody) {
         JSONObject jsonObject = new JSONObject(responseBody);
         JSONArray choices = jsonObject.getJSONArray("choices");
         StringBuilder sb=new StringBuilder();
@@ -103,7 +103,7 @@ public class UseChatGPTForStatistics {
         return sb.toString();
     }//parseAndPrintResponse
 
-    private static void fetchNextResponse(String nextToken) {
+    private  void fetchNextResponse(String nextToken) {
         // Implementation for fetching next response using the continuation token
         try {
             // API URL 설정
@@ -143,7 +143,7 @@ public class UseChatGPTForStatistics {
         }
     }
 
-    private static String printInChunks(String text, int bufferSize) {
+    private  String printInChunks(String text, int bufferSize) {
         int length = text.length();
         int start = 0;
         StringBuilder sb=new StringBuilder();
