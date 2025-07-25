@@ -5,19 +5,6 @@
 
 <mapper namespace="kr.co.sist.payment.PaymentMapper">
 
-	<select id="selectAllPayment" resultType="kr.co.sist.payment.PaymentDomain">
-		SELECT faq_num, faq_title, faq_content, faq_date
-		FROM faq
-		ORDER BY faq_date DESC
-	</select>
-	
-	<select id="selectOnePayment" parameterType="int" resultType="kr.co.sist.payment.PaymentDomain">
-	select faq_num, faq_title, faq_content
-	from faq
-	where faq_num = #{faq_num}
-
-	</select>
-
 	<select id="selectPaymentSeq" resultType="int">
     SELECT SEQ_PAYMENT.NEXTVAL FROM DUAL
 	</select>
@@ -33,14 +20,7 @@
     INSERT INTO payment (PAYMENT_ID, PAYMENT_PRICE,
      PAYMENT_TYPE, PAYMENT_STATUS, PAYMENT_TIME)
     VALUES (#{paymentId}, #{paymentPrice}, 
-    #{paymentType}, #{paymentStatus}, #{paymentTime})
+    #{paymentType}, #{paymentStatus}, #{paymentTime, jdbcType=TIMESTAMP})
   </insert>
-	
-	<update id="updatePayment" parameterType="kr.co.sist.payment.PaymentDTO">
-	  UPDATE faq
-	  SET faq_title = #{faq_title},
-	      faq_content = #{faq_content}
-	  WHERE faq_num = #{faq_num}
-	</update>
 	
 </mapper>
