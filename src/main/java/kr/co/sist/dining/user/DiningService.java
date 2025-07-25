@@ -1,6 +1,7 @@
 package kr.co.sist.dining.user;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -13,6 +14,9 @@ public class DiningService {
 
     @Autowired
     DiningMapper diningMapper;
+
+    @Value("${upload.di_saveDir}")
+    private String diningUploadDir;
 
     public DiningDomain searchOneDining(int diningId) {
         // 1. 기본 정보 + 메인/로고 이미지
@@ -55,8 +59,6 @@ public class DiningService {
 
     @Transactional
     public String updateDiningFiles(int diningId, MultipartFile mainImage, MultipartFile logoImage, MultipartFile carouselImage, Integer carouselIndex) {
-        String projectRoot = System.getProperty("user.dir");
-        String basePath = projectRoot + "/src/main/resources/static/dining/images/";
         String uploadedUrl = null;
         try {
             // 메인 이미지
@@ -65,11 +67,12 @@ public class DiningService {
                 String originalFilename = mainImage.getOriginalFilename();
                 String extension = originalFilename != null && originalFilename.contains(".") ? originalFilename.substring(originalFilename.lastIndexOf(".")) : "";
                 String mainFileName = "main_" + diningId + "_" + System.currentTimeMillis() + extension;
-                File mainDir = new File(basePath + "main/");
+                String mainDirPath = diningUploadDir + "main/";
+                File mainDir = new File(mainDirPath);
                 if (!mainDir.exists()) mainDir.mkdirs();
-                File mainFile = new File(basePath + "main/" + mainFileName);
+                File mainFile = new File(mainDirPath + mainFileName);
                 mainImage.transferTo(mainFile);
-                uploadedUrl = "/dining/images/main/" + mainFileName;
+                uploadedUrl = "/dining_images/main/" + mainFileName;
                 diningMapper.insertDiningImage(diningId, "MAIN", uploadedUrl, 1);
             }
             // 로고 이미지
@@ -78,11 +81,12 @@ public class DiningService {
                 String originalFilename = logoImage.getOriginalFilename();
                 String extension = originalFilename != null && originalFilename.contains(".") ? originalFilename.substring(originalFilename.lastIndexOf(".")) : "";
                 String logoFileName = "logo_" + diningId + "_" + System.currentTimeMillis() + extension;
-                File logoDir = new File(basePath + "logo/");
+                String logoDirPath = diningUploadDir + "logo/";
+                File logoDir = new File(logoDirPath);
                 if (!logoDir.exists()) logoDir.mkdirs();
-                File logoFile = new File(basePath + "logo/" + logoFileName);
+                File logoFile = new File(logoDirPath + logoFileName);
                 logoImage.transferTo(logoFile);
-                uploadedUrl = "/dining/images/logo/" + logoFileName;
+                uploadedUrl = "/dining_images/logo/" + logoFileName;
                 diningMapper.insertDiningImage(diningId, "LOGO", uploadedUrl, 1);
             }
             // 케러셀 이미지 (단일, index)
@@ -91,18 +95,19 @@ public class DiningService {
                 if (oldUrls.size() >= carouselIndex) {
                     String oldUrl = oldUrls.get(carouselIndex - 1);
                     diningMapper.deleteDiningImageByUrl(diningId, oldUrl, "CAROUSEL");
-                    String filePath = projectRoot + "/src/main/resources/static" + oldUrl;
+                    String filePath = diningUploadDir + oldUrl.replace("/dining_images/", "");
                     File file = new File(filePath);
                     if (file.exists()) file.delete();
                 }
                 String originalFilename = carouselImage.getOriginalFilename();
                 String extension = originalFilename != null && originalFilename.contains(".") ? originalFilename.substring(originalFilename.lastIndexOf(".")) : "";
                 String carouselFileName = "carousel_" + diningId + "_" + System.currentTimeMillis() + "_" + carouselIndex + extension;
-                File carouselDir = new File(basePath + "carousel/");
+                String carouselDirPath = diningUploadDir + "carousel/";
+                File carouselDir = new File(carouselDirPath);
                 if (!carouselDir.exists()) carouselDir.mkdirs();
-                File carouselFile = new File(basePath + "carousel/" + carouselFileName);
+                File carouselFile = new File(carouselDirPath + carouselFileName);
                 carouselImage.transferTo(carouselFile);
-                uploadedUrl = "/dining/images/carousel/" + carouselFileName;
+                uploadedUrl = "/dining_images/carousel/" + carouselFileName;
                 diningMapper.insertDiningImage(diningId, "CAROUSEL", uploadedUrl, carouselIndex);
             }
             return uploadedUrl;
@@ -119,7 +124,7 @@ public class DiningService {
             List<String> oldUrls = diningMapper.selectDiningCarouselImages(diningId);
             for (String url : oldUrls) {
                 diningMapper.deleteDiningImageByUrl(diningId, url, "CAROUSEL");
-                String filePath = System.getProperty("user.dir") + "/src/main/resources/static" + url;
+                String filePath = diningUploadDir + url.replace("/dining_images/", "");
                 File file = new File(filePath);
                 if (file.exists()) file.delete();
             }
@@ -134,12 +139,12 @@ public class DiningService {
                         extension = originalFilename.substring(originalFilename.lastIndexOf("."));
                     }
                     String fileName = "carousel_" + diningId + "_" + System.currentTimeMillis() + "_" + (i+1) + extension;
-                    String basePath = System.getProperty("user.dir") + "/src/main/resources/static/dining/images/carousel/";
+                    String basePath = diningUploadDir + "carousel/";
                     File dir = new File(basePath);
                     if (!dir.exists()) dir.mkdirs();
                     File dest = new File(basePath + fileName);
                     file.transferTo(dest);
-                    String url = "/dining/images/carousel/" + fileName;
+                    String url = "/dining_images/carousel/" + fileName;
                     diningMapper.insertDiningImage(diningId, "CAROUSEL", url, i+1);
                 } else if ("url".equals(types.get(i))) {
                     String url = urls.get(urlIdx++);
@@ -162,7 +167,7 @@ public class DiningService {
                     System.out.println("[Service] 삭제 시도: " + url);
                     diningMapper.deleteDiningImageByUrl(diningId, url, "CAROUSEL");
                     // 파일도 삭제
-                    String filePath = System.getProperty("user.dir") + "/src/main/resources/static" + url;
+                    String filePath = diningUploadDir + url.replace("/dining_images/", "");
                     File file = new File(filePath);
                     if (file.exists()) file.delete();
                 }
@@ -185,8 +190,7 @@ public class DiningService {
             // DB에서 삭제
             diningMapper.deleteDiningImageByUrl(diningId, imageUrl, imageType);
             // 파일 시스템에서 삭제
-            String projectRoot = System.getProperty("user.dir");
-            String filePath = projectRoot + "/src/main/resources/static" + imageUrl;
+            String filePath = diningUploadDir + imageUrl.replace("/dining_images/", "");
             File file = new File(filePath);
             if (file.exists()) file.delete();
             return true;

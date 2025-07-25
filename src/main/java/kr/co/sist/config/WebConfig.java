@@ -10,6 +10,9 @@ public class WebConfig implements WebMvcConfigurer {
 
 	@Value("${upload.saveDir}")
 	private String uploadDir;
+	
+	@Value("${upload.di_saveDir}")
+	private String diningUploadDir;
 
 	/**
 	 * ResourceHandlerRegistry 클래스로 정적리소스( 파일, 이미지 )를 jar파일 외부에 저장하고
@@ -17,8 +20,8 @@ public class WebConfig implements WebMvcConfigurer {
 	 */
 	@Override
 	public void addResourceHandlers(ResourceHandlerRegistry registry) {
-		registry.addResourceHandler("/room_images/**")//URL의 경로
-		.addResourceLocations("file:"+uploadDir+"/");//HDD의 경로
+		registry.addResourceHandler("/room_images/**", "/dining_images/**")//URL의 경로
+		.addResourceLocations("file:"+uploadDir+"/", "file:"+diningUploadDir+"/");//HDD의 경로
 	}//addResourceHandlers
 	
 	
