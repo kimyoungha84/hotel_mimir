@@ -164,7 +164,48 @@ window.addEventListener("message", function(event) {
   if (event.data && event.data.type === "dateSelected") {
 	  
 	selectedDateStr = event.data.date;
-	  
+	
+	const rawDate = new Date(selectedDateStr);
+	const yyyy = rawDate.getFullYear();
+	const mm = String(rawDate.getMonth() + 1).padStart(2, '0');
+	const dd = String(rawDate.getDate()).padStart(2, '0');
+	selectedDateStr = `${yyyy}-${mm}-${dd}`;
+
+	// 요청 URL 로그 삽입
+	const diningId = document.getElementById("inputDining").value;
+	console.log("🔵 요청 URL:", `/api/remainingSeats?diningId=${diningId}&date=${selectedDateStr}`);
+
+	// 좌석 AJAX 호출 삽입
+	fetch(`/api/remainingSeats?diningId=${diningId}&date=${selectedDateStr}`)
+	  .then(response => {
+	    if (!response.ok) throw new Error("API 요청 실패");
+	    return response.json();
+	  })
+	  .then(data => {
+	    console.log("✅ 잔여좌석 데이터:", data);
+
+	    // 각 버튼에 좌석 수 매핑
+		  document.querySelectorAll(".time-btn").forEach(btn => {
+		    const span = btn.querySelector("span");
+		    const timeText = span.textContent.replace("오후 ", "").trim();
+		    const seatCount = data[timeText];
+
+		    let seatTag = btn.querySelector("small.remain-seat");
+
+		    if (!seatTag) {
+		      seatTag = document.createElement("small");
+		      seatTag.classList.add("remain-seat");
+		      btn.appendChild(seatTag);
+		    }
+
+		    if (seatCount !== undefined) {
+		      seatTag.textContent = `잔여좌석: ${seatCount}석`;
+		    } else {
+		      seatTag.textContent = "잔여좌석: -석";
+		    }
+		  });
+		})
+	
     const schedulerSection = document.querySelector(".scheduler-content-wrap");
     if (schedulerSection) schedulerSection.style.display = "block";
     

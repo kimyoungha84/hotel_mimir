@@ -1,10 +1,16 @@
 package kr.co.sist.diningresv;
 
+import java.sql.Date;
+import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,12 +20,16 @@ import org.springframework.web.bind.annotation.RequestParam;
 import kr.co.sist.dining.user.DiningDomain;
 import kr.co.sist.dining.user.DiningService;
 import kr.co.sist.dining.user.RepMenuDomain;
+import kr.co.sist.diningslot.DiningTimeSlotService;
 
 @Controller
 public class DiningResvController {
 	
 	@Autowired
 	private DiningResvService drs;
+	
+	@Autowired
+	private DiningTimeSlotService dtss;
 	
 	@Autowired
 	private DiningService ds;
@@ -29,8 +39,39 @@ public class DiningResvController {
     				@RequestParam("diningId") int diningId,
                     @RequestParam(name = "adult", required = false, defaultValue = "1") int adult,
                     @RequestParam(name = "child", required = false, defaultValue = "0") int child,
+                    @RequestParam(name = "date", required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") Date selectedDate,
     				Model model) {
 
+    	List<String> timeList = Arrays.asList(
+    			  "12:00", "12:30", "13:00", "13:30", "14:00", "14:30", "15:00", "15:30", "16:00", "16:30", "17:00",
+    			  "18:00", "18:30", "19:00", "19:30", "20:00", "20:30", "21:00"
+    			);
+    	
+    	List<String> lunchTimeList = timeList.subList(0, 11);
+    	List<String> dinnerTimeList = timeList.subList(11, timeList.size());
+
+    	Map<String, Integer> remainingSeatMap = new LinkedHashMap<>();
+    	
+        // 기본값 : 오늘 날짜
+        Date targetDate = selectedDate != null ? selectedDate : new Date(System.currentTimeMillis());
+
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        
+    			for (String timeStr : timeList) {
+    				
+    			    String dateTimeStr = sdf.format(targetDate) + " " + timeStr + ":00";
+    			    Timestamp timeSlot = Timestamp.valueOf(dateTimeStr);
+
+    			    int remaining = dtss.getRemainingSeats(diningId, targetDate, timeSlot);
+
+    			    remainingSeatMap.put(timeStr, remaining);
+    			}
+
+    			model.addAttribute("remainingSeatMap", remainingSeatMap);
+    			
+    			model.addAttribute("lunchTimeList", lunchTimeList);
+    			model.addAttribute("dinnerTimeList", dinnerTimeList);
+    	
         // 메인 이미지 URL 조회
         String mainImageUrl = drs.searchMainImage(diningId);
         

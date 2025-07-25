@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import kr.co.sist.dining.user.DiningDomain;
 import kr.co.sist.dining.user.DiningService;
 import kr.co.sist.dining.user.RepMenuDomain;
+import kr.co.sist.diningslot.DiningTimeSlotService;
 import kr.co.sist.member.CustomUserDetails;
 import kr.co.sist.nonmember.NonMemberService;
 import kr.co.sist.payment.PaymentService;
@@ -26,6 +27,9 @@ public class DiningNextResvController {
 	
     @Autowired
     private DiningResvService drs;
+    
+    @Autowired
+    private DiningTimeSlotService dtss;
     
 	@Autowired
 	private DiningService ds;
@@ -154,6 +158,9 @@ public class DiningNextResvController {
 	    dto.setReservationCount(totalCount);
 	    dto.setDiningId(diningId);
 
+	    java.sql.Timestamp reservationTime = null;
+	    java.sql.Date reservationDate = null;
+	    
 	    // 날짜 / 시간 세팅
 	    try {
 	    	
@@ -161,8 +168,11 @@ public class DiningNextResvController {
 	        SimpleDateFormat sdfDateTime = new SimpleDateFormat("yyyy-MM-dd a h:mm", Locale.KOREAN);
 	        Date parsedDateTime = sdfDateTime.parse(dateTimeStr);
 	        
-	        dto.setReservationTime(new java.sql.Timestamp(parsedDateTime.getTime()));
-	        dto.setReservationDate(new java.sql.Date(parsedDateTime.getTime()));
+	        reservationTime = new Timestamp(parsedDateTime.getTime());
+	        reservationDate = new java.sql.Date(parsedDateTime.getTime());
+	        
+	        dto.setReservationTime(reservationTime);
+	        dto.setReservationDate(reservationDate);
 
 	    } catch (Exception e) {
 	    	
@@ -224,6 +234,8 @@ public class DiningNextResvController {
 
 	    drs.insertDiningResv(dto);
 
+	    dtss.reserveSeats(diningId, reservationDate, reservationTime, totalCount);
+	    
 	    // View로 값 전달
 	    String formattedDate;
 	    
