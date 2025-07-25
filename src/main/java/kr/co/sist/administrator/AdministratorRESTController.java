@@ -3,6 +3,7 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -10,6 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
+import kr.co.sist.administrator.dashboardGPT.GPTForDashboardService;
 
 @RestController
 public class AdministratorRESTController {
@@ -176,14 +178,22 @@ public class AdministratorRESTController {
 	
 	
 	/********************************************/
+	@Autowired
+	private GPTForDashboardService gbs;
 	
-	@PostMapping("/admin/gpt")
-	public String showGPTStatistical() {
+	
+	@GetMapping("/admin/showGPTOpinion")
+	public String showGPTStatistical(Model model) {
+		String resultStr="";
 		
-		//callGPTbySchedule();
+		try {
+			resultStr=gbs.callGPTbySchedule();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		model.addAttribute("messageStr",resultStr);
 		
-		
-		return "";
+		return resultStr;
 	}//showGPTStatistical
 	
 	

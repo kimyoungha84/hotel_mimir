@@ -48,6 +48,40 @@
     margin-bottom: 0.5rem;
     text-align: center;
 }
+
+.chart-view {
+    display: flex;
+    justify-content: space-between; /* 버튼 오른쪽으로 밀기 */
+    align-items: center;
+    width: 100%; 
+    max-width: 800px; /* 최대 너비 제한 */
+    padding: 20px;
+    margin: 20px auto; /* 좌우 마진 auto로 가운데 정렬 */
+    background-color: #fff;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    font-family: 'Noto Sans KR', sans-serif;
+    box-sizing: border-box;
+}
+
+.gpt-button {
+    padding: 10px 14px;
+    background-color: #ddbfb3;
+    border: none; /* ✅ 테두리 제거 */
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: bold; /* ✅ 글씨 굵게 */
+}
+
+.gpt-button:hover {
+    background-color: #cfaea2;
+}
+
+pre {
+  white-space: pre-wrap; /* ✅ 줄바꿈 허용 */
+  word-break: break-word; /* ✅ 단어 단위로 잘라도 넘침 방지 */
+}
 </style>
 
 </head>
@@ -83,8 +117,10 @@
 
 
 <div id="app">
-    <input type="hidden" v-model="messageStr"> <!-- message 값을 바인딩 -->
-    <input type="button" value="버튼" id="btn" @click="clickBtn">
+    <div class="chart-view">
+    <pre>{{messageStr}}</pre>
+    <input type="button" value="GPT 통계 의견" id="btn" class="gpt-button" @click="clickGPT">
+    </div>
 </div>
 
 </div>
@@ -93,20 +129,19 @@
 Vue.createApp({
     data(){
         return{
-            messageStr:"tao"
+            messageStr:"",
         }
     },
     methods:{
-        clickBtn(){
-            var message=JSON.stringify(this.messageStr);
-
-            axios.post("/api/chat",{message:message})
+        clickGPT(){
+            axios.get("/admin/showGPTOpinion")
             .then(res=>{
-                alert("성공!!" +res.data);
+                //alert("성공!!" +res.data);
+                this.messageStr=res.data;
             })
             .catch(err=>{
                 alert("실패!!"+err.response.data);    
-                debugger;
+                
                 
             })
         }

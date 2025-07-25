@@ -23,10 +23,11 @@ public class GPTForDashboardService{
 		private UseChatGPTForStatistics ugs;
 		
 	   // @Scheduled(cron = "0 0 11 * * *")  // 매일 오전 9시에 실행
-	    public void callGPTbySchedule() throws Exception {
-	    	String weather="", news="", prompt="", resultStr="";
+	    public String callGPTbySchedule() throws Exception {
+	    	String weather="", news="";
+	    	StringBuilder sbPromptStr=new StringBuilder();
 	    	
-	    	    	
+	    	  	
 	        // 날씨 정보 수집
 	        weather = rss.getTodayForecast(weatherUrl);
 
@@ -37,18 +38,20 @@ public class GPTForDashboardService{
 	        // GPT API에 요청 보내고 응답을 처리 (API 호출 부분)
 	        // 예시: gptApiService.sendRequest(prompt);
 	        StringBuilder sbWeather=new StringBuilder();
-	        sbWeather.append("너는 각 계절의 야채, 과일을 정확히 알고 있는 요리사야.\n")
-	        .append("그걸 토대로 이 날씨에는 농작물이 자라지 않을 가능성이 높으니, 식자재를 바꿔주세요와 같은 느낌으로 1줄로 정중하게 출력해주세요.");
-	        resultStr=ugs.analyzeUseGPT(weather+sbWeather.toString());
+	        sbWeather.append("당신은 5성급 호텔의 셰프입니다.\n")
+	        .append("주어진 날씨 데이터를 기반으로 어떤 음식이 많이 팔릴지 예상해주세요. 이때 질문을 요약하고 이에 대한 답변 형식으로 출력할니다.")
+	        .append("정중히 말하되, 친숙하게 친근하게 말해주세요");
 	        
+	        sbPromptStr.append(ugs.analyzeUseGPT("이건 날씨 RSS입니다.\n"+weather+sbWeather.toString())).append("\n");  
 	      
-//	        System.out.println(resultStr);
-	        StringBuilder sbNews=new StringBuilder();
-	        sbNews.append("너는 경제학자야.\n")
-	        .append("물가 상승률 등을 고려해서 외식이 많아질 것 같은지를 1문장으로 예측한 결과를 정중하게 출력해주세요.");
-	        resultStr=ugs.analyzeUseGPT(news+sbNews.toString());
-	//        System.out.println();
+	        sbPromptStr.append("\n\n");
 	        
+	        StringBuilder sbNews=new StringBuilder();
+	        sbNews.append("당신은 경제 전문가입니다.\n")
+	        .append("물가와 관련된 정보 등을 이용해, 사람들의 소비 심리를 1줄로 추측해주세요.");
+	        sbPromptStr.append(ugs.analyzeUseGPT("이 데이터는 경제뉴스 RSS입니다.\n"+news+sbNews.toString())).append("\n");
+	        
+	        return sbPromptStr.toString();
 	    }//collectAndProcessData
 	
 }//class
