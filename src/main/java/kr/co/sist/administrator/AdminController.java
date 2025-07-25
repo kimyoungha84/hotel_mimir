@@ -49,7 +49,6 @@ public class AdminController {
 	        model.addAttribute("memberRatio", arrds.getMemberNonMemberRatio());
 	        model.addAttribute("todayStatus", arrds.getTodayReservationStatus());
 	        model.addAttribute("popularRooms", arrds.getPopularRooms());
-			
 			dashboardPageStr="administrator/dashboard/room_dashboard";
 		}else if(authorityStr.contains("dinning")) {
 			dashboardPageStr="administrator/dashboard/dining_dashboard";
@@ -110,8 +109,6 @@ public class AdminController {
 	/*객실 메인일 때 나오는 페이지*/
 	@GetMapping("/admin/roomDashboard")
 	public String roomDashBoard(HttpSession session, Model model) {
-		
-		
 		model.addAttribute("session_id",session.getAttribute("session_id"));
 		model.addAttribute("session_name",session.getAttribute("session_name"));
 		

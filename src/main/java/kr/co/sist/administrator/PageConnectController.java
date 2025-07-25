@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import jakarta.servlet.http.HttpServletRequest;
+import kr.co.sist.admin.resvroom.AdminResvRoomDashboardService;
 import kr.co.sist.util.FilterConfig;
 import kr.co.sist.util.ModelUtils;
 import kr.co.sist.util.controller.SearchController;
@@ -21,9 +22,12 @@ public class PageConnectController {
 	@Autowired(required = false)
 	AdminService as;
 	
+	 @Autowired
+	private AdminResvRoomDashboardService arrds;
+	
 	/*dashboard*/
 	@GetMapping("/admin/dashboard")
-	public String indexPage(HttpServletRequest request) {
+	public String indexPage(HttpServletRequest request,Model model) {
 		String dashboardPageStr="administrator/index";
 		
 		String session_id=(String)request.getSession().getAttribute("session_id");
@@ -33,6 +37,12 @@ public class PageConnectController {
 		
 		
 		if(authorityStr.contains("room")) {
+			model.addAttribute("monthlyReservations", arrds.getMonthlyReservationCount());
+	        model.addAttribute("monthlySales", arrds.getMonthlySales());
+	        model.addAttribute("roomOccupancy", arrds.getRoomOccupancy());
+	        model.addAttribute("memberRatio", arrds.getMemberNonMemberRatio());
+	        model.addAttribute("todayStatus", arrds.getTodayReservationStatus());
+	        model.addAttribute("popularRooms", arrds.getPopularRooms());
 			dashboardPageStr="administrator/dashboard/room_dashboard";
 		}else if(authorityStr.contains("dinning")) {
 			dashboardPageStr="administrator/dashboard/dining_dashboard";

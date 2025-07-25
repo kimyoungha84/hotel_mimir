@@ -80,11 +80,11 @@ public class AdminReservationController {
 	    	redirectAttrs.addFlashAttribute("msg", "예약 정보가 정상적으로 수정되었습니다.");
 	    	redirectAttrs.addAttribute("resvId", rDTO.getResvId());
 	    	
-	    	return "redirect:admin/resvroomdetail";  // 수정 후 목록 페이지로 이동
+	    	return "redirect:/admin/resvroomdetail";  // 수정 후 목록 페이지로 이동
 
 	    } else {
 	        redirectAttrs.addFlashAttribute("msg", "예약 수정에 실패했습니다. 다시 시도해주세요.");
-	        return "redirect:admin/resvroommodify?resvId=" + rDTO.getResvId(); // 수정 페이지로 다시 이동
+	        return "redirect:/admin/resvroommodify?resvId=" + rDTO.getResvId(); // 수정 페이지로 다시 이동
 	    }
 	}
 

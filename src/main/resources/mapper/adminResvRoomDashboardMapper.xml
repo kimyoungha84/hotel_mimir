@@ -36,9 +36,9 @@
 
   <select id="selectTodayReservationStatus" resultType="kr.co.sist.admin.resvroom.TodayReservationStatusDTO">
     SELECT
-      (SELECT COUNT(*) FROM reservation WHERE checkin_date = SYSDATE) AS checkinCount,
-      (SELECT COUNT(*) FROM reservation WHERE checkout_date = SYSDATE) AS checkoutCount
-    FROM dual
+  		(SELECT COUNT(*) FROM reservation WHERE TRUNC(checkin_date) = TRUNC(SYSDATE)) AS checkinCount,
+  		(SELECT COUNT(*) FROM reservation WHERE TRUNC(checkout_date) = TRUNC(SYSDATE)) AS checkoutCount
+	FROM dual
   </select>
 
   <select id="selectPopularRooms" resultType="kr.co.sist.admin.resvroom.PopularRoomDTO">
