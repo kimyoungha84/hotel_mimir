@@ -1,11 +1,6 @@
 package kr.co.sist.admin.room;
 
 import java.io.File;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -92,7 +87,7 @@ public class AdminRoomController {
 	            model.addAttribute("success", false);
 	            model.addAttribute("message", "변경 사항이 없습니다.");
 	            model.addAttribute("roomId", oldRoom.getRoomId());
-	            return "redirect:admin/roomdetail?roomId=" + roomId;
+	            return "admin_room/admin_roomupdate_result";
 	        }
 
 	        ars.modifyRoom(typeName, bedName, viewName, description);

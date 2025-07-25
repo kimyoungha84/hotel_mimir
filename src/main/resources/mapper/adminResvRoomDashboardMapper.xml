@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.co.sist.admin.resvroom.AdminResvRoomDashboardMapper">
+
+  <select id="selectMonthlyReservationCount" resultType="kr.co.sist.admin.resvroom.MonthCountDTO">
+    SELECT TO_CHAR(resv_reg_date, 'YYYY-MM') AS month, COUNT(*) AS reservationCount
+    FROM reservation
+    GROUP BY TO_CHAR(resv_reg_date, 'YYYY-MM')
+    ORDER BY month
+  </select>
+
+<select id="selectMonthlySales" resultType="kr.co.sist.admin.resvroom.MonthSalesDTO">
+  SELECT 
+    TO_CHAR(payment_time, 'YYYY-MM') AS month,
+    SUM(payment_price) AS salesAmount
+  FROM payment
+  WHERE payment_time IS NOT NULL
+  GROUP BY TO_CHAR(payment_time, 'YYYY-MM')
+  ORDER BY month
+</select>
+
+  <select id="selectRoomOccupancyRate" resultType="kr.co.sist.admin.resvroom.RoomOccupancyDTO">
+	SELECT 
+	    rt.type_name AS roomType,
+	    ROUND((COUNT(*) * 100.0 / (SELECT COUNT(*) FROM reservation)), 2) AS occupancyRate
+	FROM reservation r
+	JOIN room rm ON r.room_id = rm.room_id
+	JOIN room_type rt ON rm.type_id = rt.type_id
+	GROUP BY rt.type_name
+	ORDER BY occupancyRate DESC
+  </select>
+
+
+  <select id="selectTodayReservationStatus" resultType="kr.co.sist.admin.resvroom.TodayReservationStatusDTO">
+    SELECT
+      (SELECT COUNT(*) FROM reservation WHERE checkin_date = SYSDATE) AS checkinCount,
+      (SELECT COUNT(*) FROM reservation WHERE checkout_date = SYSDATE) AS checkoutCount
+    FROM dual
+  </select>
+
+  <select id="selectPopularRooms" resultType="kr.co.sist.admin.resvroom.PopularRoomDTO">
+	SELECT rt.type_name AS roomType, COUNT(*) AS reservationCount
+	FROM reservation r
+	JOIN room rm ON r.room_id = rm.room_id
+	JOIN room_type rt ON rm.type_id = rt.type_id
+	GROUP BY rt.type_name
+	ORDER BY reservationCount DESC
+	FETCH FIRST 3 ROWS ONLY
+  </select>
+
+
+
+    <select id="selectMemberNonMemberRatio" resultType="kr.co.sist.admin.resvroom.MemberRatioDTO">
+    SELECT 
+        CASE 
+            WHEN NON_MEM_ID IS NULL AND USER_NUM IS NOT NULL THEN '회원'
+            WHEN USER_NUM IS NULL AND NON_MEM_ID IS NOT NULL THEN '비회원'
+        END AS category,
+        COUNT(*) AS value
+    FROM reservation
+    WHERE (USER_NUM IS NOT NULL OR NON_MEM_ID IS NOT NULL)
+    GROUP BY 
+        CASE 
+            WHEN NON_MEM_ID IS NULL AND USER_NUM IS NOT NULL THEN '회원'
+            WHEN USER_NUM IS NULL AND NON_MEM_ID IS NOT NULL THEN '비회원'
+        END
+    </select>
+
+</mapper>

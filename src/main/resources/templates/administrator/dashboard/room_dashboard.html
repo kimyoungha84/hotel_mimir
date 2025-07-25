@@ -17,12 +17,11 @@
 
 <style>
 .dashboard {
-    display: flex;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
     gap: 2rem;
-    flex-wrap: wrap; /* 화면 작아지면 줄바꿈 */
-    justify-content: center;
+    justify-items: center;
 }
-
 .chart-card {
     width: 300px;
     padding: 1rem;
@@ -55,175 +54,173 @@
 
 <div class="dashboard">
     <div class="chart-card">
-    <div class="card-title">월별 매출</div>
-    <canvas id="myChart" width="280" height="200"></canvas>
+        <div class="card-title">월별 매출</div>
+        <canvas id="myChart" width="280" height="200"></canvas>
     </div>
 
     <div class="chart-card">
-    <div class="card-title">고객 방문 수</div>
-    <canvas id="myChart2" width="280" height="200"></canvas>
+        <div class="card-title">회원/비회원 비율</div>
+        <canvas id="myChart2" width="280" height="200"></canvas>
     </div>
 
     <div class="chart-card">
-    <div class="card-title">고객 방문 수</div>
-    <canvas id="myChart3" width="280" height="200"></canvas>
+        <div class="card-title">인기 객실 유형 Top 3</div>
+        <canvas id="myChart3" width="280" height="200"></canvas>
     </div>
     
     <div class="chart-card">
-    <div class="card-title">고객 방문 수</div>
-    <canvas id="myChart4" width="280" height="200"></canvas>
+        <div class="card-title">객실 점유율</div>
+        <canvas id="myChart4" width="280" height="200"></canvas>
+    </div>
+
+    <div class="chart-card">
+        <div class="card-title">월별 고객 방문 수 추이</div>
+        <canvas id="myChart5" width="280" height="200"></canvas>
+    </div>
+
+    <div class="chart-card">
+        <div class="card-title">결제 유형별 매출 비중</div>
+        <canvas id="myChart6" width="280" height="200"></canvas>
     </div>
 </div>
 
 
+
 </div>
 
+<script th:inline="javascript">
+/*<![CDATA[*/
+    const monthlySales = /*[[${monthlySales}]]*/ [];
+    const monthlyReservations = /*[[${monthlyReservations}]]*/ [];
+    const memberRatio = /*[[${memberRatio}]]*/ [];
+    const popularRooms = /*[[${popularRooms}]]*/ [];
+    const todayStatus = /*[[${todayStatus}]]*/ {};
+    const roomOccupancy = /*[[${roomOccupancy}]]*/ [];
+/*]]>*/
 
+// null 체크 JS에서 처리
+const safeTodayStatus = todayStatus || { checkinCount: 0, checkoutCount: 0 };
 
-<script>
-const ctx = document.getElementById('myChart').getContext('2d');
+// 5. 당일 예약 현황 (체크인, 체크아웃 수)
+const todayLabels = ['체크인', '체크아웃'];
+const todayData = [safeTodayStatus.checkinCount, safeTodayStatus.checkoutCount];
 
-new Chart(ctx, {
-type: 'bar',
-data: {
-    labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
-    datasets: [{
-    label: '# of Votes',
-    data: [12, 19, 3, 5, 2, 3],
-    borderWidth: 1
-    }]
-},
-options: {
-    scales: {
-    y: {
-        beginAtZero: true
-    }
-    }
-}
-});
-</script>
-<script>
-const ctx2 = document.getElementById('myChart2').getContext('2d');
-const myChart2 = new Chart(ctx2, {
-    type: 'bar',
-    data: {
-        labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
-        datasets: [{
-            label: '# of Votes',
-            data: [12, 19, 3, 5, 2, 3],
-            backgroundColor: [
-                'rgba(255, 99, 132, 0.2)',
-                'rgba(54, 162, 235, 0.2)',
-                'rgba(255, 206, 86, 0.2)',
-                'rgba(75, 192, 192, 0.2)',
-                'rgba(153, 102, 255, 0.2)',
-                'rgba(255, 159, 64, 0.2)'
-            ],
-            borderColor: [
-                'rgba(255, 99, 132, 1)',
-                'rgba(54, 162, 235, 1)',
-                'rgba(255, 206, 86, 1)',
-                'rgba(75, 192, 192, 1)',
-                'rgba(153, 102, 255, 1)',
-                'rgba(255, 159, 64, 1)'
-            ],
-            borderWidth: 1
-        }]
-    },
-    options: {
-        scales: {
-            y: {
-                beginAtZero: true
+    // 1. 월별 매출 차트
+    const salesLabels = monthlySales.map(item => item.month + '월');
+    const salesData = monthlySales.map(item => item.salesAmount);
+
+    new Chart(document.getElementById('myChart'), {
+        type: 'line',
+        data: {
+            labels: salesLabels,
+            datasets: [{
+                label: '월별 매출',
+                data: salesData,
+                borderColor: '#c2a164',
+                backgroundColor: 'rgba(194, 161, 100, 0.2)',
+                tension: 0.3,
+                fill: true
+            }]
+        },
+        options: { responsive: true }
+    });
+
+    // 2. 월별 예약 수 (고객 방문 수)
+    const reservationLabels = monthlyReservations.map(item => item.month + '월');
+    const reservationData = monthlyReservations.map(item => item.reservationCount);
+
+    new Chart(document.getElementById('myChart5'), {
+        type: 'bar',
+        data: {
+            labels: reservationLabels,
+            datasets: [{
+                label: '고객 방문 수',
+                data: reservationData,
+                backgroundColor: '#c2a164'
+            }]
+        },
+        options: { responsive: true }
+    });
+
+    // 3. 회원/비회원 비율
+    const memberLabels = memberRatio.map(item => item.category);
+    const memberData = memberRatio.map(item => item.value);
+
+    new Chart(document.getElementById('myChart2'), {
+        type: 'pie',
+        data: {
+            labels: memberLabels,
+            datasets: [{
+                label: '회원/비회원 비율',
+                data: memberData,
+                backgroundColor: ['#c2a164', '#d9c39a']
+            }]
+        },
+        options: { responsive: true }
+    });
+
+    // 4. 인기 객실 (객실별 예약 수)
+    const roomLabels = popularRooms.map(item => item.roomType);
+    const roomCounts = popularRooms.map(item => item.reservationCount);
+
+    new Chart(document.getElementById('myChart3'), {
+        type: 'bar',
+        data: {
+            labels: roomLabels,
+            datasets: [{
+                label: '객실별 예약 수',
+                data: roomCounts,
+                backgroundColor: '#c2a164'
+            }]
+        },
+        options: { responsive: true }
+    });
+
+    // 5. 당일 예약 현황 (체크인, 체크아웃 수)
+
+    new Chart(document.getElementById('myChart6'), {
+        type: 'doughnut',
+        data: {
+            labels: todayLabels,
+            datasets: [{
+                data: todayData,
+                backgroundColor: ['#c2a164', '#e0cfa5']
+            }]
+        },
+        options: { responsive: true }
+    });
+
+    // 6. 객실 점유율
+    const occupancyLabels = roomOccupancy.map(item => item.roomType);
+    const occupancyRates = roomOccupancy.map(item => item.occupancyRate);
+
+    new Chart(document.getElementById('myChart4'), {
+        type: 'bar',
+        data: {
+            labels: occupancyLabels,
+            datasets: [{
+                label: '객실 점유율 (%)',
+                data: occupancyRates,
+                backgroundColor: '#c2a164'
+            }]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                y: {
+                    min: 0,
+                    max: 100,
+                    ticks: {
+                        callback: function(value) {
+                            return value + '%';
+                        }
+                    }
+                }
             }
         }
-    }
-});
+    });
 </script>
-<script>
-const ctx3 = document.getElementById('myChart3').getContext('2d');
-
-const CHART_COLORS = {
-    red: 'rgb(255, 99, 132)',
-    blue: 'rgb(54, 162, 235)'
-};
-
-const labels = ['1월', '2월', '3월', '4월', '5월', '6월', '7월'];
-
-var data = {
-    labels: labels,
-    datasets: [
-    {
-        label: 'Dataset 1',
-        data: [10, 20, -10, 30, 40, -20, 10],
-        borderColor: CHART_COLORS.red,
-        backgroundColor: 'rgba(255, 99, 132, 0.5)',
-        fill: false
-    },
-    {
-        label: 'Dataset 2',
-        data: [5, -15, 25, 10, 35, -5, 20],
-        borderColor: CHART_COLORS.blue,
-        backgroundColor: 'rgba(54, 162, 235, 0.5)',
-        fill: false
-    }
-    ]
-};
-
-const myChart3 =new Chart(ctx3, {
-    type: 'line',
-    data: data,
-    options: {
-    responsive: true,
-    plugins: {
-        legend: {
-        position: 'top',
-        },
-        title: {
-        display: true,
-        text: 'Chart.js Line Chart'
-        }
-    }
-    },
-});
-</script>
-<script>
-const ctx4 = document.getElementById('myChart4').getContext('2d');
-
-var data = {
-    labels: [
-    'Red',
-    'Blue',
-    'Yellow'
-    ],
-    datasets: [{
-    label: 'My First Dataset',
-    data: [300, 50, 100],
-    backgroundColor: [
-        'rgb(255, 99, 132)',
-        'rgb(54, 162, 235)',
-        'rgb(255, 205, 86)'
-    ],
-    hoverOffset: 4
-    }]
-};
 
 
-const myChart4 =new Chart(ctx4, {
-    type: 'pie',
-    data: data,
-    options: {
-    responsive: true,
-    plugins: {
-        legend: {
-        position: 'top',
-        },
-        title: {
-        display: true,
-        text: 'Chart.js Line Chart'
-        }
-    }
-    },
-});
-</script>
 </body>
 </html>

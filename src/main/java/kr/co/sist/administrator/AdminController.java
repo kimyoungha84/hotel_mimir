@@ -7,12 +7,16 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
+import kr.co.sist.admin.resvroom.AdminResvRoomDashboardService;
 
 @Controller
 public class AdminController {
 	
 	@Autowired(required = false)
 	AdminService as;
+	
+	  @Autowired
+	    private AdminResvRoomDashboardService arrds;
 	
 	/**
 	 * 관리자 첫 페이지
@@ -23,7 +27,7 @@ public class AdminController {
 	 * @return 
 	 */
 	@GetMapping("/admin")
-	public String admin(HttpServletRequest request) {
+	public String admin(HttpServletRequest request,Model model) {
 
 		String dashboardPageStr="administrator/index";
 		
@@ -39,6 +43,13 @@ public class AdminController {
 		
 		
 		if(authorityStr.contains("room")) {
+			model.addAttribute("monthlyReservations", arrds.getMonthlyReservationCount());
+	        model.addAttribute("monthlySales", arrds.getMonthlySales());
+	        model.addAttribute("roomOccupancy", arrds.getRoomOccupancy());
+	        model.addAttribute("memberRatio", arrds.getMemberNonMemberRatio());
+	        model.addAttribute("todayStatus", arrds.getTodayReservationStatus());
+	        model.addAttribute("popularRooms", arrds.getPopularRooms());
+			
 			dashboardPageStr="administrator/dashboard/room_dashboard";
 		}else if(authorityStr.contains("dinning")) {
 			dashboardPageStr="administrator/dashboard/dining_dashboard";
