@@ -1113,15 +1113,23 @@ function closeReservationPanel() {
 }
 
 function openDiningModal() {
-  // 예약 패널이 열려있을 때만 다이닝 모달 열기
   if (document.getElementById('reservation-panel').classList.contains('active')) {
-    // 다른 모달이 열려있으면 닫기
     closeGuestModal();
-    
     const modal = document.getElementById('dining-modal');
-    modal.style.visibility = 'visible'; // visibility 초기화
+    modal.style.visibility = 'visible';
     modal.classList.add('active');
     document.getElementById('overlay').classList.add('active');
+    // 임시 선택값을 현재 선택값으로 초기화
+    tempSelectedDiningId = selectedDiningId;
+    tempSelectedDiningName = selectedDiningName;
+    // 선택 표시도 동기화
+    document.querySelectorAll('.dining-option').forEach(opt => {
+      if (opt.getAttribute('data-dining-id') == tempSelectedDiningId) {
+        opt.classList.add('selected');
+      } else {
+        opt.classList.remove('selected');
+      }
+    });
   }
 }
 
@@ -1193,6 +1201,8 @@ function closeAllModals() {
 let availableDiningList = [];
 let selectedDiningId = null;
 let selectedDiningName = null;
+let tempSelectedDiningId = null;
+let tempSelectedDiningName = null;
 let hasSelectedDining = false;
 
 function renderDiningOptions() {
@@ -1230,14 +1240,17 @@ function updateReservationBtnState() {
 function selectDiningOption(diningId, diningName, element) {
   document.querySelectorAll('.dining-option').forEach(opt => opt.classList.remove('selected'));
   element.classList.add('selected');
-  selectedDiningId = diningId;
-  selectedDiningName = diningName;
-  hasSelectedDining = true;
+  tempSelectedDiningId = diningId;
+  tempSelectedDiningName = diningName;
+  // hasSelectedDining은 "선택" 버튼에서만 true로!
   updateReservationBtnState();
 }
 
 function confirmDiningSelection() {
-  if (selectedDiningName) {
+  if (tempSelectedDiningName) {
+    selectedDiningId = tempSelectedDiningId;
+    selectedDiningName = tempSelectedDiningName;
+    hasSelectedDining = true;
     document.getElementById('selected-dining-name').textContent = selectedDiningName;
     closeDiningModal();
     updateReservationBtnState();

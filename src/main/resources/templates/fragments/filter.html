@@ -155,7 +155,8 @@
     <div class="filter-right-section">
       <!-- 셀렉터가 1개일 경우, 라벨만 표시 -->
       <div th:if="${filter.showSelector and filter.selectOptions != null and #lists.size(filter.selectOptions) > 0}" class="filter-selector">
-      	<input type="hidden" name="searchType" th:value="${filter.selectOptions[0].value}" />
+        <!-- 셀렉터가 1개일 경우, hidden input만 -->
+        <input type="hidden" name="searchType" th:value="${filter.selectOptions[0].value}" th:if="${#lists.size(filter.selectOptions) == 1}" />
         <span th:if="${#lists.size(filter.selectOptions) == 1}" th:text="${filter.selectOptions[0].label}"></span>
         <!-- 셀렉터가 2개 이상일 경우에만 select box 표시 -->
         <select th:if="${#lists.size(filter.selectOptions) > 1}" name="searchType" class="filter-select-box">

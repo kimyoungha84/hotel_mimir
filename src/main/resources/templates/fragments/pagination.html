@@ -87,15 +87,21 @@
             </button>
         </div>
         <div class="mimir-pg-group">
-            <!-- 페이지 번호 동적 생성 -->
-            <th:block th:each="pageNum : ${#numbers.sequence(1, totalPages)}">
-                <button type="button"
-                        class="mimir-pg-page"
-                        th:classappend="${pageNum == currentPage} ? 'mimir-pg-active' : ''"
-                        th:onclick="|loadPage(${pageNum})|"
-                        th:text="${pageNum}">
-                    1
-                </button>
+            <!-- 페이지 번호 동적 생성 (윈도우 적용) -->
+            <th:block th:with="
+                pageWindow=5,
+                startPage=${((currentPage-1)/pageWindow)*pageWindow+1},
+                endPage=${(startPage+pageWindow-1) < totalPages ? (startPage+pageWindow-1) : totalPages}
+            ">
+                <th:block th:each="pageNum : ${#numbers.sequence(startPage, endPage)}">
+                    <button type="button"
+                            class="mimir-pg-page"
+                            th:classappend="${pageNum == currentPage} ? 'mimir-pg-active' : ''"
+                            th:onclick="|loadPage(${pageNum})|"
+                            th:text="${pageNum}">
+                        1
+                    </button>
+                </th:block>
             </th:block>
         </div>
         <div class="mimir-pg-group">

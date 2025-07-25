@@ -239,8 +239,18 @@ public enum FilterConfig {
             new Option("userName", "이름", "user_name")
         ),
         null,
-        null,
-        List.of(new CheckboxOption("accUse","탈퇴","use_yn","N","Y"))
+        List.of(
+                new LabelSelectorOption("탈퇴 여부", "selectorAccUse", "use_yn",
+                    List.of(
+                        new LabelSelectorItem("전체", null),
+                        new LabelSelectorItem("활성", "Y"),
+                        new LabelSelectorItem("탈퇴", "N")
+                    )
+                )
+                ),
+               
+        null
+//        List.of(new CheckboxOption("accUse","탈퇴","use_yn","N","Y"))
     );
 
     private final String filterType;

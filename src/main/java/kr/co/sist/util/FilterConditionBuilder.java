@@ -40,6 +40,7 @@ public class FilterConditionBuilder {
     // 다중 선택 필터용 (MultiValueMap)
     public List<FilterCondition> build(MultiValueMap<String, String> params, FilterConfig config) {
         List<FilterCondition> list = new ArrayList<>();
+        System.out.println(params);
         try {
             // 텍스트 검색 조건
             String searchType = params.getFirst("searchType");

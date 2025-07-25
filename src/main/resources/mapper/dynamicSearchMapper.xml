@@ -14,7 +14,7 @@
         AND ${filter.column} = #{filter.value}
       </when>
       <when test="filter.operator.name() == 'LIKE'">
-        AND ${filter.column} LIKE '%' || #{filter.value} || '%'
+        AND LOWER(${filter.column}) LIKE '%' || LOWER(#{filter.value}) || '%'
       </when>
       <when test="filter.operator.name() == 'IN'">
         <if test="filter.value != null and filter.value.size() > 1">
@@ -69,7 +69,7 @@
             AND ${filter.column} = #{filter.value}
           </when>
           <when test="filter.operator.name() == 'LIKE'">
-            AND ${filter.column} LIKE '%' || #{filter.value} || '%'
+            AND LOWER(${filter.column}) LIKE '%' || LOWER(#{filter.value}) || '%'
           </when>
           <when test="filter.operator.name() == 'IN'">
             <foreach collection="filter.value" item="v" open="AND ${filter.column} IN (" separator="," close=")">
@@ -288,9 +288,9 @@ WHERE rnum BETWEEN #{offset} AND #{end}
         <!-- user_name 필터 (회원/비회원 모두 대응) -->
         <when test="filter.column == 'user_name'">
           AND (
-            (u.user_name IS NOT NULL AND u.user_name LIKE '%' || #{filter.value} || '%')
+            (u.user_name IS NOT NULL AND LOWER(u.user_name) LIKE '%' || LOWER(#{filter.value}) || '%')
             OR
-            (nm.non_mem_name IS NOT NULL AND nm.non_mem_name LIKE '%' || #{filter.value} || '%')
+            (nm.non_mem_name IS NOT NULL AND LOWER(nm.non_mem_name) LIKE '%' || LOWER(#{filter.value}) || '%')
           )
         </when>
         <!-- ismember(회원/비회원) 전용 처리 -->
@@ -321,7 +321,7 @@ WHERE rnum BETWEEN #{offset} AND #{end}
           AND ${filter.column} = #{filter.value}
         </when>
         <when test="filter.operator.name() == 'LIKE' and filter.column != 'ismember' and filter.column != 'user_name'">
-          AND ${filter.column} LIKE '%' || #{filter.value} || '%'
+          AND LOWER(${filter.column}) LIKE '%' || LOWER(#{filter.value}) || '%'
         </when>
         <when test="filter.operator.name() == 'IN' and filter.column != 'ismember' and filter.column != 'user_name'">
           <if test="filter.value != null and filter.value.size() > 1">
@@ -448,7 +448,7 @@ WHERE rnum BETWEEN #{offset} AND #{end}
           AND ${filter.column} = #{filter.value}
         </when>
         <when test="filter.operator.name() == 'LIKE'">
-          AND ${filter.column} LIKE '%' || #{filter.value} || '%'
+          AND LOWER(${filter.column}) LIKE '%' || LOWER(#{filter.value}) || '%'
         </when>
         <when test="filter.operator.name() == 'IN'">
           <if test="filter.value != null and filter.value.size() > 1">
