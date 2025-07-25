@@ -57,8 +57,9 @@ public class FilterConditionBuilder {
             String start = params.getFirst("startDate");
             String end = params.getFirst("endDate");
             String dateNameParam = params.getFirst("dateName");
-            if (isNotBlank(dateNameParam) && dateNameParam.equals(config.getFilteringDateName())) {
-                String column = config.getDateColumnName();
+            FilterConfig.DatePickerOption datePicker = config.getDatePickerOption();
+            if (datePicker != null && isNotBlank(dateNameParam) && dateNameParam.equals(datePicker.getFormName())) {
+                String column = datePicker.getColumnName();
                 if (isValidColumn(column)) {
                     if (isNotBlank(start) && isNotBlank(end)) {
                         list.add(new FilterCondition(column, FilterOperator.TRUNC_BETWEEN, List.of(start, end)));
@@ -165,8 +166,9 @@ public class FilterConditionBuilder {
             String start = params.get("startDate");
             String end = params.get("endDate");
             String dateNameParam = params.get("dateName");
-            if (isNotBlank(dateNameParam) && dateNameParam.equals(config.getFilteringDateName())) {
-                String column = config.getDateColumnName();
+            FilterConfig.DatePickerOption datePicker = config.getDatePickerOption();
+            if (datePicker != null && isNotBlank(dateNameParam) && dateNameParam.equals(datePicker.getFormName())) {
+                String column = datePicker.getColumnName();
                 if (isValidColumn(column)) {
                     if (isNotBlank(start) && isNotBlank(end)) {
                         list.add(new FilterCondition(column, FilterOperator.TRUNC_BETWEEN, List.of(start, end)));

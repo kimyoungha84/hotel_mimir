@@ -32,6 +32,7 @@ public class ModelUtils {
      */
     public void setFilteringInfo(Model model, FilterConfig config) {
     	 System.out.println("FilterConfig passed to model: " + config);
+		 System.out.println("filter: " + config);
         model.addAttribute("filter", config);
         model.addAttribute("filterType", config.getFilterType());
     }

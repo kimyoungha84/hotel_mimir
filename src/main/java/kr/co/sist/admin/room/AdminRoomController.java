@@ -114,104 +114,104 @@ public class AdminRoomController {
 	}//adminRoomModifyProcess
 	
 	
-	@GetMapping("admin/roomsales")
-	public String adminRoomSales(@RequestParam(required = false) String startDate,
-	                             @RequestParam(required = false) String endDate,
-	                             Model model) {
-
-	    LocalDate now = LocalDate.now();
-	    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-
-	    if (startDate == null) {
-	        startDate = now.withMonth(1).withDayOfMonth(1).format(formatter); // 1월 1일
-	    }
-	    if (endDate == null) {
-	        endDate = now.withMonth(12).withDayOfMonth(31).format(formatter); // 12월 31일
-	    }
-
-	    List<SalesSummaryDTO> salesList = ars.searchSalesSummary(startDate, endDate);
-
-	    int memberCount = 0;
-	    int nonMemberCount = 0;
-
-	    int totalMemberStay = 0;
-	    int totalNonMemberStay = 0;
-	    int totalCheckout = 0;
-	    int totalCheckin = 0;
-	    int totalComplete = 0;
-	    int totalCancel = 0;
-	    int totalStay = 0;
-	    int totalAmount = 0;
-	    int totalCheckinAmount = 0;
-	    int totalCheckoutAmount = 0;
-	    int totalCompletedAmount = 0;
-	    int totalCancelAmount = 0;
-
-	    for (SalesSummaryDTO s : salesList) {
-	        // 전체 회원/비회원 수 (모든 예약 건 포함)
-	        memberCount += s.getMemberCount();
-	        nonMemberCount += s.getNonMemberCount();
-
-	        // 체크인+체크아웃 상태 회원/비회원만 합산
-	        totalMemberStay += s.getMemberStayCount();
-	        totalNonMemberStay += s.getNonMemberStayCount();
-
-	        // 상태별 집계
-	        totalCheckout += s.getCheckoutCount();
-	        totalCheckin += s.getCheckinCount();
-	        totalComplete += s.getCompletedCount();
-	        totalCancel += s.getCancelCount();
-	        totalStay += s.getStayCount();
-	        totalAmount += s.getTotalAmount();
-	        totalCheckinAmount += s.getCheckinAmount();
-	        totalCheckoutAmount += s.getCheckoutAmount();
-	        totalCompletedAmount += s.getCompletedAmount();
-	        totalCancelAmount += s.getCancelAmount();
-	    }
-
-
-	    Map<String, Integer> summary = new HashMap<>();
-	    summary.put("totalMemberStay", totalMemberStay);
-	    summary.put("totalNonMemberStay", totalNonMemberStay);
-	    summary.put("totalCheckout", totalCheckout);
-	    summary.put("totalCheckin", totalCheckin);
-	    summary.put("totalComplete", totalComplete);
-	    summary.put("totalCancel", totalCancel);
-	    summary.put("totalStay", totalStay);
-	    summary.put("totalAmount", totalAmount);
-	    summary.put("totalCheckinAmount", totalCheckinAmount);
-	    summary.put("totalCheckoutAmount", totalCheckoutAmount);
-	    summary.put("totalCompletedAmount", totalCompletedAmount);
-	    summary.put("totalCancelAmount", totalCancelAmount);
-
-	    model.addAttribute("salesList", salesList);
-	    model.addAttribute("memberCount", memberCount);
-	    model.addAttribute("nonMemberCount", nonMemberCount);
-	    model.addAttribute("summary", summary);
-	    model.addAttribute("startDate", startDate);
-	    model.addAttribute("endDate", endDate);
-
-	    return "admin_room/admin_room_sales";
-	}//adminRoomSales
-	
 //	@GetMapping("admin/roomsales")
-//	public String adminRoomSales(
+//	public String adminRoomSales(@RequestParam(required = false) String startDate,
+//	                             @RequestParam(required = false) String endDate,
 //	                             Model model) {
 //
-//		// fragment 정보 동적 등록
-//		SearchController.addFragmentInfo(
-//			FilterConfig.ROOM_SALES,
-//			"admin_room/admin_room_sales",
-//			"fm_salesList",
-//			"salesList"
-//		);
-//		modelUtils.setFilteringInfo(model, FilterConfig.ROOM_SALES);
-//		modelUtils.setPaginationAttributes(model, 5, FilterConfig.ROOM_SALES);
-//		
-//		
-//		
+//	    LocalDate now = LocalDate.now();
+//	    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+//
+//	    if (startDate == null) {
+//	        startDate = now.withMonth(1).withDayOfMonth(1).format(formatter); // 1월 1일
+//	    }
+//	    if (endDate == null) {
+//	        endDate = now.withMonth(12).withDayOfMonth(31).format(formatter); // 12월 31일
+//	    }
+//
+//	    List<SalesSummaryDTO> salesList = ars.searchSalesSummary(startDate, endDate);
+//
+//	    int memberCount = 0;
+//	    int nonMemberCount = 0;
+//
+//	    int totalMemberStay = 0;
+//	    int totalNonMemberStay = 0;
+//	    int totalCheckout = 0;
+//	    int totalCheckin = 0;
+//	    int totalComplete = 0;
+//	    int totalCancel = 0;
+//	    int totalStay = 0;
+//	    int totalAmount = 0;
+//	    int totalCheckinAmount = 0;
+//	    int totalCheckoutAmount = 0;
+//	    int totalCompletedAmount = 0;
+//	    int totalCancelAmount = 0;
+//
+//	    for (SalesSummaryDTO s : salesList) {
+//	        // 전체 회원/비회원 수 (모든 예약 건 포함)
+//	        memberCount += s.getMemberCount();
+//	        nonMemberCount += s.getNonMemberCount();
+//
+//	        // 체크인+체크아웃 상태 회원/비회원만 합산
+//	        totalMemberStay += s.getMemberStayCount();
+//	        totalNonMemberStay += s.getNonMemberStayCount();
+//
+//	        // 상태별 집계
+//	        totalCheckout += s.getCheckoutCount();
+//	        totalCheckin += s.getCheckinCount();
+//	        totalComplete += s.getCompletedCount();
+//	        totalCancel += s.getCancelCount();
+//	        totalStay += s.getStayCount();
+//	        totalAmount += s.getTotalAmount();
+//	        totalCheckinAmount += s.getCheckinAmount();
+//	        totalCheckoutAmount += s.getCheckoutAmount();
+//	        totalCompletedAmount += s.getCompletedAmount();
+//	        totalCancelAmount += s.getCancelAmount();
+//	    }
+//
+//
+//	    Map<String, Integer> summary = new HashMap<>();
+//	    summary.put("totalMemberStay", totalMemberStay);
+//	    summary.put("totalNonMemberStay", totalNonMemberStay);
+//	    summary.put("totalCheckout", totalCheckout);
+//	    summary.put("totalCheckin", totalCheckin);
+//	    summary.put("totalComplete", totalComplete);
+//	    summary.put("totalCancel", totalCancel);
+//	    summary.put("totalStay", totalStay);
+//	    summary.put("totalAmount", totalAmount);
+//	    summary.put("totalCheckinAmount", totalCheckinAmount);
+//	    summary.put("totalCheckoutAmount", totalCheckoutAmount);
+//	    summary.put("totalCompletedAmount", totalCompletedAmount);
+//	    summary.put("totalCancelAmount", totalCancelAmount);
+//
+//	    model.addAttribute("salesList", salesList);
+//	    model.addAttribute("memberCount", memberCount);
+//	    model.addAttribute("nonMemberCount", nonMemberCount);
+//	    model.addAttribute("summary", summary);
+//	    model.addAttribute("startDate", startDate);
+//	    model.addAttribute("endDate", endDate);
+//
 //	    return "admin_room/admin_room_sales";
 //	}//adminRoomSales
+	
+	@GetMapping("admin/roomsales")
+	public String adminRoomSales(
+	                             Model model) {
+
+		// fragment 정보 동적 등록
+		SearchController.addFragmentInfo(
+			FilterConfig.ROOM_SALES,
+			"admin_room/admin_room_sales",
+			"fm_salesList",
+			"salesList"
+		);
+		modelUtils.setFilteringInfo(model, FilterConfig.ROOM_SALES);
+		modelUtils.setPaginationAttributes(model, 5, FilterConfig.ROOM_SALES);
+		
+		
+		
+	    return "admin_room/admin_room_sales";
+	}//adminRoomSales
 	
 }//class
 

@@ -3,6 +3,8 @@ package kr.co.sist.util;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @Getter
@@ -10,9 +12,9 @@ import java.util.List;
 public enum FilterConfig {
 
     DINING(
-        "dining", false, true, true, true,
-        "diningRegDate",     // 👉 form name
-        "dining_reg_date",   // 👉 실제 컬럼명
+        "dining",
+        null,
+        true, true, true,
         List.of(
             new Option("name", "이름", "dining_name")
         ),
@@ -21,9 +23,9 @@ public enum FilterConfig {
         null
     ),
 
-    DINING_USER("dining_user", false, true, true, true,
+    DINING_USER("dining_user",
         null,
-        null,
+        true, true, true,
         List.of(new Option("name", "", "dining_name")),
         null,
         List.of(
@@ -42,9 +44,9 @@ public enum FilterConfig {
         null
     ),
 
-    ROOM_USER("dining_user", false, false, true, true,
+    ROOM_USER("dining_user",
         null,
-        null,
+        false, true, true,
         List.of(new Option("name", "", "dining_name")),
         null,
         List.of(
@@ -63,9 +65,9 @@ public enum FilterConfig {
         null
     ),
 
-    DINING_RESV("dining_resv", true, true, true, true,
-        "reservationDate",
-        "reservation_date",
+    DINING_RESV("dining_resv",
+        new DatePickerOption("reservationDate", "reservation_date", null, null),
+        true, true, true,
         List.of(new Option("name", "이름", "dining_name")),
         null,
         null,
@@ -73,9 +75,9 @@ public enum FilterConfig {
     ),
 
     FAQ(
-        "faq", true, true, true, true,
-        "faqRegDate",
-        "faq_date",
+        "faq",
+        new DatePickerOption("faqRegDate", "faq_date", null, null),
+        true, true, true,
         List.of(
             new Option("title", "제목", "faq_title")
         ),
@@ -85,9 +87,9 @@ public enum FilterConfig {
     ),
 
     ROOM_LIST(
-        "room_list", false, false, false, true,
+        "room_list",
         null,
-        null,
+        false, false, true,
         null,
         new SortSelectorOption(
             "정렬기준", "selectorOrder",
@@ -117,9 +119,9 @@ public enum FilterConfig {
     ),
 
     ROOM_RESV(
-        "admin_room_resv", true, true, true, true,
-        "resvRegDate",
-        "resv_reg_date",
+        "admin_room_resv",
+        new DatePickerOption("resvRegDate", "resv_reg_date", null, null),
+        true, true, true,
         List.of(
             new Option("searchUser", "", "user_name")
         ),
@@ -154,16 +156,18 @@ public enum FilterConfig {
         ),
         null
     ),
+    
 
     ROOM_SALES(
-        "room_sales", true, true, false, true,
-        "resvRegDate",
-        "resv_reg_date",
+        "room_sales",
+        new DatePickerOption("resvRegDate", "resv_reg_date" , getDefaultStart(), getDefaultEnd() ),
+        true, false, true,
         null,
         null,
         List.of(
             new LabelSelectorOption("룸 종류", "roomType", "type_name",
                 List.of(
+                	new LabelSelectorItem("전체", null),
                     new LabelSelectorItem("로얄 스위트룸", "로얄 스위트룸"),
                     new LabelSelectorItem("프레지덴셜 스위트룸", "프레지덴셜 스위트룸"),
                     new LabelSelectorItem("스위트룸", "스위트룸"),
@@ -176,9 +180,9 @@ public enum FilterConfig {
     ),
 
     STAFF(
-        "staff", false, true, true, true,
+        "staff",
         null,
-        null,
+        true, true, true,
         List.of(
             new Option("id", "아이디", "s.staff_id")
         ),
@@ -227,9 +231,9 @@ public enum FilterConfig {
         null
     ),
     MEMBER(
-        "member", false, true, true, true,
+        "member",
         null,
-        null,
+        true, true, true,
         List.of(
             new Option("userId", "아이디", "user_id"),
             new Option("userName", "이름", "user_name")
@@ -240,17 +244,21 @@ public enum FilterConfig {
     );
 
     private final String filterType;
-    private final boolean showDatePicker;
+    private final DatePickerOption datePickerOption;
     private final boolean showSelector;
     private final boolean showSearchText;
     private final boolean enableFilter;
-    private final String filteringDateName;
-    private final String dateColumnName;
     private final List<Option> selectOptions;
     private final SortSelectorOption sortSelectorOption;
     private final List<LabelSelectorOption> labelSelectorOptions;
     private final List<CheckboxOption> checkboxOptions;
 
+    private static String getDefaultStart() {
+        return LocalDate.now().withMonth(1).withDayOfMonth(1).format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+    }
+    private static String getDefaultEnd() {
+        return LocalDate.now().withMonth(12).withDayOfMonth(31).format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+    };
     
     @Getter
     @RequiredArgsConstructor
@@ -320,6 +328,15 @@ public enum FilterConfig {
         private final String value;      // ex) "asc" (프론트에서 선택값)
         private final String columnName; // ex) "price_per_night" (DB 컬럼명)
         private final String direction;  // ex) "ASC" or "DESC"
+    }
+
+    @Getter
+    @RequiredArgsConstructor
+    public static class DatePickerOption {
+        private final String formName;      // 폼에서 사용할 name
+        private final String columnName;    // DB 컬럼명
+        private final String defaultStart;  // 초기 시작일 (yyyy-MM-dd 등)
+        private final String defaultEnd;    // 초기 종료일
     }
 }
 

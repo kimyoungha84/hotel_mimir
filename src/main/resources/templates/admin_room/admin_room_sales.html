@@ -15,7 +15,7 @@
     <div class="table-section">
       <h2 class="h2Title">매출 현황</h2>
       
-      <!-- <div th:replace="~{fragments/filter :: filter(${filter})}"></div> -->
+      <div th:replace="~{fragments/filter :: filter(${filter})}"></div>
 
       <!-- <form method="get" th:action="@{/admin/roomsales}" class="filters">
         <div class="date-range">
@@ -67,7 +67,7 @@
           </tr>
 
           <!-- 총 합계 -->
-          <tr class="summary-row">
+          <tr class="summary-row" th:if="${summary != null}">
             <td>총 합계</td>
             <td th:text="|${summary.totalMemberStay} 명|">11명</td>
             <td th:text="|${summary.totalNonMemberStay} 명|">56명</td>

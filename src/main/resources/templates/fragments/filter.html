@@ -117,10 +117,12 @@
     <input type="hidden" name="filterType" th:value="${filterType}" />
     
     <!-- 왼쪽: Date Picker -->
-    <div th:if="${filter.showDatePicker}" class="filter-date-picker">
-      <input type="hidden" name="dateName" th:value="${filter.filteringDateName}" />
-      <input type="date" name="startDate" th:value="${param.startDate}" />
-      <input type="date" name="endDate" th:value="${param.endDate}" />
+    <div th:if="${filter.datePickerOption != null}" class="filter-date-picker">
+      <input type="hidden" name="dateName" th:value="${filter.datePickerOption.formName}" />
+      <input type="date" name="startDate"
+             th:value="${#strings.isEmpty(param.startDate) ? (#strings.isEmpty(filter.datePickerOption.defaultStart) ? '' : filter.datePickerOption.defaultStart) : param.startDate}" />
+      <input type="date" name="endDate"
+             th:value="${#strings.isEmpty(param.endDate) ? (#strings.isEmpty(filter.datePickerOption.defaultEnd) ? '' : filter.datePickerOption.defaultEnd) : param.endDate}" />
     </div>
     
 <!-- 🔹 체크박스 필터 옵션 -->
@@ -152,7 +154,7 @@
     <!-- 오른쪽: 콤보박스, 텍스트 입력, 검색 버튼 -->
     <div class="filter-right-section">
       <!-- 셀렉터가 1개일 경우, 라벨만 표시 -->
-      <div th:if="${filter.showSelector}" class="filter-selector">
+      <div th:if="${filter.showSelector and filter.selectOptions != null and #lists.size(filter.selectOptions) > 0}" class="filter-selector">
       	<input type="hidden" name="searchType" th:value="${filter.selectOptions[0].value}" />
         <span th:if="${#lists.size(filter.selectOptions) == 1}" th:text="${filter.selectOptions[0].label}"></span>
         <!-- 셀렉터가 2개 이상일 경우에만 select box 표시 -->
@@ -278,8 +280,25 @@
     });
     const textInputs = $form.querySelectorAll("input[type='text']");
     textInputs.forEach(input => input.value = '');
-    const dateInputs = $form.querySelectorAll("input[type='date']");
-    dateInputs.forEach(input => input.value = '');
+    const datePickerOption = /*[[${filter.datePickerOption}]]*/ null; // Thymeleaf에서 JS로 값 전달
+
+    const startDateInput = $form.querySelector("input[name='startDate']");
+    const endDateInput = $form.querySelector("input[name='endDate']");
+
+    if (startDateInput) {
+      if (datePickerOption && datePickerOption.defaultStart) {
+        startDateInput.value = datePickerOption.defaultStart;
+      } else {
+        startDateInput.value = '';
+      }
+    }
+    if (endDateInput) {
+      if (datePickerOption && datePickerOption.defaultEnd) {
+        endDateInput.value = datePickerOption.defaultEnd;
+      } else {
+        endDateInput.value = '';
+      }
+    }
     const currentPageInput = $form.querySelector("input[name='currentPage']");
     if (currentPageInput) currentPageInput.value = 1;
     $errorMessage.style.display = 'none';
