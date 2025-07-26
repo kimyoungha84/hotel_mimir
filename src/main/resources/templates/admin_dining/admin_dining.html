@@ -23,7 +23,7 @@
 <!-- <h2 class="h2Title">title 작성</h2> -->
 <hr/>
     <!-- 메인 컨텐츠 -->
-    <main class="main-content">
+    <main class="main-content" style="margin-right: 30px">
     
 
       <section class="dining-section">
@@ -44,7 +44,7 @@
       <th>담당자</th>
       <th style="text-align: center;">
         <a th:href="@{/admin/dining/add}">
-          <button type="button" style="font-size: 1.5rem; width: 40px; height: 40px; background: #e0e0e0; border: 1px solid #333; cursor: pointer; border-radius: 6px;">+</button>
+          <button type="button" class="add-btn">+</button>
         </a>
       </th>
     </tr>
@@ -58,12 +58,25 @@
     <td th:text="${dining.manager_name}"></td>
     <td>
       <a th:href="@{/admin/dining/edit(diningId=${dining.dining_id})}">
-        <button type="button" style="background: #e0e0e0; border: 1px solid #333; border-radius: 6px; padding: 6px 16px; cursor: pointer;">수정</button>
+        <button type="button" class="edit-btn">수정</button>
       </a>
     </td> 
   </tr>
 </tbody>
 </table>
+
+<!-- 버튼 영역: 오른쪽 정렬 -->
+<div style="display: flex; justify-content: flex-end; gap: 16px; margin: 16px 0 0 0;">
+  <a id="repMenuEditBtn" href="#">
+    <button type="button" class="rep-menu-btn">대표메뉴 수정</button>
+  </a>
+  <a id="deleteBtn" href="#">
+    <button type="button" class="delete-btn">삭제</button>
+  </a>
+</div>
+
+<!-- 페이지네이션 fragment -->
+<div th:replace="~{fragments/pagination :: pagination}"></div>
 
 <!-- 하이라이트용 CSS -->
 <style>
@@ -73,6 +86,89 @@
   }
   .faq-table tbody tr {
     cursor: pointer;
+  }
+  
+  /* 버튼 스타일 개선 */
+  .add-btn {
+    font-size: 1.5rem;
+    width: 40px;
+    height: 40px;
+    background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
+    color: white;
+    border: none;
+    cursor: pointer;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 8px rgba(76, 175, 80, 0.2);
+  }
+  .add-btn:hover {
+    background: linear-gradient(135deg, #45a049 0%, #3d8b40 100%);
+    transform: translateY(-2px) scale(1.05);
+    box-shadow: 0 4px 16px rgba(76, 175, 80, 0.3);
+  }
+  .add-btn:active {
+    transform: translateY(0) scale(1.02);
+  }
+  
+  .edit-btn {
+    background: linear-gradient(135deg, #2196F3 0%, #1976D2 100%);
+    color: white;
+    border: none;
+    border-radius: 6px;
+    padding: 8px 16px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 6px rgba(33, 150, 243, 0.2);
+  }
+  .edit-btn:hover {
+    background: linear-gradient(135deg, #1976D2 0%, #1565C0 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(33, 150, 243, 0.3);
+  }
+  .edit-btn:active {
+    transform: translateY(0);
+  }
+  
+  .rep-menu-btn {
+    background: linear-gradient(135deg, #4ecdc4 0%, #44a08d 100%);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 0.7rem 1rem;
+    font-size: 1.1rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 8px rgba(78, 205, 196, 0.2);
+  }
+  .rep-menu-btn:hover {
+    background: linear-gradient(135deg, #44a08d 0%, #3a8b7a 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 16px rgba(78, 205, 196, 0.3);
+  }
+  .rep-menu-btn:active {
+    transform: translateY(0);
+  }
+  
+  .delete-btn {
+    background: linear-gradient(135deg, #ff6b6b 0%, #ee5a52 100%);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 0.7rem 1rem;
+    font-size: 1.1rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 8px rgba(255, 107, 107, 0.2);
+  }
+  .delete-btn:hover {
+    background: linear-gradient(135deg, #ee5a52 0%, #d63031 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 16px rgba(255, 107, 107, 0.3);
+  }
+  .delete-btn:active {
+    transform: translateY(0);
   }
 </style>
 
@@ -94,18 +190,18 @@ document.addEventListener('DOMContentLoaded', function() {
 
   document.getElementById('repMenuEditBtn').addEventListener('click', function(e) {
     if (!window.selectedDiningId) {
-      alert('레코드를 선택하세요.');
+      alert('대표메뉴를 수정할 다이닝을 선택하세요.');
       e.preventDefault();
       return;
     }
-    window.location.href = '/admin/dining/repMenuEdit?diningId=' + window.selectedDiningId;
+    window.location.href = '/admin/repMenu?diningId=' + window.selectedDiningId;
     e.preventDefault();
   });
 
   document.getElementById('deleteBtn').addEventListener('click', function(e) {
     e.preventDefault();
     if (!window.selectedDiningId) {
-      alert('레코드를 선택하세요.');
+      alert('삭제할 다이닝을 선택하세요.');
       return;
     }
     if (!confirm('정말 삭제하시겠습니까?')) {
@@ -126,17 +222,6 @@ document.addEventListener('DOMContentLoaded', function() {
   });
 });
 </script>
-
-<!-- 오른쪽 하단 대표메뉴 수정/삭제 버튼 -->
-<div style="position: fixed; right: 40px; bottom: 40px; display: flex; gap: 16px; z-index: 100;">
-  <a id="repMenuEditBtn" href="#"><button type="button" style="background: #4ecdc4; color: #fff; border: none; border-radius: 6px; padding: 0.7rem 1rem !important; font-size: 1.1rem; font-weight: 500; cursor: pointer;">대표메뉴 수정</button></a>
-  <a id="deleteBtn" href="#"><button type="button" style="background: #ff6b6b; color: #fff; border: none; border-radius: 6px; padding: 0.7rem 1rem !important; font-size: 1.1rem; font-weight: 500; cursor: pointer;">삭제</button></a>
-</div>
-
-
-
-<div th:replace="~{fragments/pagination :: pagination}">
-</div>
 
 </section>
 <!-- 페이징 -->

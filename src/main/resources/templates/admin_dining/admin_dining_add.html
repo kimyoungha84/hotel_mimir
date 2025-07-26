@@ -5,8 +5,8 @@
 <title>다이닝 정보 추가</title>
 <link rel="stylesheet" href="/admin_common_assets/css/common.css">
 <style>
-  .edit-form-label { display: block; margin-top: 24px; font-weight: bold; }
-  .edit-form-input, .edit-form-textarea, .edit-form-select { width: 100%; padding: 8px; margin-top: 4px; }
+  .edit-form-label { display: block; margin-top: 24px; font-weight: bold; margin-bottom: 15px; }
+  .edit-form-input, .edit-form-textarea, .edit-form-select { width: 100%; padding: 8px; margin-top: 4px; border-radius: 5px; }
   .edit-form-img-preview { max-width: 200px; margin-top: 8px; display: block; }
   .edit-form-img-list { display: flex; gap: 16px; flex-wrap: wrap; margin-top: 8px; }
   .edit-form-img-list img { max-width: 120px; border: 1px solid #ccc; border-radius: 4px; }
@@ -35,6 +35,115 @@
   .dining-section {
     margin-top : 50px;
   }
+  
+  /* 폼 데이터 섹션 스타일 (이미지 업로드와 구분) */
+  .form-data-section {
+    background: #f0f8ff;
+    border: 2px dashed #e3f2fd;
+    border-radius: 12px;
+    padding: 20px;
+    margin: 20px 0;
+    transition: border-color 0.3s ease;
+  }
+  .form-data-section:hover {
+    border-color: #2196f3;
+  }
+  
+  /* 파일 선택 영역 구분 스타일 */
+  .file-upload-section {
+    background: #f8f9fa;
+    border: 2px dashed #dee2e6;
+    border-radius: 12px;
+    padding: 20px;
+    margin: 20px 0;
+    transition: border-color 0.3s ease;
+  }
+  .file-upload-section:hover {
+    border-color: #856956;
+  }
+  
+  .form-data-title {
+    font-size: 18px;
+    font-weight: 600;
+    color: #000000;
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .form-data-title::before {
+    content: "📝";
+    font-size: 20px;
+  }
+  
+  .file-upload-title {
+    font-size: 18px;
+    font-weight: 600;
+    color: #495057;
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .file-upload-title::before {
+    content: "📁";
+    font-size: 20px;
+  }
+  
+  /* 모던한 삭제/교체 버튼 스타일 */
+  .action-btn {
+    background: linear-gradient(135deg, #6c757d 0%, #495057 100%);
+    color: white;
+    border: none;
+    border-radius: 6px;
+    padding: 6px 12px;
+    font-size: 12px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    margin-right: 6px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  }
+  .action-btn:hover {
+    background: linear-gradient(135deg, #495057 0%, #343a40 100%);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+  }
+  .delete-btn {
+    background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+  }
+  .delete-btn:hover {
+    background: linear-gradient(135deg, #c82333 0%, #a71e2a 100%);
+  }
+  .replace-btn {
+    background: linear-gradient(135deg, #17a2b8 0%, #138496 100%);
+  }
+  .replace-btn:hover {
+    background: linear-gradient(135deg, #138496 0%, #117a8b 100%);
+  }
+  
+  /* 파일 입력 스타일 개선 */
+  .file-input-wrapper {
+    position: relative;
+    display: inline-block;
+    width: 100%;
+  }
+  .file-input-wrapper input[type="file"] {
+    width: 100%;
+    padding: 10px;
+    border: 2px solid #e9ecef;
+    border-radius: 8px;
+    background: white;
+    transition: border-color 0.3s ease;
+  }
+  .file-input-wrapper input[type="file"]:hover {
+    border-color: #856956;
+  }
+  .file-input-wrapper input[type="file"]:focus {
+    outline: none;
+    border-color: #856956;
+    box-shadow: 0 0 0 3px rgba(133, 105, 86, 0.1);
+  }
 </style>
 </head>
 <body>
@@ -45,61 +154,68 @@
     <section class="dining-section">
       <h1>다이닝 정보 추가</h1>
       <form id="diningDataForm" th:action="@{/admin/dining/add}" method="post">
-        <div class="edit-form-section">
-          <label class="edit-form-label">이름</label>
-          <input class="edit-form-input" type="text" name="dining_name" required placeholder="예) 스테이, 모던 레스토랑" />
+        <div class="form-data-section">
+          <div class="form-data-title">기본 정보</div>
+          <div class="edit-form-section">
+            <label class="edit-form-label">이름</label>
+            <input class="edit-form-input" type="text" name="dining_name" required placeholder="예) 스테이, 모던 레스토랑" />
+          </div>
+          <div class="edit-form-section">
+            <label class="edit-form-label">타입</label>
+            <select class="edit-form-select" name="type" required>
+              <option value="한식">한식</option>
+              <option value="프렌치">프렌치</option>
+              <option value="회원제 레스토랑">회원제 레스토랑</option>
+              <option value="레스토랑 & 바">레스토랑 & 바</option>
+              <option value="스카이 바">스카이 바</option>
+              <option value="프리미엄 베이커리 & 카페">프리미엄 베이커리 & 카페</option>
+              <option value="인룸 다이닝">인룸 다이닝</option>
+            </select>
+          </div>
+          <div class="edit-form-section">
+            <label class="edit-form-label">위치</label>
+            <input class="edit-form-input" type="text" name="location" required placeholder="예) 81층" />
+          </div>
+          <div class="edit-form-section">
+            <label class="edit-form-label">문의번호</label>
+            <input class="edit-form-input" type="text" name="phone_number" required placeholder="예) 02-1234-5678" />
+          </div>
+          <div class="edit-form-section">
+            <label class="edit-form-label">담당자</label>
+            <input class="edit-form-input" type="text" name="manager_name" required placeholder="예) 홍길동" />
+          </div>
+          <div class="edit-form-section">
+            <label class="edit-form-label">예약 가능 여부</label>
+            <select class="edit-form-select" name="dining_resv_availability">
+              <option value="Y">가능</option>
+              <option value="N">불가능</option>
+            </select>
+          </div>
+          <div class="edit-form-section">
+            <label class="edit-form-label">분류</label>
+            <select class="edit-form-select" name="dining_classification" required>
+              <option value="레스토랑">레스토랑</option>
+              <option value="라운지 &amp; 바">라운지 & 바</option>
+              <option value="베이커리 &amp; 카페">베이커리 & 카페</option>
+              <option value="룸서비스">룸서비스</option>
+            </select>
+          </div>
         </div>
-        <div class="edit-form-section">
-          <label class="edit-form-label">타입</label>
-          <select class="edit-form-select" name="type" required>
-            <option value="한식">한식</option>
-            <option value="프렌치">프렌치</option>
-            <option value="회원제 레스토랑">회원제 레스토랑</option>
-            <option value="레스토랑 & 바">레스토랑 & 바</option>
-            <option value="스카이 바">스카이 바</option>
-            <option value="프리미엄 베이커리 & 카페">프리미엄 베이커리 & 카페</option>
-            <option value="인룸 다이닝">인룸 다이닝</option>
-          </select>
-        </div>
-        <div class="edit-form-section">
-          <label class="edit-form-label">위치</label>
-          <input class="edit-form-input" type="text" name="location" required placeholder="예) 81층" />
-        </div>
-        <div class="edit-form-section">
-          <label class="edit-form-label">문의번호</label>
-          <input class="edit-form-input" type="text" name="phone_number" required placeholder="예) 02-1234-5678" />
-        </div>
-        <div class="edit-form-section">
-          <label class="edit-form-label">담당자</label>
-          <input class="edit-form-input" type="text" name="manager_name" required placeholder="예) 홍길동" />
-        </div>
-        <div class="edit-form-section">
-          <label class="edit-form-label">소개</label>
-          <textarea class="edit-form-textarea" name="dining_introduction" rows="3" placeholder="간단한 소개를 입력하세요. 예) 미쉐린 3스타 셰프가 선보이는 프렌치 레스토랑"></textarea>
-        </div>
-        <div class="edit-form-section">
-          <label class="edit-form-label">상세정보</label>
-          <textarea class="edit-form-textarea" name="dining_detailinfo" rows="5" placeholder="상세정보를 입력하세요. 예) 드레스코드, 좌석수, 특이사항 등"></textarea>
-        </div>
-        <div class="edit-form-section">
-          <label class="edit-form-label">영업시간</label>
-          <textarea class="edit-form-textarea" name="dining_operation_hours" rows="3" placeholder="예) 11:30~22:00 (Break Time 15:00~17:30)"></textarea>
-        </div>
-        <div class="edit-form-section">
-          <label class="edit-form-label">예약 가능 여부</label>
-          <select class="edit-form-select" name="dining_resv_availability">
-            <option value="Y">가능</option>
-            <option value="N">불가능</option>
-          </select>
-        </div>
-        <div class="edit-form-section">
-          <label class="edit-form-label">분류</label>
-          <select class="edit-form-select" name="dining_classification" required>
-            <option value="레스토랑">레스토랑</option>
-            <option value="라운지 &amp; 바">라운지 & 바</option>
-            <option value="베이커리 &amp; 카페">베이커리 & 카페</option>
-            <option value="룸서비스">룸서비스</option>
-          </select>
+        
+        <div class="form-data-section">
+          <div class="form-data-title">상세 정보</div>
+          <div class="edit-form-section">
+            <label class="edit-form-label">소개</label>
+            <textarea class="edit-form-textarea" name="dining_introduction" rows="3" placeholder="간단한 소개를 입력하세요. 예) 미쉐린 3스타 셰프가 선보이는 프렌치 레스토랑"></textarea>
+          </div>
+          <div class="edit-form-section">
+            <label class="edit-form-label">상세정보</label>
+            <textarea class="edit-form-textarea" name="dining_detailinfo" rows="5" placeholder="상세정보를 입력하세요. 예) 드레스코드, 좌석수, 특이사항 등"></textarea>
+          </div>
+          <div class="edit-form-section">
+            <label class="edit-form-label">영업시간</label>
+            <textarea class="edit-form-textarea" name="dining_operation_hours" rows="3" placeholder="예) 11:30~22:00 (Break Time 15:00~17:30)"></textarea>
+          </div>
         </div>
       </form>
 
@@ -107,21 +223,27 @@
       <form id="diningFileForm" th:action="@{/admin/dining/editFiles}" method="post" enctype="multipart/form-data">
         <input type="hidden" name="dining_id" />
 
-        <div class="edit-form-section">
-          <label class="edit-form-label">메인 이미지</label>
-          <input type="file" name="main_image_file" accept="image/*" />
+        <div class="file-upload-section">
+          <div class="file-upload-title">메인 이미지</div>
+          <div class="file-input-wrapper">
+            <input type="file" name="main_image_file" accept="image/*" />
+          </div>
           <input type="hidden" name="main_image_url" />
-          <img class="edit-form-img-preview" />
+          <img class="edit-form-img-preview" id="main-image-preview" style="display: none;" />
         </div>
-        <div class="edit-form-section">
-          <label class="edit-form-label">로고 이미지</label>
-          <input type="file" name="logo_image_file" accept="image/*" />
+        
+        <div class="file-upload-section">
+          <div class="file-upload-title">로고 이미지</div>
+          <div class="file-input-wrapper">
+            <input type="file" name="logo_image_file" accept="image/*" />
+          </div>
           <input type="hidden" name="logo_image_url" />
-          <img class="edit-form-img-preview" />
+          <img class="edit-form-img-preview" id="logo-image-preview" style="display: none;" />
         </div>
-        <div class="edit-form-section">
-          <label class="edit-form-label">케러셀 이미지 (여러 장 가능)</label>
-          <button type="button" id="add-carousel-btn" style="margin-bottom:12px;">케러셀 이미지 추가</button>
+        
+        <div class="file-upload-section">
+          <div class="file-upload-title">케러셀 이미지 (여러 장 가능)</div>
+          <button type="button" id="add-carousel-btn" class="action-btn replace-btn" style="margin-bottom:12px;">케러셀 이미지 추가</button>
           <input type="file" id="add-carousel-images" accept="image/*" multiple style="display:none;" />
           <div class="edit-form-img-list" id="carousel-img-list" style="display:flex; flex-direction:column; gap:0;"></div>
         </div>
@@ -135,8 +257,8 @@
   </main>
 </div>
 <script>
-// ... admin_dining_edit.html의 이미지 업로드/케러셀 관련 JS 전체 복사 (let deletedCarouselUrls ... ~ addCarouselImage 등)
-// ... existing code ...
+// 삭제된 케러셀 이미지 URL들을 저장할 배열
+let deletedCarouselUrls = [];
 
 // 1. '추가' 버튼 클릭 시 다이닝 정보 + 이미지 + 케러셀 저장이 한 번에 일어나도록 처리
 const diningDataForm = document.getElementById('diningDataForm');
@@ -166,8 +288,28 @@ function saveCarouselImages(diningId, callback) {
   const items = document.querySelectorAll('.carousel-img-item');
   const uploadPromises = [];
 
+  // 파일 선택 여부 확인
+  const hasMainFile = mainImageFile !== null;
+  const hasLogoFile = logoImageFile !== null;
+  const hasCarouselFiles = Array.from(items).some(item => item.file !== null);
+  
+  console.log('파일 선택 상태:', {
+    mainFile: hasMainFile,
+    logoFile: hasLogoFile,
+    carouselFiles: hasCarouselFiles,
+    totalItems: items.length
+  });
+
+  // 업로드할 파일이 없으면 바로 성공 처리
+  if (!hasMainFile && !hasLogoFile && !hasCarouselFiles) {
+    console.log('업로드할 파일이 없습니다.');
+    if (callback) callback();
+    return;
+  }
+
   // 메인 이미지 업로드
   if (mainImageFile) {
+    console.log('메인 이미지 업로드 시작:', mainImageFile.name);
     const formData = new FormData();
     formData.append('dining_id', diningId);
     formData.append('main_image_file', mainImageFile);
@@ -186,6 +328,7 @@ function saveCarouselImages(diningId, callback) {
         return res.json();
       })
       .then(data => {
+        console.log('메인 이미지 업로드 성공:', data.imageUrl);
         document.querySelector('input[name="main_image_url"]').value = data.imageUrl;
       })
     );
@@ -193,6 +336,7 @@ function saveCarouselImages(diningId, callback) {
 
   // 로고 이미지 업로드
   if (logoImageFile) {
+    console.log('로고 이미지 업로드 시작:', logoImageFile.name);
     const formData = new FormData();
     formData.append('dining_id', diningId);
     formData.append('logo_image_file', logoImageFile);
@@ -211,6 +355,7 @@ function saveCarouselImages(diningId, callback) {
         return res.json();
       })
       .then(data => {
+        console.log('로고 이미지 업로드 성공:', data.imageUrl);
         document.querySelector('input[name="logo_image_url"]').value = data.imageUrl;
       })
     );
@@ -220,6 +365,7 @@ function saveCarouselImages(diningId, callback) {
   items.forEach((item, idx) => {
     const file = item.file;
     if (file) {
+      console.log('케러셀 이미지 업로드 시작:', file.name, '인덱스:', idx + 1);
       const formData = new FormData();
       formData.append('dining_id', diningId);
       formData.append('carousel_image_file', file);
@@ -239,6 +385,7 @@ function saveCarouselImages(diningId, callback) {
           return res.json();
         })
         .then(data => {
+          console.log('케러셀 이미지 업로드 성공:', data.imageUrl);
           const urlInput = item.querySelector('input[name="carousel_image_urls"]');
           if (urlInput) urlInput.value = data.imageUrl;
         })
@@ -248,6 +395,7 @@ function saveCarouselImages(diningId, callback) {
 
   // 모든 업로드가 끝난 후 순서 동기화
   Promise.all(uploadPromises).then(() => {
+    console.log('모든 파일 업로드 완료');
     const orderedUrls = [];
     items.forEach(item => {
       const urlInput = item.querySelector('input[name="carousel_image_urls"]');
@@ -256,22 +404,33 @@ function saveCarouselImages(diningId, callback) {
       }
     });
     updateCarouselOrderOnServer(diningId, orderedUrls, () => {
-      window.location.href = '/admin/dining';
+      if (callback) callback();
     });
     mainImageFile = null;
     logoImageFile = null;
     items.forEach(item => { item.file = null; });
-  }).catch(() => {
-    alert('업로드 실패');
-    window.location.href = '/admin/dining';
+  }).catch((error) => {
+    console.error('업로드 실패:', error);
+    alert('업로드 실패: ' + error.message);
   });
 }
 
 // updateCarouselOrderOnServer 콜백 지원
 function updateCarouselOrderOnServer(diningId, imageUrls, callback) {
-  const bodyData = `dining_id=${encodeURIComponent(diningId)}&` +
-    imageUrls.map(url => `image_urls=${encodeURIComponent(url)}`).join('&') +
-    deletedCarouselUrls.map(url => `&deleted_image_urls=${encodeURIComponent(url)}`).join('');
+  let bodyData = `dining_id=${encodeURIComponent(diningId)}`;
+  
+  // 이미지 URL들 추가
+  if (imageUrls && imageUrls.length > 0) {
+    bodyData += '&' + imageUrls.map(url => `image_urls=${encodeURIComponent(url)}`).join('&');
+  }
+  
+  // 삭제된 이미지 URL들 추가
+  if (deletedCarouselUrls && deletedCarouselUrls.length > 0) {
+    bodyData += '&' + deletedCarouselUrls.map(url => `deleted_image_urls=${encodeURIComponent(url)}`).join('&');
+  }
+  
+  console.log('케러셀 순서 업데이트 요청:', bodyData);
+  
   fetch('/admin/dining/updateCarouselOrder', {
     method: 'POST',
     headers: {'Content-Type': 'application/x-www-form-urlencoded'},
@@ -279,12 +438,15 @@ function updateCarouselOrderOnServer(diningId, imageUrls, callback) {
   })
   .then(res => {
     if (res.ok) {
+      console.log('케러셀 순서 업데이트 성공');
       if (callback) callback();
     } else {
+      console.error('케러셀 순서 업데이트 실패:', res.status, res.statusText);
       alert('순서 저장 실패');
     }
   })
   .catch(error => {
+    console.error('케러셀 순서 업데이트 에러:', error);
     alert('순서 저장 실패');
   });
 }
@@ -356,46 +518,18 @@ function addCarouselImageWithFile(file) {
   const delBtn = document.createElement('button');
   delBtn.type = 'button';
   delBtn.textContent = '삭제';
-  delBtn.className = 'delete-carousel-btn';
-  delBtn.style.marginRight = '8px';
+  delBtn.className = 'action-btn delete-btn';
   delBtn.onclick = function() { div.parentNode.removeChild(div); renumberCarouselItems(); };
   div.appendChild(delBtn);
   // 교체 버튼
   const replaceBtn = document.createElement('button');
   replaceBtn.type = 'button';
   replaceBtn.textContent = '교체';
-  replaceBtn.style.marginRight = '8px';
+  replaceBtn.className = 'action-btn replace-btn';
   replaceBtn.onclick = function() { fileInput.click(); };
   div.appendChild(replaceBtn);
-  // 순서 이동 버튼
-  const upBtn = document.createElement('button');
-  upBtn.type = 'button';
-  upBtn.textContent = '↑';
-  upBtn.style.marginRight = '2px';
-  upBtn.onclick = function() { moveCarouselImage(idx, 'up'); };
-  div.appendChild(upBtn);
-  const downBtn = document.createElement('button');
-  downBtn.type = 'button';
-  downBtn.textContent = '↓';
-  downBtn.onclick = function() { moveCarouselImage(idx, 'down'); };
-  div.appendChild(downBtn);
   // 추가
   carouselList.appendChild(div);
-  renumberCarouselItems();
-}
-
-// 케러셀 이미지 순서 변경 (up/down)
-function moveCarouselImage(index, direction) {
-  const items = document.querySelectorAll('.carousel-img-item');
-  const currentItem = items[index];
-  const prevItem = items[index - 1];
-  const nextItem = items[index + 1];
-
-  if (direction === 'up' && prevItem) {
-    items.insertBefore(currentItem, prevItem);
-  } else if (direction === 'down' && nextItem) {
-    items.insertBefore(currentItem, nextItem.nextSibling);
-  }
   renumberCarouselItems();
 }
 
@@ -414,13 +548,28 @@ function renumberCarouselItems() {
 let mainImageFile = null;
 let logoImageFile = null;
 
-// 파일 선택 시 변수에 파일 할당
+// 메인 이미지 파일 선택 시 미리보기
 document.querySelector('input[name="main_image_file"]').addEventListener('change', function(e) {
   mainImageFile = e.target.files[0];
+  const preview = document.getElementById('main-image-preview');
+  if (mainImageFile) {
+    preview.src = URL.createObjectURL(mainImageFile);
+    preview.style.display = 'block';
+  } else {
+    preview.style.display = 'none';
+  }
 });
 
+// 로고 이미지 파일 선택 시 미리보기
 document.querySelector('input[name="logo_image_file"]').addEventListener('change', function(e) {
   logoImageFile = e.target.files[0];
+  const preview = document.getElementById('logo-image-preview');
+  if (logoImageFile) {
+    preview.src = URL.createObjectURL(logoImageFile);
+    preview.style.display = 'block';
+  } else {
+    preview.style.display = 'none';
+  }
 });
 
 const diningFileForm = document.getElementById('diningFileForm');

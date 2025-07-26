@@ -9,6 +9,7 @@ import lombok.ToString;
 @ToString
 public class RepMenuDomain {
 	
+	private int menu_id;
 	private String menu_name;
 	private String description;
 	private int price;

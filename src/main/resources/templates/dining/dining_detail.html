@@ -125,8 +125,8 @@ color: white;
     margin-top: 300px;
     background-color: white;
     flex-direction: column; /* 수직으로 배치 */
-    
-
+    margin-left: auto;
+    margin-right: auto;
 }
 .category-wrap{
     display: flex;
@@ -378,7 +378,7 @@ width: 100%;         /* 이미지가 부모 카드의 너비에 맞게 크기 �
   /* 왼쪽 정렬 */
 }
 .additional-info-wrap {
-  width: 100%;
+  width: 75%;
   /* margin-left: auto;
   margin-right: auto; */
   margin-top: 130px;
@@ -803,6 +803,15 @@ width: 100%;         /* 이미지가 부모 카드의 너비에 맞게 크기 �
   width: 800px;   /* 원하는 고정값(px, em, rem 등) */
   /* 필요하다면 height, text-align 등도 추가 */
 }
+.menu-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 150px 200px;
+}
+.menu-item {
+  min-width: 200px;
+  text-align: left;
+}
 </style>
 </head>
 <body>
@@ -891,11 +900,11 @@ width: 100%;         /* 이미지가 부모 카드의 너비에 맞게 크기 �
   <div class="menu-list-wrap">
     <th:block th:each="entry : ${groupedMenuMap}">
       <div class="menu-list">
-        <div class="info-row">
-          <div class="list-col-1" th:text="${entry.key}"></div>
-          <div class="list-col-2" style="display: flex; gap: 250px;">
+        <div class="info-row" style="align-items: flex-start;">
+          <div class="list-col-1" style="width: 300px;" th:text="${entry.key}"></div>
+          <div class="list-col-2 menu-grid">
             <th:block th:each="menu : ${entry.value}">
-              <div style="min-width: 180px;">
+              <div class="menu-item">
                 <div th:text="${menu.menu_name}"></div>
                 <div style="margin-top: 16px;">
                   <span th:text="${#numbers.formatInteger(menu.price, 0, 'COMMA')}"></span> KRW
@@ -943,19 +952,19 @@ width: 100%;         /* 이미지가 부모 카드의 너비에 맞게 크기 �
         <span th:each="img : ${diningInfo.dining_carousel_images}" th:text="${img}"></span>
       </div>
     </div>
-
-      <!-- 추가 정보 섹션 -->
-      <div class="additional-info-wrap" th:if="${diningInfo.dining_detailinfo != null and !#strings.isEmpty(diningInfo.dining_detailinfo)}">
-        <h1 class="gallery-title">추가 정보</h1>
-        <div class="additional-info-content-bg">
-          <div class="additional-info-content" style="color:#707070" th:utext="${diningInfo.dining_detailinfo}"></div>
-        </div>
+  </div> 
+    
+    <!-- 추가 정보 섹션 -->
+    <div class="additional-info-wrap" th:if="${diningInfo.dining_detailinfo != null and !#strings.isEmpty(diningInfo.dining_detailinfo)}">
+      <h1 class="gallery-title">추가 정보</h1>
+      <div class="additional-info-content-bg">
+        <div class="additional-info-content" style="color:#707070" th:utext="${diningInfo.dining_detailinfo}"></div>
       </div>
-      <hr class="section-divider">
-      <div class="btn-area">
-        <a th:href="@{/user/dining_main}"><button type="button" class="list-btn">목록</button></a>
-      </div>
-</div> 
+    </div>
+    <hr class="section-divider">
+    <div class="btn-area">
+      <a th:href="@{/user/dining_main}"><button type="button" class="list-btn">목록</button></a>
+    </div>
 
 <!-- 화면 우측 하단 예약하기 플로팅 버튼 -->
 <a href="#" class="floating-reserve-btn" onclick="openReservationPanel(event)">

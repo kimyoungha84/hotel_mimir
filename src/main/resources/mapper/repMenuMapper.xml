@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.co.sist.dining.repmenu.RepMenuMapper">
+
+  <!-- RepMenu(대표메뉴) CRUD 매퍼 -->
+  <!-- 1. 다이닝ID로 전체 대표메뉴 조회 -->
+  <select id="selectRepMenuListByDiningId" parameterType="int" resultType="kr.co.sist.dining.user.RepMenuDomain">
+    SELECT MENU_ID, MENU_NAME, DESCRIPTION, PRICE
+    FROM REP_MENU
+    WHERE DINING_ID = #{diningId}
+    ORDER BY MENU_ID
+  </select>
+
+  <!-- 2. menuId로 단일 대표메뉴 조회 -->
+  <select id="selectRepMenuByMenuId" parameterType="int" resultType="kr.co.sist.dining.user.RepMenuDomain">
+    SELECT MENU_ID, DINING_ID, MENU_NAME, DESCRIPTION, PRICE
+    FROM REP_MENU
+    WHERE MENU_ID = #{menuId}
+  </select>
+
+  <!-- 3. 대표메뉴 등록 -->
+  <insert id="insertRepMenu" parameterType="kr.co.sist.dining.user.RepMenuDTO">
+    INSERT INTO REP_MENU (MENU_ID, DINING_ID, MENU_NAME, DESCRIPTION, PRICE)
+    VALUES (REP_MENU_SEQ.NEXTVAL, #{diningId}, #{menuName}, #{description}, #{price})
+  </insert>
+
+  <!-- 4. 대표메뉴 수정 -->
+  <update id="updateRepMenu" parameterType="kr.co.sist.dining.user.RepMenuDTO">
+    UPDATE REP_MENU
+    SET MENU_NAME = #{menuName},
+        DESCRIPTION = #{description},
+        PRICE = #{price}
+    WHERE MENU_ID = #{menuId}
+  </update>
+
+  <!-- 5. 대표메뉴 삭제 -->
+  <delete id="deleteRepMenu" parameterType="int">
+    DELETE FROM REP_MENU WHERE MENU_ID = #{menuId}
+  </delete>
+
+  <!-- 6. 특정 다이닝의 고유한 분류 목록 조회 -->
+  <select id="selectDistinctDescriptionsByDiningId" parameterType="java.lang.Integer" resultType="java.lang.String">
+    SELECT DISTINCT DESCRIPTION
+    FROM REP_MENU
+    WHERE DINING_ID = #{diningId}
+    ORDER BY DESCRIPTION
+  </select>
+
+</mapper> 

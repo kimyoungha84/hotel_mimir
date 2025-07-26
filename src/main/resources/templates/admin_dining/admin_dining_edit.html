@@ -6,7 +6,7 @@
 <link rel="stylesheet" href="/admin_common_assets/css/common.css">
 <style>
   .edit-form-label { display: block; margin-top: 24px; font-weight: bold; margin-bottom: 15px; }
-  .edit-form-input, .edit-form-textarea, .edit-form-select { width: 100%; padding: 8px; margin-top: 4px; }
+  .edit-form-input, .edit-form-textarea, .edit-form-select { width: 100%; padding: 8px; margin-top: 4px; border-radius: 5px; }
   .edit-form-img-preview { max-width: 200px; margin-top: 8px; display: block; }
   .edit-form-img-list { display: flex; gap: 16px; flex-wrap: wrap; margin-top: 8px; }
   .edit-form-img-list img { max-width: 120px; border: 1px solid #ccc; border-radius: 4px; }
@@ -34,6 +34,116 @@
   .dining-section {
     margin-top : 50px;
   }
+  
+  /* 파일 선택 영역 구분 스타일 */
+  .file-upload-section {
+    background: #f8f9fa;
+    border: 2px dashed #dee2e6;
+    border-radius: 12px;
+    padding: 20px;
+    margin: 20px 0;
+    transition: border-color 0.3s ease;
+  }
+  .file-upload-section:hover {
+    border-color: #856956;
+  }
+  
+  /* 폼 데이터 섹션 스타일 (이미지 업로드와 구분) */
+  .form-data-section {
+    background: #f0f8ff;
+    border: 2px dashed #e3f2fd;
+    border-radius: 12px;
+    padding: 20px;
+    margin: 20px 0;
+    transition: border-color 0.3s ease;
+  }
+  .form-data-section:hover {
+    border-color: #2196f3;
+  }
+  
+  .file-upload-title {
+    font-size: 18px;
+    font-weight: 600;
+    color: #495057;
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .file-upload-title::before {
+    content: "📁";
+    font-size: 20px;
+  }
+  
+  /* 폼 데이터 제목 스타일 */
+  .form-data-title {
+    font-size: 18px;
+    font-weight: 600;
+    color: #000000;
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .form-data-title::before {
+    content: "📝";
+    font-size: 20px;
+  }
+  
+  /* 모던한 삭제/교체 버튼 스타일 */
+  .action-btn {
+    background: linear-gradient(135deg, #6c757d 0%, #495057 100%);
+    color: white;
+    border: none;
+    border-radius: 6px;
+    padding: 6px 12px;
+    font-size: 12px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    margin-right: 6px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  }
+  .action-btn:hover {
+    background: linear-gradient(135deg, #495057 0%, #343a40 100%);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+  }
+  .delete-btn {
+    background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+  }
+  .delete-btn:hover {
+    background: linear-gradient(135deg, #c82333 0%, #a71e2a 100%);
+  }
+  .replace-btn {
+    background: linear-gradient(135deg, #17a2b8 0%, #138496 100%);
+  }
+  .replace-btn:hover {
+    background: linear-gradient(135deg, #138496 0%, #117a8b 100%);
+  }
+  
+  /* 파일 입력 스타일 개선 */
+  .file-input-wrapper {
+    position: relative;
+    display: inline-block;
+    width: 100%;
+  }
+  .file-input-wrapper input[type="file"] {
+    width: 100%;
+    padding: 10px;
+    border: 2px solid #e9ecef;
+    border-radius: 8px;
+    background: white;
+    transition: border-color 0.3s ease;
+  }
+  .file-input-wrapper input[type="file"]:hover {
+    border-color: #856956;
+  }
+  .file-input-wrapper input[type="file"]:focus {
+    outline: none;
+    border-color: #856956;
+    box-shadow: 0 0 0 3px rgba(133, 105, 86, 0.1);
+  }
 </style>
 </head>
 <body>
@@ -54,63 +164,68 @@
       <form id="diningDataForm" th:action="@{/admin/dining/edit}" method="post">
         <input type="hidden" name="dining_id" th:value="${dining.dining_id}" />
 
-        <div class="edit-form-section">
-          <label class="edit-form-label">이름</label>
-          <input class="edit-form-input" type="text" name="dining_name" th:value="${dining.dining_name}" required />
+        <div class="form-data-section">
+          <div class="form-data-title">기본 정보</div>
+          <div class="edit-form-section">
+            <label class="edit-form-label">이름</label>
+            <input class="edit-form-input" type="text" name="dining_name" th:value="${dining.dining_name}" required />
+          </div>
+          <div class="edit-form-section">
+            <label class="edit-form-label">타입</label>
+            <select class="edit-form-select" name="type" required>
+              <option value="한식" th:selected="${dining.type == '한식'}">한식</option>
+              <option value="프렌치" th:selected="${dining.type == '프렌치'}">프렌치</option>
+              <option value="회원제 레스토랑" th:selected="${dining.type == '회원제 레스토랑'}">회원제 레스토랑</option>
+              <option value="레스토랑 & 바" th:selected="${dining.type == '레스토랑 & 바'}">레스토랑 & 바</option>
+              <option value="스카이 바" th:selected="${dining.type == '스카이 바'}">스카이 바</option>
+              <option value="프리미엄 베이커리 & 카페" th:selected="${dining.type == '프리미엄 베이커리 & 카페'}">프리미엄 베이커리 & 카페</option>
+              <option value="인룸 다이닝" th:selected="${dining.type == '인룸 다이닝'}">인룸 다이닝</option>
+            </select>
+          </div>
+          <div class="edit-form-section">
+            <label class="edit-form-label">위치</label>
+            <input class="edit-form-input" type="text" name="location" th:value="${dining.location}" required />
+          </div>
+          <div class="edit-form-section">
+            <label class="edit-form-label">문의번호</label>
+            <input class="edit-form-input" type="text" name="phone_number" th:value="${dining.phone_number}" required />
+          </div>
+          <div class="edit-form-section">
+            <label class="edit-form-label">담당자</label>
+            <input class="edit-form-input" type="text" name="manager_name" th:value="${dining.manager_name}" required />
+          </div>
+          <div class="edit-form-section">
+            <label class="edit-form-label">예약 가능 여부</label>
+            <select class="edit-form-select" name="dining_resv_availability">
+              <option value="Y" th:selected="${dining.dining_resv_availability == 'Y'}">가능</option>
+              <option value="N" th:selected="${dining.dining_resv_availability == 'N'}">불가능</option>
+            </select>
+          </div>
+          <div class="edit-form-section">
+            <label class="edit-form-label">분류</label>
+            <select class="edit-form-select" name="dining_classification" required>
+              <option value="레스토랑" th:selected="${dining.dining_classification == '레스토랑'}">레스토랑</option>
+              <option value="라운지 &amp; 바" th:selected="${dining.dining_classification == '라운지 & 바'}">라운지 & 바</option>
+              <option value="베이커리 &amp; 카페" th:selected="${dining.dining_classification == '베이커리 & 카페'}">베이커리 & 카페</option>
+              <option value="룸서비스" th:selected="${dining.dining_classification == '룸서비스'}">룸서비스</option>
+            </select>
+          </div>
         </div>
-        <div class="edit-form-section">
-          <label class="edit-form-label">타입</label>
-          <select class="edit-form-select" name="type" required>
-            <option value="한식" th:selected="${dining.type == '한식'}">한식</option>
-            <option value="프렌치" th:selected="${dining.type == '프렌치'}">프렌치</option>
-            <option value="회원제 레스토랑" th:selected="${dining.type == '회원제 레스토랑'}">회원제 레스토랑</option>
-            <option value="레스토랑 & 바" th:selected="${dining.type == '레스토랑 & 바'}">레스토랑 & 바</option>
-            <option value="스카이 바" th:selected="${dining.type == '스카이 바'}">스카이 바</option>
-            <option value="프리미엄 베이커리 & 카페" th:selected="${dining.type == '프리미엄 베이커리 & 카페'}">프리미엄 베이커리 & 카페</option>
-            <option value="인룸 다이닝" th:selected="${dining.type == '인룸 다이닝'}">인룸 다이닝</option>
-          </select>
+        <div class="form-data-section">
+          <div class="form-data-title">상세 정보</div>
+          <div class="edit-form-section">
+            <label class="edit-form-label">소개</label>
+            <textarea class="edit-form-textarea" name="dining_introduction" rows="3" th:text="${dining.dining_introduction}"></textarea>
+          </div>
+          <div class="edit-form-section">
+            <label class="edit-form-label">상세정보</label>
+            <textarea class="edit-form-textarea" name="dining_detailinfo" rows="5" th:text="${dining.dining_detailinfo}"></textarea>
+          </div>
+          <div class="edit-form-section">
+            <label class="edit-form-label">영업시간</label>
+            <textarea class="edit-form-textarea" name="dining_operation_hours" rows="3" th:text="${dining.dining_operation_hours}"></textarea>
+          </div>
         </div>
-        <div class="edit-form-section">
-          <label class="edit-form-label">위치</label>
-          <input class="edit-form-input" type="text" name="location" th:value="${dining.location}" required />
-        </div>
-        <div class="edit-form-section">
-          <label class="edit-form-label">문의번호</label>
-          <input class="edit-form-input" type="text" name="phone_number" th:value="${dining.phone_number}" required />
-        </div>
-        <div class="edit-form-section">
-          <label class="edit-form-label">담당자</label>
-          <input class="edit-form-input" type="text" name="manager_name" th:value="${dining.manager_name}" required />
-        </div>
-        <div class="edit-form-section">
-          <label class="edit-form-label">소개</label>
-          <textarea class="edit-form-textarea" name="dining_introduction" rows="3" th:text="${dining.dining_introduction}"></textarea>
-        </div>
-        <div class="edit-form-section">
-          <label class="edit-form-label">상세정보</label>
-          <textarea class="edit-form-textarea" name="dining_detailinfo" rows="5" th:text="${dining.dining_detailinfo}"></textarea>
-        </div>
-        <div class="edit-form-section">
-          <label class="edit-form-label">영업시간</label>
-          <textarea class="edit-form-textarea" name="dining_operation_hours" rows="3" th:text="${dining.dining_operation_hours}"></textarea>
-        </div>
-        <div class="edit-form-section">
-          <label class="edit-form-label">예약 가능 여부</label>
-          <select class="edit-form-select" name="dining_resv_availability">
-            <option value="Y" th:selected="${dining.dining_resv_availability == 'Y'}">가능</option>
-            <option value="N" th:selected="${dining.dining_resv_availability == 'N'}">불가능</option>
-          </select>
-        </div>
-        <div class="edit-form-section">
-          <label class="edit-form-label">분류</label>
-          <select class="edit-form-select" name="dining_classification" required>
-            <option value="레스토랑" th:selected="${dining.dining_classification == '레스토랑'}">레스토랑</option>
-            <option value="라운지 &amp; 바" th:selected="${dining.dining_classification == '라운지 & 바'}">라운지 & 바</option>
-            <option value="베이커리 &amp; 카페" th:selected="${dining.dining_classification == '베이커리 & 카페'}">베이커리 & 카페</option>
-            <option value="룸서비스" th:selected="${dining.dining_classification == '룸서비스'}">룸서비스</option>
-          </select>
-        </div>
-
         <div class="edit-form-btn-area">
           <button type="submit" class="list-btn modern-btn">데이터 수정</button>
         </div>
@@ -122,33 +237,36 @@
       <form id="diningFileForm" th:action="@{/admin/dining/editFiles}" method="post" enctype="multipart/form-data">
         <input type="hidden" name="dining_id" th:value="${dining.dining_id}" />
 
-        <div class="edit-form-section">
-          <label class="edit-form-label">메인 이미지</label>
-          <input type="file" name="main_image_file" accept="image/*" />
+        <div class="file-upload-section">
+          <div class="file-upload-title">메인 이미지</div>
+          <div class="file-input-wrapper">
+            <input type="file" name="main_image_file" accept="image/*" />
+          </div>
           <input type="hidden" name="main_image_url" />
           <img th:if="${dining.dining_main_image != null}" th:src="@{${dining.dining_main_image}}" class="edit-form-img-preview" />
         </div>
-        <div class="edit-form-section">
-          <label class="edit-form-label">로고 이미지</label>
-          <input type="file" name="logo_image_file" accept="image/*" />
+        
+        <div class="file-upload-section">
+          <div class="file-upload-title">로고 이미지</div>
+          <div class="file-input-wrapper">
+            <input type="file" name="logo_image_file" accept="image/*" />
+          </div>
           <input type="hidden" name="logo_image_url" />
           <img th:if="${dining.dining_logo_image != null}" th:src="@{${dining.dining_logo_image}}" class="edit-form-img-preview" />
         </div>
-        <div class="edit-form-section">
-          <label class="edit-form-label">케러셀 이미지 (여러 장 가능)</label>
+        
+        <div class="file-upload-section">
+          <div class="file-upload-title">케러셀 이미지 (여러 장 가능)</div>
           <div class="edit-form-img-list" id="carousel-img-list" style="display:flex; flex-direction:column; gap:0;">
             <th:block th:each="img, iterStat : ${dining.dining_carousel_images}">
               <div class="carousel-img-item" th:attr="data-index=${iterStat.index}" style="position:relative; display:flex; align-items:center; padding:12px 0; border-bottom:1px solid #e0e0e0;">
                 <span style="width:32px; display:inline-block; text-align:center; font-weight:bold;">[[${iterStat.index + 1}]]</span>
                 <img th:src="@{${img}}" style="max-width:120px; border:1px solid #ccc; border-radius:4px; margin:0 16px;" />
-                <button type="button" class="delete-carousel-btn"
-                        th:onclick="'deleteCarouselImage(' + ${iterStat.index} + ')'"
-                        style="margin-right:8px;">삭제</button>
+                <button type="button" class="action-btn delete-btn"
+                        th:onclick="'deleteCarouselImage(this)'">삭제</button>
                 <input type="file" th:name="'replace_carousel_image_' + ${iterStat.index}"
                        style="display:none;" th:onchange="'replaceCarouselImage(event, ' + ${iterStat.index} + ')'" />
-                <button type="button" th:onclick="'triggerReplace(' + ${iterStat.index} + ')'" style="margin-right:8px;">교체</button>
-                <button type="button" th:onclick="'moveCarouselImage(' + ${iterStat.index} + ', \'up\')'" style="margin-right:2px;">↑</button>
-                <button type="button" th:onclick="'moveCarouselImage(' + ${iterStat.index} + ', \'down\')'">↓</button>
+                <button type="button" class="action-btn replace-btn" th:onclick="'triggerReplace(' + ${iterStat.index} + ')'">교체</button>
                 <input type="hidden" name="carousel_image_urls" th:value="${img}" />
               </div>
             </th:block>
@@ -179,8 +297,10 @@ function renumberCarouselItems() {
   });
 }
 
-function deleteCarouselImage(idx) {
-  const item = document.querySelectorAll('.carousel-img-item')[idx];
+function deleteCarouselImage(button) {
+  const item = button.closest('.carousel-img-item');
+  if (!item) return;
+  
   const urlInput = item.querySelector('input[name="carousel_image_urls"]');
   if (urlInput && urlInput.value) {
     deletedCarouselUrls.push(urlInput.value); // URL을 직접 저장
@@ -214,35 +334,6 @@ function replaceCarouselImage(event, idx) {
   input.name = 'replace_carousel_indexes';
   input.value = idx;
   document.getElementById('diningFileForm').appendChild(input);
-}
-
-function moveCarouselImage(idx, direction) {
-  const items = document.querySelectorAll('.carousel-img-item');
-  if (direction === 'up' && idx > 0) {
-    items[idx].parentNode.insertBefore(items[idx], items[idx - 1]);
-  } else if (direction === 'down' && idx < items.length - 1) {
-    items[idx].parentNode.insertBefore(items[idx + 1], items[idx]);
-  }
-  // 순서 변경 후 hidden input에 순서 저장
-  updateCarouselOrder();
-  renumberCarouselItems();
-}
-
-function updateCarouselOrder() {
-  const items = document.querySelectorAll('.carousel-img-item');
-  let order = [];
-  items.forEach((item, i) => {
-    order.push(item.querySelector('input[name="carousel_image_urls"]').value);
-  });
-  // 기존 hidden input 제거 후 새로 추가
-  document.querySelectorAll('input[name="carousel_order[]"]').forEach(e => e.remove());
-  order.forEach((url, i) => {
-    let input = document.createElement('input');
-    input.type = 'hidden';
-    input.name = 'carousel_order[]';
-    input.value = url;
-    document.getElementById('diningFileForm').appendChild(input);
-  });
 }
 
 function uploadAllImages() {
@@ -506,29 +597,16 @@ function addCarouselImage() {
   const delBtn = document.createElement('button');
   delBtn.type = 'button';
   delBtn.textContent = '삭제';
-  delBtn.className = 'delete-carousel-btn';
-  delBtn.style.marginRight = '8px';
-  delBtn.onclick = function() { div.parentNode.removeChild(div); renumberCarouselItems(); };
+  delBtn.className = 'action-btn delete-btn';
+  delBtn.onclick = function() { deleteCarouselImage(this); };
   div.appendChild(delBtn);
   // 교체 버튼
   const replaceBtn = document.createElement('button');
   replaceBtn.type = 'button';
   replaceBtn.textContent = '교체';
-  replaceBtn.style.marginRight = '8px';
+  replaceBtn.className = 'action-btn replace-btn';
   replaceBtn.onclick = function() { fileInput.click(); };
   div.appendChild(replaceBtn);
-  // 순서 이동 버튼
-  const upBtn = document.createElement('button');
-  upBtn.type = 'button';
-  upBtn.textContent = '↑';
-  upBtn.style.marginRight = '2px';
-  upBtn.onclick = function() { moveCarouselImage(idx, 'up'); };
-  div.appendChild(upBtn);
-  const downBtn = document.createElement('button');
-  downBtn.type = 'button';
-  downBtn.textContent = '↓';
-  downBtn.onclick = function() { moveCarouselImage(idx, 'down'); };
-  div.appendChild(downBtn);
   // 추가
   carouselList.appendChild(div);
   renumberCarouselItems();
@@ -558,9 +636,11 @@ if (mainInput) {
     const file = e.target.files[0];
     if (file) {
       mainImageFile = file;
-      const img = e.target.nextElementSibling;
-      if (img && img.tagName === 'IMG') {
+      // 미리보기 이미지 찾기 (input 다음에 있는 img 태그)
+      const img = this.parentNode.parentNode.querySelector('img');
+      if (img) {
         img.src = URL.createObjectURL(file);
+        img.style.display = 'block';
       }
     }
   });
@@ -572,9 +652,11 @@ if (logoInput) {
     const file = e.target.files[0];
     if (file) {
       logoImageFile = file;
-      const img = e.target.nextElementSibling;
-      if (img && img.tagName === 'IMG') {
+      // 미리보기 이미지 찾기 (input 다음에 있는 img 태그)
+      const img = this.parentNode.parentNode.querySelector('img');
+      if (img) {
         img.src = URL.createObjectURL(file);
+        img.style.display = 'block';
       }
     }
   });

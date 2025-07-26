@@ -16,7 +16,7 @@ public enum FilterConfig {
         null,
         true, true, true,
         List.of(
-            new Option("name", "이름", "dining_name")
+            new Option("name", "다이닝 이름", "dining_name")
         ),
         null,
         null,
@@ -68,7 +68,7 @@ public enum FilterConfig {
     DINING_RESV("dining_resv",
         new DatePickerOption("reservationDate", "reservation_date", null, null),
         true, true, true,
-        List.of(new Option("name", "이름", "dining_name")),
+        List.of(new Option("name", "다이닝 이름", "dining_name")),
         null,
         null,
         null
