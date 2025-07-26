@@ -29,7 +29,7 @@ public class DiningTimeSlotController {
     							@RequestParam int diningId,
     							@RequestParam String mealType,
     							@RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate reservationDate) {
-
+    	
         List<String> timeList = dtcs.getTimeSlots(diningId, mealType);
         
         List<Map<String, Object>> result = new ArrayList<>();
@@ -45,7 +45,11 @@ public class DiningTimeSlotController {
                 Timestamp timestamp = Timestamp.valueOf(dateTime);
 
                 int remainingSeats = dtss.getRemainingSeats(diningId, Date.valueOf(reservationDate), timestamp);
-
+                
+            	System.out.println("==> 잔여좌석 조회: diningId=" + diningId 
+            		    + ", reservationDate=" + reservationDate 
+            		    + ", reservationTime=" + timestamp);
+                
                 Map<String, Object> slotInfo = new HashMap<>();
                 
                 slotInfo.put("time", timeStr);

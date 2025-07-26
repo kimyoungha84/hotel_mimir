@@ -240,8 +240,14 @@ function loadTimeButtons(inputDiningId) {
     const btn = document.createElement("button");
     btn.className = "time-btn";
     btn.type = "button";
+	
     btn.innerHTML = `<span>${time} (잔여 ${remaining}석)</span>`;
 
+	if (remaining === 0) {
+	  btn.disabled = true;
+	  btn.classList.add("disabled");
+	} else {
+	
     btn.addEventListener("click", () => {
       document.querySelectorAll(".time-btn").forEach(b => b.classList.remove("selected"));
       btn.classList.add("selected");
@@ -253,6 +259,7 @@ function loadTimeButtons(inputDiningId) {
       nextBtn.classList.remove("disabled");
       nextBtn.removeAttribute("aria-disabled");
     });
+  }
 
     return btn;
   }

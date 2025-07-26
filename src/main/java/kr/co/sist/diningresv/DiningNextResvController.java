@@ -165,7 +165,7 @@ public class DiningNextResvController {
 	    try {
 	    	
 	        String dateTimeStr = date + " " + time;
-	        SimpleDateFormat sdfDateTime = new SimpleDateFormat("yyyy-MM-dd a h:mm", Locale.KOREAN);
+	        SimpleDateFormat sdfDateTime = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 	        Date parsedDateTime = sdfDateTime.parse(dateTimeStr);
 	        
 	        reservationTime = new Timestamp(parsedDateTime.getTime());

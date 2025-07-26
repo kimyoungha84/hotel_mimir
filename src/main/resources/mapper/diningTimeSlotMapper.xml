@@ -10,9 +10,9 @@
   SELECT NVL(RESERVED_COUNT, 0)
   FROM DINING_TIME_SLOT
   WHERE DINING_ID = #{diningId}
-    AND RESERVATION_DATE = #{reservationDate}
-    AND RESERVATION_TIME = #{reservationTime}
+    AND TO_CHAR(RESERVATION_TIME, 'YYYY-MM-DD HH24:MI') = TO_CHAR(#{reservationTime}, 'YYYY-MM-DD HH24:MI')
 </select>
+<!-- reservationDate 제거 -> Time에 날짜정보가 포함되어 있으므로 두 조건 간의 충돌 발생 -->
 
   <!-- 슬롯 존재 여부 확인 -->
   <select id="existsSlot" resultType="int">

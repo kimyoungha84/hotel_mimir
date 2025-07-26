@@ -429,6 +429,13 @@ body {
   color: #fff;
 }
 
+.time-btn.disabled {
+  background-color: #a38c67;
+  color: #fff;
+  cursor: not-allowed;
+  border: 1px solid #a38c67;
+}
+
 .reservation-note-wrap {
   display: flex;
   justify-content: flex-start;
