@@ -1,0 +1,66 @@
+package kr.co.sist.admin.diningresv;
+
+import java.util.*;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import kr.co.sist.diningslot.DiningTimeSlotDTO;
+import kr.co.sist.diningslot.DiningTimeSlotService;
+import kr.co.sist.util.FilterConfig;
+import kr.co.sist.util.ModelUtils;
+import kr.co.sist.util.controller.SearchController;
+
+@Controller
+public class AdminDiningTimeSlotController {
+
+//	@Autowired
+//	private ModelUtils mu;
+
+    @Autowired
+    private DiningTimeSlotService dtss;
+
+    
+    @GetMapping("/admin/adminDiningResvSlot")
+    public String getSlotStatusForAdmin(Model model) {
+    	
+//    	int pageSize = 5;
+    	
+    	List<DiningTimeSlotDTO> slotList = dtss.getAllSlots();
+    	 
+//        SearchController.addFragmentInfo(
+//                FilterConfig.DINING_SLOT,
+//                "admin_diningresv/adminDiningResvSlot",
+//                "diningSlot",
+//                "slotList"
+//        );
+//
+//        mu.setFilteringInfo(model, FilterConfig.DINING_SLOT);
+//        mu.setPaginationAttributes(model, PAGE_SIZE, FilterConfig.DINING_SLOT);
+    	
+        model.addAttribute("slotList", slotList);
+
+        for (DiningTimeSlotDTO dto : slotList) {
+            System.out.println(dto);
+        }
+        
+        return "admin_diningresv/adminDiningResvSlot";
+        
+    }
+    
+    @PostMapping("/admin/updateSlotReservedCount")
+    public String updateReservedCount(@RequestParam int slotId,
+    								  @RequestParam int remainingSeats) {
+        
+    	int reservedCount = 20 - remainingSeats;
+    	
+        dtss.updateTotalSeat(slotId, reservedCount);
+        
+        return "redirect:/admin/adminDiningResvSlot";
+        
+    }
+    
+}

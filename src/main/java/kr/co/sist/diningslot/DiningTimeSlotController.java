@@ -12,11 +12,15 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
 
 import kr.co.sist.diningtime.DiningTimeConfigService;
+import kr.co.sist.util.ModelUtils;
 
 @RestController
 @RequestMapping("/api/timeslots")
 public class DiningTimeSlotController {
 
+	@Autowired
+	private ModelUtils mu;
+	
     @Autowired
     private DiningTimeConfigService dtcs;
 
@@ -45,10 +49,6 @@ public class DiningTimeSlotController {
                 Timestamp timestamp = Timestamp.valueOf(dateTime);
 
                 int remainingSeats = dtss.getRemainingSeats(diningId, Date.valueOf(reservationDate), timestamp);
-                
-            	System.out.println("==> 잔여좌석 조회: diningId=" + diningId 
-            		    + ", reservationDate=" + reservationDate 
-            		    + ", reservationTime=" + timestamp);
                 
                 Map<String, Object> slotInfo = new HashMap<>();
                 

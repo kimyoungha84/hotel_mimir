@@ -17,5 +17,6 @@ public class DiningTimeSlotDTO {
     private Date reservationDate;  
     private Timestamp reservationTime;
     private int reservedCount;
+    private int totalSeat;
 	
 }

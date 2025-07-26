@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html xmlns="http://www.thymeleaf.org">
+<head>
+  <!-- favicon 설정 -->
+  <link rel="icon shortcut"  href="/admin_common_assets/common_img/mimir_favicon.ico"/>
+
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- jquery CDN -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+
+  <th:block th:replace="~{administrator/fragments/admin_header :: admin_header}"></th:block>
+</head>
+
+<body>
+<th:block th:replace="~{administrator/fragments/admin_sidebar :: admin_sidebar}"></th:block>
+
+<div id="body-pd" class="body-pd">
+  <h2 class="h2Title">다이닝 좌석 현황</h2>
+  <hr/>
+
+<!-- 좌석 현황 테이블 -->
+<table>
+  <thead>
+    <tr>
+      <th>슬롯 ID</th>
+      <th>다이닝 ID</th>
+      <th>예약 날짜</th>
+      <th>예약 시간</th>
+      <th>예약된 인원</th>
+      <th>잔여 좌석</th>
+      <th>수정</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr th:each="slot : ${slotList}">
+      <form th:action="@{/admin/updateSlotReservedCount}" method="post">
+        <td th:text="${slot.slotId}"></td>
+        <td th:text="${slot.diningId}"></td>
+        <td th:text="${#dates.format(slot.reservationDate, 'yyyy-MM-dd')}"></td>
+        <td th:text="${#dates.format(slot.reservationTime, 'HH:mm')}"></td>
+        <td th:text="${slot.reservedCount}"></td>
+        
+        <td>
+          <input type="number" min="0" max="20"
+                 name="remainingSeats"
+                 th:value="${20 - slot.reservedCount}" required />
+          <input type="hidden" name="slotId" th:value="${slot.slotId}" />
+        </td>
+        
+        <td>
+          <button type="submit">저장</button>
+        </td>
+      </form>
+    </tr>
+
+    <tr th:if="${#lists.isEmpty(slotList)}">
+      <td colspan="7" style="text-align: center;">조회된 좌석 정보가 없습니다.</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+</body>
+</html>
