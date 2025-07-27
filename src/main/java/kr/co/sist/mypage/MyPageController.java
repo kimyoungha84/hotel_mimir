@@ -9,12 +9,14 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.PathVariable; // PathVariable 추가
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.sql.Date;
 import java.text.SimpleDateFormat;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import jakarta.servlet.http.Cookie;
@@ -30,6 +32,8 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import kr.co.sist.member.CustomUserDetails;
 import kr.co.sist.member.MemberDTO;
 import kr.co.sist.member.MemberService;
+import kr.co.sist.member.RoomReservationDTO;
+
 import org.springframework.security.core.context.SecurityContextHolder;
 
 @Controller
@@ -189,5 +193,59 @@ public class MyPageController {
 
         responseMap.put("success", success);
         return responseMap;
+    }
+
+    @GetMapping("/room-reservations")
+    public String roomReservations(Model model, @AuthenticationPrincipal CustomUserDetails userDetails) {
+        if (userDetails == null) {
+            return "redirect:/member/loginFrm";
+        }
+        String userNum = String.valueOf(userDetails.getUserNum());
+        List<RoomReservationDTO> myRoomReservationList = memberService.getRoomReservationsByUserNum(userNum);
+        model.addAttribute("myRoomReservationList", myRoomReservationList);
+        return "mypage/roomResvList";
+    }
+
+    @GetMapping("/room-reservations/{reservationId}")
+    public String roomReservationDetail(@PathVariable int reservationId, Model model, @AuthenticationPrincipal CustomUserDetails userDetails) {
+        if (userDetails == null) {
+            return "redirect:/member/loginFrm";
+        }
+
+        RoomReservationDTO roomReservationDetail = memberService.getRoomReservationDetail(reservationId);
+
+         if (roomReservationDetail.getUser_num() != userDetails.getUserNum()) {
+             return "redirect:/mypage/room-reservations"; 
+         }
+
+        model.addAttribute("roomReservationDetail", roomReservationDetail);
+        return "mypage/roomResvDetail";
+    }
+
+    @PostMapping("/cancel-room-reservation")
+    @ResponseBody
+    public Map<String, Boolean> cancelRoomReservation(
+            @RequestBody Map<String, Integer> body,
+            @AuthenticationPrincipal CustomUserDetails userDetails) {
+
+        Map<String, Boolean> response = new HashMap<>();
+
+        if (userDetails == null) {
+            response.put("success", false);
+            return response;
+        }
+
+        int reservationId = body.get("reservationId");
+
+        RoomReservationDTO reservation = memberService.getRoomReservationDetail(reservationId);
+
+        if (reservation == null || reservation.getUser_num() != userDetails.getUserNum()) {
+            response.put("success", false);
+            return response;
+        }
+
+        boolean success = memberService.cancelRoomReservation(reservationId);
+        response.put("success", success);
+        return response;
     }
 }

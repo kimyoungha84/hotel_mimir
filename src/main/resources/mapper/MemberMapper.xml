@@ -119,4 +119,54 @@
     WHERE EMAIL_ID = #{email}
   </update>
 
+  <select id="selectRoomReservationsByUserNum" resultType="kr.co.sist.member.RoomReservationDTO">
+    SELECT 
+        r.RESV_ID AS reservation_id,
+        rt.TYPE_NAME AS room_name,
+        r.CHECKIN_DATE AS check_in_date,
+        r.CHECKOUT_DATE AS check_out_date,
+        r.STATUS AS reservation_status,
+        NVL(p.PAYMENT_PRICE, 0) AS total_price
+    FROM 
+        RESERVATION r
+        JOIN ROOM ro ON r.ROOM_ID = ro.ROOM_ID
+        JOIN ROOM_TYPE rt ON ro.TYPE_ID = rt.TYPE_ID
+        LEFT JOIN PAYMENT p ON r.PAYMENT_ID = p.PAYMENT_ID
+    WHERE 
+        r.USER_NUM = #{userNum}
+    ORDER BY r.CHECKIN_DATE DESC
+</select>
+
+<select id="selectRoomReservationDetail" parameterType="int" resultType="kr.co.sist.member.RoomReservationDTO">
+  SELECT
+      r.RESV_ID AS reservation_id,
+      r.USER_NUM AS user_num,
+      rt.TYPE_NAME AS room_name,
+      r.CHECKIN_DATE AS check_in_date,
+      r.CHECKOUT_DATE AS check_out_date,
+      r.NUM_GUESTS_ADULT AS num_guests_adult,
+	  r.NUM_GUESTS_CHILD AS num_guests_child,
+      r.STATUS AS reservation_status,
+      r.REQUEST_MSG AS request_msg,
+      NVL(p.PAYMENT_PRICE, 0) AS total_price
+  FROM
+      RESERVATION r
+  JOIN
+      ROOM ro ON r.ROOM_ID = ro.ROOM_ID
+  JOIN
+      ROOM_TYPE rt ON ro.TYPE_ID = rt.TYPE_ID
+  LEFT JOIN
+      PAYMENT p ON r.PAYMENT_ID = p.PAYMENT_ID
+  WHERE
+      r.RESV_ID = #{reservationId}
+</select>
+
+  <update id="updateRoomReservationStatusToCancelled" parameterType="int">
+  UPDATE RESERVATION
+  SET
+      STATUS = '예약 취소'
+  WHERE
+      RESV_ID = #{reservationId}
+</update>
+
 </mapper>

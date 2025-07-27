@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" th:class="sub-page">
+<head>
+  <meta charset="UTF-8" />
+  <title>나의 객실 예약 상세</title>
+  <link rel="stylesheet" th:href="@{/css/header.css}" />
+  <link rel="stylesheet" th:href="@{/css/mypage_sidebar.css}" />
+  <style>
+    body {
+      padding-top: 130px;
+      background-color: #f8f9fa;
+    }
+
+    .main-container {
+      display: flex;
+    }
+
+    .sidebar-col {
+      width: 250px;
+    }
+
+    .content-col {
+      flex: 1;
+      padding: 40px 60px; /* 여백 조절 */
+    }
+
+    .content-container {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 40px;
+      background: #fff;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .h2Title {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    .detail-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+
+    .detail-table tr td {
+      padding: 12px;
+      border: 1px solid #dee2e6;
+    }
+
+    .detail-table tr td:first-child {
+      font-weight: bold;
+      background-color: #e9ecef;
+      width: 30%;
+    }
+
+    .action-buttons {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 30px;
+    }
+
+    .btn {
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      text-decoration: none;
+      font-size: 14px;
+      cursor: pointer;
+    }
+
+    .btn-back {
+      background-color: #6c757d;
+      color: white;
+    }
+
+    .btn-back:hover {
+      background-color: #5a6268;
+    }
+
+    .btn-cancel {
+      background-color: #dc3545;
+      color: white;
+    }
+
+    .btn-cancel:hover {
+      background-color: #c82333;
+    }
+  </style>
+</head>
+<body>
+
+<!-- Header -->
+<div th:replace="~{fragments/header :: header}"></div>
+
+<div class="main-container">
+  <!-- 사이드바 -->
+  <div class="sidebar-col">
+    <div th:replace="~{fragments/sidebar :: sidebar}"></div>
+  </div>
+
+  <!-- 본문 -->
+  <div class="content-col">
+    <div class="content-container">
+      <h2 class="h2Title">나의 객실 예약 상세</h2>
+
+      <div class="detail-box">
+        <table class="detail-table">
+          <tr>
+            <td>예약번호</td>
+            <td th:text="${roomReservationDetail.reservation_id}"></td>
+          </tr>
+          <tr>
+            <td>객실명</td>
+            <td th:text="${roomReservationDetail.room_name}"></td>
+          </tr>
+          <tr>
+            <td>체크인</td>
+            <td th:text="${#dates.format(roomReservationDetail.check_in_date, 'yyyy.MM.dd(E)')}"></td>
+          </tr>
+          <tr>
+            <td>체크아웃</td>
+            <td th:text="${#dates.format(roomReservationDetail.check_out_date, 'yyyy.MM.dd(E)')}"></td>
+          </tr>
+          <tr>
+            <td>인원 수</td>
+            <td th:text="|성인: ${roomReservationDetail.num_guests_adult} 아동: ${roomReservationDetail.num_guests_child}|"></td>
+          </tr>
+          <tr>
+            <td>결제 금액</td>
+            <td th:text="${#numbers.formatInteger(roomReservationDetail.total_price, 0, 'COMMA')} + '원'"></td>
+          </tr>
+          <tr>
+            <td>예약 상태</td>
+            <td th:text="${roomReservationDetail.reservation_status}"></td>
+          </tr>
+          <tr>
+            <td>요청사항</td>
+            <td th:text="${roomReservationDetail.request_msg}"></td>
+          </tr>
+        </table>
+      </div>
+
+      <div class="action-buttons">
+        <a th:href="@{/mypage/room-reservations}" class="btn btn-back">목록으로</a>
+        <button type="button" class="btn btn-cancel" id="cancelReservationBtn">예약 취소</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script th:inline="javascript">
+  $(function() {
+    $("#cancelReservationBtn").click(function () {
+      var reservationId = [[${roomReservationDetail.reservation_id}]];
+      if (confirm("정말로 예약을 취소하시겠습니까?")) {
+        $.ajax({
+          url: "/mypage/cancel-room-reservation",
+          type: "POST",
+          contentType: "application/json",
+          data: JSON.stringify({ reservationId: reservationId }),
+          success: function (response) {
+            if (response.success) {
+              alert("예약이 취소되었습니다.");
+              location.href = "/mypage/room-reservations";
+            } else {
+              alert("예약 취소에 실패했습니다.");
+            }
+          },
+          error: function (xhr, status, error) {
+            alert("서버 오류가 발생했습니다: " + xhr.responseText);
+          }
+        });
+      }
+    });
+  });
+</script>
+
+</body>
+</html>

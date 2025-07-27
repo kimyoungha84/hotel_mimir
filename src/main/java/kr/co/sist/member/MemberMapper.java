@@ -1,5 +1,6 @@
 package kr.co.sist.member;
 
+import java.util.List;
 import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
@@ -32,4 +33,10 @@ public interface MemberMapper {
     int updatePassword(Map<String, String> params);
 
     int updateMemberToWithdrawn(String email);
+
+    List<RoomReservationDTO> selectRoomReservationsByUserNum(String userNum);
+
+    RoomReservationDTO selectRoomReservationDetail(int reservationId);
+
+    int updateRoomReservationStatusToCancelled(int reservationId);
 }

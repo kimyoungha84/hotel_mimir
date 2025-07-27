@@ -1,6 +1,7 @@
 package kr.co.sist.member;
 
 import java.sql.Timestamp;
+import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
@@ -166,4 +167,18 @@ public class MemberServiceImpl implements MemberService {
         return result == 1;
     }
 
+    @Override
+    public List<RoomReservationDTO> getRoomReservationsByUserNum(String userNum) {
+        return memberMapper.selectRoomReservationsByUserNum(userNum);
+    }
+
+    @Override
+    public RoomReservationDTO getRoomReservationDetail(int reservationId) {
+        return memberMapper.selectRoomReservationDetail(reservationId);
+    }
+
+    @Override
+    public boolean cancelRoomReservation(int reservationId) {
+        return memberMapper.updateRoomReservationStatusToCancelled(reservationId) == 1;
+    }
 }

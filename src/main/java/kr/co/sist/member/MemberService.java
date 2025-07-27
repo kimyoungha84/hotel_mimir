@@ -1,5 +1,6 @@
 package kr.co.sist.member;
 
+import java.util.List;
 import java.util.Map;
 
 public interface MemberService {
@@ -35,5 +36,11 @@ public interface MemberService {
     boolean resetPassword(String email, String newPassword);
 
     boolean withdrawMember(String email);
+
+    List<RoomReservationDTO> getRoomReservationsByUserNum(String userNum);
+
+    RoomReservationDTO getRoomReservationDetail(int reservationId);
+
+    boolean cancelRoomReservation(int reservationId);
     
 }

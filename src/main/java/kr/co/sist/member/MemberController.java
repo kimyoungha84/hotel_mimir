@@ -78,7 +78,8 @@ public class MemberController {
     	boolean success = memberService.registerMember(mDTO);
     	
     	if(success) {
-    		return "redirect:/";
+    		redirectAttrs.addFlashAttribute("memberInfo", mDTO);
+    		return "redirect:/member/register-success";
     	} else {
     		redirectAttrs.addFlashAttribute("error", "회원가입 처리 중 오류가 발생했습니다.");
     		
@@ -86,6 +87,12 @@ public class MemberController {
     	}
     	
     }
+	
+	@GetMapping("/register-success")
+	public String registerSuccess(@ModelAttribute("memberInfo") MemberDTO memberInfo, Model model) {
+	    model.addAttribute("memberInfo", memberInfo);
+	    return "member/register-success";
+	}
 	
 	
 	/*
