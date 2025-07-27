@@ -22,4 +22,14 @@ public interface MemberMapper {
 	void updateLastLoginTime(String emailId);
 
 	int selectExpectedRoomResvCount(String userNum);
+
+    MemberDTO selectUserByNameAndEmail(Map<String, String> params);
+
+    int updateProfile(MemberDTO memberDTO);
+
+    MemberDTO selectUserByIdAndNameAndEmail(Map<String, String> params);
+
+    int updatePassword(Map<String, String> params);
+
+    int updateMemberToWithdrawn(String email);
 }

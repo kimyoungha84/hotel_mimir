@@ -35,7 +35,7 @@ public class MemberServiceImpl implements MemberService {
     	//이메일로 회원조회
     	MemberDTO mDTO = memberMapper.selectMemberByEmail(loginDTO.getEmail_id());
     	
-    	if(mDTO == null || !"N".equals(mDTO.getUse_yn())) {
+    	if(mDTO == null || !"Y".equals(mDTO.getUse_yn())) {
     		throw new RuntimeException("존재하지 않거나 탈퇴한 회원입니다.");
     	}
     	
@@ -67,7 +67,7 @@ public class MemberServiceImpl implements MemberService {
     	
     	mDTO.setLogin_type("email");
     	mDTO.setReg_time(new Timestamp(System.currentTimeMillis()));
-    	mDTO.setUse_yn("N");
+    	mDTO.setUse_yn("Y");
     	
     	mDTO.setPassword(passwordEncoder.encode(mDTO.getPassword()));
     	
@@ -130,8 +130,40 @@ public class MemberServiceImpl implements MemberService {
 	}
 
 	@Override
-	public int getExpectedRoomResvCount(String userNum) {
-		return memberMapper.selectExpectedRoomResvCount(userNum);
-	}
-    
+    public int getExpectedRoomResvCount(String userNum) {
+        return memberMapper.selectExpectedRoomResvCount(userNum);
+    }
+
+    @Override
+    public boolean isUserExist(String name, String email) {
+        Map<String, String> params = Map.of("name", name, "email", email);
+        return memberMapper.selectUserByNameAndEmail(params) != null;
+    }
+
+    @Override
+    public boolean updateProfile(MemberDTO memberDTO) {
+        return memberMapper.updateProfile(memberDTO) == 1;
+    }
+
+    @Override
+    public boolean isUserExistByIdAndNameAndEmail(String userId, String name, String email) {
+        Map<String, String> params = Map.of("userId", userId, "name", name, "email", email);
+        return memberMapper.selectUserByIdAndNameAndEmail(params) != null;
+    }
+
+    @Override
+    public boolean resetPassword(String email, String newPassword) {
+        String encodedPassword = passwordEncoder.encode(newPassword);
+        Map<String, String> params = Map.of("email", email, "newPassword", encodedPassword);
+        return memberMapper.updatePassword(params) == 1;
+    }
+
+    @Override
+    public boolean withdrawMember(String email) {
+        System.out.println("회원 탈퇴 서비스 호출 - 이메일: " + email);
+        int result = memberMapper.updateMemberToWithdrawn(email);
+        System.out.println("회원 탈퇴 매퍼 결과: " + result);
+        return result == 1;
+    }
+
 }

@@ -1,5 +1,16 @@
 package kr.co.sist.member;
 
+import org.springframework.web.bind.annotation.RequestParam;
+
+import kr.co.sist.member.MemberService;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -172,4 +183,99 @@ public class MemberController {
           boolean result = memberService.verifyAuthCodeWithJwt(token, email, code);
           return result ? "success" : "fail";
       }
+      
+    /*
+	 * ============ 아이디 찾기 ============
+	 */
+	
+	@GetMapping("/find-id")
+	public String findIdForm() {
+	    return "member/findId";
+	}
+	
+	@PostMapping("/send-auth-code-find-id")
+	@ResponseBody
+	public Map<String, String> sendAuthCodeFindId(@RequestBody Map<String, String> body) {
+	    String name = body.get("name");
+	    String email = body.get("email");
+	
+	    if (!memberService.isUserExist(name, email)) {
+	        return Map.of("error", "일치하는 사용자 정보가 없습니다.");
+	    }
+	
+	    return memberService.sendAuthCodeWithJwt(email);
+	}
+	
+	@PostMapping("/verify-auth-code-find-id")
+	@ResponseBody
+	public Map<String, Boolean> verifyAuthCodeFindId(@RequestBody Map<String, String> body) {
+	    String email = body.get("email");
+	    String code = body.get("code");
+	    String token = body.get("token");
+	
+	    boolean result = memberService.verifyAuthCodeWithJwt(token, email, code);
+	    return Map.of("success", result);
+	}
+	
+	@GetMapping("/find-id-result")
+	public String findIdResult(@RequestParam String email, Model model) {
+	    MemberDTO memberInfo = memberService.getMemberByEmail(email);
+	    if (memberInfo != null) {
+	        model.addAttribute("memberInfo", memberInfo);
+	    } else {
+	        model.addAttribute("errorMessage", "사용자 정보를 찾을 수 없습니다.");
+	    }
+	    return "member/findIdResult";
+	}
+	
+	/*
+	 * ============ 비밀번호 찾기 ============
+	 */
+	
+	@GetMapping("/find-password")
+	public String findPasswordForm() {
+	    return "member/find-password";
+	}
+	
+	@PostMapping("/send-auth-code-find-password")
+	@ResponseBody
+	public Map<String, String> sendAuthCodeFindPassword(@RequestBody Map<String, String> body) {
+	    String userId = body.get("userId");
+	    String name = body.get("name");
+	    String email = body.get("email");
+	
+	    if (!memberService.isUserExistByIdAndNameAndEmail(userId, name, email)) {
+	        return Map.of("error", "일치하는 사용자 정보가 없습니다.");
+	    }
+	
+	    return memberService.sendAuthCodeWithJwt(email);
+	}
+	
+	@PostMapping("/verify-auth-code-find-password")
+	@ResponseBody
+	public Map<String, Boolean> verifyAuthCodeFindPassword(@RequestBody Map<String, String> body) {
+	    String email = body.get("email");
+	    String code = body.get("code");
+	    String token = body.get("token");
+	
+	    boolean result = memberService.verifyAuthCodeWithJwt(token, email, code);
+	    return Map.of("success", result);
+	}
+	
+	@GetMapping("/reset-password")
+	public String resetPasswordForm() {
+	    return "member/reset-password";
+	}
+	
+	@PostMapping("/reset-password")
+	@ResponseBody
+	public Map<String, Boolean> resetPassword(@RequestBody Map<String, String> body) {
+	    String email = body.get("email");
+	    String newPassword = body.get("newPassword");
+	
+	    boolean result = memberService.resetPassword(email, newPassword);
+	    return Map.of("success", result);
+	}
+
+	
 }

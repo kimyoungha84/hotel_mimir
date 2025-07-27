@@ -25,5 +25,15 @@ public interface MemberService {
     boolean checkPassword(String email, String password);
 
     int getExpectedRoomResvCount(String userNum);
+
+    boolean isUserExist(String name, String email);
+
+    boolean updateProfile(MemberDTO memberDTO);
+
+    boolean isUserExistByIdAndNameAndEmail(String userId, String name, String email);
+
+    boolean resetPassword(String email, String newPassword);
+
+    boolean withdrawMember(String email);
     
 }

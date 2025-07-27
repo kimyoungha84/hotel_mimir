@@ -6,10 +6,23 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import java.sql.Date;
+import java.text.SimpleDateFormat;
+import java.util.HashMap;
+import java.util.Map;
+
+import jakarta.servlet.http.HttpSession;
+
+import org.springframework.beans.propertyeditors.CustomDateEditor;
+import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.InitBinder;
+import org.springframework.web.bind.annotation.ModelAttribute;
 
 import kr.co.sist.member.CustomUserDetails;
 import kr.co.sist.member.MemberDTO;
@@ -21,6 +34,14 @@ public class MyPageController {
 
     @Autowired
     private MemberService memberService;
+
+    // 날짜 바인딩을 위한 InitBinder
+    @InitBinder
+    public void initBinder(WebDataBinder binder) {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        dateFormat.setLenient(false);
+        binder.registerCustomEditor(Date.class, new CustomDateEditor(dateFormat, true));
+    }
 
     @GetMapping
     public String myPage(Model model, @AuthenticationPrincipal CustomUserDetails userDetails) {
@@ -37,29 +58,51 @@ public class MyPageController {
     }
 
     @GetMapping("/confirm-password")
-    public String confirmPasswordForm() {
+    public String confirmPasswordForm(@AuthenticationPrincipal CustomUserDetails userDetails, @RequestParam(required = false) String purpose, Model model) {
+        if (userDetails == null) {
+            return "redirect:/member/loginFrm";
+        }
+        model.addAttribute("purpose", purpose);
         return "mypage/confirmPassword";
     }
 
     @GetMapping("/edit-profile")
-    public String editProfileForm() {
+    public String editProfileForm(HttpSession session, Model model, @AuthenticationPrincipal CustomUserDetails userDetails) {
+        Boolean passwordConfirmed = (Boolean) session.getAttribute("passwordConfirmed");
+        if (passwordConfirmed == null || !passwordConfirmed) {
+            return "redirect:/mypage/confirm-password?purpose=editProfile"; // purpose 추가
+        }
+        session.removeAttribute("passwordConfirmed");
+
+        String email = userDetails.getUsername();
+        MemberDTO memberInfo = memberService.getMemberByEmail(email);
+        model.addAttribute("memberInfo", memberInfo);
+
         return "mypage/editProfile";
     }
 
     @PostMapping("/confirm-password")
     public String confirmPassword(@RequestParam String password,
                                   @AuthenticationPrincipal CustomUserDetails userDetails,
-                                  RedirectAttributes redirectAttrs) {
+                                  HttpSession session,
+                                  RedirectAttributes redirectAttrs,
+                                  @RequestParam(required = false) String purpose) {
         if (userDetails == null) {
             return "redirect:/member/loginFrm";
         }
 
         String email = userDetails.getUsername();
         if (memberService.checkPassword(email, password)) {
-            return "redirect:/mypage/edit-profile"; // 비밀번호 일치 시 수정 페이지로 리다이렉트
+            session.setAttribute("passwordConfirmed", true);
+            if ("resetPassword".equals(purpose)) {
+                return "redirect:/mypage/edit-password"; // 비밀번호 재설정 페이지로 이동
+            } else {
+                return "redirect:/mypage/edit-profile"; // 기본적으로 프로필 수정 페이지로 이동
+            }
         } else {
             redirectAttrs.addFlashAttribute("error", "비밀번호가 일치하지 않습니다.");
-            return "redirect:/mypage/confirm-password"; // 불일치 시 에러 메시지와 함께 다시 확인 페이지로
+            // 실패 시에도 purpose를 유지하여 다시 confirmPasswordForm으로 전달
+            return "redirect:/mypage/confirm-password" + (purpose != null ? "?purpose=" + purpose : "");
         }
     }
 
@@ -70,5 +113,62 @@ public class MyPageController {
             return 0;
         }
         return memberService.getExpectedRoomResvCount(String.valueOf(userDetails.getUserNum()));
+    }
+
+    @PostMapping("/update-profile")
+    public String updateProfile(@ModelAttribute MemberDTO memberDTO, @AuthenticationPrincipal CustomUserDetails userDetails, RedirectAttributes redirectAttrs) {
+        if (userDetails == null) {
+            return "redirect:/member/loginFrm";
+        }
+
+        memberDTO.setEmail_id(userDetails.getUsername());
+        boolean success = memberService.updateProfile(memberDTO);
+
+        if (success) {
+            redirectAttrs.addFlashAttribute("success", "회원정보가 성공적으로 수정되었습니다.");
+        } else {
+            redirectAttrs.addFlashAttribute("error", "회원정보 수정에 실패했습니다.");
+        }
+
+        return "redirect:/mypage";
+    }
+
+    @GetMapping("/edit-password")
+    public String editPasswordForm() {
+        return "mypage/editPassword";
+    }
+
+    @PostMapping("/update-password")
+    @ResponseBody
+    public Map<String, Boolean> updatePassword(@RequestBody Map<String, String> body, @AuthenticationPrincipal CustomUserDetails userDetails) {
+        String newPassword = body.get("newPassword");
+        String email = userDetails.getUsername();
+
+        boolean result = memberService.resetPassword(email, newPassword);
+        return Map.of("success", result);
+    }
+
+    @GetMapping("/withdraw")
+    public String withdrawForm(@AuthenticationPrincipal CustomUserDetails userDetails) {
+        if (userDetails == null) {
+            return "redirect:/member/loginFrm";
+        }
+        return "mypage/withdraw";
+    }
+
+    @PostMapping("/withdraw-member")
+    @ResponseBody
+    public Map<String, Boolean> withdrawMember(@AuthenticationPrincipal CustomUserDetails userDetails) {
+        if (userDetails == null) {
+            Map<String, Boolean> response = new HashMap<>();
+            response.put("success", false);
+            return response;
+        }
+        String email = userDetails.getUsername();
+        boolean success = memberService.withdrawMember(email);
+        
+        Map<String, Boolean> response = new HashMap<>();
+        response.put("success", success);
+        return response;
     }
 }

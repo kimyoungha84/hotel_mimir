@@ -3,7 +3,6 @@
 
 <mapper namespace="kr.co.sist.member.MemberMapper">
 	
-	<!-- 회원가입 -->
 	<insert id="insertMember" parameterType="kr.co.sist.member.MemberDTO">
 		INSERT INTO MIMIR_USER(
 			USER_NUM,
@@ -77,5 +76,47 @@
     FROM RESERVATION
     WHERE USER_NUM = #{userNum} AND STATUS = '예약완료'
   </select>
+
+  <select id="selectUserByNameAndEmail" parameterType="map" resultType="kr.co.sist.member.MemberDTO">
+    SELECT *
+    FROM MIMIR_USER
+    WHERE USER_NAME = #{name} AND EMAIL_ID = #{email}
+  </select>
+
+  <update id="updateProfile" parameterType="kr.co.sist.member.MemberDTO">
+    UPDATE MIMIR_USER
+    SET
+        BIRTH_DATE = #{birth_date},
+        TEL = #{tel},
+        UPDATE_TIME = SYSTIMESTAMP
+    WHERE EMAIL_ID = #{email_id}
+  </update>
+
+  <select id="selectUserByIdAndNameAndEmail" parameterType="map" resultType="kr.co.sist.member.MemberDTO">
+    SELECT *
+    FROM MIMIR_USER
+    WHERE EMAIL_ID = #{userId} AND USER_NAME = #{name} AND EMAIL_ID = #{email}
+  </select>
+
+  <update id="updatePassword" parameterType="map">
+    UPDATE MIMIR_USER
+    SET PASSWORD = #{newPassword}
+    WHERE EMAIL_ID = #{email}
+  </update>
+
+  <update id="updateMemberToWithdrawn" parameterType="string">
+    UPDATE MIMIR_USER
+    SET
+        USE_YN = 'N',
+        LOGIN_TYPE = 'EXPIRED',
+        USER_NAME = '탈퇴회원',
+        GENDER = NULL,
+        TEL = NULL,
+        BIRTH_DATE = NULL,
+        PASSWORD = NULL,
+        EMAIL_REFRESH_TOKEN = NULL,
+        QUIT_TIME = SYSTIMESTAMP
+    WHERE EMAIL_ID = #{email}
+  </update>
 
 </mapper>

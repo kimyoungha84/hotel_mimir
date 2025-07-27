@@ -20,6 +20,16 @@
 
         <!-- 본문 -->
         <div class="col-md-10 p-5">
+            <!-- 성공/에러 메시지 -->
+            <div th:if="${success}" class="alert alert-success alert-dismissible fade show" role="alert">
+                <span th:text="${success}"></span>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            <div th:if="${error}" class="alert alert-danger alert-dismissible fade show" role="alert">
+                <span th:text="${error}"></span>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+
             <!-- 프로필 카드 -->
             <div class="profile-card d-flex align-items-center justify-content-between mb-4">
                 <div>
@@ -28,7 +38,7 @@
                     <div th:text="'🎂 ' + ${#dates.format(memberInfo.birth_date, 'yyyy년 MM월 dd일')}"></div>
                 </div>
                 <div>
-                    <a th:href="@{/mypage/confirm-password}" class="text-white text-decoration-underline">프로필 수정 &gt;</a>
+                    <a th:href="@{/mypage/confirm-password(purpose='editProfile')}" class="text-white text-decoration-underline">프로필 수정 &gt;</a>
                 </div>
             </div>
 
@@ -55,6 +65,7 @@
 </div>
 
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.bundle.min.js"></script>
 <script type="text/javascript">
     $(document).ready(function() {
         $.ajax({
