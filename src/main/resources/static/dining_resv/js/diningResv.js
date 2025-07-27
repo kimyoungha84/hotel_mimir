@@ -231,20 +231,28 @@ if (btnMenu && menuContent) {
   });
   
   document.querySelector(".btn-cancel-menu").addEventListener("click", () => {
-    document.querySelector(".popup-overlay05").style.display = "none";
-    selectedTimeInfo = null;
+    // mealType을 먼저 저장
+    const mealType = selectedTimeInfo?.mealType;
 
-    // 선택한 시간 버튼 다시 해제
+    document.querySelector(".popup-overlay05").style.display = "none";
+
+    // 선택된 시간 버튼 해제
     document.querySelectorAll(".time-btn.selected").forEach(b => b.classList.remove("selected"));
-	
-	// 선택 수량 초기화
-	if (selectedTimeInfo?.mealType === "Lunch") {
-	  document.getElementById("lunchQtyDisplay").textContent = "";
-	} else if (selectedTimeInfo?.mealType === "Dinner") {
-	  document.getElementById("dinnerQtyDisplay").textContent = "";
-	}
+
+    // 수량 텍스트 및 hidden input 초기화
+    if (mealType === "Lunch") {
+      document.getElementById("lunchQtyDisplay").textContent = "";
+      const lunchQtyInput = document.getElementById("lunchQtyInput");
+      if (lunchQtyInput) lunchQtyInput.value = "";
+    } else if (mealType === "Dinner") {
+      document.getElementById("dinnerQtyDisplay").textContent = "";
+      const dinnerQtyInput = document.getElementById("dinnerQtyInput");
+      if (dinnerQtyInput) dinnerQtyInput.value = "";
+    }
+
+    // selectedTimeInfo 초기화
+    selectedTimeInfo = null;
   });
-  
 });
 
 let selectedDateStr = "";

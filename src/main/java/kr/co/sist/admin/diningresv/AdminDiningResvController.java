@@ -1,19 +1,26 @@
 package kr.co.sist.admin.diningresv;
 
+import java.sql.Date;
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import kr.co.sist.diningresv.DiningResvDTO;
+import kr.co.sist.diningslot.DiningTimeSlotService;
 import kr.co.sist.util.FilterConfig;
 import kr.co.sist.util.ModelUtils;
 import kr.co.sist.util.controller.SearchController;
 
 @Controller
+@RequestMapping("/admin")
 public class AdminDiningResvController {
 
 	@Autowired
@@ -22,7 +29,10 @@ public class AdminDiningResvController {
 	@Autowired
 	private AdminDiningResvService adrs;
 	
-    @GetMapping("adminDiningResvList")
+	@Autowired
+	private DiningTimeSlotService dtss;
+	
+    @GetMapping("/adminDiningResvList")
     public String adminDiningResvList(Model model) {
     	
     	int pageSize = 5;
@@ -85,17 +95,90 @@ public class AdminDiningResvController {
             
         }
         
+        if (dto.getReservationStatus() == null || dto.getReservationStatus().trim().isEmpty()) {
+        	
+            dto.setReservationStatus("진행");
+            
+        }
+        
+        String timeFormatted = new SimpleDateFormat("HH:mm").format(dto.getReservationTime());
+        
+        model.addAttribute("selectedTime", timeFormatted);
+        
+        model.addAttribute("mealType", dto.getMealType());
+        
         model.addAttribute("reservationDetail", dto);
         
         return "admin_diningresv/adminDiningResvEdit";
     }
 	
-    @PostMapping("adminDiningResvEdit")
-    public String updateReservation(@ModelAttribute DiningResvDTO dto) {
-    	
-        adrs.updateResv(dto);
+    @PostMapping("/adminDiningResvEdit")
+    public String updateReservation(@RequestParam int reservationId,
+                                    @RequestParam String reservationName,
+                                    @RequestParam String reservationTell,
+                                    @RequestParam int diningId,
+                                    @RequestParam String diningName,
+                                    @RequestParam String reservationDate,
+                                    @RequestParam String reservationTime,
+                                    @RequestParam int reservationCount,
+                                    @RequestParam String reservationStatus,
+                                    @RequestParam(required = false) String reservationRequest) {
+        try {
+            // 기존 예약 조회
+            DiningResvDTO oldResv = adrs.selectResvId(reservationId);
+
+            String fullDateTime = reservationDate + " " + reservationTime;
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+            Timestamp ts = new Timestamp(sdf.parse(fullDateTime).getTime());
+            Date resvDate = java.sql.Date.valueOf(reservationDate);
+
+            // 좌석 이동 처리
+            if (!oldResv.getReservationDate().equals(resvDate) || !oldResv.getReservationTime().equals(ts)) {
+            	
+                dtss.subtractFromSlot(
+                		
+                    oldResv.getDiningId(),
+                    oldResv.getReservationDate(),
+                    oldResv.getReservationTime(),
+                    oldResv.getReservationCount()
+                    
+                );
+
+                dtss.handleSlot(diningId, resvDate, ts, reservationCount);
+
+            } else if (oldResv.getReservationCount() != reservationCount) {
+            	
+                int delta = reservationCount - oldResv.getReservationCount();
+                dtss.addToSlot(diningId, resvDate, ts, delta);
+                
+            }
+
+            // 예약 정보 업데이트
+            DiningResvDTO dto = new DiningResvDTO();
+            
+            dto.setReservationId(reservationId);
+            dto.setReservationName(reservationName);
+            dto.setReservationTell(reservationTell);
+            dto.setDiningId(diningId);
+            dto.setDiningName(diningName);
+            dto.setReservationDate(resvDate);
+            dto.setReservationTime(ts);
+            dto.setReservationCount(reservationCount);
+            dto.setReservationStatus(reservationStatus);
+            dto.setReservationRequest(reservationRequest == null ? "없음" : reservationRequest);
+
+            adrs.updateResv(dto);
+
+            return "redirect:/admin/adminDiningResvDetail/" + reservationId;
+
+        } catch (Exception e) {
+        	
+            e.printStackTrace();
+            
+            return "redirect:/admin/error";
+            
+        }
         
-        return "redirect:/adminDiningResvDetail/" + dto.getReservationId();
     }
     
 }

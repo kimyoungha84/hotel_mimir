@@ -425,15 +425,15 @@ body {
 }
 
 .time-btn.selected  {
-  background-color: #111;
+  background-color: #a38c67;
   color: #fff;
 }
 
 .time-btn.disabled {
-  background-color: #a38c67;
+  background-color: #bbb;
   color: #fff;
   cursor: not-allowed;
-  border: 1px solid #a38c67;
+  border: 1px solid #bbb;
 }
 
 .reservation-note-wrap {
@@ -467,3 +467,85 @@ body {
   color: #111;
   margin-right: 0.4rem;
 }
+
+  .popup-overlay05 {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0, 0, 0, 0.6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+  }
+
+  .menu-qty-popup {
+    background: #fff;
+    border-radius: 1rem;
+    padding: 2rem 2.5rem;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+    min-width: 320px;
+    font-family: 'Pretendard', sans-serif;
+    animation: popupFadeIn 0.4s ease;
+  }
+
+  .popup-header {
+    text-align: center;
+    font-size: 1.4rem;
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+    color: #111;
+  }
+
+  .popup-body {
+    text-align: center;
+    margin-bottom: 2rem;
+  }
+
+  .popup-body label {
+    font-size: 1rem;
+    color: #111;
+  }
+
+  #menuQtyInput {
+    margin-left: 0.5rem;
+    padding: 0.4rem 0.8rem;
+    font-size: 1rem;
+    width: 80px;
+    border: 1px solid #ccc;
+    border-radius: 0.4rem;
+    text-align: center;
+  }
+
+  .popup-footer {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+
+  .popup-footer button {
+    flex: 1;
+    padding: 0.6rem 1rem;
+    font-size: 1rem;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    border: none;
+  }
+
+  .btn-confirm-menu {
+    background-color: #111;
+    color: white;
+  }
+
+  .btn-confirm-menu:hover {
+    background-color: #111;
+  }
+
+  .btn-cancel-menu {
+    background-color: #ddd;
+    color: #111;
+  }
+
+  .btn-cancel-menu:hover {
+    background-color: #bbb;
+  }

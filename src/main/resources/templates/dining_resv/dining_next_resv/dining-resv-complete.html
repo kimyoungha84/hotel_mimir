@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>다이닝 예약 완료</title>
+</head>
+
+<body style="font-family: 'Apple SD Gothic Neo', Arial, sans-serif; color: #333; padding: 30px; background-color: #f9f9f9; font-size: 16px; line-height: 1.6;">
+
+  <div style="background-color: white; padding: 30px; border-radius: 10px; box-shadow: 0 0 8px rgba(0,0,0,0.05); max-width: 600px; margin: auto;">
+
+    <h2 style="color: #2c3e50; font-size: 24px; margin-bottom: 30px; border-bottom: 2px solid #eee; padding-bottom: 10px;">
+      미미르호텔 다이닝 예약이 완료되었습니다.
+    </h2>
+
+    <p><strong>예약 번호 : </strong> <span th:text="${reservationId}"></span></p>
+    <p><strong>예약자명 : </strong> <span th:text="${reservationName}"></span></p>
+    <p><strong>연락처 : </strong> <span th:text="${reservationTell}"></span></p>
+    <p><strong>다이닝 : </strong> <span th:text="${dining}"></span></p>
+    <p><strong>인원 : </strong> <span th:text="${reservationCount} + '명'"></span></p>
+    <p><strong>예약 일시 : </strong> 
+      <span th:text="${mealLabel} + ' ' + ${reservationDate} + ' ' + ${reservationTime}"></span>
+    </p>
+
+    <div style="margin-top: 40px;">
+      <p>예약해 주셔서 감사합니다.</p>
+      <p>문의 사항이 있으시면 고객센터로 연락 주세요.</p>
+    </div>
+
+  </div>
+
+</body>
+
+</html>

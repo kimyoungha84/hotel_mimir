@@ -75,6 +75,13 @@ public class DiningTimeSlotService {
         
     }
     
+    // 예약 인원 차감
+    public void subtractFromSlot(int diningId, Date reservationDate, Timestamp reservationTime, int reservedCount) {
+    	
+        dtsm.updateSlot(diningId, reservationDate, reservationTime, -reservedCount);
+        
+    }
+    
     public List<String> getTimeSlots(int diningId, String mealType) {
     	
         return dtcm.selectTimeSlots(diningId, mealType);

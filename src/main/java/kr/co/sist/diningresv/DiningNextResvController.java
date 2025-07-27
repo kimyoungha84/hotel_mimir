@@ -3,8 +3,10 @@ package kr.co.sist.diningresv;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +17,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import jakarta.mail.MessagingException;
+import kr.co.sist.administrator.Util.AdministratorSendMail;
 import kr.co.sist.dining.user.DiningDomain;
 import kr.co.sist.dining.user.DiningService;
 import kr.co.sist.dining.user.RepMenuDomain;
@@ -40,6 +44,9 @@ public class DiningNextResvController {
     
     @Autowired
     private PaymentService ps;
+    
+    @Autowired
+    private AdministratorSendMail sendMail;
 	
 	@GetMapping("/diningNextResv")
 	public String nextReservation(
@@ -277,6 +284,29 @@ public class DiningNextResvController {
 	    model.addAttribute("reservationTime", time);
 	    model.addAttribute("mealLabel", mealLabel);
 
+	    String email = reservationEmail;
+
+	    Map<String, Object> variables = new HashMap<>();
+	    variables.put("reservationId", reservationId);
+	    variables.put("reservationName", reservationName);
+	    variables.put("reservationTell", reservationTell);
+	    variables.put("dining", drs.searchDining(diningId).getDining_name());
+	    variables.put("reservationCount", totalCount);
+	    variables.put("reservationDate", formattedDate);
+	    variables.put("reservationTime", time);
+	    variables.put("mealLabel", mealLabel);
+	    
+	    try {
+	        sendMail.sendMail(
+	            email,
+	            "[미미르호텔] 다이닝 예약이 완료되었습니다.",
+	            "dining_resv/dining_next_resv/dining-resv-complete",
+	            variables
+	        );
+	    } catch (MessagingException e) {
+	        e.printStackTrace();
+	    }
+	    
 	    return "dining_resv/dining_next_resv/diningResvComplete";
 	    
 	}

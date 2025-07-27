@@ -34,7 +34,7 @@
     </thead>
   <tbody id="resultArea" th:fragment="diningResv">
     <tr th:each="resv : ${reservationList}" th:attr="data-id=${resv.reservation_id}" class="reservation-row" style="cursor:pointer;"
-        th:onclick="'location.href=\'/adminDiningResvDetail/' + ${resv.reservation_id} + '\''">
+        th:onclick="'location.href=\'/admin/adminDiningResvDetail/' + ${resv.reservation_id} + '\''">
       <td th:text="${resv.reservation_id}">예약 번호</td>
       <td th:text="${resv.reservation_name + (resv.reservation_type == '회원' ? ' (회원)' : ' (비회원)')}">
         예약자명

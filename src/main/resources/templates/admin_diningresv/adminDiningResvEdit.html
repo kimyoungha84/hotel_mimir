@@ -3,7 +3,7 @@
 <head>
 <!-- favicon 설정 -->
 <link rel="icon shortcut"  href="/admin_common_assets/common_img/mimir_favicon.ico"/>
-<link rel="stylesheet" th:href="@{/dining_resv/css/adminDiningResvDetail.css}" />
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -20,78 +20,115 @@
 <h2 class="h2Title">다이닝 예약 수정</h2>
 <hr/>
 
-    <form th:action="@{/adminDiningResvEdit}" th:object="${reservationDetail}" method="post">
-      <input type="hidden" th:field="*{reservationId}" />
+<form th:action="@{/adminDiningResvEdit}" th:object="${reservationDetail}" method="post">
+  <!-- 예약 ID -->
+  <input type="hidden" th:field="*{reservationId}" />
 
-      <table class="reservation-detail-table" border="1" cellspacing="0" cellpadding="8" style="width: 100%;">
-      <thead>
-        <tr>
-          <th style="width: 20%;">항목</th>
-          <th>내용</th>
-        </tr>
-      </thead>
-        <tbody>
-          <tr>
-            <td>예약 번호</td>
-            <td><input type="text" th:value="*{reservationId}" readonly/></td>
-          </tr>
-          <tr>
-            <td>예약자명</td>
-            <td><input type="text" th:value="*{reservationName  + (reservationType == '회원' ? ' (회원)' : ' (비회원)')}" readonly/></td>
-          </tr>
-          <tr>
-            <td>연락처</td>
-            <td><input type="text" th:value="*{reservationTell}" readonly/></td>
-          </tr>
-          <tr>
-            <td>다이닝</td>
-            <td><input type="text" th:field="*{diningName}" readonly/></td>
-          </tr>
-          <tr>
-            <td>예약 날짜</td>
-            <td><input type="date" th:field="*{reservationDate}" /></td>
-          </tr>
-          <tr>
-            <td>예약 시간</td>
-            <td>
-              <div style="display: flex; gap: 8px; align-items: center; justify-content: center;">
-                <select id="mealType" onchange="updateTimeOptions()">
-                  <option value="lunch">Lunch</option>
-                  <option value="dinner">Dinner</option>
-                </select>
-            
-                <select th:field="*{reservationTime}" id="reservationTime"
-                  th:attr="data-selected-time=${#strings.substring(reservationDetail.reservationTime,0,8)}">
-                </select>
-              </div>
-            </td>
-          </tr>
-          <tr>
-            <td>인원수</td>
-            <td><input type="number" th:field="*{reservationCount}" min="1" /></td>
-          </tr>
-          <tr>
-            <td>예약 현황</td>
-            <td>
-              <select th:field="*{reservationStatus}">
-                <option value="완료">완료</option>
-                <option value="대기">진행</option>
-                <option value="취소">취소</option>
-              </select>
-            </td>
-          </tr>
-          <tr>
-            <td>요청 사항</td>
-            <td><textarea th:field="*{reservationRequest}" rows="4" cols="50"></textarea></td>
-          </tr>
-        </tbody>
-      </table>
+  <table class="reservation-detail-table" border="1" cellspacing="0" cellpadding="8" style="width: 100%;">
+    <thead>
+      <tr>
+        <th style="width: 20%;">항목</th>
+        <th>내용</th>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- 예약 번호 -->
+      <tr>
+        <td>예약 번호</td>
+        <td>
+          <input type="text" th:value="*{reservationId}" readonly />
+        </td>
+      </tr>
 
-      <div class="btnGroup">
-        <input type="submit" class="darkBtn" value="수정 완료"/>
-        <input type="button" class="softBtn" onclick="history.back()" value="취소"/>
-      </div>
-    </form>
+      <!-- 예약자명 -->
+      <tr>
+        <td>예약자명</td>
+        <td>
+          <input type="text" th:value="*{reservationName + (reservationType == '회원' ? ' (회원)' : ' (비회원)')}" readonly />
+          <input type="hidden" th:field="*{reservationName}" />
+        </td>
+      </tr>
+
+      <!-- 연락처 -->
+      <tr>
+        <td>연락처</td>
+        <td>
+          <input type="text" th:value="*{reservationTell}" readonly />
+          <input type="hidden" th:field="*{reservationTell}" />
+        </td>
+      </tr>
+
+      <!-- 다이닝 -->
+      <tr>
+        <td>다이닝</td>
+        <td>
+          <input type="text" th:field="*{diningName}" readonly />
+          <input type="hidden" th:field="*{diningName}" />
+          <input type="hidden" th:field="*{diningId}" /> <!-- diningId도 필요 -->
+        </td>
+      </tr>
+
+      <!-- 예약 날짜 -->
+      <tr>
+        <td>예약 날짜</td>
+        <td>
+          <input type="date" th:field="*{reservationDate}" />
+        </td>
+      </tr>
+
+      <!-- 예약 시간 -->
+      <tr>
+        <td>예약 시간</td>
+        <td>
+          <div style="display: flex; gap: 8px; align-items: center; justify-content: center;">
+            <select id="mealType" name="mealType" onchange="loadTimeSlots()">
+              <option value="Lunch" th:selected="${mealType == 'Lunch'}">Lunch</option>
+              <option value="Dinner" th:selected="${mealType == 'Dinner'}">Dinner</option>
+            </select>
+
+            <select th:field="*{reservationTime}" id="reservationTime"></select>
+
+            <input type="hidden" id="selectedTime" th:value="${selectedTime}" />
+            <input type="hidden" id="diningId" th:value="*{diningId}" />
+          </div>
+        </td>
+      </tr>
+
+      <!-- 인원수 -->
+      <tr>
+        <td>인원수</td>
+        <td>
+          <input type="number" th:field="*{reservationCount}" min="1" />
+        </td>
+      </tr>
+
+      <!-- 예약 현황 -->
+      <tr>
+        <td>예약 현황</td>
+        <td>
+          <select th:field="*{reservationStatus}">
+            <option value="완료">완료</option>
+            <option value="진행">진행</option>
+            <option value="취소">취소</option>
+          </select>
+        </td>
+      </tr>
+
+      <!-- 요청 사항 -->
+      <tr>
+        <td>요청 사항</td>
+        <td>
+          <textarea th:field="*{reservationRequest}" rows="4" cols="50"></textarea>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="btnGroup">
+    <input type="submit" class="darkBtn" value="수정 완료" />
+    <input type="button" class="softBtn" onclick="history.back()" value="취소" />
+  </div>
+</form>
 
 </div>
 
