@@ -10,6 +10,10 @@ import org.apache.ibatis.annotations.Param;
 @Mapper
 public interface DiningTimeSlotMapper {
 	
+	Integer selectTotalSeat(@Param("diningId") int diningId,
+							@Param("reservationDate") Date reservationDate,
+							@Param("reservationTime") Timestamp reservationTime);
+	
 	// 해당 날짜 + 시간에 예약된 인원 수 조회
     Integer selectReservedCount(@Param("diningId") int diningId,
             				@Param("reservationDate") Date reservationDate,
@@ -24,7 +28,8 @@ public interface DiningTimeSlotMapper {
     void insertSlot(@Param("diningId") int diningId,
     				@Param("reservationDate") Date reservationDate,
     				@Param("reservationTime") Timestamp reservationTime,
-    				@Param("reservedCount") int reservedCount);
+    				@Param("reservedCount") int reservedCount,
+    				@Param("totalSeat") int totalSeat);
     				
     // 슬롯 업데이트 (좌석 증가)
     void updateSlot(@Param("diningId") int diningId,

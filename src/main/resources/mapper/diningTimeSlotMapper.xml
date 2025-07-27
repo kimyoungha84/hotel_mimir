@@ -5,6 +5,13 @@
 
 <mapper namespace="kr.co.sist.diningslot.DiningTimeSlotMapper">
 
+<select id="selectTotalSeat" resultType="int">
+  SELECT TOTAL_SEAT
+  FROM DINING_TIME_SLOT
+  WHERE DINING_ID = #{diningId}
+    AND TO_CHAR(RESERVATION_TIME, 'YYYY-MM-DD HH24:MI') = TO_CHAR(#{reservationTime}, 'YYYY-MM-DD HH24:MI')
+</select>
+
 <!-- 예약된 인원 수 조회 -->
 <select id="selectReservedCount" resultType="int">
   SELECT NVL(RESERVED_COUNT, 0)
@@ -30,13 +37,15 @@
       DINING_ID,
       RESERVATION_DATE,
       RESERVATION_TIME,
-      RESERVED_COUNT
+      RESERVED_COUNT,
+      TOTAL_SEAT
     ) VALUES (
       DINING_SLOT_SEQ.NEXTVAL,
       #{diningId},
       #{reservationDate},
       #{reservationTime},
-      #{reservedCount}
+      #{reservedCount},
+      #{totalSeat}
     )
   </insert>
 
@@ -55,7 +64,8 @@
     DINING_ID AS diningId,
     RESERVATION_DATE AS reservationDate,
     RESERVATION_TIME AS reservationTime,
-    RESERVED_COUNT AS reservedCount
+    RESERVED_COUNT AS reservedCount,
+    TOTAL_SEAT AS totalSeat
   FROM DINING_TIME_SLOT
   ORDER BY RESERVATION_DATE, RESERVATION_TIME
 </select>

@@ -18,14 +18,22 @@ public class DiningTimeSlotService {
 	@Autowired
 	private DiningTimeConfigMapper dtcm;
 	
-	private static final int MAX_SEATS = 20;
-	
 	// 잔여좌석 계산
     public int getRemainingSeats(int diningId, Date reservationDate, Timestamp reservationTime) {
     	
+    	Integer totalSeat = dtsm.selectTotalSeat(diningId, reservationDate, reservationTime);
+    	
         Integer reserved = dtsm.selectReservedCount(diningId, reservationDate, reservationTime);
         
-        return MAX_SEATS - (reserved == null ? 0 : reserved);
+        if (totalSeat == null) {
+        	
+            totalSeat = 20;
+            
+        }
+        
+        System.out.println("총 좌석 수: " + totalSeat + ", 예약된 좌석 수: " + reserved);
+        
+        return totalSeat - (reserved == null ? 0 : reserved);
         
     }
     
@@ -37,9 +45,9 @@ public class DiningTimeSlotService {
     }
     
     // 슬롯 삽입
-    public void createSlot(int diningId, Date reservationDate, Timestamp reservationTime, int reservedCount) {
+    public void createSlot(int diningId, Date reservationDate, Timestamp reservationTime, int reservedCount, int totalSeat) {
     	
-        dtsm.insertSlot(diningId, reservationDate, reservationTime, reservedCount);
+        dtsm.insertSlot(diningId, reservationDate, reservationTime, reservedCount, totalSeat);
         
     }
     
@@ -59,7 +67,9 @@ public class DiningTimeSlotService {
             
         } else {
         	
-            createSlot(diningId, reservationDate, reservationTime, reservationCount);
+        	int defaultTotalSeat = 20;
+        	
+            createSlot(diningId, reservationDate, reservationTime, reservationCount, defaultTotalSeat);
             
         }
         

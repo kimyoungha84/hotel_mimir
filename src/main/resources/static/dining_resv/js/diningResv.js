@@ -235,7 +235,7 @@ function loadTimeButtons(inputDiningId) {
   const inputMeal = document.getElementById("inputMeal");
   const inputDate = document.getElementById("inputDate");
   const nextBtn = document.querySelector(".next-btn");
-
+  
   function createTimeButton(time, remaining, mealType) {
     const btn = document.createElement("button");
     btn.className = "time-btn";
