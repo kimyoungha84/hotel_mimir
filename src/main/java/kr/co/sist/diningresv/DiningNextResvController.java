@@ -5,6 +5,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -48,6 +49,8 @@ public class DiningNextResvController {
 	                              @RequestParam String date,
 	                              @RequestParam String time,
 	                              @RequestParam String meal,
+	                              @RequestParam(required = false, defaultValue = "0") int lunchQty,
+	                              @RequestParam(required = false, defaultValue = "0") int dinnerQty,
 	                              @AuthenticationPrincipal CustomUserDetails loginUser,
 	                              Model model) {
 		
@@ -56,21 +59,24 @@ public class DiningNextResvController {
 	    int totalPrice = 0;
 	    
 	    if (meal.equals("Lunch")) {
-	    	
-	        totalPrice = menuList.stream()
-	                .filter(menu -> "중식".equals(menu.getDescription()))
-	                .limit(2)
-	                .mapToInt(RepMenuDomain::getPrice)
-	                .sum();
-	        
+	        Optional<RepMenuDomain> lunchMenu = menuList.stream()
+	            .filter(menu -> "중식".equals(menu.getDescription()))
+	            .findFirst();
+
+	        if (lunchMenu.isPresent()) {
+	            totalPrice = lunchMenu.get().getPrice() * lunchQty;
+	            model.addAttribute("menuName", lunchMenu.get().getMenu_name());
+	        }
+
 	    } else if (meal.equals("Dinner")) {
-	    	
-	        totalPrice = menuList.stream()
-	                .filter(menu -> "석식".equals(menu.getDescription()))
-	                .limit(2)
-	                .mapToInt(RepMenuDomain::getPrice)
-	                .sum();
-	        
+	        Optional<RepMenuDomain> dinnerMenu = menuList.stream()
+	            .filter(menu -> "석식".equals(menu.getDescription()))
+	            .findFirst();
+
+	        if (dinnerMenu.isPresent()) {
+	            totalPrice = dinnerMenu.get().getPrice() * dinnerQty;
+	            model.addAttribute("menuName", dinnerMenu.get().getMenu_name());
+	        }
 	    }
 		
         String formattedDate;
@@ -108,6 +114,8 @@ public class DiningNextResvController {
 	    model.addAttribute("meal", meal);
 	    
 	    model.addAttribute("totalPrice", totalPrice);
+	    model.addAttribute("lunchQty", lunchQty);
+	    model.addAttribute("dinnerQty", dinnerQty);
 	    
         model.addAttribute("formattedDate", formattedDate);
         model.addAttribute("mealLabel", mealLabel);

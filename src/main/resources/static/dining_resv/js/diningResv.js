@@ -40,6 +40,23 @@ document.addEventListener("DOMContentLoaded", function () {
         schedulerSection.style.display = "none";
       }
       selectDayTxt.style.display = "block";
+	  
+	  // 시간/수량 선택 초기화
+	  selectedTimeInfo = null;
+	  document.querySelectorAll(".time-btn.selected").forEach(btn => btn.classList.remove("selected"));
+
+	  const lunchQtyDisplay = document.getElementById("lunchQtyDisplay");
+	  if (lunchQtyDisplay) lunchQtyDisplay.textContent = "";
+
+	  const dinnerQtyDisplay = document.getElementById("dinnerQtyDisplay");
+	  if (dinnerQtyDisplay) dinnerQtyDisplay.textContent = "";
+
+	  // [선택] hidden input도 초기화
+	  const lunchQtyInput = document.getElementById("lunchQtyInput");
+	  if (lunchQtyInput) lunchQtyInput.value = "";
+
+	  const dinnerQtyInput = document.getElementById("dinnerQtyInput");
+	  if (dinnerQtyInput) dinnerQtyInput.value = "";
   });
 
 if (btnMenu && menuContent) {
@@ -160,9 +177,78 @@ if (btnMenu && menuContent) {
     loadTimeButtons(inputDiningId);
   }
 
+  document.querySelector(".btn-confirm-menu").addEventListener("click", () => {
+    const qty = parseInt(document.getElementById("menuQtyInput").value) || 1;
+    const form = document.getElementById("reservationForm");
+
+    const inputTime = document.getElementById("inputTime");
+    const inputMeal = document.getElementById("inputMeal");
+    const inputDate = document.getElementById("inputDate");
+    const nextBtn = document.querySelector(".next-btn");
+
+    if (!selectedTimeInfo) return;
+
+    const { time, mealType } = selectedTimeInfo;
+
+    inputTime.value = time;
+    inputMeal.value = mealType;
+    inputDate.value = selectedDateStr;
+
+    // 수량 hidden input 생성
+    if (mealType === "Lunch") {
+      let lunchQty = document.getElementById("lunchQtyInput");
+      if (!lunchQty) {
+        lunchQty = document.createElement("input");
+        lunchQty.type = "hidden";
+        lunchQty.name = "lunchQty";
+        lunchQty.id = "lunchQtyInput";
+        form.appendChild(lunchQty);
+      }
+      lunchQty.value = qty;
+	  
+	  // 수량 표시
+	  document.getElementById("lunchQtyDisplay").textContent = `(메뉴 수량 : ${qty}개)`;
+    } else {
+      let dinnerQty = document.getElementById("dinnerQtyInput");
+      if (!dinnerQty) {
+        dinnerQty = document.createElement("input");
+        dinnerQty.type = "hidden";
+        dinnerQty.name = "dinnerQty";
+        dinnerQty.id = "dinnerQtyInput";
+        form.appendChild(dinnerQty);
+      }
+      dinnerQty.value = qty;
+	  
+	  // 수량 표시
+	  document.getElementById("dinnerQtyDisplay").textContent = `(메뉴 수량 : ${qty}개)`;
+    }
+
+    nextBtn.classList.remove("disabled");
+    nextBtn.removeAttribute("aria-disabled");
+
+    document.querySelector(".popup-overlay05").style.display = "none";
+    selectedTimeInfo = null;
+  });
+  
+  document.querySelector(".btn-cancel-menu").addEventListener("click", () => {
+    document.querySelector(".popup-overlay05").style.display = "none";
+    selectedTimeInfo = null;
+
+    // 선택한 시간 버튼 다시 해제
+    document.querySelectorAll(".time-btn.selected").forEach(b => b.classList.remove("selected"));
+	
+	// 선택 수량 초기화
+	if (selectedTimeInfo?.mealType === "Lunch") {
+	  document.getElementById("lunchQtyDisplay").textContent = "";
+	} else if (selectedTimeInfo?.mealType === "Dinner") {
+	  document.getElementById("dinnerQtyDisplay").textContent = "";
+	}
+  });
+  
 });
 
 let selectedDateStr = "";
+let selectedTimeInfo = null;
 
 // 부모 윈도우로부터 선택 날짜 메시지 받으면 예약시간 선택 영역 보이기
 window.addEventListener("message", function(event) {
@@ -251,7 +337,16 @@ function loadTimeButtons(inputDiningId) {
     btn.addEventListener("click", () => {
       document.querySelectorAll(".time-btn").forEach(b => b.classList.remove("selected"));
       btn.classList.add("selected");
+	  
+	    selectedTimeInfo = {
+	      time,
+	      mealType
+	    };
 
+	    document.getElementById("menuQtyInput").value = 1;
+	    document.getElementById("menuPopupTitle").textContent = `${mealType} 메뉴 수량 선택`;
+	    document.querySelector(".popup-overlay05").style.display = "flex";
+	  
       inputTime.value = time;
       inputMeal.value = mealType;
       inputDate.value = selectedDateStr;

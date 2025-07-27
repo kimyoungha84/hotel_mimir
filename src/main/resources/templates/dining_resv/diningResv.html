@@ -6,6 +6,29 @@
   <link rel="stylesheet" th:href="@{/dining_resv/css/diningResv.css}" />
   <link rel="stylesheet" th:href="@{/css/header.css}" />
   <link rel="stylesheet" th:href="@{/css/footer.css}" />
+  
+<style>
+  .popup-overlay05 {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex; align-items: center; justify-content: center;
+    z-index: 9999;
+  }
+
+  .menu-qty-popup {
+    background: #fff;
+    padding: 1.6rem;
+    border-radius: 0.5rem;
+  }
+
+  .qty-display {
+    margin-left: 0.8rem;
+    font-size: 1rem;
+    color: #111;
+  }
+</style>
+  
 </head>
 <body>
 
@@ -125,13 +148,19 @@
         <div class="reservation-txt"><span>예약시간 선택</span></div>
 
         <div class="time-group">
-          <div class="lunch-txt"><span>Lunch</span></div>
+          <div class="lunch-txt">
+  			<span>Lunch</span>
+  			<span id="lunchQtyDisplay" class="qty-display"></span>
+		  </div>
 
           <div class="time-lunch">
 			<div class="time-lunch-btn" id="lunchTimeContainer"></div>
           </div>
 
-          <div class="Dinner-txt"><span>Dinner</span></div>
+          <div class="Dinner-txt">
+  			<span>Dinner</span>
+  			<span id="dinnerQtyDisplay" class="qty-display"></span>
+		  </div>
 
           <div class="time-Dinner">
 			<div class="time-Dinner-btn" id="dinnerTimeContainer"></div>
@@ -192,15 +221,33 @@
     </div>
   </div>
   
+<!-- 메뉴 수량 선택 모달 -->
+<div class="popup-overlay05" style="display: none;">
+  <div class="menu-qty-popup">
+    <div class="popup-header">
+      <span id="menuPopupTitle">메뉴 수량 선택</span>
+    </div>
+    <div class="popup-body">
+      <label>수량:
+        <input type="number" id="menuQtyInput" min="1" value="1" />
+      </label>
+    </div>
+    <div class="popup-footer">
+      <button type="button" class="btn-confirm-menu">확인</button>
+      <button type="button" class="btn-cancel-menu">취소</button>
+    </div>
+  </div>
+</div>
+  
   <div th:replace="~{/dining_resv/popup/diningPopup1(diningList=${diningList}, selectDiningId=${selectDiningId})}"></div>
   <div th:replace="~{/dining_resv/popup/diningPopup2}"></div>
   <div th:replace="~{/dining_resv/popup/diningPopup4}"></div>
   
   <div th:replace="~{fragments/footer.html :: footerFragment}"></div>
 
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <script th:src="@{/dining_resv/js/diningResv.js}"></script>
   <script th:src="@{/dining_resv/js/calendar.js}"></script>
-  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   
 </body>
 
