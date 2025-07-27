@@ -227,7 +227,7 @@
           </div>
         </div>
         <div class="edit-form-btn-area">
-          <button type="submit" class="list-btn modern-btn">데이터 수정</button>
+          <button type="button" class="list-btn modern-btn" id="submit-btn">데이터 수정</button>
         </div>
       </form>
 
@@ -275,7 +275,7 @@
 
         <div class="edit-form-btn-area" style="margin-bottom: 100px;">
           <button type="button" class="list-btn modern-btn" onclick="saveCarouselImages()">이미지수정</button>
-          <a th:href="@{/admin/dining}"><button type="button" class="list-btn modern-btn">취소</button></a>
+          <a th:href="@{/admin/dining}"><button type="button" class="list-btn modern-btn">뒤로가기</button></a>
         </div>
       </form>
     </section>
@@ -287,6 +287,100 @@ let replacedCarouselFiles = {};
 let carouselOrder = [];
 let mainImageFile = null;
 let logoImageFile = null;
+
+// 유효성 검사 함수들
+function validateDiningForm() {
+  const errors = [];
+  
+  // 1. 필수 필드 검사
+  const requiredFields = {
+    'dining_name': '이름',
+    'type': '타입', 
+    'location': '위치',
+    'phone_number': '문의번호',
+    'manager_name': '담당자',
+    'dining_classification': '분류'
+  };
+  
+  for (const [fieldName, fieldLabel] of Object.entries(requiredFields)) {
+    const field = document.querySelector(`[name="${fieldName}"]`);
+    if (!field || !field.value.trim()) {
+      errors.push(`${fieldLabel}은(는) 필수 입력 항목입니다.`);
+    }
+  }
+  
+  // 2. 데이터 길이 검사 (한글 기준으로 조정)
+  const lengthValidations = {
+    'dining_name': { max: 66, label: '이름' }, // 200바이트 ÷ 3바이트 = 약 66자
+    'type': { max: 33, label: '타입' }, // 100바이트 ÷ 3바이트 = 약 33자
+    'location': { max: 6, label: '위치' }, // 20바이트 ÷ 3바이트 = 약 6자
+    'phone_number': { max: 33, label: '문의번호' }, // 100바이트 ÷ 3바이트 = 약 33자
+    'manager_name': { max: 5, label: '담당자' }, // 15바이트 ÷ 3바이트 = 5자
+    'dining_introduction': { max: 333, label: '소개' }, // 1000바이트 ÷ 3바이트 = 약 333자
+    'dining_detailinfo': { max: 1333, label: '상세정보' }, // 4000바이트 ÷ 3바이트 = 약 1333자
+    'dining_classification': { max: 33, label: '분류' }, // 100바이트 ÷ 3바이트 = 약 33자
+    'dining_operation_hours': { max: 333, label: '영업시간' } // 1000바이트 ÷ 3바이트 = 약 333자
+  };
+  
+  for (const [fieldName, validation] of Object.entries(lengthValidations)) {
+    const field = document.querySelector(`[name="${fieldName}"]`);
+    if (field && field.value && field.value.length > validation.max) {
+      errors.push(`${validation.label}은(는) ${validation.max}자 이하여야 합니다. (현재: ${field.value.length}자)`);
+    }
+  }
+  
+  // 3. 전화번호 형식 검사
+  const phoneField = document.querySelector('[name="phone_number"]');
+  if (phoneField && phoneField.value.trim()) {
+    const phonePattern = /^[0-9-]+$/;
+    if (!phonePattern.test(phoneField.value.trim())) {
+      errors.push('문의번호는 숫자와 하이픈(-)만 입력 가능합니다.');
+    }
+  }
+  
+  // 4. 예약 가능 여부 검사 (Y/N만 허용)
+  const resvField = document.querySelector('[name="dining_resv_availability"]');
+  if (resvField && resvField.value && !['Y', 'N'].includes(resvField.value)) {
+    errors.push('예약 가능 여부는 Y 또는 N만 입력 가능합니다.');
+  }
+  
+  return errors;
+}
+
+// 에러 메시지 표시 함수
+function showValidationErrors(errors) {
+  if (errors.length === 0) return;
+  
+  let errorMessage = '다음 오류를 수정해주세요:\n\n';
+  errors.forEach((error, index) => {
+    errorMessage += `${index + 1}. ${error}\n`;
+  });
+  
+  alert(errorMessage);
+}
+
+// 데이터 수정 버튼 클릭 이벤트
+document.addEventListener('DOMContentLoaded', function() {
+  const submitBtn = document.getElementById('submit-btn');
+  if (submitBtn) {
+    submitBtn.addEventListener('click', function(e) {
+      e.preventDefault(); // 기본 동작 막기
+      
+      // 유효성 검사 수행
+      const validationErrors = validateDiningForm();
+      if (validationErrors.length > 0) {
+        showValidationErrors(validationErrors);
+        return; // 유효성 검사 실패 시 현재 페이지에 머무름
+      }
+      
+      // 유효성 검사 통과 시 기존 폼 제출
+      const diningDataForm = document.getElementById('diningDataForm');
+      if (diningDataForm) {
+        diningDataForm.submit();
+      }
+    });
+  }
+});
 
 function renumberCarouselItems() {
   const carouselList = document.getElementById('carousel-img-list');
