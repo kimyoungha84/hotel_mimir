@@ -26,8 +26,7 @@
     SELECT COUNT(*)
     FROM DINING_TIME_SLOT
     WHERE DINING_ID = #{diningId}
-      AND RESERVATION_DATE = #{reservationDate}
-      AND RESERVATION_TIME = #{reservationTime}
+      AND TO_CHAR(RESERVATION_TIME, 'YYYY-MM-DD HH24:MI') = TO_CHAR(#{reservationTime}, 'YYYY-MM-DD HH24:MI')
   </select>
 
   <!-- 슬롯 삽입 -->
@@ -54,8 +53,7 @@
     UPDATE DINING_TIME_SLOT
     SET RESERVED_COUNT = RESERVED_COUNT + #{reservedCount}
     WHERE DINING_ID = #{diningId}
-      AND RESERVATION_DATE = #{reservationDate}
-      AND RESERVATION_TIME = #{reservationTime}
+      AND TO_CHAR(RESERVATION_TIME, 'YYYY-MM-DD HH24:MI') = TO_CHAR(#{reservationTime}, 'YYYY-MM-DD HH24:MI')
   </update>
   
 <select id="selectAllSlots" resultType="kr.co.sist.diningslot.DiningTimeSlotDTO">

@@ -2,7 +2,7 @@
  * 
  */
 document.addEventListener("DOMContentLoaded", function () {
-  const maxCount = 20;
+  const maxCount = 10;
   const minCount = 0;
 
   document.querySelectorAll(".plus, .minus").forEach(button => {

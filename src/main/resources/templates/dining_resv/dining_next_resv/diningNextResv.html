@@ -6,6 +6,7 @@
   <link rel="stylesheet" th:href="@{/dining_resv/css/diningNextResv.css}" />
   <link rel="stylesheet" th:href="@{/css/header.css}" />
   <link rel="stylesheet" th:href="@{/css/footer.css}" />
+  
 </head>
 <body>
 
@@ -76,12 +77,12 @@
     
     <div class="payment-method" id="paymentMethod" th:if="${diningId != 3}" style="display: none;">
       <div class="payment-method-btn">
-<button type="button" class="kakao-pay-btn"
-  onclick="selectPayment('카카오페이', this)">카카오페이</button>
-<button type="button" class="toss-pay-btn"
-  onclick="selectPayment('토스페이', this)">토스페이</button>
-<button type="button" class="card-pay-btn"
-  onclick="selectPayment('카드결제', this)">카드결제</button>
+		<button type="button" class="kakao-pay-btn"
+  				onclick="selectPayment('카카오페이', this)">카카오페이</button>
+		<button type="button" class="toss-pay-btn"
+  				onclick="selectPayment('토스페이', this)">토스페이</button>
+		<button type="button" class="card-pay-btn"
+  				onclick="selectPayment('카드결제', this)">카드결제</button>
       </div>
     </div>
     
@@ -289,6 +290,22 @@
   </div>
 </div>
 </form>
+
+<!-- 결제 성공 모달 -->
+<div id="successModal" class="custom-modal">
+  <div class="modal-content">
+    <p>결제가 완료되었습니다.</p>
+    <button id="successConfirmBtn">확인</button>
+  </div>
+</div>
+
+<!-- 결제 실패 모달 -->
+<div id="failModal" class="custom-modal">
+  <div class="modal-content">
+    <p id="failMessage">결제에 실패했습니다.</p>
+    <button id="failConfirmBtn">확인</button>
+  </div>
+</div>
 
   <div th:replace="~{/dining_resv/popup/diningPopup3}"></div>
 

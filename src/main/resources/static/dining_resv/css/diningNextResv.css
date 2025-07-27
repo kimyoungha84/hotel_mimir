@@ -608,3 +608,30 @@ input[type="checkbox"]:not(#checkAll):checked::after {
 .checkbox-disabled input[type="checkbox"]::after {
   color: #ccc !important;
 }
+
+.custom-modal {
+  display: none;
+  position: fixed;
+  z-index: 9999;
+  left: 0; top: 0;
+  width: 100%; height: 100%;
+  background-color: rgba(0, 0, 0, 0.4);
+}
+
+.modal-content {
+  background: white;
+  padding: 2rem;
+  border-radius: 0.5rem;
+  width: 300px;
+  margin: 20% auto;
+  text-align: center;
+}
+
+.modal-content button {
+  margin-top: 1.2rem;
+  padding: 0.6rem 1rem;
+  background-color: #111;
+  color: white;
+  border: none;
+  border-radius: 0.5rem;
+}
