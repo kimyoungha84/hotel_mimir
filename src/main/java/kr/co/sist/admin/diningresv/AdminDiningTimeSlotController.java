@@ -17,8 +17,8 @@ import kr.co.sist.util.controller.SearchController;
 @Controller
 public class AdminDiningTimeSlotController {
 
-//	@Autowired
-//	private ModelUtils mu;
+	@Autowired
+	private ModelUtils mu;
 
     @Autowired
     private DiningTimeSlotService dtss;
@@ -27,25 +27,25 @@ public class AdminDiningTimeSlotController {
     @GetMapping("/admin/adminDiningResvSlot")
     public String getSlotStatusForAdmin(Model model) {
     	
-//    	int pageSize = 5;
+    	int pageSize = 5;
     	
-    	List<DiningTimeSlotDTO> slotList = dtss.getAllSlots();
+//    	List<DiningTimeSlotDTO> slotList = dtss.getAllSlots();
     	 
-//        SearchController.addFragmentInfo(
-//                FilterConfig.DINING_SLOT,
-//                "admin_diningresv/adminDiningResvSlot",
-//                "diningSlot",
-//                "slotList"
-//        );
-//
-//        mu.setFilteringInfo(model, FilterConfig.DINING_SLOT);
-//        mu.setPaginationAttributes(model, PAGE_SIZE, FilterConfig.DINING_SLOT);
-    	
-        model.addAttribute("slotList", slotList);
+        SearchController.addFragmentInfo(
+                FilterConfig.DINING_SLOT,
+                "admin_diningresv/adminDiningResvSlot",
+                "fm_slotList",
+                "slotList"
+        );
 
-        for (DiningTimeSlotDTO dto : slotList) {
-            System.out.println(dto);
-        }
+        mu.setFilteringInfo(model, FilterConfig.DINING_SLOT);
+        mu.setPaginationAttributes(model, pageSize, FilterConfig.DINING_SLOT);
+    	
+//        model.addAttribute("slotList", slotList);
+//
+//        for (DiningTimeSlotDTO dto : slotList) {
+//            System.out.println(dto);
+//        }
         
         return "admin_diningresv/adminDiningResvSlot";
         

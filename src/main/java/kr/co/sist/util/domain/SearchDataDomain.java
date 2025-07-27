@@ -89,6 +89,14 @@ public class SearchDataDomain {
     private int totalAmount;
     private int memberStayCount;
     private int nonMemberStayCount;
+
+	//DINING_SLOT
+	private int slotId;
+	private String diningName;
+	private Date reservationDate;
+	private Timestamp reservationTime;
+	private int reservedCount;
+	private int totalSeat;
 	
 	
 }//class

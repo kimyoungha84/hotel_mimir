@@ -9,6 +9,7 @@
 
   <!-- jquery CDN -->
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+  <script src="/admin_common_assets/js/pagination.js"></script>
 
   <th:block th:replace="~{administrator/fragments/admin_header :: admin_header}"></th:block>
   
@@ -38,6 +39,9 @@
   <h2 class="h2Title">다이닝 좌석 현황</h2>
   <hr/>
 
+
+<div th:replace="~{fragments/filter :: filter(${filter})}"></div>
+
 <!-- 좌석 현황 테이블 -->
 <table>
   <thead>
@@ -52,7 +56,7 @@
       <th>수정</th>
     </tr>
   </thead>
-  <tbody>
+  <tbody th:fragment="fm_slotList" id="resultArea">
     <tr th:each="slot : ${slotList}">
       <form th:action="@{/admin/updateTotalSeat}" method="post">
         <td th:text="${slot.slotId}"></td>
@@ -79,6 +83,7 @@
     </tr>
   </tbody>
 </table>
+<div th:replace="~{fragments/pagination :: pagination}"></div>
 </div>
 
 </body>

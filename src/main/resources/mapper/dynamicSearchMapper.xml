@@ -607,6 +607,46 @@ ORDER BY rt.TYPE_NAME
 
 <!--///////////////////////////////// ROOM-SALES-END /////////////////////////////////-->
 
+<!--///////////////////////////////// DINING-SLOT /////////////////////////////////-->
+
+<select id="searchDiningSlot" resultType="kr.co.sist.util.domain.SearchDataDomain">
+  SELECT
+    s.SLOT_ID AS slotId,
+    s.DINING_ID AS diningId,
+    s.DINING_NAME AS diningName,
+    s.RESERVATION_DATE AS reservationDate,
+    s.RESERVATION_TIME AS reservationTime,
+    s.RESERVED_COUNT AS reservedCount,
+    s.TOTAL_SEAT AS totalSeat
+  FROM (
+    SELECT
+      s.SLOT_ID,
+      s.DINING_ID,
+      d.DINING_NAME,
+      s.RESERVATION_DATE,
+      s.RESERVATION_TIME,
+      s.RESERVED_COUNT,
+      s.TOTAL_SEAT,
+      ROW_NUMBER() OVER (ORDER BY s.RESERVATION_DATE DESC, s.RESERVATION_TIME DESC) rnum
+    FROM DINING_TIME_SLOT s
+    JOIN DINING d ON s.DINING_ID = d.DINING_ID
+    WHERE 1=1
+    <include refid="filter"/>
+  ) s
+  WHERE s.rnum BETWEEN #{offset} AND #{end}
+  ORDER BY s.RESERVATION_DATE, s.RESERVATION_TIME
+</select>
+
+<select id="countDiningSlot" resultType="int">
+  SELECT COUNT(*)
+  FROM DINING_TIME_SLOT s
+  JOIN DINING d ON s.DINING_ID = d.DINING_ID
+  WHERE 1=1
+  <include refid="filter"/>
+</select>
+
+<!--///////////////////////////////// DINING-SLOT-END /////////////////////////////////-->
+
 
 
 </mapper>

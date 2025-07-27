@@ -251,7 +251,18 @@ public enum FilterConfig {
                
         null
 //        List.of(new CheckboxOption("accUse","탈퇴","use_yn","N","Y"))
-    );
+    ),
+    DINING_SLOT(
+            "dining_slot",
+            null,
+            true, true, true,
+            List.of(
+                new Option("name", "다이닝 이름", "d.dining_name")
+            ),
+            null,
+            null,
+            null
+        );
 
     private final String filterType;
     private final DatePickerOption datePickerOption;

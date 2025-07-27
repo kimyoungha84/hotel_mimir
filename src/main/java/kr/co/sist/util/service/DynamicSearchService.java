@@ -38,6 +38,7 @@ public class DynamicSearchService {
                 case DINING_USER -> searchUserDining(filters, offset, end, pageSize);
                 case ROOM_RESV -> searchRoomResv(filters, offset, end, pageSize);
                 case MEMBER -> searchMember(filters, offset, end, pageSize); // 추가
+                case DINING_SLOT -> searchDiningSlot(filters, offset, end, pageSize);
                 default -> {
                     logger.warn("지원하지 않는 FilterConfig: {}", config);
                     yield List.of();
@@ -113,6 +114,18 @@ public class DynamicSearchService {
     		return List.of();
     	}
     }
+    public List<SearchDataDomain> searchDiningSlot(List<FilterCondition> filters, int offset, int end, int pageSize) {
+    	try {
+    		logger.debug("슬롯 검색 - filters: {}, offset: {}, end: {}", filters.size(), offset, end);
+    		for(FilterCondition filter : filters) {
+    			System.out.println(filter);
+    		}
+    		return mapper.searchDiningSlot(filters, offset, end, pageSize);
+    	} catch (Exception e) {
+    		logger.error("슬롯 검색 중 오류 발생", e);
+    		return List.of();
+    	}
+    }
 
     public List<SearchDataDomain> searchMember(List<FilterCondition> filters, int offset, int end, int pageSize) {
         try {
@@ -155,6 +168,7 @@ public class DynamicSearchService {
                 case DINING_RESV -> countDiningResv(filters);
                 case ROOM_RESV -> countRoomResv(filters);
                 case MEMBER -> countMember(filters); // 추가
+                case DINING_SLOT -> countDiningSlot(filters);
                 default -> {
                     logger.warn("지원하지 않는 FilterConfig: {}", config);
                     yield 0;
@@ -201,6 +215,16 @@ public class DynamicSearchService {
     		return 0;
     	}
     }
+    
+    public int countDiningSlot(List<FilterCondition> filters) {
+    	try {
+    		return mapper.countDiningSlot(filters);
+    	} catch (Exception e) {
+    		logger.error("다이닝슬롯 카운트 조회 중 오류 발생", e);
+    		return 0;
+    	}
+    }
+    
     public int countRoomResv(List<FilterCondition> filters) {
     	try {
     		return mapper.countRoomResv(filters);

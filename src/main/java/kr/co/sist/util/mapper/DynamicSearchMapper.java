@@ -30,11 +30,14 @@ public interface DynamicSearchMapper {
     
     List<SearchDataDomain> searchRoomSales(@Param("filters") List<FilterCondition> filters, int offset, int end, int pageSize, String startDate, String endDate);
     
+    List<SearchDataDomain> searchDiningSlot(@Param("filters") List<FilterCondition> filters, int offset, int end, int pageSize);
+    
     int countFaq(@Param("filters") List<FilterCondition> filters);
     int countDining(@Param("filters") List<FilterCondition> filters);
     int countStaff(@Param("filters") List<FilterCondition> filters);
     int countDiningResv(@Param("filters") List<FilterCondition> filters);
     int countRoomResv(@Param("filters") List<FilterCondition> filters);
     int countMember(@Param("filters") List<FilterCondition> filters);
+    int countDiningSlot(@Param("filters") List<FilterCondition> filters);
 
 }
