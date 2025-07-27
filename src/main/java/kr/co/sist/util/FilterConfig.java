@@ -196,7 +196,7 @@ public enum FilterConfig {
                     new LabelSelectorItem("문의 관리", "inquiry"),
                     new LabelSelectorItem("인사 관리", "person"),
                     new LabelSelectorItem("회원 관리", "member"),
-                    new LabelSelectorItem("경영지원", "member")
+                    new LabelSelectorItem("경영지원", "manage")
                 )
             ),
             new LabelSelectorOption("직책", "selectorPosition", "position_identified_code",
