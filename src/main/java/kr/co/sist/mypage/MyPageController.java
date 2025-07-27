@@ -17,6 +17,9 @@ import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.Map;
 
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 
 import org.springframework.beans.propertyeditors.CustomDateEditor;
@@ -27,6 +30,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import kr.co.sist.member.CustomUserDetails;
 import kr.co.sist.member.MemberDTO;
 import kr.co.sist.member.MemberService;
+import org.springframework.security.core.context.SecurityContextHolder;
 
 @Controller
 @RequestMapping("/mypage")
@@ -35,7 +39,6 @@ public class MyPageController {
     @Autowired
     private MemberService memberService;
 
-    // 날짜 바인딩을 위한 InitBinder
     @InitBinder
     public void initBinder(WebDataBinder binder) {
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
@@ -48,12 +51,11 @@ public class MyPageController {
         if (userDetails == null) {
             return "redirect:/member/loginFrm";
         }
-        
+
         String email = userDetails.getUsername();
         MemberDTO memberInfo = memberService.getMemberByEmail(email);
-        
         model.addAttribute("memberInfo", memberInfo);
-        
+
         return "mypage/myPage";
     }
 
@@ -64,21 +66,6 @@ public class MyPageController {
         }
         model.addAttribute("purpose", purpose);
         return "mypage/confirmPassword";
-    }
-
-    @GetMapping("/edit-profile")
-    public String editProfileForm(HttpSession session, Model model, @AuthenticationPrincipal CustomUserDetails userDetails) {
-        Boolean passwordConfirmed = (Boolean) session.getAttribute("passwordConfirmed");
-        if (passwordConfirmed == null || !passwordConfirmed) {
-            return "redirect:/mypage/confirm-password?purpose=editProfile"; // purpose 추가
-        }
-        session.removeAttribute("passwordConfirmed");
-
-        String email = userDetails.getUsername();
-        MemberDTO memberInfo = memberService.getMemberByEmail(email);
-        model.addAttribute("memberInfo", memberInfo);
-
-        return "mypage/editProfile";
     }
 
     @PostMapping("/confirm-password")
@@ -95,24 +82,29 @@ public class MyPageController {
         if (memberService.checkPassword(email, password)) {
             session.setAttribute("passwordConfirmed", true);
             if ("resetPassword".equals(purpose)) {
-                return "redirect:/mypage/edit-password"; // 비밀번호 재설정 페이지로 이동
+                return "redirect:/mypage/edit-password";
             } else {
-                return "redirect:/mypage/edit-profile"; // 기본적으로 프로필 수정 페이지로 이동
+                return "redirect:/mypage/edit-profile";
             }
         } else {
             redirectAttrs.addFlashAttribute("error", "비밀번호가 일치하지 않습니다.");
-            // 실패 시에도 purpose를 유지하여 다시 confirmPasswordForm으로 전달
             return "redirect:/mypage/confirm-password" + (purpose != null ? "?purpose=" + purpose : "");
         }
     }
 
-    @GetMapping("/expected-room-resv-count")
-    @ResponseBody
-    public int getExpectedRoomResvCount(@AuthenticationPrincipal CustomUserDetails userDetails) {
-        if (userDetails == null) {
-            return 0;
+    @GetMapping("/edit-profile")
+    public String editProfileForm(HttpSession session, Model model, @AuthenticationPrincipal CustomUserDetails userDetails) {
+        Boolean passwordConfirmed = (Boolean) session.getAttribute("passwordConfirmed");
+        if (passwordConfirmed == null || !passwordConfirmed) {
+            return "redirect:/mypage/confirm-password?purpose=editProfile";
         }
-        return memberService.getExpectedRoomResvCount(String.valueOf(userDetails.getUserNum()));
+        session.removeAttribute("passwordConfirmed");
+
+        String email = userDetails.getUsername();
+        MemberDTO memberInfo = memberService.getMemberByEmail(email);
+        model.addAttribute("memberInfo", memberInfo);
+
+        return "mypage/editProfile";
     }
 
     @PostMapping("/update-profile")
@@ -148,6 +140,15 @@ public class MyPageController {
         return Map.of("success", result);
     }
 
+    @GetMapping("/expected-room-resv-count")
+    @ResponseBody
+    public int getExpectedRoomResvCount(@AuthenticationPrincipal CustomUserDetails userDetails) {
+        if (userDetails == null) {
+            return 0;
+        }
+        return memberService.getExpectedRoomResvCount(String.valueOf(userDetails.getUserNum()));
+    }
+
     @GetMapping("/withdraw")
     public String withdrawForm(@AuthenticationPrincipal CustomUserDetails userDetails) {
         if (userDetails == null) {
@@ -158,17 +159,35 @@ public class MyPageController {
 
     @PostMapping("/withdraw-member")
     @ResponseBody
-    public Map<String, Boolean> withdrawMember(@AuthenticationPrincipal CustomUserDetails userDetails) {
+    public Map<String, Boolean> withdrawMember(@AuthenticationPrincipal CustomUserDetails userDetails,
+                                               HttpServletRequest request,
+                                               HttpServletResponse response,
+                                               HttpSession session) {
+        Map<String, Boolean> responseMap = new HashMap<>();
+
         if (userDetails == null) {
-            Map<String, Boolean> response = new HashMap<>();
-            response.put("success", false);
-            return response;
+            responseMap.put("success", false);
+            return responseMap;
         }
+
         String email = userDetails.getUsername();
         boolean success = memberService.withdrawMember(email);
-        
-        Map<String, Boolean> response = new HashMap<>();
-        response.put("success", success);
-        return response;
+
+        if (success) {
+            SecurityContextHolder.clearContext();
+            session.invalidate();
+
+            Cookie[] cookies = request.getCookies();
+            if (cookies != null) {
+                for (Cookie cookie : cookies) {
+                    cookie.setMaxAge(0);
+                    cookie.setPath("/");
+                    response.addCookie(cookie);
+                }
+            }
+        }
+
+        responseMap.put("success", success);
+        return responseMap;
     }
 }

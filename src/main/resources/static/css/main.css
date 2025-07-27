@@ -59,3 +59,72 @@ body {
 .swiper-pagination-bullet-active {
   background-color: white;
 }
+/* intro-section */
+.intro-section {
+    background-color: #f3f0ee;
+    color: #333;
+  }
+  .intro-title {
+    font-family: 'Georgia', serif;
+    font-size: 2rem;
+    color: #2a2a2a;
+  }
+  .intro-description {
+    font-size: 1rem;
+    line-height: 1.7;
+  }
+  
+/* signiel-feature-section */
+.signiel-feature-section {
+  background-color: #0f2a21;
+  color: #fff;
+  font-family: 'Segoe UI', system-ui, sans-serif;
+  padding: 4rem 0; /* 상하 패딩 조정 */
+}
+
+.featured-title {
+  font-size: 2.2rem; /* 기존보다 약간 키움 */
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.featured-subtitle {
+  font-size: 1.1rem;
+  color: #d1ccc7;
+  margin-bottom: 2.5rem; /* 타이틀-슬라이더 간 여백 */
+}
+
+.featuredSwiper .swiper-slide {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.featuredSwiper .card-img {
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.featuredSwiper .card-title {
+  font-size: 1.3rem; /* 제목 크게 */
+  font-weight: 600;
+  margin-top: 1rem;
+  color: #fff;
+}
+
+.featuredSwiper .card-text {
+  font-size: 1.05rem; /* 본문 약간 키움 */
+  line-height: 1.6;
+  color: #ccc;
+  margin-bottom: 1.2rem;
+}
+
+.featuredSwiper .swiper-pagination {
+  margin-top: 1.2rem; /* 페이지네이션 여백 조정 */
+}
+
+
+
+
+
