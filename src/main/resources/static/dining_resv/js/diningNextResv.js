@@ -250,11 +250,12 @@ document.addEventListener("DOMContentLoaded", () => {
         buyer_tel: document.querySelector("input[name='reservationTell']").value.trim(),
       }, function (rsp) {
         if (rsp.success) {
-          alert("결제가 완료되었습니다.");
+          showModal("successModal", null, () => {
           document.getElementById("paymentType").value = selectedPaymentMethod;
           document.getElementById("reservationForm").submit();
+		  });
         } else {
-          alert("결제에 실패했습니다: " + rsp.error_msg);
+          showModal("failModal", "결제에 실패했습니다: " + rsp.error_msg);
         }
       });
     } else {
@@ -272,4 +273,19 @@ function selectPayment(method, btn) {
     .forEach(b => b.classList.remove('selected'));
 
   btn.classList.add('selected');
+}
+
+function showModal(modalId, message, callback) {
+  const modal = document.getElementById(modalId);
+  if (message) {
+    const msgEl = modal.querySelector("p");
+    msgEl.textContent = message;
+  }
+  modal.style.display = "block";
+
+  const btn = modal.querySelector("button");
+  btn.addEventListener("click", () => {
+    modal.style.display = "none";
+    if (callback) callback();
+  }, { once: true });
 }

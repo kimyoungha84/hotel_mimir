@@ -20,7 +20,7 @@
 <h2 class="h2Title">다이닝 예약 수정</h2>
 <hr/>
 
-<form th:action="@{/adminDiningResvEdit}" th:object="${reservationDetail}" method="post">
+<form th:action="@{/admin/adminDiningResvEdit}" th:object="${reservationDetail}" method="post">
   <!-- 예약 ID -->
   <input type="hidden" th:field="*{reservationId}" />
 

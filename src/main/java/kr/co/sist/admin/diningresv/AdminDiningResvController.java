@@ -152,6 +152,13 @@ public class AdminDiningResvController {
                 dtss.addToSlot(diningId, resvDate, ts, delta);
                 
             }
+            
+            boolean wasActive = !"취소".equals(oldResv.getReservationStatus());
+            boolean nowCanceled = "취소".equals(reservationStatus);
+
+            if (wasActive && nowCanceled) {
+                dtss.subtractFromSlot(diningId, resvDate, ts, reservationCount);
+            }
 
             // 예약 정보 업데이트
             DiningResvDTO dto = new DiningResvDTO();
