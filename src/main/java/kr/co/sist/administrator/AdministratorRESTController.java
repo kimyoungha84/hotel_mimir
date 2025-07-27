@@ -11,6 +11,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
+import kr.co.sist.administrator.DTO.LoginDTO;
+import kr.co.sist.administrator.DTO.StaffDTO;
+import kr.co.sist.administrator.DTO.StaffDomain;
 import kr.co.sist.administrator.dashboardGPT.GPTForDashboardService;
 
 @RestController

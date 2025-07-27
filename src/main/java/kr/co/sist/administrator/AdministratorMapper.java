@@ -2,6 +2,11 @@ package kr.co.sist.administrator;
 
 import org.apache.ibatis.annotations.Mapper;
 
+import kr.co.sist.administrator.DTO.LoginDTO;
+import kr.co.sist.administrator.DTO.PermissionDTO;
+import kr.co.sist.administrator.DTO.StaffDTO;
+import kr.co.sist.administrator.DTO.StaffDomain;
+
 @Mapper
 public interface AdministratorMapper {
 	

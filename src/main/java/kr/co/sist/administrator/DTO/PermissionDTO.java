@@ -1,4 +1,4 @@
-package kr.co.sist.administrator;
+package kr.co.sist.administrator.DTO;
 
 import lombok.Getter;
 import lombok.Setter;

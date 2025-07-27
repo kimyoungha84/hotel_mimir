@@ -15,6 +15,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import jakarta.mail.MessagingException;
+import kr.co.sist.administrator.DTO.LoginDTO;
+import kr.co.sist.administrator.DTO.PermissionDTO;
+import kr.co.sist.administrator.DTO.StaffDTO;
+import kr.co.sist.administrator.DTO.StaffDomain;
+import kr.co.sist.administrator.Util.AdministratorSendMail;
+import kr.co.sist.administrator.Util.CryptographicDecryption;
 
 @Service
 public class AdminService {
@@ -309,21 +315,17 @@ public class AdminService {
 		//이거 mapper에 아마도 이 query가 있을 텐데....
 		String idAuthoryStr=am.selectPermissionById(id);
 		String urlAuthoryStr=mappingURLtoAthority(uri);
-//		System.out.println("adminServce=-----------");
-//		System.out.println("idAuthoryStr------"+idAuthoryStr);
-//		System.out.println("urlAuthoryStr-------"+urlAuthoryStr);
-//		System.out.println("111222333-------"+uri);
 		
 		//이 url에 이 id가 접근 가능해도 되는건지?! 확인
+		System.out.println(">>> [AdminService] uri: " + uri);
+
+		System.out.println("idAuthoriyStr-------" + idAuthoryStr);
+		System.out.println("urlAuthoryStr-------" + urlAuthoryStr);
 		
 		if(idAuthoryStr.contains(urlAuthoryStr) || idAuthoryStr.equals("admin")) {
 			//이 url에 이 id가 접근 가능해도 되나? || 관리자 인가?
 			flag=true;
-//			System.out.println("여기는 들어오나?");
 			
-//			System.out.println("11111"+idAuthoryStr.contains("member"));
-//			System.out.println("22222"+idAuthoryStr.contains("employee"));
-//			System.out.println("33333"+uri.equals("/admin/dashboard")  + "uri====="+uri);
 			//근데 만약 직원 권한, 회원 권한을 가진 사용자다! //그러면 index로 보내면 안됨
 			if((idAuthoryStr.contains("member") ||idAuthoryStr.contains("employee"))&& uri.isBlank()) {
 //				System.out.println("직원 권한, 회원 권한을 가진 사용자다! //그러면 index로 보내면 안됨");
@@ -641,9 +643,13 @@ public class AdminService {
 		
 		accessPage.put("/admin/dining","dinning");
 		accessPage.put("/adminDiningResvList","dinning");
+		accessPage.put("/admin/adminDiningResvSlot","dinning");
 		
 		accessPage.put("/admin/faq","inquiry");
 		accessPage.put("/admin/chat","inquiry");
+
+		accessPage.put("/admin/employee/log","admin");
+		//accessPage.put("/admin/dashboard", "admin");
 		
 		//uri가 들어오면, 권한을 반환해 주는거지
 		return accessPage.get(uri);

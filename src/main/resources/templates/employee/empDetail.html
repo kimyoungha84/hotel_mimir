@@ -41,6 +41,7 @@
 </style>
 <script th:inline="javascript">
 var jsonStr='[[${staffDomain}]]';
+var staffJSON=[[${staffDomain}]];
 const staffJson=JSON.parse(jsonStr);
 
 
@@ -124,9 +125,13 @@ window.onload = function() {
 </tbody>
 </table>
 
+<form id="logFrm" action="/admin/employee/log" method="post">
 <div>
-<input type="button" value="로그 기록 보기" class="radiusBtn" style="background-color: #c1c1c1;  margin-top: 5rem; float:none;display: flex; justify-content: center; margin:0px auto"/>
+<input type="button" value="로그 기록 보기" @click="clickLogBtn" class="radiusBtn" style="background-color: #c1c1c1;  margin-top: 5rem; float:none;display: flex; justify-content: center; margin:0px auto"/>
+<input type="hidden" id="staffVal" name="staff_id" :value="staffDTOJSON.staff_id"/>
 </div>
+</form>
+
 <div class="btnGroup" style="margin-left:50rem;">
 <input type="button" class="darkBtn" value="수정" id="modifyBtn" @click="modifyBtn"/>
 <input type="button" class="softBtn" value="취소" onclick="history.back()"/>
@@ -144,8 +149,8 @@ window.onload = function() {
 Vue.createApp({
     data(){
         return{
-            staffDTOJSON : {},
-            sDomainJSON:{}
+            staffDTOJSON : staffJSON,
+            sDomainJSON : {}
         }
     },
     methods:{
@@ -161,18 +166,24 @@ Vue.createApp({
         },
         modifyBtn(){
             // form submit
+            //alert(this.staffDTOJSON.staff_id);
+            
             this.$refs.frm.elements['staff_id'].value = this.staffDTOJSON.staff_id;
             console.log(this.staffDTOJSON.staff_id);
             this.$refs.frm.submit();
+        },
+        clickLogBtn(){
+            //document.getElementById("staffVal").value = this.staffDTOJSON.staff_id;
+            document.getElementById("logFrm").submit();
+        
+        },
+        mounted(){
+            console.log(this.staffDTOJSON);
+            this.sDomainJSON=staffJson;
+            this.staffDTOJSON=this.sDomainJSON;
+            
         }
-    },
-    mounted(){
-    
-        this.sDomainJSON=staffJson;
-
-        this.staffDTOJSON=this.sDomainJSON;
     }
-
 }).mount("#app"); 
 </script>
 </body>

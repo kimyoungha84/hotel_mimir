@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import jakarta.mail.MessagingException;
-import kr.co.sist.administrator.AdministratorSendMail;
+import kr.co.sist.administrator.Util.AdministratorSendMail;
 import kr.co.sist.member.CustomUserDetails;
 import kr.co.sist.nonmember.NonMemberService;
 import kr.co.sist.payment.PaymentService;

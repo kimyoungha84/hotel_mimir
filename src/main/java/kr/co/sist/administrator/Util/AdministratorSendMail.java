@@ -1,4 +1,4 @@
-package kr.co.sist.administrator;
+package kr.co.sist.administrator.Util;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.Map;

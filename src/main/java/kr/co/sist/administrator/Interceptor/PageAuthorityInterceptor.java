@@ -30,7 +30,10 @@ public class PageAuthorityInterceptor implements HandlerInterceptor{
 		//String inputUri=
 		/*접근 URL 받아오기*/
 		String url=request.getRequestURI();
-		System.out.println("접근 uri--============================-----------------"+url);
+		System.out.println("\n\n\n\n\n\n>>> [PageInterceptor] uri: " + url);
+		System.out.println("📌 Interceptor preHandle URL: " + request.getRequestURL());
+		System.out.println("📌 Interceptor preHandle URI: " + request.getRequestURI());
+
 		//Map으로 권한하고 mapping을 해서 그걸로 비교하는 method를 작성해야 함.
 		
 		chkAuthStatus=as.chkHaveAuthority(sessionIdStr, url);

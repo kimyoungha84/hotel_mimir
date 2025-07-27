@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 
 import jakarta.servlet.http.HttpServletRequest;
 import kr.co.sist.admin.resvroom.AdminResvRoomDashboardService;
+import kr.co.sist.administrator.DTO.StaffDomain;
 import kr.co.sist.util.FilterConfig;
 import kr.co.sist.util.ModelUtils;
 import kr.co.sist.util.controller.SearchController;
@@ -133,7 +134,7 @@ public class PageConnectController {
 	
 	@PostMapping("/admin/employee/modify")
 	public String modifyEmployee(@RequestParam String staff_id, Model model) {
-		
+		//System.out.println("/admin/employee/modify0000000"+staff_id);
 		StaffDomain sdomain=as.getOneStaffInfo(staff_id);
 		
 		model.addAttribute("staffDomain",sdomain);
@@ -165,5 +166,14 @@ public class PageConnectController {
 	}//memberManage
 	
 
+	/**************************************/
+	/*로그 기록*/
+	@PostMapping("/admin/employee/log")
+	public String showLog(@RequestParam String staff_id) {
+		
+		System.out.println("여기는 로그 기록 확인!");
+		
+		return "administrator/log/log_view";
+	}
 		
 }//class

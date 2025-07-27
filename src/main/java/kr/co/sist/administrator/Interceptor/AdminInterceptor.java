@@ -18,7 +18,7 @@ public class AdminInterceptor implements HandlerInterceptor{
 		boolean flag=false;
 		/*session_id 받아오기*/
 		HttpSession session=request.getSession(false);//기존에 session이 없으면 null 출력
-
+		System.out.println("sessiond있나아아아--------"+session);
 		
 		if(session == null || session.getAttribute("session_id") == null) {
 //			System.out.println("----------------------------AdminInterceptor 수정--------------------------------------------");

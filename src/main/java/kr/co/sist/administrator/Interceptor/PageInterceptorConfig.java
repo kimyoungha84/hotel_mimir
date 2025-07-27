@@ -13,8 +13,11 @@ public class PageInterceptorConfig implements WebMvcConfigurer{
 	@Autowired
 	private PageAuthorityInterceptor pai;
 	
-
-	@Value("${admin.page.addPath}")
+//	@Value("${admin.Page.excludePath}")
+//	private String[] excludePath;
+//	
+	
+	@Value("${admin.Page.addPath}")
 	private String[] addPagePath;
 
 
