@@ -138,13 +138,15 @@ public class DiningNextResvController {
 								@RequestParam String reservationTell,
 								@RequestParam String reservationRequest,
 								@RequestParam String paymentType,
+								@RequestParam int paymentPrice,
 								@RequestParam int adult,
 								@RequestParam int child,
 								@RequestParam String date,
 								@RequestParam String time,
 								@RequestParam String meal,
 								@RequestParam int diningId,
-								@RequestParam int paymentPrice,
+							    @RequestParam(required = false, defaultValue = "0") int lunchQty,
+							    @RequestParam(required = false, defaultValue = "0") int dinnerQty,
 								@AuthenticationPrincipal CustomUserDetails loginUser,
 								Model model) {
 

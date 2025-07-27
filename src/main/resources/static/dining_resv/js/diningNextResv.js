@@ -215,8 +215,61 @@ document.addEventListener("DOMContentLoaded", () => {
   // 결제 버튼 클릭 시 form 제출
   payBtn.addEventListener("click", (e) => {
     e.preventDefault();
-    if (!payBtn.classList.contains("disabled")) {
+    if (payBtn.classList.contains("disabled")) return;
+
+    // 온라인 결제일 경우 → Iamport 실행
+    if (selectedPaymentText === "온라인결제" && selectedPaymentMethod !== null) {
+      const amountText = document.querySelector(".price-num").textContent;
+      const amount = parseInt(amountText.replace(/[₩,]/g, ""));
+      const diningName = document.querySelector(".dining-name-txt").textContent.trim();
+      const productName = `미미르호텔 ${diningName} 다이닝 예약`;
+
+      let channelKey = "";
+      if (selectedPaymentMethod === "카카오페이") {
+        channelKey = "channel-key-01764171-b249-4c16-9d18-e9174fa8e611";
+      } else if (selectedPaymentMethod === "토스페이") {
+        channelKey = "channel-key-01aab9b9-828b-4913-9395-52f922e578f6";
+      } else if (selectedPaymentMethod === "카드결제") {
+        channelKey = "channel-key-bf43e218-5567-4875-96da-3270e1fba054";
+      }
+
+      if (!channelKey) {
+        alert("결제수단이 올바르지 않습니다.");
+        return;
+      }
+
+      IMP.init("imp14397622");
+
+      IMP.request_pay({
+        channelKey: channelKey,
+        pay_method: "card",
+        merchant_uid: "order_" + new Date().getTime(),
+        name: productName,
+        amount: amount,
+        buyer_name: document.querySelector("input[name='reservationName']").value.trim(),
+        buyer_tel: document.querySelector("input[name='reservationTell']").value.trim(),
+      }, function (rsp) {
+        if (rsp.success) {
+          alert("결제가 완료되었습니다.");
+          document.getElementById("paymentType").value = selectedPaymentMethod;
+          document.getElementById("reservationForm").submit();
+        } else {
+          alert("결제에 실패했습니다: " + rsp.error_msg);
+        }
+      });
+    } else {
       document.querySelector("#reservationForm").submit();
     }
   });
 });
+
+let selectedPaymentMethod = null;
+
+function selectPayment(method, btn) {
+  selectedPaymentMethod = method;
+
+  document.querySelectorAll('.payment-method-btn button')
+    .forEach(b => b.classList.remove('selected'));
+
+  btn.classList.add('selected');
+}
