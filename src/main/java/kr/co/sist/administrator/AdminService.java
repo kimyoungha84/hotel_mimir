@@ -1,5 +1,6 @@
 package kr.co.sist.administrator;
 
+import java.io.IOException;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -19,6 +20,7 @@ import kr.co.sist.administrator.DTO.LoginDTO;
 import kr.co.sist.administrator.DTO.PermissionDTO;
 import kr.co.sist.administrator.DTO.StaffDTO;
 import kr.co.sist.administrator.DTO.StaffDomain;
+import kr.co.sist.administrator.Log.ReadData;
 import kr.co.sist.administrator.Util.AdministratorSendMail;
 import kr.co.sist.administrator.Util.CryptographicDecryption;
 
@@ -431,6 +433,28 @@ public class AdminService {
 		return resultInt;
 	}//modifyByeEmpInfo
 	
+	@Autowired
+	private ReadData rd;
+	
+	/*파일 목록 가져오기*/
+	public String[] getFileListNames(String userid) {
+		
+		return rd.getFileNamelist(userid);
+	}//getFileListNames
+	
+	
+	/*파일 내용 가져오기*/
+	public String getFileContext(String fileName,String staff_id) {
+		String fileContext="";
+		
+		try {
+			fileContext=rd.readFileData(fileName,staff_id);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		return fileContext;
+	}//getFileContext
 	
 	
 	

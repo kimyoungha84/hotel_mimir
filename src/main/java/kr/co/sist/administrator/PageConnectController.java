@@ -169,11 +169,16 @@ public class PageConnectController {
 	/**************************************/
 	/*로그 기록*/
 	@PostMapping("/admin/employee/log")
-	public String showLog(@RequestParam String staff_id) {
-		
-		System.out.println("여기는 로그 기록 확인!");
+	public String showLogList(@RequestParam String staff_id, HttpServletRequest request, Model model) {
+		System.out.println("/admin/employee/log=---------"+staff_id);
+		request.setAttribute("fileListArr", as.getFileListNames(staff_id));
+		model.addAttribute("staff_id",staff_id);
 		
 		return "administrator/log/log_view";
-	}
+	}//showLog
+	
+
+	
+	
 		
 }//class

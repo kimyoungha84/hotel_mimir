@@ -10,20 +10,117 @@
 <!-- jquery CDN -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
 
+<!-- Vue CDN -->
+<script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+
+<!-- axios CDN -->
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
 <th:block th:replace="~{administrator/fragments/admin_header :: admin_header}"></th:block>
+<style>
+    .container {
+        display: flex;
+        justify-content: center;
+        margin-top: 2rem;
+    }
+    .box {
+        width: 400px;
+        height: 320px;
+        border: 2px solid #ff9933;
+        padding: 1rem;
+        margin: 1rem;
+        overflow-y: auto;
+    }
+    .file-list a {
+        display: block;
+        margin: 0.3rem 0;
+        color: #333;
+        text-decoration: none;
+        font-weight: bold;
+    }
+    .file-list a:hover {
+        text-decoration: underline;
+        color: #ff9933;
+    }
+    .log-title {
+        text-align: right;
+        margin-right: 3rem;
+        font-size: 0.9rem;
+        font-weight: bold;
+    }
+</style>
 
 </head>
 <body>
 <th:block th:replace="~{administrator/fragments/admin_sidebar :: admin_sidebar}"></th:block>
 
 <div id="body-pd" class="body-pd">
-<h2 class="h2Title">title 작성</h2>
+<h2 class="h2Title">로그 기록</h2>
 <hr/>
+<!-- <div>
+    <input type="button" class="radiusBtn" value="로그인 시도 log" @click="attempLogin"/>
+</div> -->
+<br><br><br>
+<div class="container" id="app">
+    <!-- 왼쪽 박스: 파일 목록 -->
+    <div class="box file-list">
+        <ul style="list-style: none; padding: 0;">
+            <li th:each="fileName : ${fileListArr}">
+            <input type="hidden" th:attr="data-filename=${fileName}"  th:value="${fileName}" />
+            <a href="#" @click="showFileContext" th:text="${fileName}"></a>
+            </li>
+        </ul>
+    </div>
 
-
-logView 페이지 입니다.
-
+    <!-- 오른쪽 박스: 파일 내용 -->
+    <div class="box">
+        <p style="white-space: pre-wrap;">
+            {{fileContent}}
+        </p>
+    </div>
 </div>
 
+
+</div>
+<script type="text/javascript">
+
+let staff_id_str="";
+
+staff_id_str='[[${staff_id}]]';
+    //alert(staff_id_str);
+
+</script>
+
+<script>
+Vue.createApp({
+    data(){
+        return{
+            fileContent: "",
+            staff_id : ""
+        }
+    },
+    mounted(){
+        this.staff_id=staff_id_str;
+    },
+    methods:{
+        showFileContext(event){
+            const fileName = event.currentTarget.innerText;
+            
+            //debugger;
+            //alert("fileName----"+fileName);
+            //alert("staff_id----"+this.staff_id);
+            
+            axios.get("/admin/employee/log/"+fileName+"?staff_id="+this.staff_id)
+            .then(res=>{
+                this.fileContent=res.data;
+            })
+            .catch(err=>{
+
+            })
+        },
+    
+    }
+}).mount("#app");
+</script>
 </body>
 </html>
