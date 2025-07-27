@@ -41,10 +41,11 @@
 </style>
 <script th:inline="javascript">
 
-const sDomainJSONstr='[[${staffDomain}]]';
-const sDomainJSON=JSON.parse(sDomainJSONstr);
+const sDomainJSON=[[${staffDomain}]];
+//const sDomainJSON=JSON.parse(sDomainJSONstr);
 
-console.log(sDomainJSON);
+// console.log("sDomainJSON입니다.");
+// console.log(sDomainJSON);
 </script>
 </head>
 <body>
@@ -63,16 +64,16 @@ console.log(sDomainJSON);
 </tr>
 <tr>
     <th>이름</th>
-    <td><input type="text" v-model="employRegisterObj.name"/></td>
+    <td th:text="${staffDomain.staff_name}"></td>
 </tr>
 <tr>
     <th>이메일</th>
-    <td><input type="text" v-model="employRegisterObj.email"/></td>
+    <td th:text="${staffDomain.staff_email}"></td>
 </tr>
 <tr>
     <th>부서</th>
     <td>
-        <select id="dept" v-model="employRegisterObj.dept">
+        <select id="dept" v-model="staffDomainJSON.dept_iden">
         <option  :value="''" th:text="-----선택-----" disabled selected></option>
         <option v-for="dept in this.depts" :value="dept.dept_iden" :key="dept.dept_iden">{{dept.dept_name}}</option>
         </select>
@@ -81,7 +82,7 @@ console.log(sDomainJSON);
 <tr>
     <th>직책</th>
     <td>
-        <select id="position" v-model="employRegisterObj.position">
+        <select id="position" v-model="staffDomainJSON.position_identified_code">
         <option :value="''" th:text="---선택---" disabled selected></option>
         <option v-for="position in this.positions" :value="position.position_iden_code" :key="position.position_iden_code">{{position.position_name}}</option>
         </select>
@@ -91,25 +92,21 @@ console.log(sDomainJSON);
     <th>권한</th>
     <td style="display: flex; align-items: center;">
     <div style="flex: 1;">
-    <span v-for="(auth,index) in employRegisterObj.authority" :key="index">
-    <select :id="'authority'+index" v-model="employRegisterObj.authority[index]" style="margin-right:0.5rem" @change="chkDuplicateValue(index)">
-    <option :value="''" th:text="---선택---" disabled selected></option>
-    <option v-for="authority in this.authorities" :value="authority.permission_id" :key="authority.permission_id">{{authority.permission_type}}</option>
-    </select>
-    </span>
+    <div v-for="authority in authorities" :key="authority.permission_id">
+    <label>
+    <input type="checkbox" :value="authority.permission_type" v-model="this.permissionArr">
+    {{ authority.permission_type }}
+    </label>
     </div>
-    <div style="margin-left: 1rem; display: flex; flex-direction: column; gap: 0.5rem;">
-    
-    <input type="button" class="addAuthorityBtn" value="+ 추가" @click="addAuthoritySelector"/>
-    <input type="button" class="removeAuthorityBtn" value="- 삭제" @click="removeAuthoritySelector"/>
-    
+
     </div>
+
     </td>
 </tr>
 <tr>
     <th>상태</td>
     <td>
-        <select id="status" v-model="employRegisterObj.status">
+        <select id="status" v-model="staffDomainJSON.staff_status">
         <option :value="''" th:text="---선택---" disabled selected></option>
         <option v-for="status in this.statuses" :value="status.staff_status" :key="status.staff_status">{{status.staff_status_kor}}</option>
         </select>
@@ -117,14 +114,14 @@ console.log(sDomainJSON);
 </tr>
 <tr>
     <th>입사일</th>
-    <td><input type="date" v-model="employRegisterObj.date"></td>
+    <td th:text="${staffDomain.date_of_employment}"></td>
 </tr>
 </tbody>
 </table>
 
 
 <div class="btnGroup" style="margin-left:50rem;">
-<input type="button" class="darkBtn" value="확인"/>
+<input type="button" class="darkBtn" value="확인" @click="modifyBtn"/>
 <input type="button" class="softBtn" value="취소" @click="cancelBtn"/>
 </div>
 </div>
@@ -136,12 +133,10 @@ console.log(sDomainJSON);
 Vue.createApp({
     data(){
         return{
-            staffDomainJSON : {},
-            employRegisterObj :{
-                id:"",
-                name:"", email:"",dept:"",position:"",authority:[''], status:"",date:""
-            },
+            staffDomainJSON : sDomainJSON,
             flag : "",
+            authoritySelector:"",
+            permissionArr:[],
             depts :[
                 {dept_iden:"room", dept_name:"객실 관리"},
                 {dept_iden:"dinning", dept_name:"다이닝 관리"},
@@ -166,93 +161,28 @@ Vue.createApp({
             ],
             statuses:[
                 {staff_status:"ACTIVE", staff_status_kor:"재직"},
-                {staff_status:"deactive", staff_status_kor:"퇴사"},
+                {staff_status:"DEACTIVE", staff_status_kor:"퇴사"},
             ]
         }
     },
     mounted(){
-        //뒤로가기를 위한 세션 저장
-        sessionStorage.setItem("staffModifyCache",sDomainJSONstr);
-
-
-        this.employRegisterObj.id=document.getElementById('staffId').innerText;
-        this.staffDomainJSON = sDomainJSON;
-        
-        this.employRegisterObj.id = this.staffDomainJSON.staff_id;
-        this.employRegisterObj.name = this.staffDomainJSON.staff_name;
-        this.employRegisterObj.email = this.staffDomainJSON.staff_email;
-        this.employRegisterObj.dept = this.staffDomainJSON.dept_iden;
-        this.employRegisterObj.position = this.staffDomainJSON.position_identified_code;
-        this.employRegisterObj.status=this.staffDomainJSON.staff_status;
-        this.employRegisterObj.date = this.staffDomainJSON.date_of_employment;
-
-        //권한 리스트까지 넘어오면, 그때, 주석 풀기
-        //this.employRegisterObj.authority = [...this.staffDomainJSON.permission_id_code_list];
+        const raw = this.staffDomainJSON.permission_str_kor;
+        this.permissionArr = raw ? raw.split(',') : [];
     },
     methods:{
-        addAuthoritySelector(){
-            //이게 클릭했을 때, <selector>가 추가되어야함.
+        modifyBtn(){
 
-            //마지막에 추가된 값
-            var lastSelected=this.employRegisterObj.authority[this.employRegisterObj.authority.length-1];
-
-            //이번에 추가된 값.
-            if(!this.employRegisterObj.authority.includes('')){
-                //select의 값을 선택했으면 들어오기.!
-                
-                if(this.flag){
-                    this.employRegisterObj.authority.push('');
-                }//end if
-            }else{
-                alert("권한을 선택해 주세요.");
-            }//end if~else
-        },
-        removeAuthoritySelector(){
-            // 권한 select가 1개 초과일 때만 제거
-            if(this.employRegisterObj.authority.length > 1){
-                this.employRegisterObj.authority.pop();
-            } else {
-                alert("최소 권한 한 개는 선택해야 합니다.");
-            }//end if~else
-        },
-        
-        addAuthoritytoList(){
-
-        },
-        chkDuplicateValue(index){
-            this.flag=true;
-            //중복값 체크
-            //index가 들어가야하는지 생각 필요!!
-            var selectVal=this.employRegisterObj.authority[index];
+            this.staffDomainJSON.permission_str_kor=this.permissionArr.join(',');
             
-            //debugger;
-            //console.log("중복값 체크크크크 -----"+selectVal);
-            
-            
-            var isDuplicate=this.employRegisterObj.authority.some((eleVal,i)=>{
-                return i != index && eleVal === selectVal;
-            });
 
-            //console.log("isduplicate--------"+isDuplicate)
-
-            if(isDuplicate){
-                //만약에 배열 안에 지금 선택한 값이 들어가 있으면
-                alert("이미 선택된 값입니다. 다시 선택해주세요.");
-                //해당 selector를 초기화 시켜줍시다아.
-                this.employRegisterObj.authority[index]='';
-                this.flag=false;
-            }//end if
-
-            //console.log("chkDuplicateValueFlag============"+this.flag);
-            return this.flag;
-        },
-        registerBtn(){
-            console.log(this.employRegisterObj);
-            
-            axios.post("/admin/registerStaff",this.employRegisterObj)
+            axios.post("/admin/employee/modifySend",this.staffDomainJSON)
             .then(res=>{
-                alert("수정을 완료했습니다.");
-                location.href="/admin/employee";
+                if(res.data ==="true" || res.data === true){
+                    alert("수정을 완료했습니다.");
+                    location.href="/admin/employee/detail?staff_id="+this.staffDomainJSON.staff_id;
+                }else{
+                    alert("수정에 실패했습니다.\n값들을 다시 확인해 주세요.");
+                }
             })
             .catch(err=>{
                 alert("수정에 실패했습니다.\n값들을 다시 확인해 주세요.");
@@ -262,9 +192,9 @@ Vue.createApp({
             // 이전 페이지로 돌아가면서 새로 고침
             history.go(-1);  // 뒤로가기
             setTimeout(function() {
-                // 뒤로가기를 한 후에, 페이지 새로 고침을 강제 실행
-                location.reload();
-            }, 500); // 0.5초 정도 대기 후 새로 고침
+                 // 뒤로가기를 한 후에, 페이지 새로 고침을 강제 실행
+                 location.reload();
+             }, 500); // 0.5초 정도 대기 후 새로 고침
         },
 
     }

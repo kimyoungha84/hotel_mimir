@@ -1,18 +1,20 @@
 package kr.co.sist.administrator;
 
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.StringTokenizer;
+import java.util.regex.Pattern;
 
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import jakarta.mail.MessagingException;
-import jakarta.servlet.http.HttpServletRequest;
 
 @Service
 public class AdminService {
@@ -24,8 +26,6 @@ public class AdminService {
 	private CryptographicDecryption cd;
 	
 	
-	@Autowired
-	private ApplicationContext context;
 		
 	/**
 	 * 로그인할 때,
@@ -309,24 +309,24 @@ public class AdminService {
 		//이거 mapper에 아마도 이 query가 있을 텐데....
 		String idAuthoryStr=am.selectPermissionById(id);
 		String urlAuthoryStr=mappingURLtoAthority(uri);
-		System.out.println("adminServce=-----------");
-		System.out.println("idAuthoryStr------"+idAuthoryStr);
-		System.out.println("urlAuthoryStr-------"+urlAuthoryStr);
-		System.out.println("111222333-------"+uri);
+//		System.out.println("adminServce=-----------");
+//		System.out.println("idAuthoryStr------"+idAuthoryStr);
+//		System.out.println("urlAuthoryStr-------"+urlAuthoryStr);
+//		System.out.println("111222333-------"+uri);
 		
 		//이 url에 이 id가 접근 가능해도 되는건지?! 확인
 		
 		if(idAuthoryStr.contains(urlAuthoryStr) || idAuthoryStr.equals("admin")) {
 			//이 url에 이 id가 접근 가능해도 되나? || 관리자 인가?
 			flag=true;
-			System.out.println("여기는 들어오나?");
+//			System.out.println("여기는 들어오나?");
 			
-			System.out.println("11111"+idAuthoryStr.contains("member"));
-			System.out.println("22222"+idAuthoryStr.contains("employee"));
-			System.out.println("33333"+uri.equals("/admin/dashboard")  + "uri====="+uri);
+//			System.out.println("11111"+idAuthoryStr.contains("member"));
+//			System.out.println("22222"+idAuthoryStr.contains("employee"));
+//			System.out.println("33333"+uri.equals("/admin/dashboard")  + "uri====="+uri);
 			//근데 만약 직원 권한, 회원 권한을 가진 사용자다! //그러면 index로 보내면 안됨
 			if((idAuthoryStr.contains("member") ||idAuthoryStr.contains("employee"))&& uri.isBlank()) {
-				System.out.println("직원 권한, 회원 권한을 가진 사용자다! //그러면 index로 보내면 안됨");
+//				System.out.println("직원 권한, 회원 권한을 가진 사용자다! //그러면 index로 보내면 안됨");
 				flag =false;
 			}//end if
 			
@@ -348,6 +348,88 @@ public class AdminService {
 
 		return idAuthoryStr;
 	}//chkHaveAuthority
+	
+	
+	/*직원 정보 수정*/
+	@Transactional
+	public int modifyEmpInfo(StaffDomain sdomainDTO) {
+		//sdomainDTO를 staffDTO에 자동 복사하기
+		StaffDTO staffDTO=new StaffDTO();
+		String perStr="";
+		PermissionDTO pDTO=new PermissionDTO();
+		int returnInt=0;
+		
+		BeanUtils.copyProperties(sdomainDTO, staffDTO);
+		System.out.println("modifyEmpInfo에서 staffDTO의 값 ------"+staffDTO);
+				
+		staffDTO.setPermission_id_code(permissionReverseMapping(staffDTO.getPermission_str_kor()));
+		
+		perStr=staffDTO.getPermission_id_code();
+		
+		returnInt+=am.deletePermission(staffDTO.getStaff_id());
+		
+		if(perStr.contains(",")) {
+			//여러개란 의미지
+			StringTokenizer stk=new StringTokenizer(perStr,",");
+			System.out.println("token count ------------------"+stk.countTokens());
+			
+			while(stk.hasMoreTokens()) {
+				pDTO.setStaff_id(staffDTO.getStaff_id());
+				pDTO.setPermission_id_code(stk.nextToken());
+				returnInt+=am.insertPermission(pDTO);
+			}//end while
+
+			
+		}else {
+			pDTO.setStaff_id(staffDTO.getStaff_id());
+			pDTO.setPermission_id_code(staffDTO.getPermission_id_code());
+			returnInt+=am.insertPermission(pDTO);
+		}//end if ~ else
+
+		returnInt+=am.updateStaffModify(staffDTO);
+
+		return returnInt;
+	}//modifyEmpInfo
+	
+	
+	@Transactional
+	public int modifyByeEmpInfo(StaffDomain staffDomain) {
+		StaffDTO staffDTO=new StaffDTO();
+		BeanUtils.copyProperties(staffDomain, staffDTO);
+		
+		
+		
+		Timestamp timestamp=new Timestamp(System.currentTimeMillis());
+		SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");
+		String retire_date=sdf.format(timestamp);
+
+		//한글 쪽에도 넣어주고.. (재직 > 퇴사로 바꾸는 작업)
+		
+		staffDTO.setStaff_status_kor(statusMapping(staffDTO.getStaff_status()));
+		
+		//자 이제 퇴사 처리를 해봅시다아
+		//1. 이름 마스킹 처리(양끝 냅두고 가운데는 모두 *로)
+		//System.out.println("masked1-----"+staffDTO.getStaff_name().replaceAll("(?<=^.).(?=.$)", "*")); // 홍*동
+	    String maskedName= Pattern.compile("(?<=^.).+(?=.$)").matcher(staffDTO.getStaff_name()).replaceAll(m -> "*".repeat(m.group().length()));
+	    staffDTO.setStaff_name(maskedName);
+		
+		//2.이메일 마스킹 처리
+		String maskedEmail=staffDTO.getStaff_email().replaceAll("^[^@]+", "***");
+		staffDTO.setStaff_email(maskedEmail);
+
+		//3.퇴사일 넣기
+		staffDTO.setRetire_date(retire_date);
+		System.out.println(retire_date);
+		int resultInt=0;
+		
+		
+		resultInt=am.updateStaffRetire(staffDTO);
+		
+		
+		return resultInt;
+	}//modifyByeEmpInfo
+	
+	
 	
 	
 	/***********************************************************************/
@@ -440,6 +522,58 @@ public class AdminService {
 	}//permissionMapping
 	
 	
+	/**
+	 * 권한에 mapping되는 권한코드(id)을 반환한다.
+	 * @param permissionCode //권한 코드
+	 * @return 권한명
+	 */
+	private String permissionReverseMapping(String permissionStr) {
+	
+		StringBuilder sb=new StringBuilder();
+		
+		String permissionId="";
+		
+		Map<String, String> permissionMap=new HashMap<String, String>();
+		permissionMap.put("객실","room");
+		permissionMap.put("다이닝","dinning");
+		permissionMap.put("문의","inquiry");
+		permissionMap.put("회원","member");
+		permissionMap.put("직원","employee");
+		permissionMap.put("관리자","admin");
+		
+
+		if(permissionStr.contains(",")) {
+			//여기 들어왔다는건 권한이 여러 개라는 의미잖아.
+			StringTokenizer stk=new StringTokenizer(permissionStr,",");
+			System.out.println("token count ------------------"+stk.countTokens());
+			
+			while(stk.hasMoreTokens()) {
+				sb.append(permissionMap.get(stk.nextToken())).append(",");
+				
+			}//end while
+			
+			permissionId=sb.toString();
+		}else {
+			permissionId=permissionMap.get(permissionStr);
+		}//end if~else
+		
+		
+		System.out.println("permissionStr---------------"+permissionId);
+		
+		//아 여기서 정규식을 사용하면 되겠다.
+		//정규식을 사용해서 맨 끝의 ,를 빼면 된다.
+		permissionStr=permissionStr.replaceAll(",$", "");
+	
+		
+		System.out.println("permissionStrstrstr---------------"+permissionId);
+		
+		
+		
+		return permissionId;
+	}//permissionMapping
+	
+	
+	
 	private String statusMapping(String statusCode) {
 		
 		   Map<String, String> statusMap=new HashMap<String, String>();
@@ -448,6 +582,7 @@ public class AdminService {
 		   
 		   return statusMap.get(statusCode);
 	}//statusMapping
+
 	
 	
 	/*로그 번호 생성*/

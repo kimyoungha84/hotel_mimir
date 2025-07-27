@@ -176,6 +176,36 @@ public class AdministratorRESTController {
 	
 	
 	
+	/**
+	 * 직원 정보 수정
+	 * @return
+	 */
+	@PostMapping("/admin/employee/modifySend")
+	public String modifyEmployeeSend(@RequestBody StaffDomain staffDomainJSON, Model model) {
+		String returnStr="false";
+		int resultInt=0;		
+		
+		
+		if(staffDomainJSON.getStaff_status().equals("DEACTIVE")) {
+			System.out.println("퇴사자입니다.");	
+			resultInt=as.modifyByeEmpInfo(staffDomainJSON);
+			if(resultInt > 0) {
+				returnStr="true";
+			}//end if
+		}else {
+			resultInt=as.modifyEmpInfo(staffDomainJSON);
+			if(resultInt >= 3) {
+				returnStr="true";
+			}//end if
+		}//end if~else
+		
+
+		//수정해야지이이
+		model.addAttribute("staff_id",staffDomainJSON.getStaff_id());
+
+		return returnStr;
+	}//modifyEmployeeSend
+	
 	
 	/********************************************/
 	@Autowired

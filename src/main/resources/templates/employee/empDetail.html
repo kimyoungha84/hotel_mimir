@@ -167,24 +167,8 @@ Vue.createApp({
         }
     },
     mounted(){
-    //     var cacheVal=sessionStorage.getItem("staffModifyCache");
-    //     alert("cacheVal----------"+cacheVal);
-
-
-    //     if((cacheVal != null) && !sessionStorage.getItem('reloaded')){
-    //         //sessionStorage에 값이 존재하면,
-    //         sessionStorage.setItem('reloaded', 'true');
-    //         location.reload(true);//새로고침
-    //         //this.$router.go(0);//새로고침
-    //         this.sDomainJSON=JSON.parse(sessionStorage.getItem("staffModifyCache"));
-    //         console.log("sessionStorage --sDomainJSON----------- "+this.sDomainJSON);
-    //         console.log("sessionStorage id ------------------"+this.sDomainJSON.staff_id);
-    //         //sessionStorage 다 썼으면 지우기
-    //         sessionStorage.removeItem("staffModifyCache");
-    //     }else{
-    //     //서버값 사용
+    
         this.sDomainJSON=staffJson;
-    //     }//if~else
 
         this.staffDTOJSON=this.sDomainJSON;
     }

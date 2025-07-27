@@ -63,4 +63,31 @@ set staff_pass=#{staff_pass}
 where staff_id=#{staff_id}
 </update>
 
+<!-- 직원정보 수정(권한 삭제, 권한 넣기, staff 정보 수정) -->
+<delete id="deletePermission" parameterType="String">
+delete from staff_permission where staff_id=#{id}
+</delete>
+
+<insert id="insertPermission" parameterType="permissionDTO">
+insert into staff_permission(staff_id,permission_id_code) values(#{staff_id},#{permission_id_code})
+</insert>
+
+<update id="updateStaffModify" parameterType="staffDTO">
+update staff
+set dept_iden=#{dept_iden},
+	position_identified_code=#{position_identified_code}
+where staff_id=#{staff_id}
+</update>
+
+
+<!-- 직원 퇴사 -->
+<update id="updateStaffRetire" parameterType="staffDTO">
+update staff
+set staff_name=#{staff_name},
+		staff_email=#{staff_email},
+		staff_status=#{staff_status},
+		retire_date=#{retire_date}
+where staff_id=#{staff_id}
+</update>
+
 </mapper>

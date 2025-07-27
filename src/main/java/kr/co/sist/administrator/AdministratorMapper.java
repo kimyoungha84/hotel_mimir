@@ -29,6 +29,16 @@ public interface AdministratorMapper {
 	public int updateStaffInitPassword(LoginDTO lDTO);
 	/*관리자, 비밀번호 초기화 버튼 눌렀을 때*/
 	public int updateResetPass(StaffDTO staffDTO);
+	
+	
+	/*직원 수정*/
+	public int deletePermission(String staff_id);
+	public int insertPermission(PermissionDTO pDTO);
+	public int updateStaffModify(StaffDTO sDTO);
+	
+	
+	/*직원 퇴사*/
+	public int updateStaffRetire(StaffDTO sDTO);
 }//interface
 
 

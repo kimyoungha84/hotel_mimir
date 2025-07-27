@@ -43,40 +43,40 @@
     
     <!-- MyBatis SQL 로그 로거 -->
     <logger name="org.mybatis" level="DEBUG" additivity="false">
-        <appender-ref ref="RollingFile"/>
+        <!-- <appender-ref ref="RollingFile"/> -->
         <appender-ref ref="Console"/>
     </logger>
     
     <!-- MyBatis 쿼리 로그 로거 -->
     <logger name="jdbc.sqlonly" level="DEBUG" additivity="false">
-        <appender-ref ref="RollingFile"/>
+        <!-- <appender-ref ref="RollingFile"/> -->
         <appender-ref ref="Console"/>
     </logger>
     
     <logger name="jdbc.statement" level="DEBUG" additivity="false">
-        <appender-ref ref="RollingFile"/>
+        <!-- <appender-ref ref="RollingFile"/> -->
         <appender-ref ref="Console"/>
     </logger>
     
     <logger name="jdbc.resultset" level="DEBUG" additivity="false">
-        <appender-ref ref="RollingFile"/>
+        <!-- <appender-ref ref="RollingFile"/> -->
         <appender-ref ref="Console"/>
     </logger>
     
     <!-- Spring 트랜잭션 로그 로거 -->
     <logger name="org.springframework.transaction" level="DEBUG" additivity="false">
-        <appender-ref ref="RollingFile"/>
+        <!-- <appender-ref ref="RollingFile"/> -->
         <appender-ref ref="Console"/>
     </logger>
     
     <logger name="org.springframework.jdbc.datasource.DataSourceTransactionManager" level="DEBUG" additivity="false">
-        <appender-ref ref="RollingFile"/>
+        <!-- <appender-ref ref="RollingFile"/> -->
         <appender-ref ref="Console"/>
     </logger>
     
     <!-- Hibernate SQL 로그 로거 -->
     <logger name="org.hibernate.SQL" level="DEBUG" additivity="false">
-        <appender-ref ref="RollingFile"/>
+        <!-- <appender-ref ref="RollingFile"/> -->
         <appender-ref ref="Console"/>
     </logger>
 <!-- 
