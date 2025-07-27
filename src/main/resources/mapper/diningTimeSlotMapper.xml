@@ -60,19 +60,27 @@
   
 <select id="selectAllSlots" resultType="kr.co.sist.diningslot.DiningTimeSlotDTO">
   SELECT 
-    SLOT_ID AS slotId,
-    DINING_ID AS diningId,
-    RESERVATION_DATE AS reservationDate,
-    RESERVATION_TIME AS reservationTime,
-    RESERVED_COUNT AS reservedCount,
-    TOTAL_SEAT AS totalSeat
-  FROM DINING_TIME_SLOT
-  ORDER BY RESERVATION_DATE, RESERVATION_TIME
+    s.SLOT_ID AS slotId,
+    s.DINING_ID AS diningId,
+    d.DINING_NAME AS diningName,
+    s.RESERVATION_DATE AS reservationDate,
+    s.RESERVATION_TIME AS reservationTime,
+    s.RESERVED_COUNT AS reservedCount,
+    s.TOTAL_SEAT AS totalSeat
+  FROM DINING_TIME_SLOT s
+  JOIN DINING d ON s.DINING_ID = d.DINING_ID
+  ORDER BY s.RESERVATION_DATE, s.RESERVATION_TIME
 </select>
 
-<update id="updateTotalSeat">
+<select id="selectSlotById" resultType="kr.co.sist.diningslot.DiningTimeSlotDTO">
+  SELECT *
+  FROM DINING_TIME_SLOT
+  WHERE SLOT_ID = #{slotId}
+</select>
+
+<update id="updateTotalSeatOnly">
   UPDATE DINING_TIME_SLOT
-  SET RESERVED_COUNT = #{reservedCount}
+  SET TOTAL_SEAT = #{totalSeat}
   WHERE SLOT_ID = #{slotId}
 </update>
 

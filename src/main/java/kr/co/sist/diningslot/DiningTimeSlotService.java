@@ -87,9 +87,15 @@ public class DiningTimeSlotService {
         
     }
     
-    public void updateTotalSeat(int slotId, int reservedCount) {
+    public DiningTimeSlotDTO getSlotById(int slotId) {
     	
-        dtsm.updateTotalSeat(slotId, reservedCount);
+        return dtsm.selectSlotById(slotId);
+        
+    }
+    
+    public void updateTotalSeatOnly(int slotId, int totalSeat) {
+    	
+        dtsm.updateTotalSeatOnly(slotId, totalSeat);
         
     }
     

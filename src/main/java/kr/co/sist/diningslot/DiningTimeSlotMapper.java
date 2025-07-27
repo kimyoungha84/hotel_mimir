@@ -39,7 +39,9 @@ public interface DiningTimeSlotMapper {
     
     List<DiningTimeSlotDTO> selectAllSlots();
     
-    void updateTotalSeat(@Param("slotId") int slotId,
-    					 @Param("reservedCount") int reservedCount);
+    void updateTotalSeatOnly(@Param("slotId") int slotId,
+    						 @Param("totalSeat") int totalSeat);
+    
+    DiningTimeSlotDTO selectSlotById(@Param("slotId") int slotId);
     
 }

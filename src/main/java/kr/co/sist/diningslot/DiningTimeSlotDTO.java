@@ -12,11 +12,15 @@ import lombok.ToString;
 @ToString
 public class DiningTimeSlotDTO {
 
-    private int slotId;     
-    private int diningId;      
+    private int slotId;   
+    
+    private int diningId;  
+    private String diningName;
+    
     private Date reservationDate;  
     private Timestamp reservationTime;
     private int reservedCount;
+    
     private int totalSeat;
 	
 }

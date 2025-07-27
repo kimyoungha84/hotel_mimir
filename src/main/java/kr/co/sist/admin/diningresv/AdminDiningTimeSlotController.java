@@ -51,14 +51,13 @@ public class AdminDiningTimeSlotController {
         
     }
     
-    @PostMapping("/admin/updateSlotReservedCount")
-    public String updateReservedCount(@RequestParam int slotId,
-    								  @RequestParam int remainingSeats) {
-        
-    	int reservedCount = 20 - remainingSeats;
-    	
-        dtss.updateTotalSeat(slotId, reservedCount);
-        
+    @PostMapping("/admin/updateTotalSeat")
+    public String updateTotalSeat(@RequestParam int slotId,
+                                  @RequestParam int totalSeat,
+                                  RedirectAttributes redirectAttributes) {
+
+    	dtss.updateTotalSeatOnly(slotId, totalSeat);
+
         return "redirect:/admin/adminDiningResvSlot";
         
     }
