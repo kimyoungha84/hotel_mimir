@@ -21,7 +21,18 @@ public class DiningResvService {
 	
 	public List<DiningDomain> searchALLDining() {
 		
-		return drm.selectAllDining();
+		List<DiningDomain> list = drm.selectAllDining();
+		
+	    for (DiningDomain dining : list) {
+	    	
+	        // 대표 이미지 URL 조회 후 세팅
+	        String imageUrl = searchMainImage(dining.getDining_id());
+	        
+	        dining.setDining_main_image(imageUrl);
+	        
+	    }
+	    
+		return list;
 		
 	}
 	

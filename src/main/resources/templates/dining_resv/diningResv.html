@@ -9,6 +9,7 @@
   <link rel="stylesheet" th:href="@{/dining_resv/css/diningPopup4.css}" />
   <link rel="stylesheet" th:href="@{/css/header.css}" />
   <link rel="stylesheet" th:href="@{/css/footer.css}" />
+  
 </head>
 <body>
 
@@ -252,7 +253,7 @@
                 th:attr="data-id=${dining.dining_id}"
                 th:classappend="${dining.dining_id == selectDiningId} ? ' selected' : ''">
 
-                <img th:src="@{/dining_resv/images/modern.png}" alt="모던 레스토랑 이미지" class="dining-img" />
+                <img th:src="@{${dining.dining_main_image}}" alt="다이닝 이미지" class="dining-img" />
                 <div class="dining-info-txt">
                   <span class="title-txt" th:text="${dining.dining_name}">다이닝</span>
                   <div class="type-info">
