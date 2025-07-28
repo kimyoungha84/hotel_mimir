@@ -9,7 +9,6 @@
     body {
       padding-top: 130px;
       background-color: #f8f9fa;
-      padding: 0;
       margin: 0;
     }
 
@@ -171,7 +170,7 @@
     const cancelBtn = $("#cancelReservationBtn");
     if (cancelBtn.length > 0) {
       cancelBtn.click(function () {
-        var reservationId = [[${roomReservationDetail.reservation_id}]];
+        var reservationId = /*[[${roomReservationDetail.reservation_id}]]*/ 0;
         if (confirm("정말로 예약을 취소하시겠습니까?")) {
           $.ajax({
             url: "/mypage/cancel-room-reservation",

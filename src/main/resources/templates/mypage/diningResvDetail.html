@@ -9,7 +9,6 @@
     body {
       padding-top: 130px;
       background-color: #f8f9fa;
-      padding: 0;
  	  margin: 0;
     }
 
@@ -166,7 +165,7 @@
 <script th:inline="javascript">
   $(function() {
     $("#cancelReservationBtn").click(function () {
-      var reservationId = [[${diningReservationDetail.reservationId}]];
+      var reservationId = /*[[${diningReservationDetail.reservationId}]]*/ 0;
       if (confirm("정말로 예약을 취소하시겠습니까?")) {
         $.ajax({
           url: "/mypage/cancel-dining-reservation",
