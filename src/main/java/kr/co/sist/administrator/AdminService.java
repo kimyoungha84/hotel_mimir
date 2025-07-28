@@ -57,7 +57,11 @@ public class AdminService {
 		return flag;
 	}//chkLogin
 	
-	
+	/*아이디 입력 > 해당 아이디 상태 가져오기*/
+	public String getStatusById(String id) {
+		String status= am.selectEmployeeStatusById(id);
+		return status;
+	}//getStatusById
 	
 	/*해당 id에 mapping되는 name 가져오기*/
 	public String getNameById(String id) {

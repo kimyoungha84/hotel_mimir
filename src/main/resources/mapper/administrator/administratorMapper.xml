@@ -7,6 +7,10 @@
 select staff_pass from staff where staff_id=#{staff_id}
 </select>
 
+<!-- id를 넣으면, 해당 상태 가져오기 -->
+<select id="selectEmployeeStatusById" parameterType="String" resultType="String">
+select staff_status from staff where staff_id=#{staff_id}
+</select>
 <!-- id를 넣으면, 해당 id에 대응하면 이름 가져오기 -->
 <select id="selectNamebyId" parameterType="String" resultType="String">
 select staff_name from staff where staff_id=#{staff_id}

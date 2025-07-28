@@ -40,6 +40,13 @@ public class AdministratorRESTController {
 		
 		httpSession=request.getSession(false);
 		
+		String statusStr=as.getStatusById(lDTO.getId());
+		
+		
+		/*로그인 상태가 퇴사일 경우 로그인 못하도록 throw 날리기, 퇴사인걸 알리는 것도 개인정보니까, 그냥 아이디 비번 안 일치한다고 날리기*/
+		if(statusStr.equals("DEACTIVE")) {
+			throw new Exception();
+		}//end if
 		
 		if(httpSession != null) {
 			System.out.println("id---------------"+lDTO.getId());

@@ -14,6 +14,9 @@ public interface AdministratorMapper {
 	public String selectEmployeeLogin(String employee_id);
 	/*입력값 id, 출력값 name*/
 	public String selectNamebyId(String employee_id);
+	/*id를 넣으면, 직원 재직상태 보여주기*/
+	public String selectEmployeeStatusById(String employee_id);
+	
 	/*id를 입력값으로 넣으면, 해당 아이디가 가진 권한을 가져옴.*/
 	public String selectPermissionById(String employee_id);
 	
