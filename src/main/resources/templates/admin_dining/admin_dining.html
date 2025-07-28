@@ -15,6 +15,9 @@
 
 <script src="/admin_common_assets/js/pagination.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+<!-- CSS 파일 포함 -->
+<link rel="stylesheet" th:href="@{/dining/css/admin_dining.css}">
 </head>
 <body>
 <th:block th:replace="~{administrator/fragments/admin_sidebar :: admin_sidebar}"></th:block>
@@ -78,150 +81,8 @@
 <!-- 페이지네이션 fragment -->
 <div th:replace="~{fragments/pagination :: pagination}"></div>
 
-<!-- 하이라이트용 CSS -->
-<style>
-  .highlight-row {
-    background-color: #d4cfc7 !important;
-    transition: background 0.2s;
-  }
-  .faq-table tbody tr {
-    cursor: pointer;
-  }
-  
-  /* 버튼 스타일 개선 */
-  .add-btn {
-    font-size: 1.5rem;
-    width: 40px;
-    height: 40px;
-    background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
-    color: white;
-    border: none;
-    cursor: pointer;
-    border-radius: 8px;
-    transition: all 0.3s ease;
-    box-shadow: 0 2px 8px rgba(76, 175, 80, 0.2);
-  }
-  .add-btn:hover {
-    background: linear-gradient(135deg, #45a049 0%, #3d8b40 100%);
-    transform: translateY(-2px) scale(1.05);
-    box-shadow: 0 4px 16px rgba(76, 175, 80, 0.3);
-  }
-  .add-btn:active {
-    transform: translateY(0) scale(1.02);
-  }
-  
-  .edit-btn {
-    background: linear-gradient(135deg, #2196F3 0%, #1976D2 100%);
-    color: white;
-    border: none;
-    border-radius: 6px;
-    padding: 8px 16px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    box-shadow: 0 2px 6px rgba(33, 150, 243, 0.2);
-  }
-  .edit-btn:hover {
-    background: linear-gradient(135deg, #1976D2 0%, #1565C0 100%);
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(33, 150, 243, 0.3);
-  }
-  .edit-btn:active {
-    transform: translateY(0);
-  }
-  
-  .rep-menu-btn {
-    background: linear-gradient(135deg, #4ecdc4 0%, #44a08d 100%);
-    color: white;
-    border: none;
-    border-radius: 8px;
-    padding: 0.7rem 1rem;
-    font-size: 1.1rem;
-    font-weight: 500;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    box-shadow: 0 2px 8px rgba(78, 205, 196, 0.2);
-  }
-  .rep-menu-btn:hover {
-    background: linear-gradient(135deg, #44a08d 0%, #3a8b7a 100%);
-    transform: translateY(-2px);
-    box-shadow: 0 4px 16px rgba(78, 205, 196, 0.3);
-  }
-  .rep-menu-btn:active {
-    transform: translateY(0);
-  }
-  
-  .delete-btn {
-    background: linear-gradient(135deg, #ff6b6b 0%, #ee5a52 100%);
-    color: white;
-    border: none;
-    border-radius: 8px;
-    padding: 0.7rem 1rem;
-    font-size: 1.1rem;
-    font-weight: 500;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    box-shadow: 0 2px 8px rgba(255, 107, 107, 0.2);
-  }
-  .delete-btn:hover {
-    background: linear-gradient(135deg, #ee5a52 0%, #d63031 100%);
-    transform: translateY(-2px);
-    box-shadow: 0 4px 16px rgba(255, 107, 107, 0.3);
-  }
-  .delete-btn:active {
-    transform: translateY(0);
-  }
-</style>
-
-<!-- 행 클릭 시 하이라이트 JS -->
-<script>
-// 반드시 전역에 선언
-let selectedDiningId = null;
-
-document.addEventListener('DOMContentLoaded', function() {
-  const tbody = document.getElementById('resultArea');
-  tbody.addEventListener('click', function(e) {
-    let tr = e.target.closest('tr');
-    if (!tr || !tr.getAttribute('data-dining-id')) return;
-    Array.from(tbody.querySelectorAll('tr')).forEach(r => r.classList.remove('highlight-row'));
-    tr.classList.add('highlight-row');
-    window.selectedDiningId = tr.getAttribute('data-dining-id');
-    console.log('row click:', window.selectedDiningId);
-  });
-
-  document.getElementById('repMenuEditBtn').addEventListener('click', function(e) {
-    if (!window.selectedDiningId) {
-      alert('대표메뉴를 수정할 다이닝을 선택하세요.');
-      e.preventDefault();
-      return;
-    }
-    window.location.href = '/admin/repMenu?diningId=' + window.selectedDiningId;
-    e.preventDefault();
-  });
-
-  document.getElementById('deleteBtn').addEventListener('click', function(e) {
-    e.preventDefault();
-    if (!window.selectedDiningId) {
-      alert('삭제할 다이닝을 선택하세요.');
-      return;
-    }
-    if (!confirm('정말 삭제하시겠습니까?')) {
-      return;
-    }
-    axios.delete('/admin/dining/' + window.selectedDiningId)
-      .then(function(response) {
-        alert('삭제가 완료되었습니다.');
-        // 테이블 갱신 (예: 검색 버튼 클릭 트리거)
-        // location.reload(); // 또는 아래처럼 fragment만 갱신
-        document.getElementById('searchApiBtn')?.click();
-        window.selectedDiningId = null;
-      })
-      .catch(function(error) {
-        alert('삭제에 실패했습니다. 참조된 데이터가 있을 수 있습니다.');
-        console.error(error);
-      });
-  });
-});
-</script>
+<!-- JavaScript 파일 포함 -->
+<script th:src="@{/dining/js/admin_dining.js}"></script>
 
 </section>
 <!-- 페이징 -->
