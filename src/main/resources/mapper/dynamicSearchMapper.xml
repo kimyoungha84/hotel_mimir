@@ -415,6 +415,7 @@ WHERE rnum BETWEEN #{offset} AND #{end}
     CASE
       WHEN login_type = 'social' THEN oauth_id
       WHEN login_type = 'email' THEN email_id
+      WHEN login_type = 'EXPIRED' THEN email_id
       ELSE NULL
     END AS user_id,
     user_name,
