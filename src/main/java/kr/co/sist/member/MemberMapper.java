@@ -5,6 +5,8 @@ import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
 
+import kr.co.sist.diningresv.DiningResvDTO;
+
 @Mapper
 public interface MemberMapper {
 		
@@ -23,6 +25,8 @@ public interface MemberMapper {
 	void updateLastLoginTime(String emailId);
 
 	int selectExpectedRoomResvCount(String userNum);
+	
+	int selectExpectedDiningResvCount(String userNum);
 
     MemberDTO selectUserByNameAndEmail(Map<String, String> params);
 
@@ -39,4 +43,12 @@ public interface MemberMapper {
     RoomReservationDTO selectRoomReservationDetail(int reservationId);
 
     int updateRoomReservationStatusToCancelled(int reservationId);
+    
+    List<DiningResvDTO> selectDiningReservationsByUserNum(String userNum);
+
+    DiningResvDTO selectDiningReservationDetail(int reservationId);
+
+    int updateDiningReservationStatusToCancelled(int reservationId);
+    
+    
 }

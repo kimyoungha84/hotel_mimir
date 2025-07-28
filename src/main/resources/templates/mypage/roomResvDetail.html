@@ -9,6 +9,8 @@
     body {
       padding-top: 130px;
       background-color: #f8f9fa;
+      padding: 0;
+      margin: 0;
     }
 
     .main-container {
@@ -143,9 +145,22 @@
       </div>
 
       <div class="action-buttons">
-        <a th:href="@{/mypage/room-reservations}" class="btn btn-back">목록으로</a>
-        <button type="button" class="btn btn-cancel" id="cancelReservationBtn">예약 취소</button>
-      </div>
+  <a th:href="@{/mypage/room-reservations}" class="btn btn-back">목록으로</a>
+
+  <button th:if="${roomReservationDetail.reservation_status != '예약취소'}"
+          type="button"
+          class="btn btn-cancel"
+          id="cancelReservationBtn">
+    예약 취소
+  </button>
+
+  <button th:if="${roomReservationDetail.reservation_status == '예약취소'}"
+          type="button"
+          class="btn btn-secondary"
+          disabled>
+    예약 취소됨
+  </button>
+</div>
     </div>
   </div>
 </div>
@@ -153,28 +168,31 @@
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 <script th:inline="javascript">
   $(function() {
-    $("#cancelReservationBtn").click(function () {
-      var reservationId = [[${roomReservationDetail.reservation_id}]];
-      if (confirm("정말로 예약을 취소하시겠습니까?")) {
-        $.ajax({
-          url: "/mypage/cancel-room-reservation",
-          type: "POST",
-          contentType: "application/json",
-          data: JSON.stringify({ reservationId: reservationId }),
-          success: function (response) {
-            if (response.success) {
-              alert("예약이 취소되었습니다.");
-              location.href = "/mypage/room-reservations";
-            } else {
-              alert("예약 취소에 실패했습니다.");
+    const cancelBtn = $("#cancelReservationBtn");
+    if (cancelBtn.length > 0) {
+      cancelBtn.click(function () {
+        var reservationId = [[${roomReservationDetail.reservation_id}]];
+        if (confirm("정말로 예약을 취소하시겠습니까?")) {
+          $.ajax({
+            url: "/mypage/cancel-room-reservation",
+            type: "POST",
+            contentType: "application/json",
+            data: JSON.stringify({ reservationId: reservationId }),
+            success: function (response) {
+              if (response.success) {
+                alert("예약이 취소되었습니다.");
+                location.href = "/mypage/room-reservations";
+              } else {
+                alert("예약 취소에 실패했습니다.");
+              }
+            },
+            error: function (xhr, status, error) {
+              alert("서버 오류가 발생했습니다: " + xhr.responseText);
             }
-          },
-          error: function (xhr, status, error) {
-            alert("서버 오류가 발생했습니다: " + xhr.responseText);
-          }
-        });
-      }
-    });
+          });
+        }
+      });
+    }
   });
 </script>
 

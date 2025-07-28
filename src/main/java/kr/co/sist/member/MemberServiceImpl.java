@@ -11,6 +11,7 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import kr.co.sist.diningresv.DiningResvDTO;
 import kr.co.sist.util.LoginJwtUtil;
 
 @Service
@@ -134,6 +135,11 @@ public class MemberServiceImpl implements MemberService {
     public int getExpectedRoomResvCount(String userNum) {
         return memberMapper.selectExpectedRoomResvCount(userNum);
     }
+	
+	@Override
+    public int getExpectedDiningResvCount(String userNum) {
+        return memberMapper.selectExpectedDiningResvCount(userNum);
+    }
 
     @Override
     public boolean isUserExist(String name, String email) {
@@ -180,5 +186,20 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public boolean cancelRoomReservation(int reservationId) {
         return memberMapper.updateRoomReservationStatusToCancelled(reservationId) == 1;
+    }
+    
+    @Override
+    public List<DiningResvDTO> getDiningReservationsByUserNum(String userNum) {
+        return memberMapper.selectDiningReservationsByUserNum(userNum);
+    }
+
+    @Override
+    public DiningResvDTO getDiningReservationDetail(int reservationId) {
+        return memberMapper.selectDiningReservationDetail(reservationId);
+    }
+
+    @Override
+    public boolean cancelDiningReservation(int reservationId) {
+        return memberMapper.updateDiningReservationStatusToCancelled(reservationId) == 1;
     }
 }

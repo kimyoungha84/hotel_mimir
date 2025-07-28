@@ -29,6 +29,7 @@ import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 
+import kr.co.sist.diningresv.DiningResvDTO;
 import kr.co.sist.member.CustomUserDetails;
 import kr.co.sist.member.MemberDTO;
 import kr.co.sist.member.MemberService;
@@ -152,6 +153,15 @@ public class MyPageController {
         }
         return memberService.getExpectedRoomResvCount(String.valueOf(userDetails.getUserNum()));
     }
+    
+    @GetMapping("/expected-dining-resv-count")
+    @ResponseBody
+    public int getExpectedDiningResvCount(@AuthenticationPrincipal CustomUserDetails userDetails) {
+        if (userDetails == null) {
+            return 0;
+        }
+        return memberService.getExpectedDiningResvCount(String.valueOf(userDetails.getUserNum()));
+    }
 
     @GetMapping("/withdraw")
     public String withdrawForm(@AuthenticationPrincipal CustomUserDetails userDetails) {
@@ -194,7 +204,7 @@ public class MyPageController {
         responseMap.put("success", success);
         return responseMap;
     }
-
+    //객실 예약내역
     @GetMapping("/room-reservations")
     public String roomReservations(Model model, @AuthenticationPrincipal CustomUserDetails userDetails) {
         if (userDetails == null) {
@@ -245,6 +255,61 @@ public class MyPageController {
         }
 
         boolean success = memberService.cancelRoomReservation(reservationId);
+        response.put("success", success);
+        return response;
+    }
+    
+  //다이닝 예약내역
+    @GetMapping("/dining-reservations")
+    public String diningReservations(Model model, @AuthenticationPrincipal CustomUserDetails userDetails) {
+        if (userDetails == null) {
+            return "redirect:/member/loginFrm";
+        }
+        String userNum = String.valueOf(userDetails.getUserNum());
+        List<DiningResvDTO> myDiningReservationList = memberService.getDiningReservationsByUserNum(userNum);
+        model.addAttribute("myDiningReservationList", myDiningReservationList);
+        return "mypage/diningResvList";
+    }
+
+    @GetMapping("/dining-reservations/{reservationId}")
+    public String diningReservationDetail(@PathVariable int reservationId, Model model, @AuthenticationPrincipal CustomUserDetails userDetails) {
+        if (userDetails == null) {
+            return "redirect:/member/loginFrm";
+        }
+
+        DiningResvDTO diningReservationDetail = memberService.getDiningReservationDetail(reservationId);
+
+         if (diningReservationDetail.getUserNum() != userDetails.getUserNum()) {
+             return "redirect:/mypage/dining-reservations"; 
+         }
+
+        model.addAttribute("diningReservationDetail", diningReservationDetail);
+        return "mypage/diningResvDetail";
+    }
+
+    @PostMapping("/cancel-dining-reservation")
+    @ResponseBody
+    public Map<String, Boolean> cancelDiningReservation(
+            @RequestBody Map<String, Integer> body,
+            @AuthenticationPrincipal CustomUserDetails userDetails) {
+
+        Map<String, Boolean> response = new HashMap<>();
+
+        if (userDetails == null) {
+            response.put("success", false);
+            return response;
+        }
+
+        int reservationId = body.get("reservationId");
+
+        DiningResvDTO reservation = memberService.getDiningReservationDetail(reservationId);
+
+        if (reservation == null || reservation.getUserNum() != userDetails.getUserNum()) {
+            response.put("success", false);
+            return response;
+        }
+
+        boolean success = memberService.cancelDiningReservation(reservationId);
         response.put("success", success);
         return response;
     }

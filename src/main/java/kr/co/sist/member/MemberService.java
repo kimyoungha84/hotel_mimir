@@ -3,6 +3,8 @@ package kr.co.sist.member;
 import java.util.List;
 import java.util.Map;
 
+import kr.co.sist.diningresv.DiningResvDTO;
+
 public interface MemberService {
 	
 	LoginResponseDTO login(LoginRequestDTO loginDTO);
@@ -26,6 +28,8 @@ public interface MemberService {
     boolean checkPassword(String email, String password);
 
     int getExpectedRoomResvCount(String userNum);
+    
+    int getExpectedDiningResvCount(String userNum);
 
     boolean isUserExist(String name, String email);
 
@@ -36,11 +40,17 @@ public interface MemberService {
     boolean resetPassword(String email, String newPassword);
 
     boolean withdrawMember(String email);
-
+    
     List<RoomReservationDTO> getRoomReservationsByUserNum(String userNum);
 
     RoomReservationDTO getRoomReservationDetail(int reservationId);
 
     boolean cancelRoomReservation(int reservationId);
+    
+    List<DiningResvDTO> getDiningReservationsByUserNum(String userNum);
+
+    DiningResvDTO getDiningReservationDetail(int reservationId);
+
+    boolean cancelDiningReservation(int reservationId);
     
 }

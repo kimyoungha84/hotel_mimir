@@ -76,6 +76,14 @@
     FROM RESERVATION
     WHERE USER_NUM = #{userNum} AND STATUS = '예약완료'
   </select>
+  
+  <!-- (마이페이지) 다이닝 예약 건수 조회 -->
+  <select id="selectExpectedDiningResvCount" parameterType="String" resultType="int">
+  SELECT count(*)
+  FROM DINING_RESERVATION
+  WHERE USER_NUM = #{userNum} AND RESERVATION_STATUS = '진행'
+    
+</select>
 
   <select id="selectUserByNameAndEmail" parameterType="map" resultType="kr.co.sist.member.MemberDTO">
     SELECT *
@@ -118,6 +126,8 @@
         QUIT_TIME = SYSTIMESTAMP
     WHERE EMAIL_ID = #{email}
   </update>
+  
+  <!-- 객실 -->
 
   <select id="selectRoomReservationsByUserNum" resultType="kr.co.sist.member.RoomReservationDTO">
     SELECT 
@@ -164,9 +174,63 @@
   <update id="updateRoomReservationStatusToCancelled" parameterType="int">
   UPDATE RESERVATION
   SET
-      STATUS = '예약 취소'
+      STATUS = '예약취소'
   WHERE
       RESV_ID = #{reservationId}
+</update>
+
+
+<!-- 다이닝 -->
+
+<select id="selectDiningReservationsByUserNum" parameterType="string" resultType="kr.co.sist.diningresv.DiningResvDTO">
+  SELECT
+    dr.RESERVATION_ID AS reservationId,
+    dr.RESERVATION_NAME AS reservationName,
+    dr.RESERVATION_DATE AS reservationDate,
+    dr.RESERVATION_STATUS AS reservationStatus,
+    d.DINING_NAME AS diningName
+  FROM
+    DINING_RESERVATION dr
+    JOIN DINING d ON dr.DINING_ID = d.DINING_ID
+  WHERE
+    dr.USER_NUM = #{userNum}
+  ORDER BY
+    dr.RESERVATION_DATE DESC
+</select>
+
+<select id="selectDiningReservationDetail" parameterType="int" resultType="kr.co.sist.diningresv.DiningResvDTO">
+  SELECT
+    dr.RESERVATION_ID AS reservationId,
+    dr.USER_NUM AS userNum,
+    dr.DINING_ID AS diningId,
+    dr.RESERVATION_NAME AS reservationName,
+    dr.RESERVATION_DATE AS reservationDate,
+    dr.RESERVATION_TIME AS reservationTime,
+    dr.RESERVATION_COUNT AS reservationCount,
+    dr.RESERVATION_REQUEST AS reservationRequest,
+    dr.RESERVATION_TELL AS reservationTell,
+    dr.RESERVATION_STATUS AS reservationStatus,
+    d.DINING_NAME AS diningName,
+    m.USER_NAME AS userName,
+    m.TEL AS userTel,
+    m.EMAIL_ID AS userEmail,
+    p.PAYMENT_PRICE AS paymentPrice,
+    p.PAYMENT_TYPE AS paymentType,
+    p.PAYMENT_STATUS AS paymentStatus,
+    p.PAYMENT_TIME AS paymentTime
+  FROM
+    DINING_RESERVATION dr
+    JOIN DINING d ON dr.DINING_ID = d.DINING_ID
+    LEFT JOIN MIMIR_USER m ON dr.USER_NUM = m.USER_NUM
+    LEFT JOIN PAYMENT p ON dr.PAYMENT_ID = p.PAYMENT_ID
+  WHERE
+    dr.RESERVATION_ID = #{reservationId}
+</select>
+
+<update id="updateDiningReservationStatusToCancelled" parameterType="int">
+  UPDATE DINING_RESERVATION
+  SET RESERVATION_STATUS = '취소'
+  WHERE RESERVATION_ID = #{reservationId}
 </update>
 
 </mapper>

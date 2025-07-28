@@ -8,11 +8,11 @@
         <hr>
         <a class="menu"><strong>예약</strong></a>
         <a th:href="@{/mypage/room-reservations}" class="menu-link ps-3">- 객실 예약 내역</a>
-        <a href="#" class="menu-link ps-3">- 다이닝 예약 내역</a>
+        <a th:href="@{/mypage/dining-reservations}" class="menu-link ps-3">- 다이닝 예약 내역</a>
         <a class="menu"><strong>나의 정보관리</strong></a>
         <a th:href="@{/mypage/edit-profile(purpose='editProfile')}" class="menu-link ps-3">- 회원정보 수정</a>
         <a th:href="@{/mypage/confirm-password(purpose='resetPassword')}" class="menu-link ps-3">- 비밀번호 재설정</a>
-        <a href="#" class="menu-link ps-3">- SNS 연동</a>
+        <!-- <a href="#" class="menu-link ps-3">- SNS 연동</a> -->
         <a th:href="@{/mypage/withdraw}" class="menu-link ps-3">- 회원탈퇴</a>
     </div>
 </body>

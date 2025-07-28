@@ -6,7 +6,31 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css">
     <link rel="stylesheet" th:href="@{/css/header.css}">
     <link rel="stylesheet" th:href="@{/css/mypage_sidebar.css}">
-    
+
+    <style>
+        .reservation-box {
+            cursor: pointer;
+            background-color: #f1f1f1;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            transition: background-color 0.2s;
+        }
+
+        .reservation-box:hover {
+            background-color: #e2e6ea;
+        }
+
+        .reservation-icon {
+            font-size: 24px;
+            margin-bottom: 8px;
+        }
+
+        .reservation-link {
+            text-decoration: none;
+            color: inherit;
+        }
+    </style>
 </head>
 <body>
 
@@ -46,37 +70,56 @@
             <div class="section-title">나의 예약/주문</div>
             <div class="row g-3">
                 <div class="col-md-6">
-                    <div class="reservation-box">
-                        <div class="reservation-icon">🏨</div>
-                        <div><strong>객실 예약</strong></div>
-                        <div class="text-muted mt-1" id="room-resv-count">투숙 예정 0건</div>
-                    </div>
+                    <a th:href="@{/mypage/room-reservations}" class="reservation-link">
+                        <div class="reservation-box">
+                            <div class="reservation-icon">🏨</div>
+                            <div><strong>객실 예약</strong></div>
+                            <div class="text-muted mt-1" id="room-resv-count">투숙 예정 0건</div>
+                        </div>
+                    </a>
                 </div>
                 <div class="col-md-6">
-                    <div class="reservation-box">
-                        <div class="reservation-icon">🍽️</div>
-                        <div><strong>다이닝 예약</strong></div>
-                        <div class="text-muted mt-1">방문 예정 0건</div>
-                    </div>
+                    <a th:href="@{/mypage/dining-reservations}" class="reservation-link">
+                        <div class="reservation-box">
+                            <div class="reservation-icon">🍽️</div>
+                            <div><strong>다이닝 예약</strong></div>
+                            <div class="text-muted mt-1" id="dining-resv-count">방문 예정 0건</div>
+                        </div>
+                    </a>
                 </div>
             </div>
         </div>
     </div>
 </div>
 
+<!-- 스크립트 -->
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.bundle.min.js"></script>
 <script type="text/javascript">
-    $(document).ready(function() {
+    $(document).ready(function () {
+        // 객실 예약 건수 조회
         $.ajax({
             url: "/mypage/expected-room-resv-count",
             type: "GET",
-            success: function(count) {
+            success: function (count) {
                 $("#room-resv-count").text("투숙 예정 " + count + "건");
             },
-            error: function(xhr, status, error) {
+            error: function (xhr, status, error) {
                 console.error("객실 예약 건수 조회 실패:", error);
                 $("#room-resv-count").text("정보를 불러올 수 없습니다.");
+            }
+        });
+
+        // 다이닝 예약 건수 조회
+        $.ajax({
+            url: "/mypage/expected-dining-resv-count",
+            type: "GET",
+            success: function (count) {
+                $("#dining-resv-count").text("방문 예정 " + count + "건");
+            },
+            error: function (xhr, status, error) {
+                console.error("다이닝 예약 건수 조회 실패:", error);
+                $("#dining-resv-count").text("정보를 불러올 수 없습니다.");
             }
         });
     });
