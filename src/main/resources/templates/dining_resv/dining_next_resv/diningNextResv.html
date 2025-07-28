@@ -251,13 +251,13 @@
         <div class="price-txt">
 
         <!-- 대표 메뉴명 -->
-        <div class="menu-info-line">
+        <div class="menu-info-line" th:if="${diningId != 3}">
           <span class="menu-label">메뉴명 : </span>
           <span class="menu-name" th:text="${menuName}">대표메뉴</span>
         </div>
 
         <!-- 수량 -->
-        <div class="menu-info-line">
+        <div class="menu-info-line" th:if="${diningId != 3}">
           <span class="menu-label">수량 : </span>
           <span class="menu-qty" th:if="${meal == 'Lunch'}" th:text="${lunchQty}"></span>
           <span class="menu-qty" th:if="${meal == 'Dinner'}" th:text="${dinnerQty}"></span>

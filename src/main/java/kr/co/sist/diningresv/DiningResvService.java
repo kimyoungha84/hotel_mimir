@@ -1,17 +1,33 @@
 package kr.co.sist.diningresv;
 
+import java.sql.Date;
+import java.sql.Timestamp;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import kr.co.sist.dining.user.DiningDomain;
+import kr.co.sist.diningslot.DiningTimeSlotMapper;
 
 @Service
 public class DiningResvService {
 
 	@Autowired
-	DiningResvMapper drm;
+	private DiningResvMapper drm;
+	
+	@Autowired
+	private DiningTimeSlotMapper dtsm;
+	
+	public boolean canReserve(int diningId, Date reservationDate, Timestamp reservationTime, int requestCount) {
+		
+	    int reservedCount = dtsm.selectReservedCount(diningId, reservationDate, reservationTime);
+	    
+	    int totalSeat = dtsm.selectTotalSeat(diningId, reservationDate, reservationTime);
+
+	    return (reservedCount + requestCount) <= totalSeat;
+	    
+	}
 	
 	public DiningDomain searchDining(int diningId) {
 

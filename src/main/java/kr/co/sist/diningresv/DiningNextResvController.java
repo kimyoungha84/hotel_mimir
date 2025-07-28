@@ -196,6 +196,15 @@ public class DiningNextResvController {
 	        e.printStackTrace();
 	        
 	    }
+	    
+	    // 예약 가능 여부 체크
+	    if (!drs.canReserve(diningId, reservationDate, reservationTime, totalCount)) {
+	    	
+	        model.addAttribute("errorMessage", "해당 시간에 예약 가능한 좌석이 부족합니다.");
+	        
+	        return "redirect:/diningResv?diningId=" + diningId;
+	        
+	    }
 
 	    // 회원 / 비회원 분기
 	    if (loginUser != null) {

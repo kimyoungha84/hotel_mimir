@@ -342,18 +342,21 @@ function loadTimeButtons(inputDiningId) {
 	      mealType
 	    };
 
-	    document.getElementById("menuQtyInput").value = 1;
-	    document.getElementById("menuPopupTitle").textContent = `${mealType} 메뉴 수량 선택`;
-	    document.querySelector(".popup-overlay05").style.display = "flex";
-	  
-      inputTime.value = time;
-      inputMeal.value = mealType;
-      inputDate.value = selectedDateStr;
+		    inputTime.value = time;
+		    inputMeal.value = mealType;
+		    inputDate.value = selectedDateStr;
 
-      nextBtn.classList.remove("disabled");
-      nextBtn.removeAttribute("aria-disabled");
-    });
-  }
+		    // diningId가 3이면 수량 모달 없이 바로 다음 버튼 활성화
+		    if (parseInt(selectDiningId) === 3) {
+		      nextBtn.classList.remove("disabled");
+		      nextBtn.removeAttribute("aria-disabled");
+		    } else {
+		      document.getElementById("menuQtyInput").value = 1;
+		      document.getElementById("menuPopupTitle").textContent = `${mealType} 메뉴 수량 선택`;
+		      document.querySelector(".popup-overlay05").style.display = "flex";
+		    }
+		  });
+		}
 
     return btn;
   }

@@ -89,30 +89,29 @@
   </thead>
   <tbody th:fragment="fm_slotList" id="resultArea">
     <tr th:each="slot : ${slotList}">
-      <form th:action="@{/admin/updateTotalSeat}" method="post">
-        <td th:text="${slot.slotId}"></td>
-        <td th:text="${slot.diningName}"></td>
-        <td th:text="${#dates.format(slot.reservationDate, 'yyyy-MM-dd(E)')}"></td>
-        <td th:text="${#dates.format(slot.reservationTime, 'HH:mm')}"></td>
-        <td th:text="${slot.reservedCount}"></td>
-        
-        <!-- 총 좌석 수정 가능 -->
-        <td>
+      <td th:text="${slot.slotId}"></td>
+      <td th:text="${slot.diningName}"></td>
+      <td th:text="${#dates.format(slot.reservationDate, 'yyyy-MM-dd(E)')}"></td>
+      <td th:text="${#dates.format(slot.reservationTime, 'HH:mm')}"></td>
+      <td th:text="${slot.reservedCount}"></td>
+    
+      <!-- 폼 요소만 td 안에 별도로 배치 -->
+      <td>
+        <form th:action="@{/admin/updateTotalSeat}" method="post" style="display:inline-flex;">
           <input type="number" name="totalSeat" min="20" th:value="${slot.totalSeat}" required />
           <input type="hidden" name="slotId" th:value="${slot.slotId}" />
-        </td>
+          <button type="submit" class="save-btn" onclick="return confirm('총 좌석 수를 수정하시겠습니까?');">저장</button>
+        </form>
+      </td>
 
-        <!-- 잔여 좌석: 수정 불가, 계산된 값만 보여줌 -->
-        <td th:text="${slot.totalSeat - slot.reservedCount}"></td>
+      <td th:text="${slot.totalSeat - slot.reservedCount}"></td>
 
-        <td>
-        <button type="submit" class="save-btn">저장</button><span style="margin: 0 0.6rem;">/</span>
-  		<button type="button" class="save-btn"
-          		th:onclick="'deleteSlot(' + ${slot.slotId} + ')'" style="background-color: #f44336;">
+      <td>
+        <button type="button" class="save-btn"
+        		th:onclick="'deleteSlot(' + ${slot.slotId} + ')'" style="background-color: #f44336;">
           삭제
-  		</button>
-        </td>
-      </form>
+        </button>
+      </td>
     </tr>
 
     <tr th:if="${#lists.isEmpty(slotList)}">

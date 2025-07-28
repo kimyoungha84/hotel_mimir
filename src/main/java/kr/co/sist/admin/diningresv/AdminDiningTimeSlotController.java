@@ -77,7 +77,7 @@ public class AdminDiningTimeSlotController {
             
         }
         
-        return "redirect:/admin/adminDiningSlotList";
+        return "redirect:/admin/adminDiningResvSlot";
         
     }
     
