@@ -53,14 +53,33 @@ public class AdminiStratorAspect {
 			MDC.clear();	
 		}//end
 		
+		System.out.println("sldkfjl------------------------------"+jp.getSignature().toString());
 		
-	    //Object[] args = jp.getArgs();
-	    //for (Object arg : args) {
-	    //    logger.info("arg: " + arg);
-	    //}
+		if(request.getRequestURL().toString().contains("/admin/employee")) {
+			logger.info("[직원] 직원관리 접근");	
+		}else if(request.getRequestURL().toString().contains("/admin/member")) {
+			logger.info("[회원] 회원 관리 접근");
+		}else if(request.getRequestURL().toString().contains("/admin/roomlist")) {
+			logger.info("[객실] 정보 접근");
+		}else if(request.getRequestURL().toString().contains("/admin/resvroomlist")) {
+			logger.info("[객실] 예약 현황 접근");
+		}else if(request.getRequestURL().toString().contains("/admin/roomsales")) {
+			logger.info("[객실] 매출 현황 접근");
+		}else if(request.getRequestURL().toString().contains("/admin/dining")) {
+			logger.info("[다이닝] 다이닝 관리 접근");
+		}else if(request.getRequestURL().toString().contains("/admin/adminDiningResvList")) {
+			logger.info("[다이닝] 예약 관리 접근");
+		}else if(request.getRequestURL().toString().contains("/admin/adminDiningResvSlot")) {
+			logger.info("[다이닝] 좌석 관리 접근");
+		}else if(request.getRequestURL().toString().contains("/admin/faq")) {
+			logger.info("[문의] FAQ 접근");
+		}else if(request.getRequestURL().toString().contains("/admin/chat")) {
+			logger.info("[문의] 실시간 문의 접근");
+		}else if(request.getRequestURL().toString().contains("/admin/employee/log")) {
+			logger.info("[관리자] 로그 기록 접근");
+		}
 		
-		//logger.info("여기는 before---idname---"+idname);
-		//logger.info("여기는 before "+jp.getSignature());
+		
 		
 		
 	}//beforeAdvice
@@ -68,8 +87,44 @@ public class AdminiStratorAspect {
 	
 	@After("execution(* kr.co.sist.administrator.*.*(..))")
 	public void afterAdvice(JoinPoint jp) {
-		logger.info("여기는 after "+jp.getSignature());
+		//logger.info("여기는 after "+jp.getSignature());
+		ServletRequestAttributes sra=(ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+	if(sra == null) {return;}//비웹 요청일 경우
+		
+		HttpServletRequest request=sra.getRequest();
+		HttpSession session=request.getSession(false);//없으면 null 반환
+		
+		
+		if(request.getRequestURL().toString().contains("/admin/employee")) {
+			logger.info("[직원] 직원관리 접근 완료");	
+		}else if(request.getRequestURL().toString().contains("/admin/member")) {
+			logger.info("[회원] 회원 관리 접근 완료");
+		}else if(request.getRequestURL().toString().contains("/admin/roomlist")) {
+			logger.info("[객실] 정보 접근 완료");
+		}else if(request.getRequestURL().toString().contains("/admin/resvroomlist")) {
+			logger.info("[객실] 예약 현황 접근 완료");
+		}else if(request.getRequestURL().toString().contains("/admin/roomsales")) {
+			logger.info("[객실] 매출 현황 접근 완료");
+		}else if(request.getRequestURL().toString().contains("/admin/dining")) {
+			logger.info("[다이닝] 다이닝 관리 접근 완료");
+		}else if(request.getRequestURL().toString().contains("/admin/adminDiningResvList")) {
+			logger.info("[다이닝] 예약 관리 접근 완료");
+		}else if(request.getRequestURL().toString().contains("/admin/adminDiningResvSlot")) {
+			logger.info("[다이닝] 좌석 관리 접근 완료");
+		}else if(request.getRequestURL().toString().contains("/admin/faq")) {
+			logger.info("[문의] FAQ 접근 완료");
+		}else if(request.getRequestURL().toString().contains("/admin/chat")) {
+			logger.info("[문의] 실시간 문의 접근 완료");
+		}else if(request.getRequestURL().toString().contains("/admin/employee/log")) {
+			logger.info("[관리자] 로그 기록 접근 완료");
+		}
+		
+		
+		
 	}//afterAdvice
+	
+	
+	
 	
 	@AfterThrowing(
 			pointcut="execution(* kr.co.sist.administrator.*.*(..))",
@@ -77,7 +132,40 @@ public class AdminiStratorAspect {
 			)
 	public void afterThrowAdvice(JoinPoint jp, Throwable ex) {
 		//System.out.println(ex.getMessage());
-		logger.info("여기는 afterthrow "+jp.getSignature());
+		//logger.info("여기는 afterthrow "+jp.getSignature());
+		//jp.getSignature().toString().contains("/admin/adminDiningResvSlot")
+		ServletRequestAttributes sra=(ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+		if(sra == null) {return;}//비웹 요청일 경우
+		
+		HttpServletRequest request=sra.getRequest();
+		HttpSession session=request.getSession(false);//없으면 null 반환
+		
+		if(request.getRequestURL().toString().contains("/admin/employee")) {
+			logger.info("[직원] 직원관리 접근 예외!!!! 터짐");	
+		}else if(request.getRequestURL().toString().contains("/admin/member")) {
+			logger.info("[회원] 회원 관리 접근  예외!!!! 터짐");
+		}else if(request.getRequestURL().toString().contains("/admin/roomlist")) {
+			logger.info("[객실] 정보 접근 예외!!!! 터짐");
+		}else if(request.getRequestURL().toString().contains("/admin/resvroomlist")) {
+			logger.info("[객실] 예약 현황 접근 예외!!!! 터짐");
+		}else if(request.getRequestURL().toString().contains("/admin/roomsales")) {
+			logger.info("[객실] 매출 현황 접근 예외!!!! 터짐");
+		}else if(request.getRequestURL().toString().contains("/admin/dining")) {
+			logger.info("[다이닝] 다이닝 관리 접근 예외!!!! 터짐");
+		}else if(request.getRequestURL().toString().contains("/admin/adminDiningResvList")) {
+			logger.info("[다이닝] 예약 관리 접근 예외!!!! 터짐");
+		}else if(request.getRequestURL().toString().contains("/admin/adminDiningResvSlot")) {
+			logger.info("[다이닝] 좌석 관리 접근 예외!!!! 터짐");
+		}else if(request.getRequestURL().toString().contains("/admin/faq")) {
+			logger.info("[문의] FAQ 접근 예외!!!! 터짐");
+		}else if(request.getRequestURL().toString().contains("/admin/chat")) {
+			logger.info("[문의] 실시간 문의 접근 예외!!!! 터짐");
+		}else if(request.getRequestURL().toString().contains("/admin/employee/log")) {
+			logger.info("[관리자] 로그 기록 접근 예외!!!! 터짐");
+		}
+		
+		
+		
 		
 	}//beforeAdvice
 	

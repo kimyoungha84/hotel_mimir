@@ -666,7 +666,7 @@ public class AdminService {
 		accessPage.put("/admin/roomsales","room");
 		
 		accessPage.put("/admin/dining","dinning");
-		accessPage.put("/adminDiningResvList","dinning");
+		accessPage.put("/admin/adminDiningResvList","dinning");
 		accessPage.put("/admin/adminDiningResvSlot","dinning");
 		
 		accessPage.put("/admin/faq","inquiry");
