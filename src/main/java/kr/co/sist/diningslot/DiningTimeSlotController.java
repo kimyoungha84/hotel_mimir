@@ -49,12 +49,15 @@ public class DiningTimeSlotController {
                 Timestamp timestamp = Timestamp.valueOf(dateTime);
 
                 int remainingSeats = dtss.getRemainingSeats(diningId, Date.valueOf(reservationDate), timestamp);
+                int totalSeats = dtss.getTotalSeats(diningId, Date.valueOf(reservationDate), timestamp);
                 
                 Map<String, Object> slotInfo = new HashMap<>();
                 
                 slotInfo.put("time", timeStr);
                 
                 slotInfo.put("remainingSeats", remainingSeats);
+                
+                slotInfo.put("totalSeats", totalSeats);
                 
                 result.add(slotInfo);
                 

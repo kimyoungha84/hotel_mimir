@@ -39,6 +39,16 @@
   <h2 class="h2Title">다이닝 좌석 현황</h2>
   <hr/>
   
+<!-- 성공 메시지 -->
+<div th:if="${successMessage}" style="color: green; font-weight: bold; margin: 1rem 0; text-align: center;">
+  <p th:text="${successMessage}"></p>
+</div>
+
+<!-- 에러 메시지 -->
+<div th:if="${errorMessage}" style="color: red; font-weight: bold; margin: 1rem 0; text-align: center;">
+  <p th:text="${errorMessage}"></p>
+</div>
+  
   <div th:replace="~{fragments/filter :: filter(${filter})}"></div>
 
 <!-- 좌석 현황 테이블 -->
@@ -52,7 +62,7 @@
       <th>예약된 인원</th>
       <th>총 좌석</th>
       <th>잔여 좌석</th>
-      <th>수정</th>
+      <th>--</th>
     </tr>
   </thead>
   <tbody th:fragment="fm_slotList" id="resultArea">
@@ -73,7 +83,13 @@
         <!-- 잔여 좌석: 수정 불가, 계산된 값만 보여줌 -->
         <td th:text="${slot.totalSeat - slot.reservedCount}"></td>
 
-        <td><button type="submit" class="save-btn">저장</button></td>
+        <td>
+        <button type="submit" class="save-btn">저장</button><span style="margin: 0 0.6rem;">/</span>
+  		<button type="button" class="save-btn"
+          		th:onclick="'deleteSlot(' + ${slot.slotId} + ')'" style="background-color: crimson;">
+          삭제
+  		</button>
+        </td>
       </form>
     </tr>
 
@@ -85,6 +101,26 @@
 
 <div th:replace="~{fragments/pagination :: pagination}"></div>
 </div>
+
+<script>
+  function deleteSlot(slotId) {
+    if (confirm("정말 이 좌석 슬롯을 삭제하시겠습니까?")) {
+      // POST 방식으로 삭제 요청 보내기
+      const form = document.createElement("form");
+      form.method = "post";
+      form.action = "/admin/deleteSlot";
+
+      const input = document.createElement("input");
+      input.type = "hidden";
+      input.name = "slotId";
+      input.value = slotId;
+      form.appendChild(input);
+
+      document.body.appendChild(form);
+      form.submit();
+    }
+  }
+</script>
 
 </body>
 </html>

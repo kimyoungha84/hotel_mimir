@@ -37,6 +37,14 @@ public class DiningTimeSlotService {
         
     }
     
+    public int getTotalSeats(int diningId, Date reservationDate, Timestamp reservationTime) {
+    	
+        DiningTimeSlotDTO dto = dtsm.selectSlot(diningId, reservationDate, reservationTime);
+        
+        return dto != null ? dto.getTotalSeat() : 20;
+        
+    }
+    
     // 슬롯 존재 여부 확인
     public boolean slotExists(int diningId, Date reservationDate, Timestamp reservationTime) {
     	
@@ -103,6 +111,12 @@ public class DiningTimeSlotService {
     public void updateTotalSeatOnly(int slotId, int totalSeat) {
     	
         dtsm.updateTotalSeatOnly(slotId, totalSeat);
+        
+    }
+    
+    public void deleteSlotById(int slotId) {
+    	
+        dtsm.deleteSlot(slotId);
         
     }
     

@@ -330,12 +330,12 @@ function loadTimeButtons(inputDiningId) {
   const inputDate = document.getElementById("inputDate");
   const nextBtn = document.querySelector(".next-btn");
   
-  function createTimeButton(time, remaining, mealType) {
+  function createTimeButton(time, remaining, totalSeats, mealType) {
     const btn = document.createElement("button");
     btn.className = "time-btn";
     btn.type = "button";
 	
-    btn.innerHTML = `<span>${time} (잔여 ${remaining}석)</span>`;
+    btn.innerHTML = `<span>${time} (좌석 ${remaining}/${totalSeats}석)</span>`;
 
 	if (remaining === 0) {
 	  btn.disabled = true;
@@ -383,7 +383,7 @@ function loadTimeButtons(inputDiningId) {
       success: function (slotList) {
         lunchContainer.innerHTML = "";
         slotList.forEach(slot => {
-          const btn = createTimeButton(slot.time, slot.remainingSeats, "Lunch");
+          const btn = createTimeButton(slot.time, slot.remainingSeats, slot.totalSeats, "Lunch");
           lunchContainer.appendChild(btn);
         });
       },
@@ -405,7 +405,7 @@ function loadTimeButtons(inputDiningId) {
       success: function (slotList) {
         dinnerContainer.innerHTML = "";
         slotList.forEach(slot => {
-          const btn = createTimeButton(slot.time, slot.remainingSeats, "Dinner");
+          const btn = createTimeButton(slot.time, slot.remainingSeats, slot.totalSeats, "Dinner");
           dinnerContainer.appendChild(btn);
         });
       },

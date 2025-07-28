@@ -43,6 +43,10 @@
       <td th:text="${#dates.format(resv.reservation_date, 'yyyy-MM-dd(E)')}">예약 날짜</td>
       <td th:text="${resv.reservation_status}">예약 상태</td>
     </tr>
+    
+    <tr th:if="${#lists.isEmpty(reservationList)}">
+      <td colspan="8" style="text-align: center;">조회된 예약 정보가 없습니다.</td>
+    </tr>
   </tbody>
   </table>
   

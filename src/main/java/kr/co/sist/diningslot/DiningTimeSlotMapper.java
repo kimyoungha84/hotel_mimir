@@ -16,8 +16,13 @@ public interface DiningTimeSlotMapper {
 	
 	// 해당 날짜 + 시간에 예약된 인원 수 조회
     Integer selectReservedCount(@Param("diningId") int diningId,
-            				@Param("reservationDate") Date reservationDate,
-            				@Param("reservationTime") Timestamp reservationTime);
+            					@Param("reservationDate") Date reservationDate,
+            					@Param("reservationTime") Timestamp reservationTime);
+    
+    DiningTimeSlotDTO selectSlot(
+    	    				@Param("diningId") int diningId,
+    	    				@Param("reservationDate") Date reservationDate,
+    	    				@Param("reservationTime") Timestamp reservationTime);
     
     // 슬롯 존재 여부 확인
     int existsSlot(@Param("diningId") int diningId,
@@ -43,5 +48,7 @@ public interface DiningTimeSlotMapper {
     						 @Param("totalSeat") int totalSeat);
     
     DiningTimeSlotDTO selectSlotById(@Param("slotId") int slotId);
+    
+    void deleteSlot(@Param("slotId") int slotId);
     
 }

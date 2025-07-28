@@ -21,6 +21,13 @@
 </select>
 <!-- reservationDate 제거 -> Time에 날짜정보가 포함되어 있으므로 두 조건 간의 충돌 발생 -->
 
+<select id="selectSlot" resultType="kr.co.sist.diningslot.DiningTimeSlotDTO">
+  SELECT *
+  FROM DINING_TIME_SLOT
+  WHERE DINING_ID = #{diningId}
+    AND TO_CHAR(RESERVATION_TIME, 'YYYY-MM-DD HH24:MI') = TO_CHAR(#{reservationTime}, 'YYYY-MM-DD HH24:MI')
+</select>
+
   <!-- 슬롯 존재 여부 확인 -->
   <select id="existsSlot" resultType="int">
     SELECT COUNT(*)
@@ -81,5 +88,10 @@
   SET TOTAL_SEAT = #{totalSeat}
   WHERE SLOT_ID = #{slotId}
 </update>
+
+<delete id="deleteSlot">
+  DELETE FROM DINING_TIME_SLOT
+  WHERE SLOT_ID = #{slotId}
+</delete>
 
 </mapper>

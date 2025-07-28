@@ -125,7 +125,7 @@
   </table>
 
   <div class="btnGroup">
-    <input type="submit" class="darkBtn" value="수정 완료" />
+    <input type="submit" class="darkBtn" value="수정 완료" onclick="return confirmUpdate();" />
     <input type="button" class="softBtn" onclick="history.back()" value="취소" />
   </div>
 </form>
@@ -133,6 +133,12 @@
 </div>
 
   <script th:src="@{/dining_resv/js/adminDiningResvEdit.js}"></script>
+
+<script>
+  function confirmUpdate() {
+    return confirm("정말 예약 정보를 수정하시겠습니까?");
+  }
+</script>
 
 </body>
 </html>

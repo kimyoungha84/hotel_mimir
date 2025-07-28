@@ -44,9 +44,38 @@ public class AdminDiningTimeSlotController {
                                   @RequestParam int totalSeat,
                                   RedirectAttributes redirectAttributes) {
 
-    	dtss.updateTotalSeatOnly(slotId, totalSeat);
+        try {
+        	
+            dtss.updateTotalSeatOnly(slotId, totalSeat);
+            
+            redirectAttributes.addFlashAttribute("successMessage", "총 좌석 수가 수정되었습니다.");
+            
+        } catch (Exception e) {
+        	
+            redirectAttributes.addFlashAttribute("errorMessage", "수정 중 오류가 발생했습니다.");
+            
+            e.printStackTrace();
+            
+        }
 
         return "redirect:/admin/adminDiningResvSlot";
+        
+    }
+    
+    @PostMapping("/admin/deleteSlot")
+    public String deleteSlot(@RequestParam int slotId, RedirectAttributes redirectAttributes) {
+        try {
+        	
+            dtss.deleteSlotById(slotId);
+            
+            redirectAttributes.addFlashAttribute("successMessage", "좌석 슬롯이 삭제되었습니다.");
+            
+        } catch (Exception e) {
+        	
+            redirectAttributes.addFlashAttribute("errorMessage", "삭제 중 오류가 발생했습니다.");
+            
+        }
+        return "redirect:/admin/adminDiningSlotList";
         
     }
     

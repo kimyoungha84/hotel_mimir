@@ -20,6 +20,16 @@
 <h2 class="h2Title">다이닝 예약 상세</h2>
 <hr/>
 
+<!-- 성공 메시지 -->
+<div th:if="${successMessage}" style="color: green; font-weight: bold; margin: 1rem 0; text-align: center;">
+  <p th:text="${successMessage}"></p>
+</div>
+
+<!-- 에러 메시지 -->
+<div th:if="${errorMessage}" style="color: red; font-weight: bold; margin: 1rem 0; text-align: center;">
+  <p th:text="${errorMessage}"></p>
+</div>
+
   <table class="reservation-detail-table" border="1" cellspacing="0" cellpadding="8" style="width: 100%; text-align: left;">
     <thead>
       <tr>

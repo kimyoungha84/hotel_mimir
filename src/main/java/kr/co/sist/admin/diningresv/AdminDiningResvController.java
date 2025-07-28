@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import kr.co.sist.diningresv.DiningResvDTO;
 import kr.co.sist.diningslot.DiningTimeSlotService;
@@ -85,9 +86,20 @@ public class AdminDiningResvController {
     }
     
     @GetMapping("/adminDiningResvEdit/{reservationId}")
-    public String adminDiningResvEdit(@PathVariable int reservationId, Model model) {
+    public String adminDiningResvEdit(@PathVariable int reservationId,
+    								  RedirectAttributes redirectAttributes,
+    								  Model model) {
     	
         DiningResvDTO dto = adrs.resvDetail(reservationId);
+        
+        // 예약 상태가 '취소'인 경우 수정 불가
+        if ("취소".equals(dto.getReservationStatus())) {
+        	
+            redirectAttributes.addFlashAttribute("errorMessage", "취소된 예약은 수정할 수 없습니다.");
+            
+            return "redirect:/admin/adminDiningResvList";
+            
+        }
         
         if (dto.getReservationRequest() == null || dto.getReservationRequest().trim().isEmpty()) {
         	
@@ -122,11 +134,21 @@ public class AdminDiningResvController {
                                     @RequestParam String reservationTime,
                                     @RequestParam int reservationCount,
                                     @RequestParam String reservationStatus,
-                                    @RequestParam(required = false) String reservationRequest) {
+                                    @RequestParam(required = false) String reservationRequest,
+                                    RedirectAttributes redirectAttributes) {
         try {
             // 기존 예약 조회
             DiningResvDTO oldResv = adrs.selectResvId(reservationId);
 
+            // 취소된 예약이면 수정 불가
+            if ("취소".equals(oldResv.getReservationStatus())) {
+            	
+                redirectAttributes.addFlashAttribute("errorMessage", "이미 취소된 예약은 수정할 수 없습니다.");
+                
+                return "redirect:/admin/adminDiningResvList";
+                
+            }
+            
             String fullDateTime = reservationDate + " " + reservationTime;
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
             Timestamp ts = new Timestamp(sdf.parse(fullDateTime).getTime());
@@ -175,12 +197,16 @@ public class AdminDiningResvController {
             dto.setReservationRequest(reservationRequest == null ? "없음" : reservationRequest);
 
             adrs.updateResv(dto);
+            
+            redirectAttributes.addFlashAttribute("successMessage", "예약 정보가 수정되었습니다.");
 
             return "redirect:/admin/adminDiningResvDetail/" + reservationId;
 
         } catch (Exception e) {
         	
             e.printStackTrace();
+            
+            redirectAttributes.addFlashAttribute("errorMessage", "예약 수정 중 오류가 발생했습니다.");
             
             return "redirect:/admin/error";
             
