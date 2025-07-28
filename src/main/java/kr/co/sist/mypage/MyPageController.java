@@ -88,6 +88,8 @@ public class MyPageController {
             session.setAttribute("passwordConfirmed", true);
             if ("resetPassword".equals(purpose)) {
                 return "redirect:/mypage/edit-password";
+            } else if ("withdraw".equals(purpose)) {
+                return "redirect:/mypage/withdraw";
             } else {
                 return "redirect:/mypage/edit-profile";
             }
@@ -164,10 +166,17 @@ public class MyPageController {
     }
 
     @GetMapping("/withdraw")
-    public String withdrawForm(@AuthenticationPrincipal CustomUserDetails userDetails) {
+    public String withdrawForm(HttpSession session, @AuthenticationPrincipal CustomUserDetails userDetails) {
         if (userDetails == null) {
             return "redirect:/member/loginFrm";
         }
+
+        Boolean passwordConfirmed = (Boolean) session.getAttribute("passwordConfirmed");
+        if (passwordConfirmed == null || !passwordConfirmed) {
+            return "redirect:/mypage/confirm-password?purpose=withdraw";
+        }
+        session.removeAttribute("passwordConfirmed");
+
         return "mypage/withdraw";
     }
 
