@@ -79,8 +79,16 @@ public class AdminiStratorAspect {
 			logger.info("[관리자] 로그 기록 접근");
 		}
 		
-		
-		
+		if(jp.getSignature().toString().contains("updateDiningData")) {
+			logger.info("[다이닝] 다이닝 정보 수정 접근");
+		}else if(jp.getSignature().toString().contains("insertDiningAndReturnId")) {
+			logger.info("[다이닝] 다이닝 추가 기능 접근");
+		}else if(jp.getSignature().toString().contains("updateRepMenu")) {
+			logger.info("[다이닝] RepMenu 수정하는 곳 접근");
+		}else if(jp.getSignature().toString().contains("addRepMenu")) {
+			logger.info("[다이닝] RepMenu 추가하는 곳 접근");
+			
+		}
 		
 	}//beforeAdvice
 	
