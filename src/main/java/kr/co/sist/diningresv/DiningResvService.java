@@ -19,16 +19,6 @@ public class DiningResvService {
 	@Autowired
 	private DiningTimeSlotMapper dtsm;
 	
-	public boolean canReserve(int diningId, Date reservationDate, Timestamp reservationTime, int requestCount) {
-		
-	    int reservedCount = dtsm.selectReservedCount(diningId, reservationDate, reservationTime);
-	    
-	    int totalSeat = dtsm.selectTotalSeat(diningId, reservationDate, reservationTime);
-
-	    return (reservedCount + requestCount) <= totalSeat;
-	    
-	}
-	
 	public DiningDomain searchDining(int diningId) {
 
 		return drm.selectDiningId(diningId);

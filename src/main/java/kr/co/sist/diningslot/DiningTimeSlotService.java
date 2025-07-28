@@ -21,6 +21,8 @@ public class DiningTimeSlotService {
 	// 잔여좌석 계산
     public int getRemainingSeats(int diningId, Date reservationDate, Timestamp reservationTime) {
     	
+    	System.out.println("SELECTING TOTAL_SEAT → " + diningId + " / " + reservationDate + " / " + reservationTime);
+
     	Integer totalSeat = dtsm.selectTotalSeat(diningId, reservationDate, reservationTime);
     	
         Integer reserved = dtsm.selectReservedCount(diningId, reservationDate, reservationTime);
@@ -29,19 +31,35 @@ public class DiningTimeSlotService {
         	
             totalSeat = 20;
             
+            System.out.println("총좌석이 null이어서 기본값 20으로 설정됨");
+            
         }
-        
-        System.out.println("총 좌석 수: " + totalSeat + ", 예약된 좌석 수: " + reserved);
         
         return totalSeat - (reserved == null ? 0 : reserved);
         
     }
     
+    public DiningTimeSlotDTO selectSlot(int diningId, Date reservationDate, Timestamp reservationTime) {
+    	
+        return dtsm.selectSlot(diningId, reservationDate, reservationTime);
+        
+    }
+    
     public int getTotalSeats(int diningId, Date reservationDate, Timestamp reservationTime) {
+    	
+    	System.out.println("SELECTING TOTAL_SEAT → " + diningId + " / " + reservationDate + " / " + reservationTime);
     	
         DiningTimeSlotDTO dto = dtsm.selectSlot(diningId, reservationDate, reservationTime);
         
-        return dto != null ? dto.getTotalSeat() : 20;
+        if (dto == null) {
+        	
+            System.out.println("selectSlot() 결과가 null → 총좌석 20으로 대체됨");
+            
+            return 20;
+            
+        }
+        
+        return dto.getTotalSeat();
         
     }
     
