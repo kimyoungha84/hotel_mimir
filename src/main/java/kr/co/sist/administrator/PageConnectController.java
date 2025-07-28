@@ -20,10 +20,10 @@ import kr.co.sist.util.controller.SearchController;
 public class PageConnectController {
 	
 	@Autowired
-	ModelUtils modelUtils;
+	private ModelUtils modelUtils;
 	
 	@Autowired(required = false)
-	AdminService as;
+	private AdminService as;
 	
 	 @Autowired
 	private AdminResvRoomDashboardService arrds;

@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class CryptographicDecryption {
 	@Autowired
-	PasswordEncoder pe;
+	private PasswordEncoder pe;
 	
 	/*Bcrypt를 이용해서, 일방향 해쉬 함수, 암호화*/
 	public String useBcryptEncryption(String plainText) {

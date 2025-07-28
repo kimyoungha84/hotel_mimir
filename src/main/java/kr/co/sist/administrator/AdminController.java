@@ -1,4 +1,4 @@
-package kr.co.sist.administrator;
+ package kr.co.sist.administrator;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -13,10 +13,10 @@ import kr.co.sist.admin.resvroom.AdminResvRoomDashboardService;
 public class AdminController {
 	
 	@Autowired(required = false)
-	AdminService as;
+	private AdminService as;
 	
-	  @Autowired
-	    private AdminResvRoomDashboardService arrds;
+	@Autowired
+	private AdminResvRoomDashboardService arrds;
 	
 	/**
 	 * 관리자 첫 페이지

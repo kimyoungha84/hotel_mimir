@@ -19,16 +19,11 @@ import kr.co.sist.util.ModelUtils;
 @Component
 public class AdministratorSendMail {
 
-	@Autowired
-	private final ModelUtils modelUtils;
 
 	@Autowired
 	private JavaMailSender mailSender;
 
-    AdministratorSendMail(ModelUtils modelUtils) {
-        this.modelUtils = modelUtils;
-    }
-	
+
 	public void sendMail(String to, String subject,String url) throws MessagingException{
 		MimeMessage message=mailSender.createMimeMessage();
 		

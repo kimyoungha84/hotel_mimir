@@ -23,7 +23,7 @@ public class AdministratorRESTController {
 
 
 	@Autowired
-	AdminService as;
+	private AdminService as;
 
 	/**
 	 * 아이디와 비밀번호 체크
