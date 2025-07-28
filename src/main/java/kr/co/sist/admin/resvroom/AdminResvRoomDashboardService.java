@@ -14,23 +14,18 @@ public class AdminResvRoomDashboardService {
     public List<MonthCountDTO> getMonthlyReservationCount() {
         return arrdm.selectMonthlyReservationCount();
     }
-
     public List<MonthSalesDTO> getMonthlySales() {
         return arrdm.selectMonthlySales();
     }
-
     public List<RoomOccupancyDTO> getRoomOccupancy() {
         return arrdm.selectRoomOccupancyRate();
     }
-
     public List<MemberRatioDTO> getMemberNonMemberRatio() {
         return arrdm.selectMemberNonMemberRatio();
     }
-
     public TodayReservationStatusDTO getTodayReservationStatus() {
         return arrdm.selectTodayReservationStatus();
     }
-
     public List<PopularRoomDTO> getPopularRooms() {
         return arrdm.selectPopularRooms();
     }

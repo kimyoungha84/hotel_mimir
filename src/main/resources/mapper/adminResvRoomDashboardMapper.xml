@@ -13,13 +13,16 @@
   </select>
 
 <select id="selectMonthlySales" resultType="kr.co.sist.admin.resvroom.MonthSalesDTO">
-  SELECT 
-    TO_CHAR(payment_time, 'YYYY-MM') AS month,
-    SUM(payment_price) AS salesAmount
-  FROM payment
-  WHERE payment_time IS NOT NULL
-  GROUP BY TO_CHAR(payment_time, 'YYYY-MM')
-  ORDER BY month
+SELECT 
+  TO_CHAR(p.payment_time, 'YYYY-MM') AS month,
+  SUM(p.payment_price) AS salesAmount
+FROM payment p
+JOIN reservation r ON p.payment_id = r.payment_id
+WHERE 
+  p.payment_time IS NOT NULL
+  AND r.status IN ('체크인', '체크아웃')
+GROUP BY TO_CHAR(p.payment_time, 'YYYY-MM')
+ORDER BY month
 </select>
 
   <select id="selectRoomOccupancyRate" resultType="kr.co.sist.admin.resvroom.RoomOccupancyDTO">
