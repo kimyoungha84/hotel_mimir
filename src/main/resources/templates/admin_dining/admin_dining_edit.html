@@ -412,7 +412,10 @@ function triggerReplace(idx) {
     input.type = 'file';
     input.name = 'replace_carousel_image_' + idx;
     input.style.display = 'none';
-    input.onchange = function(event) { replaceCarouselImage(event, idx); };
+    input.accept = 'image/*';
+    input.onchange = function(event) { 
+      replaceCarouselImage(event, idx); 
+    };
     document.getElementById('diningFileForm').appendChild(input);
   }
   input.click();
@@ -422,7 +425,15 @@ function replaceCarouselImage(event, idx) {
   // 미리보기 변경
   let img = document.querySelectorAll('.carousel-img-item img')[idx];
   img.src = URL.createObjectURL(event.target.files[0]);
-  // 교체 파일 hidden input 추가
+  
+  // 교체된 파일을 해당 item에 저장
+  const items = document.querySelectorAll('.carousel-img-item');
+  if (items[idx]) {
+    items[idx].file = event.target.files[0]; // 파일 객체 저장
+    console.log('교체된 파일 저장:', event.target.files[0].name, '인덱스:', idx);
+  }
+  
+  // 교체 파일 hidden input 추가 (기존 코드 유지)
   let input = document.createElement('input');
   input.type = 'hidden';
   input.name = 'replace_carousel_indexes';
@@ -501,6 +512,11 @@ function saveCarouselImages() {
   const items = document.querySelectorAll('.carousel-img-item');
   const uploadPromises = [];
 
+  console.log('=== 케러셀 이미지 저장 시작 ===');
+  console.log('총 케러셀 아이템 수:', items.length);
+  console.log('메인 이미지 파일:', mainImageFile ? mainImageFile.name : '없음');
+  console.log('로고 이미지 파일:', logoImageFile ? logoImageFile.name : '없음');
+
   // 메인 이미지 업로드
   if (mainImageFile) {
     const formData = new FormData();
@@ -538,7 +554,14 @@ function saveCarouselImages() {
   // 케러셀 이미지 업로드 (추가/교체된 것만)
   items.forEach((item, idx) => {
     const file = item.file;
+    console.log(`케러셀 아이템 ${idx + 1}:`, {
+      hasFile: !!file,
+      fileName: file ? file.name : '없음',
+      hasUrl: !!item.querySelector('input[name="carousel_image_urls"]')?.value
+    });
+    
     if (file) {
+      console.log(`케러셀 이미지 업로드 시작: ${file.name}, 인덱스: ${idx + 1}`);
       const formData = new FormData();
       formData.append('dining_id', diningId);
       formData.append('carousel_image_file', file);
@@ -550,6 +573,7 @@ function saveCarouselImages() {
         })
         .then(res => res.json())
         .then(data => {
+          console.log(`케러셀 이미지 업로드 성공: ${data.imageUrl}`);
           const urlInput = item.querySelector('input[name="carousel_image_urls"]');
           if (urlInput) urlInput.value = data.imageUrl;
         })
@@ -577,6 +601,9 @@ function saveCarouselImages() {
 }
 
 function updateCarouselOrderOnServer(diningId, imageUrls) {
+  console.log('=== 케러셀 순서 업데이트 ===');
+  console.log('다이닝 ID:', diningId);
+  console.log('이미지 URLs:', imageUrls);
   console.log('삭제될 이미지 URL 전체:', deletedCarouselUrls);
 
   const bodyData = `dining_id=${encodeURIComponent(diningId)}&` +
