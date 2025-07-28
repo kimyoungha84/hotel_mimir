@@ -45,6 +45,7 @@ body {
 }
 .faq-answer {
   display: none;
+   white-space: pre-line;
   padding: 12px 0 18px 0;
   background: #f9fafd;
   color: #444;

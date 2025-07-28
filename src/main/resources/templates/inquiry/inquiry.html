@@ -18,7 +18,7 @@
         <div class="faq-box">
           <div th:each="faq : ${faqList}">
             <div class="faq-item" th:text="${faq.faq_title}"></div>
-            <div class="faq-answer" th:text="${faq.faq_content}" style="display: none;"></div>
+            <div class="faq-answer" th:utext="${faq.faq_content}" style="display: none;"></div>
           </div>
         </div>
       </div>

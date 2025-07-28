@@ -28,9 +28,24 @@ body, html {
   flex-direction: column;
   padding: 0;
   width: 60%;
-  margin: 0;
+  margin: 0 auto;
   height: 89%;
   min-height: 0;
+  transition: width 0.3s ease, padding 0.3s ease;
+}
+
+/* 반응형 처리 */
+@media screen and (max-width: 1200px) {
+  .chat-main {
+    width: 90%;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .chat-main {
+    width: 100%;
+    padding: 0 8px;
+  }
 }
 
 

@@ -5,7 +5,7 @@ $(document).ready(function() {
     const content = $(this).next(".faq-answer");
     $(".faq-answer").not(content).slideUp();
     // FAQ 답변도 escapeHtml 적용
-    content.html(escapeHtml(content.text())).slideToggle();
+	content.slideToggle(); // escapeHtml 제거
   });
 });
 
@@ -286,7 +286,7 @@ $(document).ready(function() {
   }
 
   // ===== 욕설 필터 함수와 리스트를 최상단에 선언 =====
-  const badWords = ["ㅅㅂ", "개새끼", "병신", "tq", "시발", "ㄳㄲ", "ㄱㅅㄲ", "ㅄ", "ㅅ1ㅂ", "ㅂ1ㅅ", "쉬발", "씨발", "씨1발", "보지", "자지", "섹스", "뒤져라", "애미", "애비", "tlqkf"];
+  const badWords = ["ㅅㅂ", "개새끼", "병신", "tq", "시발", "ㄳㄲ", "ㄱㅅㄲ", "ㅄ", "ㅅ1ㅂ", "ㅂ1ㅅ", "쉬발", "씨발", "씨1발", "뒤져라", "tlqkf"];
   function filterBadWords(msg) {
       if (!msg) return "";
       let filtered = msg;
@@ -306,10 +306,10 @@ $(document).ready(function() {
 
     // 채팅 팝업 버튼 바인딩: 회원(userNum 있으면)만 열림, 비회원은 로그인 안내
     $("#chatToggleBtn").off('click').on('click', function() {
-      if (!userNum) {
+      /*if (!userNum) {
         alert("로그인이 필요한 서비스입니다.\n로그인 후 이용해 주세요.");
         return;
-      }
+      }*/
       isOpen = !isOpen;
       $("#chatBox").fadeToggle();
       $(this).html(isOpen ? "✖" : "💬");
