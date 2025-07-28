@@ -64,6 +64,7 @@ public class AdminDiningTimeSlotController {
     
     @PostMapping("/admin/deleteSlot")
     public String deleteSlot(@RequestParam int slotId, RedirectAttributes redirectAttributes) {
+    	
         try {
         	
             dtss.deleteSlotById(slotId);
@@ -75,6 +76,7 @@ public class AdminDiningTimeSlotController {
             redirectAttributes.addFlashAttribute("errorMessage", "삭제 중 오류가 발생했습니다.");
             
         }
+        
         return "redirect:/admin/adminDiningSlotList";
         
     }

@@ -12,10 +12,21 @@
       AND MEAL_TYPE = #{mealType}
     ORDER BY TIME_SLOT
   </select>
+  
+<select id="selectAllTimeSlots" resultType="kr.co.sist.diningtime.DiningTimeConfigDTO">
+  SELECT C.CONFIG_ID AS configId,
+         C.DINING_ID AS diningId,
+         D.DINING_NAME AS diningName,
+         C.MEAL_TYPE AS mealType,
+         C.TIME_SLOT AS timeSlot
+  FROM DINING_TIME_CONFIG C
+  LEFT JOIN DINING D ON C.DINING_ID = D.DINING_ID
+  ORDER BY C.DINING_ID, C.MEAL_TYPE, C.TIME_SLOT
+</select>
 
   <insert id="insertTimeSlot" parameterType="kr.co.sist.diningtime.DiningTimeConfigDTO">
     INSERT INTO DINING_TIME_CONFIG (CONFIG_ID, DINING_ID, MEAL_TYPE, TIME_SLOT)
-    VALUES (DINING_TIME_CONFIG_SEQ.NEXTVAL, #{diningId}, #{mealType}, #{timeSlot})
+    VALUES (DINING_TIME_SEQ.NEXTVAL, #{diningId}, #{mealType}, #{timeSlot})
   </insert>
   
   <update id="updateTimeSlot">
@@ -24,10 +35,9 @@
     WHERE CONFIG_ID = #{configId}
   </update>
 
-  <delete id="deleteTimeSlots">
-    DELETE FROM DINING_TIME_CONFIG
-    WHERE DINING_ID = #{diningId}
-      AND MEAL_TYPE = #{mealType}
-  </delete>
+<delete id="deleteTimeSlot">
+  DELETE FROM DINING_TIME_CONFIG
+  WHERE CONFIG_ID = #{configId}
+</delete>
 
 </mapper>

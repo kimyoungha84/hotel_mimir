@@ -11,12 +11,15 @@ public interface DiningTimeConfigMapper {
     List<String> selectTimeSlots(@Param("diningId") int diningId,
             					 @Param("mealType") String mealType);
 
+    List<DiningTimeConfigDTO> selectAllTimeSlots();
+    
     void insertTimeSlot(DiningTimeConfigDTO dto);
     
     void updateTimeSlot(@Param("configId") int configId,
             			@Param("timeSlot") String timeSlot);
 
-    void deleteTimeSlots(@Param("diningId") int diningId,
-    					 @Param("mealType") String mealType);
+    void deleteTimeSlot(@Param("configId") int configId);
+    
+    int countReservationsForTimeSlot(DiningTimeConfigDTO dto);
 	
 }

@@ -122,6 +122,7 @@ public class AdminDiningResvController {
         model.addAttribute("reservationDetail", dto);
         
         return "admin_diningresv/adminDiningResvEdit";
+        
     }
 	
     @PostMapping("/adminDiningResvEdit")
@@ -136,6 +137,7 @@ public class AdminDiningResvController {
                                     @RequestParam String reservationStatus,
                                     @RequestParam(required = false) String reservationRequest,
                                     RedirectAttributes redirectAttributes) {
+    	
         try {
             // 기존 예약 조회
             DiningResvDTO oldResv = adrs.selectResvId(reservationId);

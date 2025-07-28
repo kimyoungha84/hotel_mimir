@@ -14,8 +14,23 @@
   <th:block th:replace="~{administrator/fragments/admin_header :: admin_header}"></th:block>
   
   <style>
+  input[type="number"] {
+    padding: 0.5rem 0.7rem;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 1rem;
+    background-color: #fff;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  input[type="number"]:focus {
+    border-color: #111;
+    box-shadow: 0 0 4px rgba(17, 17, 17, 0.3);
+    outline: none;
+  }
+
     .save-btn {
-      background-color: #111;
+      background-color: #4CAF50;
       color: white;
       padding: 0.4rem 0.8rem;
       font-size: 1rem;
@@ -23,10 +38,6 @@
       border-radius: 0.3rem;
       cursor: pointer;
       transition: background-color 0.3s;
-    }
-
-    .save-btn:hover {
-      background-color: #111;
     }
   </style>
   
@@ -36,7 +47,7 @@
 <th:block th:replace="~{administrator/fragments/admin_sidebar :: admin_sidebar}"></th:block>
 
 <div id="body-pd" class="body-pd">
-  <h2 class="h2Title">다이닝 좌석 현황</h2>
+  <h2 class="h2Title">다이닝 좌석</h2>
   <hr/>
   
 <!-- 성공 메시지 -->
@@ -50,6 +61,17 @@
 </div>
   
   <div th:replace="~{fragments/filter :: filter(${filter})}"></div>
+
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+  <div></div>
+  <div>
+    <button type="button"
+            onclick="location.href='/admin/adminDiningTimeConfig'"
+            style="background-color: #0066cc; color: white; border: none; padding: 0.5rem 1rem; border-radius: 0.3rem; font-size: 1rem; cursor: pointer;">
+      슬롯 추가
+    </button>
+  </div>
+</div>
 
 <!-- 좌석 현황 테이블 -->
 <table>
@@ -71,12 +93,12 @@
         <td th:text="${slot.slotId}"></td>
         <td th:text="${slot.diningName}"></td>
         <td th:text="${#dates.format(slot.reservationDate, 'yyyy-MM-dd(E)')}"></td>
-        <td th:text="${#dates.format(slot.reservationTime, 'a hh:mm')}"></td>
+        <td th:text="${#dates.format(slot.reservationTime, 'HH:mm')}"></td>
         <td th:text="${slot.reservedCount}"></td>
         
         <!-- 총 좌석 수정 가능 -->
         <td>
-          <input type="number" name="totalSeat" min="1" th:value="${slot.totalSeat}" required />
+          <input type="number" name="totalSeat" min="20" th:value="${slot.totalSeat}" required />
           <input type="hidden" name="slotId" th:value="${slot.slotId}" />
         </td>
 
@@ -86,7 +108,7 @@
         <td>
         <button type="submit" class="save-btn">저장</button><span style="margin: 0 0.6rem;">/</span>
   		<button type="button" class="save-btn"
-          		th:onclick="'deleteSlot(' + ${slot.slotId} + ')'" style="background-color: crimson;">
+          		th:onclick="'deleteSlot(' + ${slot.slotId} + ')'" style="background-color: #f44336;">
           삭제
   		</button>
         </td>
@@ -104,7 +126,7 @@
 
 <script>
   function deleteSlot(slotId) {
-    if (confirm("정말 이 좌석 슬롯을 삭제하시겠습니까?")) {
+    if (confirm("정말 해당 좌석 슬롯을 삭제하시겠습니까?")) {
       // POST 방식으로 삭제 요청 보내기
       const form = document.createElement("form");
       form.method = "post";

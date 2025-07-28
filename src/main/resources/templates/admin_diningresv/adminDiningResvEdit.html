@@ -12,6 +12,33 @@
 
 <th:block th:replace="~{administrator/fragments/admin_header :: admin_header}"></th:block>
 
+<style>
+  input[type="text"],
+  input[type="number"],
+  input[type="date"],
+  select,
+  textarea {
+    padding: 0.5rem 0.7rem;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 1rem;
+    background-color: #fff;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  input:focus,
+  select:focus,
+  textarea:focus {
+    border-color: #111;
+    box-shadow: 0 0 4px rgba(17, 17, 17, 0.3);
+    outline: none;
+  }
+
+  textarea {
+    resize: vertical;
+  }
+</style>
+
 </head>
 <body>
 <th:block th:replace="~{administrator/fragments/admin_sidebar :: admin_sidebar}"></th:block>
@@ -98,7 +125,7 @@
       <tr>
         <td>인원수</td>
         <td>
-          <input type="number" th:field="*{reservationCount}" min="1" />
+          <input type="number" th:field="*{reservationCount}" min="1" max="20" />
         </td>
       </tr>
 

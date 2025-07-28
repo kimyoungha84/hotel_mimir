@@ -10,7 +10,10 @@ import lombok.ToString;
 public class DiningTimeConfigDTO {
 
     private int configId;
+    
     private int diningId;
+    private String diningName;
+    
     private String mealType;
     private String timeSlot;
 	

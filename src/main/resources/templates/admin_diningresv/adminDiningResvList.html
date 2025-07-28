@@ -17,8 +17,13 @@
 <th:block th:replace="~{administrator/fragments/admin_sidebar :: admin_sidebar}"></th:block>
 
 <div id="body-pd" class="body-pd">
-<h2 class="h2Title">다이닝 예약 관리</h2>
+<h2 class="h2Title">다이닝 예약</h2>
 <hr/>
+
+<!-- 에러 메시지 -->
+<div th:if="${errorMessage}" style="color: red; font-weight: bold; margin: 1rem 0; text-align: center;">
+  <p th:text="${errorMessage}"></p>
+</div>
 
 <div th:replace="~{fragments/filter :: filter(${filter})}"></div>
 

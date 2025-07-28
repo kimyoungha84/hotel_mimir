@@ -23,15 +23,21 @@ public class DiningTimeConfigService {
 	    
 	}
 	
+	public List<DiningTimeConfigDTO> getAllTimeSlots() {
+		
+	    return dtcm.selectAllTimeSlots();
+	    
+	}
+	
 	public void insertTimeSlot(DiningTimeConfigDTO dto) {
 		
 	    dtcm.insertTimeSlot(dto);
 	    
 	}
 
-	public void deleteTimeSlots(int diningId, String mealType) {
+	public void deleteTimeSlot(int configId) {
 		
-	    dtcm.deleteTimeSlots(diningId, mealType);
+	    dtcm.deleteTimeSlot(configId);
 	    
 	}
 	
