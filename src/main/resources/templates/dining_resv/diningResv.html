@@ -4,6 +4,9 @@
   <meta charset="UTF-8">
   <title>다이닝 예약</title>
   <link rel="stylesheet" th:href="@{/dining_resv/css/diningResv.css}" />
+  <link rel="stylesheet" th:href="@{/dining_resv/css/diningPopup1.css}" />
+  <link rel="stylesheet" th:href="@{/dining_resv/css/diningPopup2.css}" />
+  <link rel="stylesheet" th:href="@{/dining_resv/css/diningPopup4.css}" />
   <link rel="stylesheet" th:href="@{/css/header.css}" />
   <link rel="stylesheet" th:href="@{/css/footer.css}" />
 </head>
@@ -215,16 +218,152 @@
     </div>
   </div>
 </div>
+
+  <!-- 다이닝 선택 팝업 -->
+  <div class="popup-overlay01"></div>
+
+  <div class="dining-popup">
+    <button class="popup-close01" type="button">×</button>
+
+    <div class="popup-row">
+      <div class="popup-txt">
+        <span>다이닝 선택</span>
+      </div>
+
+      <div class="popup-wrap">
+        <div class="popup-info01">
+          <div class="popup-content">
+            <div class="hotel-select-txt"><span>호텔 선택</span></div>
+            <div class="hotel-list">
+              <div class="hotel-item">
+                <button class="hotel-btn selected" data-name="미미르 호텔"><span>미미르 호텔</span></button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="popup-info02">
+          <div class="dining-select-txt"><span>다이닝 선택</span></div>
+
+          <div class="dining-list">
+            <div class="dining-info01">
+              <div class="dining-item"
+                th:each="dining : ${diningList}"
+                th:attr="data-id=${dining.dining_id}"
+                th:classappend="${dining.dining_id == selectDiningId} ? ' selected' : ''">
+
+                <img th:src="@{/dining_resv/images/modern.png}" alt="모던 레스토랑 이미지" class="dining-img" />
+                <div class="dining-info-txt">
+                  <span class="title-txt" th:text="${dining.dining_name}">다이닝</span>
+                  <div class="type-info">
+                    <span class="type-txt01">타입</span>
+                    <span class="type-txt02" th:text="${dining.type}">타입</span>
+                  </div>
+                  <div class="location-txt">
+                    <span class="location-txt01">위치</span>
+                    <span class="location-txt02" th:text="${dining.location}">위치</span>
+                  </div>
+                </div>
+                <div class="checkmark"></div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <div class="dining-select-btn">
+      <button class="diningBtn" type="button">선택</button>
+    </div>
+  </div>
   
-  <div th:replace="~{/dining_resv/popup/diningPopup1(diningList=${diningList}, selectDiningId=${selectDiningId})}"></div>
-  <div th:replace="~{/dining_resv/popup/diningPopup2}"></div>
-  <div th:replace="~{/dining_resv/popup/diningPopup4}"></div>
+    <!-- 인원 선택 팝업 -->
+  <div class="popup-overlay02"></div>
+  <div class="cnt-popup">
+    <button class="popup-close02" type="button">×</button>
+    <div class="cnt-popup-wrap">
+      <div class="cnt-txt">
+        <span>인원 수</span>
+      </div>
+      <div class="cnt-popup-body">
+        <div class="cnt-group01">
+          <span>성인</span>
+          <div class="cnt-adult-btn">
+            <button class="minus" type="button" data-type="adult">-</button>
+            <span id="adultCnt" th:text="${adult}"></span>
+            <button class="plus" type="button" data-type="adult">+</button>
+          </div>
+        </div>
+        <div class="cnt-group02">
+          <span>어린이</span>
+          <div class="cnt-child-btn">
+            <button class="minus" type="button" data-type="child">-</button>
+            <span id="childCnt" th:text="${child}"></span>
+            <button class="plus" type="button" data-type="child">+</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="cnt-select-btn">
+      <button class="cntBtn" type="button">선택</button>
+    </div>
+  </div>
+  
+    <!-- 다이닝 지도 팝업 -->
+  <div class="popup-overlay04" style="display: none;">
+    <div class="popup-content04">
+      <button class="popup-close04" type="button">×</button>
+
+      <div class="map-popup-inner">
+        <div class="map-txt">
+          <span>지도 보기</span>
+        </div>
+        <iframe
+          width="100%"
+          height="300"
+          style="border:0;"
+          loading="lazy"
+          allowfullscreen
+          src="https://www.google.com/maps?q=37.4993192768461,127.033205638158&hl=ko&z=15&output=embed">
+        </iframe>
+      </div>
+
+      <div class="addr-wrap">
+        <div class="addr-inner">
+          <div class="hotel-name">
+            <span>미미르 호텔</span>
+          </div>
+          <div class="dining-name">
+            <span th:text="${diningInfo.dining_name}"></span>
+          </div>
+          <div class="addr-txt">
+            <span th:text="${diningInfo.location}"></span>
+          </div>
+        </div>
+      </div>
+
+      <div class="check-btn">
+        <button class="checkBtn" type="button">확인</button>
+      </div>
+
+    </div>
+  </div>
+  
+<script th:inline="javascript">
+  /*<![CDATA[*/
+  var selectDiningId = '[[${selectDiningId}]]';
+  /*]]>*/
+</script>
   
   <div th:replace="~{fragments/footer.html :: footerFragment}"></div>
 
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <script th:src="@{/dining_resv/js/diningResv.js}"></script>
   <script th:src="@{/dining_resv/js/calendar.js}"></script>
+  <script th:src="@{/dining_resv/js/diningPopup1.js}"></script>
+  <script th:src="@{/dining_resv/js/diningPopup2.js}"></script>
+  <script th:src="@{/dining_resv/js/diningPopup4.js}"></script>
   
 </body>
 

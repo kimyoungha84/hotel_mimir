@@ -76,57 +76,48 @@ if (btnMenu && menuContent) {
   menuContent.style.display = "none";
   tabTitle.textContent = "예약일 선택";
 
-  // 다이닝 선택 팝업 열기
-  document.querySelector(".dining-name-btn").addEventListener("click", () => {
-	  
-    document.querySelectorAll(".dining-popup .dining-item.selected").forEach(item => {
-      item.classList.remove("selected");
-	});
-	
-	if (selectDiningId) {
-	  const selectedItemElem = document.querySelector(`.dining-popup .dining-item[data-id='${selectDiningId.toString()}']`);
-	  if (selectedItemElem) {
-	    selectedItemElem.classList.add("selected");
-	    selectedItem = selectedItemElem;
-	  }
-	}
-	  
-    document.querySelector(".popup-overlay01").style.display = "block";
-    document.querySelector(".dining-popup").style.display = "block";
-  });
-
-  // 다이닝 선택 팝업 닫기 및 선택 처리
-  let selectedItem = null;
-
   document.querySelectorAll(".dining-item").forEach(item => {
     item.addEventListener("click", function () {
-      if (selectedItem) selectedItem.classList.remove("selected");
+      // 모든 항목에서 선택 클래스 제거
+      document.querySelectorAll(".dining-item").forEach(i => i.classList.remove("selected"));
+      // 현재 선택된 항목에만 클래스 추가
       this.classList.add("selected");
-      selectedItem = this;
     });
   });
 
   document.querySelector(".dining-select-btn").addEventListener("click", () => {
-    if (selectedItem) {
-      const name = selectedItem.querySelector(".title-txt")?.textContent.trim();
-	  const id = selectedItem.getAttribute("data-id");
-	    if (name && id) {
-	      const newUrl = `${location.pathname}?diningId=${id}`;
-	      location.href = newUrl;
-	    }
-	  }
+    const selected = document.querySelector(".dining-item.selected");
+    if (selected) {
+      const name = selected.querySelector(".title-txt")?.textContent.trim();
+      const id = selected.getAttribute("data-id");
+      if (name && id) {
+        const newUrl = `${location.pathname}?diningId=${id}`;
+        location.href = newUrl;
+      }
+    }
+
     document.querySelector(".popup-overlay01").style.display = "none";
     document.querySelector(".dining-popup").style.display = "none";
   });
 
   // 인원수 선택 후 반영 및 팝업 닫기
   document.querySelector(".cntBtn").addEventListener("click", () => {
-	const currentAdult = document.querySelector(".cnt-adult-txt")?.textContent.trim() || "1";
-	const currentChild = document.querySelector(".cnt-child-txt")?.textContent.trim() || "0";
+    const adultCnt = document.getElementById("adultCnt").textContent.trim();
+    const childCnt = document.getElementById("childCnt").textContent.trim();
 
-	document.getElementById("adultCnt").textContent = currentAdult;
-	document.getElementById("childCnt").textContent = currentChild;
+    // 화면 표시
+    const adultTxtSpan = document.querySelector(".cnt-adult-txt");
+    const childTxtSpan = document.querySelector(".cnt-child-txt");
+    if (adultTxtSpan) adultTxtSpan.textContent = adultCnt;
+    if (childTxtSpan) childTxtSpan.textContent = childCnt;
 
+    // hidden input 반영
+    const inputAdult = document.getElementById("inputAdult");
+    const inputChild = document.getElementById("inputChild");
+    if (inputAdult) inputAdult.value = adultCnt;
+    if (inputChild) inputChild.value = childCnt;
+
+    // 팝업 닫기
     document.querySelector(".popup-overlay02").style.display = "none";
     document.querySelector(".cnt-popup").style.display = "none";
   });

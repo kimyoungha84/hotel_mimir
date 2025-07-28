@@ -24,7 +24,7 @@ public class DiningResvController {
 	@Autowired
 	private DiningService ds;
 	
-    @GetMapping("diningResv")
+    @GetMapping("/diningResv")
     public String diningResv(
     				@RequestParam("diningId") int diningId,
                     @RequestParam(name = "adult", required = false, defaultValue = "1") int adult,
