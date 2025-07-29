@@ -40,4 +40,22 @@
   WHERE CONFIG_ID = #{configId}
 </delete>
 
+<select id="countReservationsForTimeSlot" resultType="int">
+  SELECT COUNT(*) 
+  FROM DINING_RESERVATION
+  WHERE DINING_ID = #{diningId}
+    AND TO_CHAR(RESERVATION_TIME, 'HH24:MI') =  #{timeSlot}
+</select>
+
+<resultMap id="timeSlotResultMap" type="kr.co.sist.diningtime.DiningTimeConfigDTO">
+  <id property="configId" column="CONFIG_ID"/>
+  <result property="diningId" column="DINING_ID"/>
+  <result property="mealType" column="MEAL_TYPE"/>
+  <result property="timeSlot" column="TIME_SLOT"/>
+</resultMap>
+
+<select id="selectSlotById" resultMap="timeSlotResultMap" parameterType="int">
+  SELECT * FROM DINING_TIME_CONFIG WHERE CONFIG_ID = #{configId}
+</select>
+
 </mapper>

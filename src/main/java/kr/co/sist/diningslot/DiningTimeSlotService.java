@@ -20,9 +20,11 @@ public class DiningTimeSlotService {
 	
 	// 잔여좌석 계산
     public int getRemainingSeats(int diningId, Date reservationDate, Timestamp reservationTime) {
-    	
-    	System.out.println("SELECTING TOTAL_SEAT → " + diningId + " / " + reservationDate + " / " + reservationTime);
 
+        System.out.println("=== getRemainingSeats ===");
+        System.out.println("reservationTime.toString(): " + reservationTime.toString());
+        System.out.println("formatted: " + new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm").format(reservationTime));
+    	
     	Integer totalSeat = dtsm.selectTotalSeat(diningId, reservationDate, reservationTime);
     	
         Integer reserved = dtsm.selectReservedCount(diningId, reservationDate, reservationTime);
@@ -46,8 +48,6 @@ public class DiningTimeSlotService {
     }
     
     public int getTotalSeats(int diningId, Date reservationDate, Timestamp reservationTime) {
-    	
-    	System.out.println("SELECTING TOTAL_SEAT → " + diningId + " / " + reservationDate + " / " + reservationTime);
     	
         DiningTimeSlotDTO dto = dtsm.selectSlot(diningId, reservationDate, reservationTime);
         

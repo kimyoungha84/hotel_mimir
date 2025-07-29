@@ -54,5 +54,17 @@ public class DiningTimeConfigService {
         return list;
         
     }
+    
+    public boolean hasReservationForTimeSlot(DiningTimeConfigDTO dto) {
+    	
+        return dtcm.countReservationsForTimeSlot(dto) > 0;
+        
+    }
+    
+    public DiningTimeConfigDTO getSlotById(int configId) {
+    	
+        return dtcm.selectSlotById(configId);
+        
+    }
 	
 }

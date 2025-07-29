@@ -21,5 +21,7 @@ public interface DiningTimeConfigMapper {
     void deleteTimeSlot(@Param("configId") int configId);
     
     int countReservationsForTimeSlot(DiningTimeConfigDTO dto);
-	
+
+    DiningTimeConfigDTO selectSlotById(int configId);
+    
 }

@@ -63,9 +63,32 @@ public class AdminDiningTimeConfigController {
 
         try {
         	
-            dtcs.deleteTimeSlot(configId);
+        	DiningTimeConfigDTO slot = dtcs.getSlotById(configId);
+        	
+        	System.out.println("조회된 configId: " + (slot != null ? slot.getConfigId() : "null"));
+        	
+            if (slot == null) {
+            	
+                ra.addFlashAttribute("errorMessage", "해당 시간 슬롯 정보를 찾을 수 없습니다.");
+                
+                return "redirect:/admin/adminDiningTimeConfig";
+                
+            }
+        	
             
-            ra.addFlashAttribute("successMessage", "시간 슬롯이 삭제되었습니다.");
+            boolean hasReservation = dtcs.hasReservationForTimeSlot(slot);
+            
+            if (hasReservation) {
+            	
+                ra.addFlashAttribute("errorMessage", "해당 시간에 예약이 있어 삭제할 수 없습니다.");
+                
+            } else {
+            	
+                dtcs.deleteTimeSlot(configId);
+                
+                ra.addFlashAttribute("successMessage", "시간 슬롯이 삭제되었습니다.");
+                
+            }
             
         } catch (Exception e) {
         	
