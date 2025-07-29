@@ -16,7 +16,7 @@ document.addEventListener("DOMContentLoaded", function () {
   const inputTime = document.getElementById("inputTime");
   const nextBtn = document.querySelector(".next-btn");
   
-  inputAdult.value = document.querySelector(".cnt-adult-txt").textContent.trim() || "1";
+  inputAdult.value = document.querySelector(".cnt-adult-txt").textContent.trim() || "0";
   inputChild.value = document.querySelector(".cnt-child-txt").textContent.trim() || "0";
   
   document.querySelector(".next-btn").addEventListener("click", function(e) {
@@ -116,6 +116,19 @@ if (btnMenu && menuContent) {
     const inputChild = document.getElementById("inputChild");
     if (inputAdult) inputAdult.value = adultCnt;
     if (inputChild) inputChild.value = childCnt;
+	
+	// 인원수 총합 계산
+	const totalCnt = parseInt(adultCnt) + parseInt(childCnt);
+	
+	// 다음 버튼 활성화 or 비활성화
+	const nextBtn = document.querySelector(".next-btn");
+	if (totalCnt > 0) {
+	  nextBtn.classList.remove("disabled");
+	  nextBtn.removeAttribute("aria-disabled");
+	} else {
+	  nextBtn.classList.add("disabled");
+	  nextBtn.setAttribute("aria-disabled", "true");
+	}
 
     // 팝업 닫기
     document.querySelector(".popup-overlay02").style.display = "none";
@@ -131,7 +144,7 @@ if (btnMenu && menuContent) {
       const isLunch = btn.closest(".time-lunch") !== null;
       const mealType = isLunch ? "Lunch" : "Dinner";
 	  
-	  if (!inputAdult.value) inputAdult.value = "1";
+	  if (!inputAdult.value) inputAdult.value = "0";
 	  if (!inputChild.value) inputChild.value = "0";
       
       // form 데이터 저장
@@ -291,7 +304,7 @@ window.addEventListener("pageshow", function (event) {
 
 	// 표시된 텍스트도 초기화
 	document.querySelector(".dining-name-txt").textContent = "스테이, 모던 레스토랑";
-	document.querySelector(".cnt-adult-txt").textContent = "1";
+	document.querySelector(".cnt-adult-txt").textContent = "0";
 	document.querySelector(".cnt-child-txt").textContent = "0";
 
 	// 선택된 시간 버튼 초기화
@@ -334,6 +347,35 @@ function loadTimeButtons(inputDiningId) {
 	} else {
 	
     btn.addEventListener("click", () => {
+		const inputAdult = document.getElementById("inputAdult");
+		const inputChild = document.getElementById("inputChild");
+		const nextBtn = document.querySelector(".next-btn");
+		
+		const adultCnt = parseInt(inputAdult?.value || "0");
+		const childCnt = parseInt(inputChild?.value || "0");
+		const totalCnt = adultCnt + childCnt;
+		
+		if (totalCnt === 0) {
+		  alert("예약 인원을 선택해주세요.");
+		  nextBtn.classList.add("disabled");
+		  nextBtn.setAttribute("aria-disabled", "true");
+		  return;
+		}
+		
+		// 잔여좌석 초과 시 경고
+		if (totalCnt > remaining) {
+		  alert(`선택하신 시간대에는 잔여 좌석이 ${remaining}석입니다.\n현재 인원 수 (${totalCnt}명)가 초과되었습니다.\n인원을 줄이거나 다른 시간대를 선택해주세요.`);
+		  
+		  // 다음 버튼 비활성화
+		  nextBtn.classList.add("disabled");
+		  nextBtn.setAttribute("aria-disabled", "true");
+		  
+		  return;
+		}
+		
+		// 잔여좌석 정보 저장
+		currentRemainingSeats = remaining;
+		
       document.querySelectorAll(".time-btn").forEach(b => b.classList.remove("selected"));
       btn.classList.add("selected");
 	  

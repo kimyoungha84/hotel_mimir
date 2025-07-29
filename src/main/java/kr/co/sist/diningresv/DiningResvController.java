@@ -27,7 +27,7 @@ public class DiningResvController {
     @GetMapping("/diningResv")
     public String diningResv(
     				@RequestParam("diningId") int diningId,
-                    @RequestParam(name = "adult", required = false, defaultValue = "1") int adult,
+                    @RequestParam(name = "adult", required = false, defaultValue = "0") int adult,
                     @RequestParam(name = "child", required = false, defaultValue = "0") int child,
     				Model model) {
     	
