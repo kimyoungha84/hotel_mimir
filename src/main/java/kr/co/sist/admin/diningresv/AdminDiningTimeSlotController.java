@@ -67,13 +67,25 @@ public class AdminDiningTimeSlotController {
     	
         try {
         	
-            dtss.deleteSlotById(slotId);
-            
-            redirectAttributes.addFlashAttribute("successMessage", "좌석 슬롯이 삭제되었습니다.");
+        	boolean hasReservation = dtss.hasReservationInSlot(slotId);
+        	
+            if (hasReservation) {
+            	
+                redirectAttributes.addFlashAttribute("errorMessage", "예약된 인원이 있어 삭제할 수 없습니다.");
+                
+            } else {
+            	
+                dtss.deleteSlotById(slotId);
+                
+                redirectAttributes.addFlashAttribute("successMessage", "좌석 슬롯이 삭제되었습니다.");
+                
+            }
             
         } catch (Exception e) {
         	
             redirectAttributes.addFlashAttribute("errorMessage", "삭제 중 오류가 발생했습니다.");
+            
+            e.printStackTrace();
             
         }
         

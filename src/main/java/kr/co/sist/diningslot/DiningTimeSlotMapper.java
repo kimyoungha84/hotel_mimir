@@ -51,4 +51,6 @@ public interface DiningTimeSlotMapper {
     
     void deleteSlot(@Param("slotId") int slotId);
     
+    Integer selectReservedCountBySlotId(int slotId);
+    
 }

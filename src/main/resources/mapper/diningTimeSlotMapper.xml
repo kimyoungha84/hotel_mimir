@@ -94,4 +94,10 @@
   WHERE SLOT_ID = #{slotId}
 </delete>
 
+<select id="selectReservedCountBySlotId" resultType="int">
+  SELECT RESERVED_COUNT
+  FROM DINING_TIME_SLOT
+  WHERE SLOT_ID = #{slotId}
+</select>
+
 </mapper>

@@ -138,4 +138,12 @@ public class DiningTimeSlotService {
         
     }
     
+    public boolean hasReservationInSlot(int slotId) {
+    	
+        Integer reserved = dtsm.selectReservedCountBySlotId(slotId);
+        
+        return reserved != null && reserved > 0;
+        
+    }
+    
 }
