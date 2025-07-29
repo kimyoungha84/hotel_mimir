@@ -326,7 +326,7 @@ function loadTimeButtons(inputDiningId) {
     btn.className = "time-btn";
     btn.type = "button";
 	
-    btn.innerHTML = `<span>${time} (좌석 ${remaining}/${totalSeats}석)</span>`;
+    btn.innerHTML = `<span>${time} (잔여 ${remaining}석)</span>`;
 
 	if (remaining === 0) {
 	  btn.disabled = true;
