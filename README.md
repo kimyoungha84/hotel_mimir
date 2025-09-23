@@ -8,5 +8,5 @@
 ## 데이터 구조 (ERD)
 
 <p align="center">
-  <img src="images/gungon_erd.png" alt="GUNG ON ERD" width="600">
+  <img src="images/mimir-erd.png" alt="GUNG ON ERD" width="600">
 </p>
